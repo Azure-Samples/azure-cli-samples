@@ -1,7 +1,7 @@
 #!/bin/bash
 
 webappname=mywebapp$RANDOM
-gitrepo="<URL of your repo here>"
+githubrepo="<URL of your repo here>"
 
 # Create a resource group. For possible values of --location, run "az appservice list-locations"
 az group create --location westeurope --name $webappname
@@ -20,9 +20,7 @@ az appservice web deployment slot create --name $webappname --resource-group $we
 
 # Configure GitHub deployment from your GitHub repo and deploy once.
 az appservice web source-control config --name $webappname --resource-group $webappname --slot staging \
---repo-url $gitrepo --branch master
-
-#### What are the requirements for setting up GitHub? Does the terminal need to be already logged into GitHub? #####
+--repo-url $githubrepo --branch master
 
 # Browse to the deployed web app on staging. If you don't see your app, deployment may be in progress. Rerun this in a few minutes.
 az appservice web browse --name $webappname --resource-group $webappname --slot staging

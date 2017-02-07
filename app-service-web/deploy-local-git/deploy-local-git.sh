@@ -23,7 +23,7 @@ az appservice web deployment user set --user-name $username --password $password
 # Configure local Git and save the JSON output
 json=$(az appservice web source-control config-local-git --name $webappname --resource-group $webappname)
 
-# Extract the Azure repository URL from the JSON output  ---> See below for alternative
+# Extract the Azure repository URL from the JSON output
 url=$(echo $json | grep -oP '"url": "\K[^"]*')
 
 # Add the Azure remote to your local Git respository and push your code
@@ -35,20 +35,3 @@ git push azure master
 
 # Browse to the deployed web app.
 az appservice web browse --name $webappname --resource-group $webappname
-
-
-#################################################################################################################
-#### Alternative for deploying to local git ####
-
-uri=$(az appservice web deployment list-site-credentials --name $webappname \
---resource-group $webappname --query scmUri)
-
-uri=$(echo "${uri:1:${#uri}-2}")
-
-# Add the Azure remote to your local Git respository and push your code
-#### This method saves your password in the git remote. You can use a Git credential manager to secure your password instead.
-#### Trade off is that you get to use the app-level credentials. However the source-control config-local-git command returns 
-#### the account-level credentials
-cd $gitdirectory
-git remote add azure $uri
-git push azure master
