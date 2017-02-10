@@ -1,9 +1,9 @@
 #!/bin/bash
 
+gitrepo=<Replace with your GitHub repo URL>
 webappname=mywebapp$RANDOM
-githubrepo="<URL of your repo here>"
 
-# Create a resource group. For possible values of --location, run "az appservice list-locations"
+# Create a resource group.
 az group create --location westeurope --name $webappname
 
 # Create an App Service plan in `FREE` tier.
@@ -14,7 +14,7 @@ az appservice web create --name $webappname --resource-group $webappname --plan 
 
 # Configure GitHub deployment from your GitHub repo and deploy once.
 az appservice web source-control config --name $webappname --resource-group $webappname \
---repo-url $githubrepo --branch master
+--repo-url $gitrepo --branch master
 
-# Browse to the deployed web app. If you don't see your app, deployment may be in progress. Rerun this in a few minutes.
+# Browse to the deployed web app. Deployment may be in progress, so rerun this if necessary.
 az appservice web browse --name $webappname --resource-group $webappname
