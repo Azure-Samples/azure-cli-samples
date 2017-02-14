@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # OMS Id and OMS key.
-omsid=efd8d50c-42e7-4976-b36b-4f2440c12f05
-omskey=pmZtZIPdKNSv7eAm6DhJG+GuEqNV6FXZLNmfCX3Y9fokUiVxAzh+7cPQc/BPm0VeTDVDLVY0qrQFN3fzbDnFnA==
+omsid=<Replace with your OMS Id>
+omskey=<Replace with your OMS key>
 
 # Create a resource group.
 az group create --name myResourceGroup --location westeurope
@@ -47,5 +47,5 @@ az vm extension set \
   --resource-group myResourceGroup \
   --vm-name myVM --name OmsAgentForLinux \
   --publisher Microsoft.EnterpriseCloud.Monitoring \
-  --version 1.0 --protected-settings '{"workspaceKey": "\"$omskey\""}' \
-  --settings '{"workspaceId": "\"$omsid\""}'
+  --version 1.0 --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
+  --settings '{"workspaceId": "'"$omsid"'"}'
