@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # OMS Id and OMS key.
-omsid=<Replace with your OMS Id>
-omskey=<Replace with your OMS key>
+omsid=efd8d50c-42e7-4976-b36b-4f2440c12f05
+omskey=pmZtZIPdKNSv7eAm6DhJG+GuEqNV6FXZLNmfCX3Y9fokUiVxAzh+7cPQc/BPm0VeTDVDLVY0qrQFN3fzbDnFnA==
 
 # Create a resource group.
 az group create --name myResourceGroup --location westeurope
@@ -13,7 +13,7 @@ az network vnet create --resource-group myResourceGroup --location westeurope --
 
 # Create a public IP address and specify a DNS name.
 az network public-ip create --resource-group myResourceGroup --location westeurope \
-  --name myPublicIP --dns-name publicdns=mypublicdns$RANDOM --allocation-method static --idle-timeout 4
+  --name myPublicIP --dns-name mypublicdns$RANDOM --allocation-method static --idle-timeout 4
 
 # Create a network security group.
 az network nsg create --resource-group myResourceGroup --location westeurope \
@@ -27,24 +27,25 @@ az network nsg rule create --resource-group myResourceGroup \
   --access allow
 
 # Create a virtual network card and associate with public IP address and NSG.
-az network nic create --resource-group myResourceGroup --location westeurope --name myNic \
-  --vnet-name myNic1 --subnet mySubnet --network-security-group myNetworkSecurityGroup \
+az network nic create --resource-group myResourceGroup --location westeurope --name myNic1 \
+  --vnet-name myVnet --subnet mySubnet --network-security-group myNetworkSecurityGroup \
   --public-ip-address myPublicIP
 
 # Create a virtual machine. 
 az vm create \
-  --resource-group myResourceGroup \
-  --name myVM1 \
-  --location westeurope \
-  --nics myNic1 \
-  --image UbuntuLTS \
-  --ssh-key-value ~/.ssh/id_rsa.pub \
-  --admin-username azureuser
+    --resource-group myResourceGroup \
+    --name myVM \
+    --location westeurope \
+    --nics myNic1 \
+    --image UbuntuLTS \
+    --ssh-key-value ~/.ssh/id_rsa.pub \
+    --admin-username azureuser \
+    --no-wait
 
 # Install and configure the OMS agent.
 az vm extension set \
   --resource-group myResourceGroup \
-  --vm-name myVM1 --name OmsAgentForLinux \
+  --vm-name myVM --name OmsAgentForLinux \
   --publisher Microsoft.EnterpriseCloud.Monitoring \
-  --version 1.0 --protected-settings '{"workspaceKey": "$omskey"}' \
-  --settings '{"workspaceId": "$omsid"}'
+  --version 1.0 --protected-settings '{"workspaceKey": "\"$omskey\""}' \
+  --settings '{"workspaceId": "\"$omsid\""}'
