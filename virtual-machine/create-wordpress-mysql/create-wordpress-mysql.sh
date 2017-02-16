@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create a resource group.
-az resource group create --name myResourceGroup --location westus
+az group create --name myResourceGroup --location westus
 
 # Create a vNet
 az network vnet create \
@@ -66,23 +66,20 @@ az network nic create \
   --public-ip-address myPublicIP
 
 # Create a VM
-az vm create 
-  --resource-group myResourceGroup 
-  --name wpvm 
-  --location westus 
-  --nics myNic1 
-  --vnet myVnet 
-  --subnet-name mySubnet 
-  --nsg myNetworkSecurityGroup  
-  --image UbuntuLTS 
-  --ssh-key-value ~/.ssh/id_rsa.pub 
-  --admin-username ops 
+az vm create \
+  --resource-group myResourceGroup \
+  --name myVM1 \
+  --location westus \
+  --nics myNic1 \
+  --image UbuntuLTS \
+  --ssh-key-value ~/.ssh/id_rsa.pub \
+  --admin-username azureuser
 
 # Start a CustomScript extension to use a simple bash script to update, download and install WordPress and MySQL 
 az vm extension set \
-  --publisher Microsoft.Azure.Extensions 
-  --name CustomScript 
-  --vm-name wpvm 
-  --resource-group myResourceGroup 
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0
+  --name CustomScript \
+  --vm-name myVM1 \
+  --resource-group myResourceGroup \ 
   --settings '{"fileUris":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/wordpress-single-vm-ubuntu/install_wordpress.sh"], "commandToExecute":"sh install_wordpress.sh" }'
-  
