@@ -76,10 +76,8 @@ az vm create \
   --admin-username azureuser
 
 # Start a CustomScript extension to use a simple bash script to update, download and install WordPress and MySQL 
-az vm extension set \
+az vm extension set --name customscript \
   --publisher Microsoft.Azure.Extensions \
-  --version 2.0
-  --name CustomScript \
-  --vm-name myVM1 \
-  --resource-group myResourceGroup \ 
+  --version 2.0 --name CustomScript \
+  --vm-name myVM1 --resource-group myResourceGroup \
   --settings '{"fileUris":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/wordpress-single-vm-ubuntu/install_wordpress.sh"], "commandToExecute":"sh install_wordpress.sh" }'
