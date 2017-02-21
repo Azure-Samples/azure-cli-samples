@@ -1,6 +1,8 @@
 #!/bin/bash
 
 gitdirectory=<Replace with path to local Git repo>
+username=<Replace with desired deployment username>
+password=<Replace with desired deployment password>
 webappname=mywebapp$RANDOM
 
 # Log in to Azure
@@ -15,22 +17,22 @@ az appservice plan create --name $webappname --resource-group $webappname --sku 
 # Create a web app.
 az appservice web create --name $webappname --resource-group $webappname --plan $webappname
 
-# Configure local Git
-az appservice web source-control config-local-git --name $webappname \
---resource-group $webappname
+# Set the account-level deployment credentials
+az appservice web deployment user set --user-name $username --password $password
 
-# Get app-level credential information
-uri=$(az appservice web deployment list-site-credentials --name $webappname \
---resource-group $webappname --query scmUri)
+# Configure local Git and get deployment URL
+url=$(az appservice web source-control config-local-git --name $webappname \
+--resource-group $webappname --query url)
 
-# Extract the Azure repository URL from the JSON output
-uri=$(echo "${uri:1:${#uri}-2}")
+# Get rid of double quote-unquote
+url=$(echo "${url:1:${#url}-2}")
 
 # Add the Azure remote to your local Git respository and push your code
-#### This method saves your password in the git remote. You can use a Git credential manager to secure your password instead.
 cd $gitdirectory
-git remote add azure $uri
+git remote add azure $url
 git push azure master
+
+# When prompted for password, use the value of $password that you specified
 
 # Browse to the deployed web app.
 az appservice web browse --name $webappname --resource-group $webappname

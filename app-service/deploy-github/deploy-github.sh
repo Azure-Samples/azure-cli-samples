@@ -16,5 +16,5 @@ az appservice web create --name $webappname --resource-group $webappname --plan 
 az appservice web source-control config --name $webappname --resource-group $webappname \
 --repo-url $gitrepo --branch master
 
-# Browse to the deployed web app. Deployment may be in progress, so rerun this if necessary.
+# Browse to the web app.
 az appservice web browse --name $webappname --resource-group $webappname
