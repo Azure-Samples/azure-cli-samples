@@ -12,7 +12,7 @@ az vm create \
   --location westeurope \
   --name myVM
 
-# Get network security group name.
+# Get Network Security Group name.
 nsg=$(az network nsg list --query "[?contains(resourceGroup,'myResourceGroup')].{name:name}" -o tsv)
 
 # Create an inbound network security group rule for port 80.
@@ -22,10 +22,11 @@ az network nsg rule create --resource-group myResourceGroup \
   --source-port-range '*' --destination-address-prefix '*' --destination-port-range 80 \
   --access allow
 
-# Install Docker and start container.
+# Use CustomScript extension to install NGINX.
 az vm extension set \
-  --resource-group myResourceGroup \
-  --vm-name myVM --name DockerExtension \
   --publisher Microsoft.Azure.Extensions \
-  --version 1.1 \
-  --settings '{"docker": {"port": "2375"},"compose": {"web": {"image": "nginx","ports": ["80:80"]}}}'
+  --version 2.0
+  --name CustomScript \
+  --vm-name myVM1 \
+  --resource-group myResourceGroup \ 
+  --settings '{"fileUris":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/wordpress-single-vm-ubuntu/install_wordpress.sh"], "commandToExecute":"sh install_nginx.sh" }'
