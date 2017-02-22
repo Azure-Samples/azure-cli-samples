@@ -12,15 +12,12 @@ az vm create \
   --location westeurope \
   --name myVM
 
-# Get network security group name.
-nsg=$(az network nsg list --query "[?contains(resourceGroup,'myResourceGroup')].{name:name}" -o tsv)
-
-# Create an inbound network security group rule for port 80.
-az network nsg rule create --resource-group myResourceGroup \
-  --nsg-name $nsg --name myNetworkSecurityGroupRuleHTTP \
-  --protocol tcp --direction inbound --priority 2000 --source-address-prefix '*' \
-  --source-port-range '*' --destination-address-prefix '*' --destination-port-range 80 \
-  --access allow
+# Open port 80 to allow web traffic to host.
+  az vm open-port \
+    --port 80 \
+    --priority 300 \
+    --resource-group myResourceGroup \
+    --name myVM
 
 # Install Docker and start container.
 az vm extension set \
