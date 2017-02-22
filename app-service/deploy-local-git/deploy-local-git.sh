@@ -5,9 +5,6 @@ username=<Replace with desired deployment username>
 password=<Replace with desired deployment password>
 webappname=mywebapp$RANDOM
 
-# Log in to Azure
-az login
-
 # Create a resource group.
 az group create --location westeurope --name $webappname
 
