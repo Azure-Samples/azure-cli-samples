@@ -13,7 +13,7 @@ az vm create \
   --name myVM
 
 # Open port 80 to allow web traffic to host.
-  az vm open-port \
+az vm open-port \
     --port 80 \
     --priority 300 \
     --resource-group myResourceGroup \
@@ -21,9 +21,9 @@ az vm create \
 
 # Use CustomScript extension to install Apache.
 az vm extension set \
-  --publisher Microsoft.Azure.Extensions \
-  --version 2.0
-  --name CustomScript \
-  --vm-name myVM \
-  --resource-group myResourceGroup \ 
-  --settings '{"fileUris":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/apache2-on-ubuntu-vm/install_apache.sh"], "commandToExecute":"sh install_apache.sh" }'
+    --publisher Microsoft.Azure.Extensions \
+    --version 2.0 \
+    --name CustomScript \
+    --vm-name myVM \
+    --resource-group myResourceGroup \
+    --settings '{"fileUris":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/apache2-on-ubuntu-vm/install_apache.sh"], "commandToExecute":"sh install_apache.sh" }'
