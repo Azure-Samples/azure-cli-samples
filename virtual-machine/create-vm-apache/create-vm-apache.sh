@@ -19,10 +19,11 @@ az vm create \
     --resource-group myResourceGroup \
     --name myVM
 
-# Install Docker and start container.
+# Use CustomScript extension to install Apache.
 az vm extension set \
-  --resource-group myResourceGroup \
-  --vm-name myVM --name DockerExtension \
   --publisher Microsoft.Azure.Extensions \
-  --version 1.1 \
-  --settings '{"docker": {"port": "2375"},"compose": {"web": {"image": "nginx","ports": ["80:80"]}}}'
+  --version 2.0
+  --name CustomScript \
+  --vm-name myVM \
+  --resource-group myResourceGroup \ 
+  --settings '{"fileUris":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/apache2-on-ubuntu-vm/install_apache.sh"], "commandToExecute":"sh install_apache.sh" }'

@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Source virtual machine details.
-sourcevm=exploitme
-resourceGroup=exploitme
+sourcevm=<Replace with vm name>
+resourceGroup=<Replace with resource group name>
+
 # Get the URI for the source VM operating system disk.
 uri="$(az vm show -g $resourceGroup -n $sourcevm --query [storageProfile.osDisk.vhd.uri] -o tsv)"
 

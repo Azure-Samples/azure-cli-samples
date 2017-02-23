@@ -9,7 +9,7 @@ appName="AppServiceManualScale$random"
 location="WestUS"
 
 # Create a Resource Group
-az group create --name $resourceGroupName --location $location1
+az group create --name $resourceGroupName --location $location
 
 # Create App Service Plans
 az appservice plan create --name AppServiceManualScalePlan --resource-group $resourceGroupName --location $location --sku B1
