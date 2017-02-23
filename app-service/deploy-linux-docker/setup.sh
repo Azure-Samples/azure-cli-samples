@@ -7,7 +7,7 @@ random=$(python -c 'import uuid; print(str(uuid.uuid4())[0:8])')
 resourceGroupName="myResourceGroup$random"
 appName="AppServiceLinuxDocker$random"
 location="WestUS"
-dockerHubContainerPath="cfowler/aspnetcoresample:0.1"
+dockerHubContainerPath="<replace-with-docker-hub-container-or-image" #format: <username>/<container-or-image>:<tag>
 
 # Create a Resource Group
 az group create --name $resourceGroupName --location $location
