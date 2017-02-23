@@ -30,7 +30,7 @@ az network nic create --resource-group myResourceGroup --location westeurope --n
 # Create a virtual machine. 
 az vm create \
     --resource-group myResourceGroup \
-    --name myVM1 \
+    --name myVM \
     --location westeurope \
     --nics myNic1 \
     --image UbuntuLTS \
