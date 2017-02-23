@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gitrepo=<Replace with your GitHub repo URL. e.g. https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git>
+gitrepo=<Replace with a public GitHub repo URL. e.g. https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git>
 webappname=mywebapp$RANDOM
 
 # Create a resource group.
