@@ -23,3 +23,4 @@ az sql server firewall create -g SampleResourceGroup --server-name $servername \
 # Create a database in the server
 az sql db create -g SampleResourceGroup -l northcentralus --server-name $servername \
 	-n MySampleDatabase --requested-service-objective-name S0
+
