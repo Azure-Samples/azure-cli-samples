@@ -68,7 +68,7 @@ az network nic create \
 # Create a VM
 az vm create \
   --resource-group myResourceGroup \
-  --name myVM1 \
+  --name myVM \
   --location westus \
   --nics myNic1 \
   --image UbuntuLTS \
@@ -80,6 +80,6 @@ az vm extension set \
   --publisher Microsoft.Azure.Extensions \
   --version 2.0
   --name CustomScript \
-  --vm-name myVM1 \
+  --vm-name myVM \
   --resource-group myResourceGroup \ 
   --settings '{"fileUris":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/wordpress-single-vm-ubuntu/install_wordpress.sh"], "commandToExecute":"sh install_wordpress.sh" }'
