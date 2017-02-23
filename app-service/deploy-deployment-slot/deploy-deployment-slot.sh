@@ -1,26 +1,23 @@
 #!/bin/bash
 
-gitrepo=<Replace with your GitHub repo URL>
+gitrepo=https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git
 webappname=mywebapp$RANDOM
 
 # Create a resource group.
 az group create --location westeurope --name $webappname
 
-# Create an App Service plan in FREE tier.
-az appservice plan create --name $webappname --resource-group $webappname --sku FREE
+# Create an App Service plan in STANDARD tier (minimum required by deployment slots).
+az appservice plan create --name $webappname --resource-group $webappname --sku S1
 
 # Create a web app.
 az appservice web create --name $webappname --resource-group $webappname \
 --plan $webappname
 
-# Upgrade App Service plan to STANDARD tier (minimum required by deployment slots)
-az appservice plan update --name $webappname --resource-group $webappname --sku S1
-
 #Create a deployment slot with the name "staging".
 az appservice web deployment slot create --name $webappname --resource-group $webappname \
 --slot staging
 
-# Configure GitHub deployment from your GitHub repo and deploy once.
+# Deploy sample code to "staging" slot from GitHub.
 az appservice web source-control config --name $webappname --resource-group $webappname \
 --slot staging --repo-url $gitrepo --branch master
 

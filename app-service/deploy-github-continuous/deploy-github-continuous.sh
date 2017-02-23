@@ -1,6 +1,7 @@
 #!/bin/bash
 
-gitrepo=<Replace with your GitHub repo URL. e.g. https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git>
+gitrepo=<Replace with your GitHub repo URL>
+token=<Replace with a GitHub access token>
 webappname=mywebapp$RANDOM
 
 # Create a resource group.
@@ -12,9 +13,10 @@ az appservice plan create --name $webappname --resource-group $webappname --sku 
 # Create a web app.
 az appservice web create --name $webappname --resource-group $webappname --plan $webappname
 
-# Deploy code from a public GitHub repository. 
+# Configure continuous deployment from GitHub. 
+# --git-token parameter is required only once per Azure account (Azure remembers token).
 az appservice web source-control config --name $webappname --resource-group $webappname \
---repo-url $gitrepo --branch master
+--repo-url $gitrepo --branch master --git-token $token
 
 # Browse to the web app.
 az appservice web browse --name $webappname --resource-group $webappname
