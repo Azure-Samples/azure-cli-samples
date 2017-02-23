@@ -1,16 +1,16 @@
 #!/bin/bash
 
-fqdn=<Replace with www.yourdomain>
+fqdn=<Replace with www.{yourdomain}>
 webappname=mywebapp$RANDOM
 
 # Create a resource group.
-az group create --location westeurope --name $webappname
+az group create --location westeurope --name myResourceGroup
 
 # Create an App Service plan in SHARED tier (minimum required by custom domains).
-az appservice plan create --name $webappname --resource-group $webappname --sku SHARED
+az appservice plan create --name $webappname --resource-group myResourceGroup --sku SHARED
 
 # Create a web app.
-az appservice web create --name $webappname --resource-group $webappname \
+az appservice web create --name $webappname --resource-group myResourceGroup \
 --plan $webappname
 
 echo "Your web app's default domain name: $webappname.azurewebsites.net"
@@ -20,8 +20,8 @@ echo "Your web app's default domain name: $webappname.azurewebsites.net"
 # hostname "www" and point it your web app's default domain name.
 
 # Map your prepared custom domain name to the web app.
-az appservice web config hostname add --webapp $webappname --resource-group $webappname \
+az appservice web config hostname add --webapp $webappname --resource-group myResourceGroup \
 --name $fqdn
 
 # Browse to the production slot. 
-az appservice web browse --name $webappname --resource-group $webappname
+az appservice web browse --name $webappname --resource-group myResourceGroup
