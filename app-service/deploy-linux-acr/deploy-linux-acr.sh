@@ -25,8 +25,8 @@ acrPassword=$(az acr show --name $appName --resource-group myResourceGroup --que
 # Pull from Docker
 docker login $acrurl -u $acrUser -p $acrPassword
 docker pull $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion
-docker tag $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion $acrurl/$dockerHubContainerName
-docker push $dockerContainerUser/$dockerHubContainerName
+docker tag $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion $acrurl/$dockerHubContainerName:$dockerContainerVersion
+docker push $acrurl/$dockerHubContainerName:$dockerContainerVersion
 
 # Create an App Service Plan
 az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myResourceGroup --location $location --is-linux --sku S1
@@ -35,4 +35,4 @@ az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myRe
 az appservice web create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
 
 # Configure Web App with a Custom Docker Container from Docker Hub
-az appservice web config container update --docker-registry-server-url http://$acrurl --docker-custom-image-name $acrurl/$dockerHubContainerName --docker-registry-server-user $spid --docker-registry-server-password $servicePrincipalPassword --name $appName --resource-group myResourceGroup
+az appservice web config container update --docker-registry-server-url http://$acrurl --docker-custom-image-name $acrurl/$dockerHubContainerName:$dockerContainerVersion --docker-registry-server-user $spid --docker-registry-server-password $servicePrincipalPassword --name $appName --resource-group myResourceGroup
