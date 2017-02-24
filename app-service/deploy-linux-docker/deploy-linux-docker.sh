@@ -1,8 +1,5 @@
 #/bin/bash
 
-# Ensures unique id
-random=$(python -c 'import uuid; print(str(uuid.uuid4())[0:8])')
-
 # Variables
 appName="AppServiceLinuxDocker$random"
 location="WestUS"

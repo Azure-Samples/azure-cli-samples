@@ -19,10 +19,7 @@ az appservice web deployment user set --user-name $username --password $password
 
 # Configure local Git and get deployment URL
 url=$(az appservice web source-control config-local-git --name $webappname \
---resource-group myResourceGroup --query url)
-
-# Get rid of double quote-unquote
-url=$(echo "${url:1:${#url}-2}")
+--resource-group myResourceGroup --query url --output tsv)
 
 # Add the Azure remote to your local Git respository and push your code
 cd $gitdirectory
