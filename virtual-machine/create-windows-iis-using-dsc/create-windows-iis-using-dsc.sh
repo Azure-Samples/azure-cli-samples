@@ -17,11 +17,12 @@ az vm create \
 
 # Start a CustomScript extension to use a simple bash script to update, download and install WordPress and MySQL 
 az vm extension set \
-  --name customscript \
-  --publisher Microsoft.Powershell \
-  --version 2.0 --name DSC \
-  --vm-name myVM1 --resource-group myResourceGroup \
-  --settings '{"ModulesUrl":["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/blob/master/dsc-extension-iis-server-windows-vm/ContosoWebsite.ps1.zip"], "ConfigurationFunction":"ContosoWebsite.ps1\\ContosoWebsite" }'
+   --name DSC \
+   --publisher Microsoft.Powershell \
+   --version 2.19 \
+   --vm-name myVM1 \
+   --resource-group myResourceGroup \
+   --settings '{"ModulesURL":"https://github.com/Azure/azure-quickstart-templates/raw/master/dsc-extension-iis-server-windows-vm/ContosoWebsite.ps1.zip", "configurationFunction": "ContosoWebsite.ps1\\ContosoWebsite", "Properties": {"MachineName": "myVM1"} }'
 
   # open port 80 to allow web traffic to host
   az vm open-port \
