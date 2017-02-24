@@ -25,7 +25,7 @@ acrPassword=$(az acr show --name $appName --resource-group myResourceGroup --que
 # Pull from Docker
 docker login $acrurl -u $acrUser -p $acrPassword
 docker pull $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion
-docker tag $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion $acrurl/$dockerHubContainerName
+docker tag $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion $acrurl/$dockerHubContainerName:$dockerContainerVersion
 docker push $dockerContainerUser/$dockerHubContainerName
 
 # Create an App Service Plan
