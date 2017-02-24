@@ -35,4 +35,4 @@ az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myRe
 az appservice web create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
 
 # Configure Web App with a Custom Docker Container from Docker Hub
-az appservice web config container update --docker-registry-server-url http://$acrurl --docker-custom-image-name $acrurl/$dockerHubContainerName --docker-registry-server-user $acrUser --docker-registry-server-password $acrPassword --name $appName --resource-group myResourceGroup
+az appservice web config container update --docker-registry-server-url http://$acrurl --docker-custom-image-name $acrurl/$dockerHubContainerName --docker-registry-server-user $spid --docker-registry-server-password $servicePrincipalPassword --name $appName --resource-group myResourceGroup
