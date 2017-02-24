@@ -3,7 +3,7 @@
 # Variables
 appName="AppServiceLinuxDocker$random"
 location="WestUS"
-dockerHubContainerPath="<replace-with-docker-hub-container-or-image" #format: <username>/<container-or-image>:<tag>
+dockerHubContainerPath="<replace-with-docker-hub-container-or-image>" #format: <username>/<container-or-image>:<tag>
 
 # Create a Resource Group
 az group create --name myResourceGroup --location $location
