@@ -2,11 +2,11 @@
 
 # Variables
 appName="AppServiceLinuxDocker$RANDOM"
-location="WestUS"
-servicePrincipalPassword="Passw0rd123"
-dockerContainerUser="cfowler/"
-dockerHubContainerName="aspnetcoresample"
-dockerContainerVersion=":0.1"
+location="westeurope"
+servicePrincipalPassword="<replace-with-password>"
+dockerContainerUser="<replace-with-docker-user>"
+dockerHubContainerName="<replace-with-docker-container>"
+dockerContainerVersion="latest"
 
 # Create a Resource Group
 az group create --name myResourceGroup --location $location
@@ -24,8 +24,9 @@ acrPassword=$(az acr show --name $appName --resource-group myResourceGroup --que
 
 # Pull from Docker
 docker login $acrurl -u $acrUser -p $acrPassword
-docker pull $dockerContainerUser$dockerHubContainerName$dockerContainerVersion
-docker push $dockerContainerUser$dockerHubContainerName
+docker pull $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion
+docker tag $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion $acrurl/$dockerHubContainerName
+docker push $dockerContainerUser/$dockerHubContainerName
 
 # Create an App Service Plan
 az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myResourceGroup --location $location --is-linux --sku S1
@@ -34,4 +35,4 @@ az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myRe
 az appservice web create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
 
 # Configure Web App with a Custom Docker Container from Docker Hub
-az appservice web config container update --docker-registry-server-url http://$acrurl --docker-custom-image-name $dockerHubContainerName --docker-registry-server-user $spid --docker-registry-server-password $servicePrincipalPassword --name $appName --resource-group myResourceGroup
+az appservice web config container update --docker-registry-server-url http://$acrurl --docker-custom-image-name $acrurl/$dockerHubContainerName --docker-registry-server-user $spid --docker-registry-server-password $servicePrincipalPassword --name $appName --resource-group myResourceGroup
