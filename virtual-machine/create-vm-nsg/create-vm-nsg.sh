@@ -66,6 +66,4 @@ az vm create \
     --name myVMBackEnd \
     --nics myNic2\
     --image UbuntuLTS \
-    --ssh-key-value ~/.ssh/id_rsa.pub \
-    --admin-username azureuser \
     --no-wait
