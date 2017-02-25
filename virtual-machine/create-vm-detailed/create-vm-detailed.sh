@@ -4,8 +4,7 @@
 az group create --name myResourceGroup --location westeurope
 
 # Create a virtual network.
-az network vnet create --resource-group myResourceGroup --name myVnet \
-  --address-prefix 192.168.0.0/16 --subnet-name mySubnet --subnet-prefix 192.168.0.0/16
+az network vnet create --resource-group myResourceGroup --name myVnet --subnet-name mySubnet
 
 # Create a public IP address.
 az network public-ip create --resource-group myResourceGroup --name myPublicIP
