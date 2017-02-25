@@ -22,9 +22,7 @@ az vm create \
   --resource-group myResourceGroup \
   --name myVM \
   --nics myNic \
-  --image UbuntuLTS \
-  --ssh-key-value ~/.ssh/id_rsa.pub \
-  --admin-username azureuser
+  --image UbuntuLTS
 
 # Open port 22 to allow SSh traffic to host.
 az vm open-port \
