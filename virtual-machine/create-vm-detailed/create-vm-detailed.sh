@@ -4,36 +4,31 @@
 az group create --name myResourceGroup --location westeurope
 
 # Create a virtual network.
-az network vnet create --resource-group myResourceGroup --location westeurope --name myVnet \
-  --address-prefix 192.168.0.0/16 --subnet-name mySubnet --subnet-prefix 192.168.1.0/24
+az network vnet create --resource-group myResourceGroup --name myVnet \
+  --address-prefix 192.168.0.0/16 --subnet-name mySubnet --subnet-prefix 192.168.0.0/16
 
-# Create a public IP address and specify a DNS name.
-az network public-ip create --resource-group myResourceGroup --location westeurope \
-  --name myPublicIP --dns-name mypublicdns$RANDOM --allocation-method static --idle-timeout 4
+# Create a public IP address.
+az network public-ip create --resource-group myResourceGroup --name myPublicIP
 
 # Create a network security group.
-az network nsg create --resource-group myResourceGroup --location westeurope \
-  --name myNetworkSecurityGroup
-
-# Create an inbound network security group rule for port 22.
-az network nsg rule create --resource-group myResourceGroup \
-  --nsg-name myNetworkSecurityGroup --name myNetworkSecurityGroupRuleSSH \
-  --protocol tcp --direction inbound --priority 1000 --source-address-prefix '*' \
-  --source-port-range '*' --destination-address-prefix '*' --destination-port-range 22 \
-  --access allow
+az network nsg create --resource-group myResourceGroup --name myNetworkSecurityGroup
 
 # Create a virtual network card and associate with public IP address and NSG.
-az network nic create --resource-group myResourceGroup --location westeurope --name myNic1 \
+az network nic create --resource-group myResourceGroup --name myNic \
   --vnet-name myVnet --subnet mySubnet --network-security-group myNetworkSecurityGroup \
   --public-ip-address myPublicIP
-
+  
 # Create a virtual machine. 
 az vm create \
-    --resource-group myResourceGroup \
-    --name myVM \
-    --location westeurope \
-    --nics myNic1 \
-    --image UbuntuLTS \
-    --ssh-key-value ~/.ssh/id_rsa.pub \
-    --admin-username azureuser \
-    --no-wait
+  --resource-group myResourceGroup \
+  --name myVM \
+  --nics myNic \
+  --image UbuntuLTS \
+  --ssh-key-value ~/.ssh/id_rsa.pub \
+  --admin-username azureuser
+
+# Open port 22 to allow SSh traffic to host.
+az vm open-port \
+  --port 22 \
+  --resource-group myResourceGroup \
+  --name myVM
