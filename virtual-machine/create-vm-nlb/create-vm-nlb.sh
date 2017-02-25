@@ -4,12 +4,10 @@
 az group create --name myResourceGroup --location westeurope
 
 # Create a virtual network.
-az network vnet create --resource-group myResourceGroup --location westeurope --name myVnet \
-  --address-prefix 192.168.0.0/16 --subnet-name mySubnet --subnet-prefix 192.168.1.0/24
+az network vnet create --resource-group myResourceGroup --location westeurope --name myVnet --subnet-name mySubnet
 
-# Create a public IP address and specify a DNS name.
-az network public-ip create --resource-group myResourceGroup --location westeurope \
-  --name myPublicIP --dns-name mypublicdns$RANDOM --allocation-method static --idle-timeout 4
+# Create a public IP address.
+az network public-ip create --resource-group myResourceGroup --name myPublicIP
 
 # Create an Azure Network Load Balancer.
 az network lb create --resource-group myResourceGroup --location westeurope \
@@ -18,7 +16,7 @@ az network lb create --resource-group myResourceGroup --location westeurope \
 
 # Creates an NLB probe on port 80.
 az network lb probe create --resource-group myResourceGroup --lb-name myLoadBalancer \
-  --name myHealthProbe --protocol tcp --port 80 --interval 15 --threshold 4
+  --name myHealthProbe --protocol tcp --port 80
 
 # Creates an NLB rule for port 80.
 az network lb rule create --resource-group myResourceGroup --lb-name myLoadBalancer \
@@ -34,13 +32,12 @@ for i in `seq 1 3`; do
 done
 
 # Create a network security group
-az network nsg create --resource-group myResourceGroup --location westeurope \
-  --name myNetworkSecurityGroup
+az network nsg create --resource-group myResourceGroup --name myNetworkSecurityGroup
 
 # Create a network security group rule for port 22.
 az network nsg rule create --resource-group myResourceGroup \
   --nsg-name myNetworkSecurityGroup --name myNetworkSecurityGroupRuleSSH \
-  --protocol tcp --direction inbound --priority 1000 --source-address-prefix '*' \
+  --protocol tcp --direction inbound --source-address-prefix '*' \
   --source-port-range '*' --destination-address-prefix '*' --destination-port-range 22 \
   --access allow
 
@@ -53,14 +50,14 @@ az network nsg rule create --resource-group myResourceGroup \
 
 # Create three virtual network cards and associate with public IP address and NSG.
 for i in `seq 1 3`; do
-  az network nic create --resource-group myResourceGroup --location westeurope --name myNic$i \
+  az network nic create --resource-group myResourceGroup --name myNic$i \
     --vnet-name myVnet --subnet mySubnet --network-security-group myNetworkSecurityGroup \
     --lb-name myLoadBalancer --lb-address-pools myBackEndPool \
     --lb-inbound-nat-rules myLoadBalancerRuleSSH$i
 done
 
 # Create an availability set.
-az vm availability-set create --resource-group myResourceGroup --location westeurope \
+az vm availability-set create --resource-group myResourceGroup \
   --name myAvailabilitySet --platform-fault-domain-count 3
 
 # Create three virtual machines.
@@ -72,7 +69,5 @@ for i in `seq 1 3`; do
     --availability-set myAvailabilitySet \
     --nics myNic$i \
     --image UbuntuLTS \
-    --ssh-key-value ~/.ssh/id_rsa.pub \
-    --admin-username azureuser \
     --no-wait
 done
