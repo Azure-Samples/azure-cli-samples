@@ -69,7 +69,5 @@ for i in `seq 1 3`; do
     --availability-set myAvailabilitySet \
     --nics myNic$i \
     --image UbuntuLTS \
-    --ssh-key-value ~/.ssh/id_rsa.pub \
-    --admin-username azureuser \
     --no-wait
 done
