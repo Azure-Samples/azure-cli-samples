@@ -3,7 +3,7 @@
 # Create a resource group.
 az group create --name myResourceGroup --location westus
 
-# Create a VM
+# Create a new virtual machine, this creates SSH keys if not present.
 az vm create --resource-group myResourceGroup --name myVM --image UbuntuLTS --generate-ssh-keys
 
 # Open port 80 to allow web traffic to host.
