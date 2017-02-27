@@ -56,7 +56,7 @@ done
 # Create an availability set.
 az vm availability-set create --resource-group myResourceGroup --name myAvailabilitySet --platform-fault-domain-count 3
 
-# Create three virtual machines.
+# Create three virtual machines, this creates SSH keys if not present.
 for i in `seq 1 3`; do
   az vm create \
     --resource-group myResourceGroup \

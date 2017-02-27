@@ -21,7 +21,7 @@ az network nic create \
   --network-security-group myNetworkSecurityGroup \
   --public-ip-address myPublicIP
 
-# Create a virtual machine. 
+# Create a new virtual machine, this creates SSH keys if not present.
 az vm create --resource-group myResourceGroup --name myVM --nics myNic --image UbuntuLTS --generate-ssh-keys
 
 # Open port 22 to allow SSh traffic to host.

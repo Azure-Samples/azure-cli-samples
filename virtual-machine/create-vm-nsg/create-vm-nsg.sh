@@ -11,7 +11,7 @@ az network vnet create --resource-group myResourceGroup --name myVnet --address-
 az network vnet subnet create --resource-group myResourceGroup --vnet-name myVnet \
   --name mySubnetBackEnd --address-prefix 192.168.2.0/24
 
-# Create a virtual machine. 
+# Create a new virtual machine, this creates SSH keys if not present.
 az vm create --resource-group myResourceGroup --name myVMFrontEnd --image UbuntuLTS \
   --vnet-name myVnet --subnet mySubnetFrontEnd --nsg myNetworkSecurityGroupFrontEnd --generate-ssh-keys
 
