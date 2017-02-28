@@ -22,10 +22,10 @@ az vm create --resource-group myResourceGroup --name myVMBackEnd --image UbuntuL
   --public-ip-address "" --generate-ssh-keys
 
 # Get nsg rule name.
-$ngsrule = $(az network nsg rule list --resource-group myResourceGroup --nsg-name myNetworkSecurityGroupBackEnd --query [0].name -o tsv)
+nsgrule=$(az network nsg rule list --resource-group myResourceGroup --nsg-name myNetworkSecurityGroupBackEnd --query [0].name -o tsv)
 
 # Update backend network security group rule to limit source prefix.
 az network nsg rule update --resource-group myResourceGroup --nsg-name myNetworkSecurityGroupBackEnd \
-  --name $ngsrule --protocol tcp --direction inbound --priority 1000 \
+  --name $nsgrule --protocol tcp --direction inbound --priority 1000 \
   --source-address-prefix 192.168.1.0/24 --source-port-range '*' --destination-address-prefix '*' \
   --destination-port-range 22 --access allow
