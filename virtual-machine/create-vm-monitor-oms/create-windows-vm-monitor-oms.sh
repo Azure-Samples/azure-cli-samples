@@ -21,7 +21,7 @@ az vm create \
 # Install and configure the OMS agent.
 az vm extension set \
   --resource-group myResourceGroup \
-  --vm-name myVM --name Microsoft.EnterpriseCloud.Monitoring \
+  --vm-name myVM --name MicrosoftMonitoringAgent \
   --publisher Microsoft.EnterpriseCloud.Monitoring \
   --version 1.0 --protected-settings '{"workspaceKey": "'"$omskey"'"}' \
   --settings '{"workspaceId": "'"$omsid"'"}'
