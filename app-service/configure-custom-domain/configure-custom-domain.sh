@@ -23,5 +23,4 @@ echo "Your web app's default domain name: $webappname.azurewebsites.net"
 az appservice web config hostname add --webapp $webappname --resource-group myResourceGroup \
 --name $fqdn
 
-# Browse to the production slot. 
-az appservice web browse --name $webappname --resource-group myResourceGroup
+echo "You can now browse to http://$fqdn"
