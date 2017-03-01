@@ -13,7 +13,8 @@ az appservice plan create --name $webappname --resource-group myResourceGroup --
 az appservice web create --name $webappname --resource-group myResourceGroup \
 --plan $webappname
 
-echo "Your web app's default domain name: $webappname.azurewebsites.net"
+echo "Configure a CNAME record that maps $fqdn to $webappname.azurewebsites.net"
+read -p "Press [Enter] key when ready ..."
 
 # Before continuing, go to your DNS configuration UI for your custom domain and follow the 
 # instructions at https://aka.ms/appservicecustomdns to configure a CNAME record for the 
