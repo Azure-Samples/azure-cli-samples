@@ -54,9 +54,9 @@ echo "To delete the created resource groups run the following."
 DELETE_CMD=''
 for group in ${RESOURCE_GROUPS[@]}; do
     if [[ ${DELETE_CMD} ]]; then
-        DELETE_CMD="${DELETE_CMD} && az group delete -n ${group} --no-wait --force"
+        DELETE_CMD="${DELETE_CMD} && az group delete -n ${group} --no-wait --yes"
     else
-        DELETE_CMD="az group delete -n ${group} --no-wait --force"
+        DELETE_CMD="az group delete -n ${group} --no-wait --yes"
     fi
 done
 
