@@ -11,7 +11,7 @@ dockerContainerVersion="latest"
 az group create --name myResourceGroup --location $location
 
 # Create Azure Container Registry
-acrValues=$(az acr create --name $appName --resource-group myResourceGroup --location $location --admin-enabled true --query "[loginServer,username,password]" --output tsv | cut -f1234)
+acrValues=$(az acr create --name $appName --resource-group myResourceGroup --location $location --admin-enabled true --query "[loginServer,username,password]" --output tsv | cut -f123)
 
 # Pull from Docker
 docker login ${acrValues[0]} -u ${acrValues[1]} -p ${acrValues[2]}
