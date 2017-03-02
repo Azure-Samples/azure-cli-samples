@@ -11,13 +11,15 @@ dockerContainerVersion="latest"
 az group create --name myResourceGroup --location $location
 
 # Create Azure Container Registry
-acrValues=$(az acr create --name $appName --resource-group myResourceGroup --location $location --admin-enabled true --query "[loginServer,username,password]" --output tsv | cut -f123)
+acrUrl=$(az acr create --name $appName --resource-group myResourceGroup --location $location --admin-enabled true --query loginServer --output tsv)
+
+acrCreds=($(az acr credential show --name $appName --resource-group myResourceGroup --query [username,password] --output tsv))
 
 # Pull from Docker
-docker login ${acrValues[0]} -u ${acrValues[1]} -p ${acrValues[2]}
+docker login ${acrUrl} -u ${acrCreds[0]} -p ${acrCreds[1]}
 docker pull $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion
-docker tag $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion ${acrValues[0]}/$dockerHubContainerName:$dockerContainerVersion
-docker push ${acrValues[0]}/$dockerHubContainerName:$dockerContainerVersion
+docker tag $dockerContainerUser/$dockerHubContainerName:$dockerContainerVersion ${acrUrl}/$dockerHubContainerName:$dockerContainerVersion
+docker push ${acrUrl}/$dockerHubContainerName:$dockerContainerVersion
 
 # Create an App Service Plan
 az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myResourceGroup --location $location --is-linux --sku S1
@@ -26,4 +28,4 @@ az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myRe
 az appservice web create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
 
 # Configure Web App with a Custom Docker Container from Docker Hub
-az appservice web config container update --docker-registry-server-url http://${acrValues[0]} --docker-custom-image-name ${acrValues[0]}/$dockerHubContainerName:$dockerContainerVersion --docker-registry-server-user ${acrValues[1]} --docker-registry-server-password ${acrValues[2]} --name $appName --resource-group myResourceGroup
+az appservice web config container update --docker-registry-server-url http://${acrUrl} --docker-custom-image-name ${acrUrl}/$dockerHubContainerName:$dockerContainerVersion --docker-registry-server-user ${acrCreds[0]} --docker-registry-server-password ${acrCreds[1]} --name $appName --resource-group myResourceGroup
