@@ -12,7 +12,6 @@ az group create --name myResourceGroup --location $location
 
 # Create Azure Container Registry
 acrUrl=$(az acr create --name $appName --resource-group myResourceGroup --location $location --admin-enabled true --query loginServer --output tsv)
-
 acrCreds=($(az acr credential show --name $appName --resource-group myResourceGroup --query [username,password] --output tsv))
 
 # Pull from Docker
