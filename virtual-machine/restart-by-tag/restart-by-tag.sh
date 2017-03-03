@@ -14,6 +14,8 @@ for group in ${RESOURCE_GROUPS[@]}; do
 
     echo "Deploying vm named ${group}-vm in ${group} with no waiting"
     az vm create -g ${group} -n "${group}-vm" --image UbuntuLTS --admin-username deploy --tags ${DEFAULT_TAG} --no-wait $1>/dev/null
+    # If you don't have an ssh key, you can add the --generate-ssh-keys parameter to the az vm create command
+    # az vm create -g ${group} -n "${group}-vm" --image UbuntuLTS --admin-username deploy --tags ${DEFAULT_TAG} --generate-ssh-keys --no-wait $1>/dev/null
 done
 
 echo "Waiting for the vms to complete provisioning"
