@@ -9,8 +9,7 @@ az group create --name myResourceGroup --location westus
 # Create a virtual machine. 
 az vm create \
     --resource-group myResourceGroup \
-    --name myVM1 \
-    --location westus \
+    --name myVM \
     --image win2016datacenter \
     --admin-username azureuser \
     --admin-password $AdminPassword \

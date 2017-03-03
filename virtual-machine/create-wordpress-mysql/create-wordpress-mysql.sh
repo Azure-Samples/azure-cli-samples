@@ -3,21 +3,11 @@
 # Create a resource group.
 az group create --name myResourceGroup --location westus
 
-# Create a VM
-az vm create \
-    --resource-group myResourceGroup \
-    --name myVM \
-    --location westus \
-    --image UbuntuLTS \
-    --ssh-key-value ~/.ssh/id_rsa.pub \
-    --admin-username azureuser
+# Create a new virtual machine, this creates SSH keys if not present.
+az vm create --resource-group myResourceGroup --name myVM --image UbuntuLTS --generate-ssh-keys
 
 # Open port 80 to allow web traffic to host.
-az vm open-port \
-    --port 80 \
-    --priority 300 \
-    --resource-group myResourceGroup \
-    --name myVM
+az vm open-port --port 80 --resource-group myResourceGroup --name myVM
 
 # Start a CustomScript extension to use a simple bash script to update, download and install WordPress and MySQL 
 az vm extension set \

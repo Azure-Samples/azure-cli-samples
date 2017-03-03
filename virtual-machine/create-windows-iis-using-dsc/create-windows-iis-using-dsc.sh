@@ -9,8 +9,7 @@ az group create --name myResourceGroup --location westus
 # Create a VM
 az vm create \
     --resource-group myResourceGroup \
-    --name myVM1 \
-    --location westus \
+    --name myVM \
     --image win2016datacenter \
     --admin-username azureuser \
     --admin-password $AdminPassword
@@ -20,14 +19,13 @@ az vm extension set \
    --name DSC \
    --publisher Microsoft.Powershell \
    --version 2.19 \
-   --vm-name myVM1 \
+   --vm-name myVM \
    --resource-group myResourceGroup \
-   --settings '{"ModulesURL":"https://github.com/Azure/azure-quickstart-templates/raw/master/dsc-extension-iis-server-windows-vm/ContosoWebsite.ps1.zip", "configurationFunction": "ContosoWebsite.ps1\\ContosoWebsite", "Properties": {"MachineName": "myVM1"} }'
+   --settings '{"ModulesURL":"https://github.com/Azure/azure-quickstart-templates/raw/master/dsc-extension-iis-server-windows-vm/ContosoWebsite.ps1.zip", "configurationFunction": "ContosoWebsite.ps1\\ContosoWebsite", "Properties": {"MachineName": "myVM"} }'
 
   # open port 80 to allow web traffic to host
   az vm open-port \
     --port 80 \
-    --priority 300 \
     --resource-group myResourceGroup \
-    --name myVM1
+    --name myVM
     
