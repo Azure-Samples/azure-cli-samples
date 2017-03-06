@@ -14,7 +14,7 @@ az appservice web create --name $webappname --resource-group myResourceGroup --p
 
 # Deploy code from a public GitHub repository. 
 az appservice web source-control config --name $webappname --resource-group myResourceGroup \
---repo-url $gitrepo --branch master
+--repo-url $gitrepo --branch master --manual-integration
 
 # Browse to the web app.
 az appservice web browse --name $webappname --resource-group myResourceGroup

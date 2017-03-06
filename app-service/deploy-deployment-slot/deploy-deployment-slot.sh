@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gitrepo=https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git
+gitrepo=<Replace with a public GitHub repo URL. e.g. https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git>
 webappname=mywebapp$RANDOM
 
 # Create a resource group.
@@ -19,7 +19,7 @@ az appservice web deployment slot create --name $webappname --resource-group myR
 
 # Deploy sample code to "staging" slot from GitHub.
 az appservice web source-control config --name $webappname --resource-group myResourceGroup \
---slot staging --repo-url $gitrepo --branch master
+--slot staging --repo-url $gitrepo --branch master --manual-integration
 
 # Browse to the deployed web app on staging. Deployment may be in progress, so rerun this if necessary.
 az appservice web browse --name $webappname --resource-group myResourceGroup --slot staging
