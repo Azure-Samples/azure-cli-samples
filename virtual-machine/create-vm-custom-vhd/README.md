@@ -7,7 +7,7 @@ replaced with the executor of the scripts public key.
 You can download the custom VHD at https://azclisamples.blob.core.windows.net/vhds/sample.vhd.
 
 ## To run this sample
-`./vm-custom-vhd`
+`./create-vm-custom-vhd`
 
 ## To tear down this sample
 `az group delete -n az-cli-custom-vhd`
