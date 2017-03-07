@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-RESOURCE_GROUP='az-cli-custom-vhd'
+RESOURCE_GROUP='az-cli-vhd'
 STORAGE_PREFIX='customimagevm'
 LOCATION='westus'
 
@@ -22,7 +22,7 @@ fi
 echo "Creating resource group ${RESOURCE_GROUP} in ${LOCATION}"
 az group create -n ${RESOURCE_GROUP} -l ${LOCATION} 1>/dev/null
 
-# Create the storage account to upload the custom vhd. If the storage provider has not been registered, run:
+# Create the storage account to upload the vhd. If the storage provider has not been registered, run:
 # `az provider register --namespace "Microsoft.Storage"`
 STORAGE_NAME=$(az storage account list --query "[?starts_with(name, '${STORAGE_PREFIX}')] | [0].name" -o tsv)
 if [[ ${STORAGE_NAME} ]]; then
@@ -66,7 +66,7 @@ if [[ VM_NAME ]]; then
     echo "VM named custom-vm in ${RESOURCE_GROUP} already exists."
 else
     # Create the vm from the custom image
-    echo "Creating a virtual machine from the custom vhd"
+    echo "Creating a virtual machine from the vhd"
     az vm create -g ${RESOURCE_GROUP} -n custom-vm --image "https://${STORAGE_NAME}.blob.core.windows.net/vhds/sample.vhd" \
         --os-type linux --admin-username deploy 1>/dev/null
 fi
@@ -78,7 +78,7 @@ az vm access set-linux-user -g ${RESOURCE_GROUP} -n custom-vm -u deploy --ssh-ke
 
 
 # Get public IP address for the VM
-IP_ADDRESS=$(az vm list-ip-addresses -g az-cli-custom-vhd -n custom-vm \
+IP_ADDRESS=$(az vm list-ip-addresses -g az-cli-vhd -n custom-vm \
     --query "[0].virtualMachine.network.publicIpAddresses[0].ipAddress" -o tsv)
 
 echo ""
