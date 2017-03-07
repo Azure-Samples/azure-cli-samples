@@ -19,4 +19,4 @@ az appservice web create --name $appName --plan WebAppWithRedisPlan --resource-g
 redis=($(az redis create --name $appName --resource-group $resourceGroupName --location $location --sku-capacity 0 --sku-family C --sku-name Basic --query [hostName,sslPort,accessKeys.primaryKey] --output tsv))
 
 # Assign the connection string to an App Setting in the Web App
-az appservice web config appsettings update --settings "REDIS_URL=${redis[0]}" "REDIS_PORT=${redis[1]}" "REDIS_KEY=${redis[2]}"
+az appservice web config appsettings update --settings "REDIS_URL=${redis[0]}" "REDIS_PORT=${redis[1]}" "REDIS_KEY=${redis[2]}" --name $appName --resource-group $resourceGroupName
