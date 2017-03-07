@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-RESOURCE_GROUP='az-cli-vhd'
-STORAGE_PREFIX='customimagevm'
-LOCATION='westus'
+RESOURCE_GROUP="az-cli-vhd"
+STORAGE_PREFIX="customimagevm"
+LOCATION="westus"
 
 # Read in the public key
 if [[ -r ~/.ssh/id_rsa.pub ]]; then
@@ -18,12 +18,11 @@ else
 fi
 
 
-# Create the resource group if it doesn't exist
+# Create the resource group
 echo "Creating resource group ${RESOURCE_GROUP} in ${LOCATION}"
 az group create -n ${RESOURCE_GROUP} -l ${LOCATION} 1>/dev/null
 
-# Create the storage account to upload the vhd. If the storage provider has not been registered, run:
-# `az provider register --namespace "Microsoft.Storage"`
+# Create the storage account to upload the vhd
 STORAGE_NAME=$(az storage account list --query "[?starts_with(name, '${STORAGE_PREFIX}')] | [0].name" -o tsv)
 if [[ ${STORAGE_NAME} ]]; then
     echo "Storage account ${STORAGE_NAME} already exists"
