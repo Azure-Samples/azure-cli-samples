@@ -13,6 +13,7 @@ else
     eval FILE_PATH=${FILE_PATH}
     while [ ! -e ${FILE_PATH} ]; do
         read -e -p "I couldn't find $FILE_PATH. Please provide a path to your public key: " FILE_PATH
+        eval FILE_PATH=${FILE_PATH}
     done
     SSH_PUB_KEY=`cat ${FILE_PATH}`
 fi
