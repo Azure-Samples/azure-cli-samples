@@ -41,12 +41,12 @@ az network nsg create --resource-group myResourceGroup --name myNetworkSecurityG
 # Create a network security group rule for port 3389.
 az network nsg rule create --resource-group myResourceGroup --nsg-name myNetworkSecurityGroup --name myNetworkSecurityGroupRuleSSH \
   --protocol tcp --direction inbound --source-address-prefix '*' --source-port-range '*'  \
-  --destination-address-prefix '*' --destination-port-range 3389 --access allow
+  --destination-address-prefix '*' --destination-port-range 3389 --access allow --priority 1000
 
 # Create a network security group rule for port 80.
 az network nsg rule create --resource-group myResourceGroup --nsg-name myNetworkSecurityGroup --name myNetworkSecurityGroupRuleHTTP \
 --protocol tcp --direction inbound --priority 1001 --source-address-prefix '*' --source-port-range '*' \
---destination-address-prefix '*' --destination-port-range 80 --access allow
+--destination-address-prefix '*' --destination-port-range 80 --access allow --priority 2000
 
 # Create three virtual network cards and associate with public IP address and NSG.
 for i in `seq 1 3`; do
