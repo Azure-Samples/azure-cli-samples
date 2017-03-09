@@ -9,7 +9,7 @@ az vm create --resource-group myResourceGroup --name myVM --image UbuntuLTS --ge
 # Open port 80 to allow web traffic to host.
 az vm open-port --port 80 --resource-group myResourceGroup --name myVM 
 
-# Use CustomScript extension to install Apache.
+# Use CustomScript extension to install NGINX.
 az vm extension set \
   --publisher Microsoft.Azure.Extensions \
   --version 2.0 \
