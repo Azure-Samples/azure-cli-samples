@@ -74,8 +74,7 @@ fi
 
 # Ensure ssh access to the VM for this user by resetting the current ssh key for the deploy user
 echo "Ensure the deploy user can authenicate with ~/.ssh/id_rsa.pub"
-az vm access set-linux-user -g ${RESOURCE_GROUP} -n custom-vm -u deploy --ssh-key-value "${SSH_PUB_KEY}" 1>/dev/null
-
+az vm user update --resource-group ${RESOURCE_GROUP} -n custom-vm -u deploy --ssh-key-value "${SSH_PUB_KEY}" 1>?dev/null
 
 # Get public IP address for the VM
 IP_ADDRESS=$(az vm list-ip-addresses -g az-cli-vhd -n custom-vm \
