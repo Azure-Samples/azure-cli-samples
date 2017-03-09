@@ -16,7 +16,7 @@ STORAGE_KEY=$(az storage account keys list -g myResourceGroup -n myStrorageAccou
 # Create the container for the vhd
 az storage container create -n vhds --account-name myStorageAccount --account-key ${STORAGE_KEY}
 
-# Upload the vhd to a blog
+# Upload the vhd to a blob
 az storage blob upload -c vhds -f ~/sample.vhd -n sample.vhd --account-name myStorageAccount --account-key ${STORAGE_KEY}
 
 # Create the vm from the vhd
