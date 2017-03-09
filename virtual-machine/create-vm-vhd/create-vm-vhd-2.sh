@@ -30,5 +30,4 @@ az vm user update --resource-group myResourceGroup -n custom-vm -u deploy --ssh-
 IP_ADDRESS=$(az vm list-ip-addresses -g az-cli-vhd -n custom-vm \
     --query "[0].virtualMachine.network.publicIpAddresses[0].ipAddress" -o tsv)
 
-echo ""
-echo "You can now connect via 'ssh deploy@${IP_ADDRESS}'"
+echo "You can now connect using 'ssh deploy@${IP_ADDRESS}'"
