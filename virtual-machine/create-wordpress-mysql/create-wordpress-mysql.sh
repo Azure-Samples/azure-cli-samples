@@ -4,7 +4,7 @@
 az group create --name myResourceGroup --location westus
 
 # Create a new virtual machine, this creates SSH keys if not present.
-az vm create --resource-group myResourceGroup --name myVM --image Canonical:UbuntuServer:16.04-LTS:latest --generate-ssh-keys
+az vm create --resource-group myResourceGroup --name myVM --image Canonical:UbuntuServer:14.04.5-LTS:latest --generate-ssh-keys
 
 # Open port 80 to allow web traffic to host.
 az vm open-port --port 80 --resource-group myResourceGroup --name myVM
