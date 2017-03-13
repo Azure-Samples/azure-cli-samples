@@ -19,13 +19,13 @@ az appservice plan create --name WebAppWithSQLPlan --resource-group myResourceGr
 az appservice web create --name $appName --plan WebAppWithSQLPlan --resource-group myResourceGroup
 
 # Create a SQL Server
-az sql server create --name $serverName --resource-group myResourceGroup --location $location --administrator-login $username --administrator-login-password $sqlServerPassword
+az sql server create --name $serverName --resource-group myResourceGroup --location $location --admin-user $username --admin-password $sqlServerPassword
 
 # Configure Firewall for Azure Access
-az sql server firewall create --resource-group myResourceGroup --server-name $serverName --name AllowYourIp --start-ip-address $startip --end-ip-address $endip
+az sql server firewall-rule create --resource-group myResourceGroup --server $serverName --name AllowYourIp --start-ip-address $startip --end-ip-address $endip
 
 # Create Database on Server
-az sql db create --resource-group myResourceGroup -l $location --server-name $serverName --name MySampleDatabase --requested-service-objective-name S0
+az sql db create --resource-group myResourceGroup --server $serverName --name MySampleDatabase --service-objective S0
 
 # Assign the connection string to an App Setting in the Web App
 az appservice web config appsettings update --settings "SQLSRV_CONNSTR=Server=tcp:$serverName.database.windows.net;Database=MySampleDatabase;User ID=$username@$serverName;Password=$sqlServerPassword;Trusted_Connection=False;Encrypt=True;" --name $appName --resource-group myResourceGroup
