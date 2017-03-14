@@ -18,7 +18,7 @@ az group create \
 az sql server create \
 	--name $servername \
 	--resource-group myResourceGroup \
-	--location northcentralus \
+	--location westeurope  \
 	--admin-user $adminlogin \
 	--admin-password $password
 
