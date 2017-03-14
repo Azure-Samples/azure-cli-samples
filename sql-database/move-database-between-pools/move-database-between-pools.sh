@@ -9,7 +9,7 @@ servername=server-$RANDOM
 # Create a resource group
 az group create \
 	--name myResourceGroup \
-	--location northcentralus
+	--location westeurope 
 
 # Create a logical server in the resource group
 az sql server create \
@@ -22,14 +22,14 @@ az sql server create \
 # Create two pools in the logical server
 az sql elastic-pools create \
 	--resource-group myResourceGroup \
-	--location northcentralus \
+	--location westeurope  \
 	--server $servername \
 	--name myFirstPool \
 	--dtu 50 \
 	--database-dtu-max 20
 az sql elastic-pools create \
 	--resource-group myResourceGroup \
-	--location northcentralus \
+	--location westeurope  \
 	--server $servername \
 	--name MySecondPool \
 	--dtu 50 \
