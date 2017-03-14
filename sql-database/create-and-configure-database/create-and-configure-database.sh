@@ -11,20 +11,20 @@ endip=255.255.255.255
 
 # Create a resource group
 az group create \
-	-n myResourceGroup \
-	-l northcentralus
+	--name myResourceGroup \
+	--location westeurope
 
 # Create a logical server in the resource group
 az sql server create \
-	-n $servername \
-	-g myResourceGroup \
-	-l northcentralus \
-	--administrator-login $adminlogin \
-	--administrator-login-password $password
+	--name $servername \
+	--resource-group myResourceGroup \
+	--location northcentralus \
+	--admin-user $adminlogin \
+	--admin-password $password
 
 # Configure a firewall rule for the server
 az sql server firewall-rule create \
-	-g myResourceGroup \
+	--resource-group myResourceGroup \
 	--server $servername \
 	-n AllowYourIp \
 	--start-ip-address $startip \
@@ -32,8 +32,8 @@ az sql server firewall-rule create \
 
 # Create a database in the server
 az sql db create \
-	-g myResourceGroup \
+	--resource-group myResourceGroup \
 	--server $servername \
-	-n mySampleDatabase \
+	--name mySampleDatabase \
 	--service-objective S0
 
