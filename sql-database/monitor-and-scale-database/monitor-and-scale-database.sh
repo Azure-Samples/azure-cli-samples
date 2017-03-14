@@ -9,7 +9,7 @@ servername=server-$RANDOM
 # Create a resource group
 az group create \
 	--name myResourceGroup \
-	-location northcentralus
+	-location westeurope 
 
 # Create a server
 az sql server create \
