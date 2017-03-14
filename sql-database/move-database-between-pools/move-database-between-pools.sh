@@ -8,53 +8,50 @@ servername=server-$RANDOM
 
 # Create a resource group
 az group create \
-	-n myResourceGroup \
-	-l northcentralus
+	--name myResourceGroup \
+	--location northcentralus
 
 # Create a logical server in the resource group
 az sql server create \
-	-n $servername \
-	-g myResourceGroup \
-	-l northcentralus \
-	--administrator-login $adminlogin \
-	--administrator-login-password $password
+	--name $servername \
+	--resource-group myResourceGroup \
+	--location westeurope \
+	--admin-user $adminlogin \
+	--admin-password $password
 
 # Create two pools in the logical server
 az sql elastic-pools create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n myFirstPool \
+	--resource-group myResourceGroup \
+	--location northcentralus \
+	--server $servername \
+	--name myFirstPool \
 	--dtu 50 \
 	--database-dtu-max 20
 az sql elastic-pools create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n MySecondPool \
+	--resource-group myResourceGroup \
+	--location northcentralus \
+	--server $servername \
+	--name MySecondPool \
 	--dtu 50 \
 	--database-dtu-max 50
 
 # Create a database in the first pool
 az sql db create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n mySampleDatabase \
+	--resource-group myResourceGroup \
+	--server $servername \
+	--name mySampleDatabase \
 	--elastic-pool-name myFirstPool
 
 # Move the database to the second pool - create command updates the db if it exists
 az sql db create \
-	-g myResourceGroup \
-	-l northcentralus \
+	--resource-group myResourceGroup \
 	--server-name $servername \
-	-n mySampleDatabase \
+	--name mySampleDatabase \
 	--elastic-pool-name mySecondPool
 
 # Move the database to standalone S1 performance level
 az sql db create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n mySampleDatabase \
-	--requested-service-objective-name S1
+	--resource-group myResourceGroup \
+	--server $servername \
+	--name mySampleDatabase \
+	--service-objective S1
