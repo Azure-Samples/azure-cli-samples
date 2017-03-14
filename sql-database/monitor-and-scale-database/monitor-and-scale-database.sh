@@ -8,35 +8,33 @@ servername=server-$RANDOM
 
 # Create a resource group
 az group create \
-	-n myResourceGroup \
-	-l northcentralus
+	--name myResourceGroup \
+	-location northcentralus
 
 # Create a server
 az sql server create \
-	-n $servername \
-	-g myResourceGroup \
-	-l northcentralus \
-	--administrator-login $adminlogin \
-	--administrator-login-password $password
+	--name $servername \
+	--resource-group myResourceGroup \
+	--location westeurope \
+	--admin-user $adminlogin \
+	--admin-password $password
 
 # Create a database
 az sql db create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n mySampleDatabase \
-	--requested-service-objective-name S0
+	--resource-group myResourceGroup \
+	--server $servername \
+	--name mySampleDatabase \
+	--service-objective S0
 
 # Monitor database size
 az sql db show-usage \
-	-n mySampleDatabase \
-	-g myResourceGroup \
-	--server-name $servername
+	--name mySampleDatabase \
+	--resource-group myResourceGroup \
+	--name $servername
 
 # Scale up database to S1 performance level (create command executes update if DB already exists)
 az sql db create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n mySampleDatabase \
-	--requested-service-objective-name S1
+	--resource-group myResourceGroup \
+	--server $servername \
+	--name mySampleDatabase \
+	--service-objective S1
