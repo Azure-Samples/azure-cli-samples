@@ -8,43 +8,43 @@ servername=server-$RANDOM
 
 # Create a resource group
 az group create \
-	-n myResourceGroup \
-	-l northcentralus
+	--name myResourceGroup \
+	--location northcentralus
 
 # Create a server
 az sql server create \
-	-n $servername \
-	-g myResourceGroup \
-	-l northcentralus \
-	--administrator-login $adminlogin \
-	--administrator-login-password $password
+	--name $servername \
+	--resource-group myResourceGroup \
+	--location westeurope \
+	--admin-user $adminlogin \
+	--admin-password $password
 
 # Create a pool
 az sql elastic-pools create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n samplepool \
+	--resource-group myResourceGroup \
+	--location northcentralus \
+	--server $servername \
+	--name samplepool \
 	--dtu 50 \
 	--database-dtu-max 20
 
 # Create two database in the pool
 az sql db create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n myFirstSampleDatabase \
+	--resource-group myResourceGroup \
+	--location northcentralus \
+	--server $servername \
+	--name myFirstSampleDatabase \
 	--elastic-pool-name samplepool
 az sql db create \
-	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
-	-n mySecondSampleDatabase \
+	--resource-group myResourceGroup \
+	--location northcentralus \
+	--server $servername \
+	--name mySecondSampleDatabase \
 	--elastic-pool-name samplepool
 
 # Scale up to the pool to 100 eDTU
 az sql elastic-pools update \
-	-g myResourceGroup \
-	--server-name $servername \
-	-n samplepool \
+	--resource-group myResourceGroup \
+	--server $servername \
+	--name samplepool \
 	--set dtu=100
