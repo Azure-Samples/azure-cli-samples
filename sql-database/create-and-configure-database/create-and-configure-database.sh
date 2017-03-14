@@ -23,9 +23,9 @@ az sql server create \
 	--administrator-login-password $password
 
 # Configure a firewall rule for the server
-az sql server firewall create \
+az sql server firewall-rule create \
 	-g myResourceGroup \
-	--server-name $servername \
+	--server $servername \
 	-n AllowYourIp \
 	--start-ip-address $startip \
 	--end-ip-address $endip
@@ -33,8 +33,7 @@ az sql server firewall create \
 # Create a database in the server
 az sql db create \
 	-g myResourceGroup \
-	-l northcentralus \
-	--server-name $servername \
+	--server $servername \
 	-n mySampleDatabase \
-	--requested-service-objective-name S0
+	--service-objective S0
 
