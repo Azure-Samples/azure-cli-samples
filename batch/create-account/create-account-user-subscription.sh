@@ -6,7 +6,7 @@ az login
 # Create a resource group.
 az group create --name myresourcegroup --location westeurope
 
-# A Batch account that will allocate pools in the users subscription must be configured
+# A Batch account that will allocate pools in the user's subscription must be configured
 # with a Key Vault located in the same region. Let's create this first.
 az keyvault create \
     --resource-group myresourcegroup \
@@ -33,6 +33,6 @@ az batch account create \
     --keyvault mykevault
 
 # We can now authenticate directly against the account for further CLI interaction.
-# Note that Batch accounts that allocate pools in the users subscription must be
+# Note that Batch accounts that allocate pools in the user's subscription must be
 # authenticated via an Azure Active Directory token.
 az batch account login -g myresourcegroup -n mybatchaccount
