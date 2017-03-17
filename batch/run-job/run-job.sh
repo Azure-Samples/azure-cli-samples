@@ -18,7 +18,7 @@ az batch task create \
     --command-line "cmd /c %AZ_BATCH_APP_PACKAGE_MYAPP#1.0%\\myapp.exe"
 
 # If we want to add many tasks at once - this can be done by specifying the tasks
-# in a JSON file, and passing it into the command. See all_tasks.json for formatting.
+# in a JSON file, and passing it into the command. See tasks.json for formatting.
 az batch task create --job-id myjob --json-file tasks.json
 
 # Now that all the tasks are added - we can update the job so that it will automatically
