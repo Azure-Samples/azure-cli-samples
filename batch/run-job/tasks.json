@@ -1,0 +1,43 @@
+[{
+  "id": "task2",
+  "displayName": "displayName2",
+  "commandLine": "cmd /c dir /s",
+  "constraints": {
+    "maxWallClockTime": "P1D",
+    "maxTaskRetryCount": 2
+  },
+  "environmentSettings": [
+    {
+      "name": "env1",
+      "value": "value1"
+    },
+    {
+      "name": "env2",
+      "value": "value2"
+    }
+  ]
+},
+{
+  "id": "task3",
+  "displayName": "displayName3",
+  "commandLine": "cmd /c dir /s",
+  "constraints": {
+    "maxWallClockTime": "P1D",
+    "maxTaskRetryCount": 2
+  }
+},
+{
+  "id": "task4",
+  "displayName": "displayName4",
+  "commandLine": "cmd /c dir /s",
+  "environmentSettings": [
+    {
+      "name": "env1",
+      "value": "value1"
+    },
+    {
+      "name": "env2",
+      "value": "value2"
+    }
+  ]
+}]
