@@ -7,7 +7,7 @@ password=ChangeYourAdminPassword1
 servername=server-$RANDOM
 # The ip address range that you want to allow to access your DB
 startip=0.0.0.0
-endip=255.255.255.255
+endip=0.0.0.0
 
 # Create a resource group
 az group create \
