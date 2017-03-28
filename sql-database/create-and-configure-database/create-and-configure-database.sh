@@ -35,5 +35,6 @@ az sql db create \
 	--resource-group myResourceGroup \
 	--server $servername \
 	--name mySampleDatabase \
+	--sample-name AdventureWorksLT \
 	--service-objective S0
 
