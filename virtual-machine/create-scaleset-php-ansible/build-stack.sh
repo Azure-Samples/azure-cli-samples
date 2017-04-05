@@ -19,7 +19,7 @@ az network lb rule create -g myResourceGroup -n http-rule --backend-pool-name my
 # of instances. This is helpful for hooking into configuration management software or simply
 # provisioning your software stack directly.
 az vmss extension set -n CustomScript --publisher Microsoft.Azure.Extensions --version 2.0 \
-   -g myResourceGroup --vmss-name myScaleSet --protected-settings ./protected_config.json
+   -g myResourceGroup --vmss-name myScaleSet --protected-settings ./protected_config.json --no-auto-upgrade
 
 # The instances that we have were created before the extension was added.
 # Update these instances to run the new configuration on each of them.
