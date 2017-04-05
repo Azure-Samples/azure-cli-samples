@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Create the resource group if it doesn't exist
 az group create -n myResourceGroup -l westus
