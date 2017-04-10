@@ -28,7 +28,7 @@ read -p "Press [Enter] key when ready ..."
 # instructions at https://aka.ms/appservicecustomdns to configure a CNAME record for the 
 # hostname "www" and point it your web app's default domain name.
 
-# Map your prepared custom domain name to the web app.
+# Map your prepared custom domain name to the function app.
 az appservice web config hostname add --webapp $functionAppName --resource-group myResourceGroup \
 --name $fqdn
 
@@ -37,7 +37,7 @@ thumprint=$(az appservice web config ssl upload --certificate-file $pfxPath \
 --certificate-password $pfxPassword --name $functionAppName --resource-group myResourceGroup \
 --query thumbprint --output tsv)
 
-# Binds the uploaded SSL certificate to the web app.
+# Binds the uploaded SSL certificate to the function app.
 az appservice web config ssl bind --certificate-thumbprint $thumbprint --ssl-type SNI \
 --name $functionAppName --resource-group myResourceGroup
 
