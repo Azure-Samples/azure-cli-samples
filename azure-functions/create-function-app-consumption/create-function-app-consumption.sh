@@ -1,5 +1,7 @@
 #!/bin/bash
 
+storageName=myfunctionappstorage$RANDOM
+
 # Create resource group
 az group create --name myResourceGroup --location westeurope
 
