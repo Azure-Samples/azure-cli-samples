@@ -1,8 +1,5 @@
 #/bin/bash
 
-# Variables
-resourceGroupName="myResourceGroup"
-cacheName="myCache"
-
-# Retrieve the details for an Azure Redis Cache instance, including provisioning status
-az redis show --name $cacheName --resource-group $resourceGroupName 
+# Retrieve the details for an Azure Redis Cache instance named contosoCache in the Resource Group contosoGroup
+# This script shows details such as hostname, ports, and provisioning status
+az redis show --name contosoCache --resource-group contosoGroup 
