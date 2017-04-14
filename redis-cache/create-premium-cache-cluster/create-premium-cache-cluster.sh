@@ -1,12 +1,10 @@
 #/bin/bash
 
-# Variables
-resourceGroupName="myResourceGroup$RANDOM"
-cacheName="myCache$RANDOM"
+# Creates a Resource Group named contosoGroup, and creates a Premium Redis Cache with clustering in that group named contosoCache
 
 # Create a Resource Group 
-az group create --name $resourceGroupName --location eastus
+az group create --name contosoGroup --location eastus
 
 # Create a Redis Cache
-az redis create --name $cacheName --resource-group $resourceGroupName --location eastus --sku-capacity 1 --sku-family P --sku-name Premium --shard-count 2
+az redis create --name contosoCache --resource-group contosoGroup --location eastus --sku-capacity 1 --sku-family P --sku-name Premium --shard-count 2
 
