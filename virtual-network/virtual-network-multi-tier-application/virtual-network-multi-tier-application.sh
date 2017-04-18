@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RgName="MyResourceGroup4"
+RgName="MyResourceGroup"
 Location="westus"
 
 # Create a resource group.
