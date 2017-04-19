@@ -1,9 +1,10 @@
 #!/bin/bash
 
-$RgName=MyResourceGroup
+RgName=MyResourceGroup
+location=westus
 
 # Create a resource group.
-az group create --name myResourceGroup --location westeurope
+az group create --name myResourceGroup --location $location
 
 # Create a virtual network and subnet (front end).
 az network vnet create --resource-group $RgName --name MyVnet --address-prefix 10.0.0.0/16 \
