@@ -1,6 +1,3 @@
-# login to azure 
-az login
-
 # create a resource group with location
 az group create --name myResourceGroup --location westeurope
 
@@ -13,8 +10,6 @@ az functionapp create --name myFunction --resource-group myResourceGroup --stora
 # create documentdb database. 
 az documentdb create --name myDocumentDB --resource-group myResourceGroup
 
-# clean up
-az group delete --name myResourceGroup
 
 
 
