@@ -137,7 +137,6 @@ az vm create \
   --name MyVm-Web \
   --nics MyNic-Web \
   --image UbuntuLTS \
-  --admin-username azureadmin \
   --generate-ssh-keys
 
 # Create a public IP address for the MySQL VM.
@@ -160,5 +159,4 @@ az vm create \
   --name MyVm-Sql \
   --nics MyNic-Sql \
   --image UbuntuLTS \
-  --admin-username azureadmin \
   --generate-ssh-keys
