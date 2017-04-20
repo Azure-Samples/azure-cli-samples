@@ -1,6 +1,3 @@
-# login to azure 
-az login
-
 # create a resource group with location
 az group create --name myResourceGroup --location westeurope
 
