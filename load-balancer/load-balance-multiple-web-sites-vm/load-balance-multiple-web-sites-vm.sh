@@ -137,7 +137,6 @@ az vm create \
   --nics MyNic-Vm1 \
   --image UbuntuLTS \
   --availability-set MyAvailabilitySet \
-  --admin-username azureadmin \
   --generate-ssh-keys
 
 ############### VM2 ###############
@@ -177,5 +176,4 @@ az vm create \
   --nics MyNic-Vm2 \
   --image UbuntuLTS \
   --availability-set MyAvailabilitySet \
-  --admin-username azureadmin \
   --generate-ssh-keys
