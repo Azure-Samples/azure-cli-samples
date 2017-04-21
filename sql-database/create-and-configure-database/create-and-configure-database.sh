@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Set an admin login and password for your database
-adminlogin=ServerAdmin
-password=ChangeYourAdminPassword1
+export adminlogin=ServerAdmin
+export password=ChangeYourAdminPassword1
 # The logical server name has to be unique in the system
-servername=server-$RANDOM
+export servername=server-$RANDOM
 # The ip address range that you want to allow to access your DB
-startip=0.0.0.0
-endip=0.0.0.0
+export startip=0.0.0.0
+export endip=0.0.0.0
 
 # Create a resource group
 az group create \
