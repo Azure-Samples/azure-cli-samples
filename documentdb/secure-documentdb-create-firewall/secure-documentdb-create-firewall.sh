@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set variables for the new account, database, and collection
-resourceGroupName=myResourceGroup
+resourceGroupName=docdbgetstarted
 location="South Central US"
 name=docdb-test
 ipRangeFilter="13.91.6.132,13.91.6.1/24"
@@ -27,7 +27,7 @@ az documentdb add-database \
 	--resource-group $resourceGroupName \
 	--name $name \
 	--dbname $databaseName \
-    --locations "East US"
+    --locations $location
 
 # Create a DocumentDB collection
 az documentdb add-collection \

@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Set variables for the new account, database, and collection
-resourceGroupName=myResourceGroup
+resourceGroupName=docdbgetstarted
 location="South Central US"
 name=docdb-test
-ipRangeFilter="13.91.6.132,13.91.6.1/24"
 databaseName=docdb-mongodb-database
 collectionName=docdb-mongodb-collection
+throughput=400
+zipcode=55104
 
 # Create a resource group
 az group create \
@@ -27,12 +28,13 @@ az documentdb create \
 az documentdb add-database \
 	--resource-group $resourceGroupName \
 	--name $name \
-	--dbname $databaseName \
-    --locations $location
+	--dbname $databaseName 
 
 # Create a MongoDB API DocumentDB collection
 az documentdb add-collection \
 	--resource-group $resourceGroupName \
 	--name $name \
 	--dbname $databaseName \
-	--collname $collectionName 
+	--collname $collectionName \
+	--throughput $throughput \
+	--partitionkey $zipcode

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set variables for the new account, database, and collection
-resourceGroupName=myResourceGroup
+resourceGroupName=docdbgetstarted
 location="South Central US"
 name=docdb-test
 distributedLocations="East US"=2 "West US"=1 "South Central US"=0

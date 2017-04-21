@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Set variables for the new account, database, and collection
-resourceGroupName=myResourceGroup
+resourceGroupName=docdbgetstarted
 location="South Central US"
 name=docdb-test
 databaseName=docdb-test-database
 collectionName=docdb-test-collection
-throughput=10000 
+originalThroughput=400 
+newThroughput=700
 
 # Create a resource group
 az group create \
@@ -17,7 +18,6 @@ az group create \
 az documentdb create \
 	--name $name \
 	--resource-group $resourceGroupName \
-	--ip-range-filter $ipRangeFilter \
 	--kind GlobalDocumentDB \
 	--locations $location  \
 	--max-interval 10 \
@@ -28,18 +28,18 @@ az documentdb add-database \
 	--resource-group $resourceGroupName \
 	--name $name \
 	--dbname $databaseName \
-    --locations "East US"
 
 # Create a DocumentDB collection
 az documentdb add-collection \
 	--resource-group $resourceGroupName \
 	--name $name \
 	--dbname $databaseName \
-	--collname $collectionName 
+	--collname $collectionName \
+    --througput $originalThrougput
 
 # Scale throughput
 az documentdb update \
 	--name $name \
     --resource-group $resourceGroupName \
     --collname $collectionName \
-	--throughput $throughput
+	--throughput $newThroughput
