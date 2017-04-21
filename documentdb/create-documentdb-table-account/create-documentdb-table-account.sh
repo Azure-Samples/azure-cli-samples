@@ -28,7 +28,7 @@ az documentdb add-database \
 	--resource-group $resourceGroupName \
 	--name $name \
 	--dbname $databaseName \
-    --locations "East US"
+    --locations $location
 
 # Create a Tables API DocumentDB collection
 az documentdb add-collection \
