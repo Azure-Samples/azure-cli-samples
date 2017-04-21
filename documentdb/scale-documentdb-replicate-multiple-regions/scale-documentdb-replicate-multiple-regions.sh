@@ -34,7 +34,7 @@ az documentdb update \
 # Modify regional failover priorities 
 az documentdb update \
 	--name $name \
-	--resource-group $myResourceGroup \
+	--resource-group $resourceGroupName \
 	--locations $newDistributedLocations 
 
 
