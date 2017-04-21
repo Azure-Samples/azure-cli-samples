@@ -4,11 +4,9 @@
 resourceGroupName=myResourceGroup
 location="South Central US"
 name=docdb-test
-ipRangeFilter="13.91.6.132,13.91.6.1/24"
 databaseName=docdb-test-database
 collectionName=docdb-test-collection
-distributedLocations="East US"=2 "West US"=1 "South Central US"=0
-newDistributedLocations="South Central US"=2 "East US"=1 "West US"=0  
+throughput=10000 
 
 # Create a resource group
 az group create \
@@ -25,16 +23,23 @@ az documentdb create \
 	--max-interval 10 \
 	--max-staleness-prefix 200
 
-# Replicate DocumentDB in multiple regions 
-az documentdb update \
-	--name $name \
+# Create a DocumentDB database 
+az documentdb add-database \
 	--resource-group $resourceGroupName \
-	--locations $distributedLocations  
+	--name $name \
+	--dbname $databaseName \
+    --locations "East US"
 
-# Modify regional failover priorities 
+# Create a DocumentDB collection
+az documentdb add-collection \
+	--resource-group $resourceGroupName \
+	--name $name \
+	--dbname $databaseName \
+	--collname $collectionName 
+
+# Scale throughput
 az documentdb update \
 	--name $name \
-	--resource-group $myResourceGroup \
-	--locations $newDistributedLocations 
-
-
+    --resource-group $resourceGroupName \
+    --collname $collectionName \
+	--throughput $throughput
