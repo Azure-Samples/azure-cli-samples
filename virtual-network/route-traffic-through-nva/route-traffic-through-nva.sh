@@ -90,50 +90,70 @@ az vm create \
   --name MyVm-Firewall \
   --nics MyNic-Firewall \
   --image UbuntuLTS \
-  --admin-username azureadmin \
   --generate-ssh-keys
 
 # Get the private IP address from the VM for the user-defined route.
 Fw1Ip=$(az vm list-ip-addresses \
   --resource-group $RgName \
   --name MyVm-Firewall \
-  --query [].virtualMachine.network.privateIpAddresses[0] -otsv)
+  --query [].virtualMachine.network.privateIpAddresses[0] --out tsv)
 
-# Create route table to the DMZ subnet.
+# Create route table for the FrontEnd subnet.
 az network route-table create \
-  --name MyRouteTable-Dmz \
+  --name MyRouteTable-FrontEnd \
   --resource-group $RgName
 
 # Create a route for traffic from the front-end to the back-end subnet through the firewall VM.
 az network route-table route create \
   --name RouteToBackEnd \
   --resource-group $RgName \
-  --route-table-name MyRouteTable-Dmz \
+  --route-table-name MyRouteTable-FrontEnd \
   --address-prefix 10.0.2.0/24 \
   --next-hop-type VirtualAppliance \
   --next-hop-ip-address $Fw1Ip
-
-# Create a route for traffic from the back-end subnet to the front-end subnet through the firewall VM.
-az network route-table route create \
-  --name RouteToFrontEnd \
-  --resource-group $RgName \
-  --route-table-name MyRouteTable-Dmz \
-  --address-prefix 10.0.1.0/24 \
-  --next-hop-type VirtualAppliance \
-  --next-hop-ip-address $Fw1Ip
-
+  
 # Create a route for traffic from the front-end subnet to the Internet through the firewall VM.
 az network route-table route create \
   --name RouteToInternet \
   --resource-group $RgName \
-  --route-table-name MyRouteTable-Dmz \
+  --route-table-name MyRouteTable-FrontEnd \
   --address-prefix 0.0.0.0/0 \
   --next-hop-type VirtualAppliance \
   --next-hop-ip-address $Fw1Ip
 
-# Associate the route table to the DMZ subnet.
+# Associate the route table to the FrontEnd subnet.
 az network vnet subnet update \
-  --name MySubnet-Dmz \
+  --name MySubnet-FrontEnd \
   --vnet-name MyVnet \
   --resource-group $RgName \
-  --route-table MyRouteTable-Dmz
+  --route-table MyRouteTable-FrontEnd
+
+# Create route table for the BackEnd subnet.
+az network route-table create \
+  --name MyRouteTable-BackEnd \
+  --resource-group $RgName
+  
+# Create a route for traffic from the back-end subnet to the front-end subnet through the firewall VM.
+az network route-table route create \
+  --name RouteToFrontEnd \
+  --resource-group $RgName \
+  --route-table-name MyRouteTable-BackEnd \
+  --address-prefix 10.0.1.0/24 \
+  --next-hop-type VirtualAppliance \
+  --next-hop-ip-address $Fw1Ip
+
+# Create a route for traffic from the back-end subnet to the Internet through the firewall VM.
+az network route-table route create \
+  --name RouteToInternet \
+  --resource-group $RgName \
+  --route-table-name MyRouteTable-BackEnd \
+  --address-prefix 0.0.0.0/0 \
+  --next-hop-type VirtualAppliance \
+  --next-hop-ip-address $Fw1Ip
+
+# Associate the route table to the BackEnd subnet.
+az network vnet subnet update \
+  --name MySubnet-BackEnd \
+  --vnet-name MyVnet \
+  --resource-group $RgName \
+  --route-table MyRouteTable-BackEnd
