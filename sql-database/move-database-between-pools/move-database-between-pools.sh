@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Set an admin login and password for your database
-adminlogin=ServerAdmin
-password=ChangeYourAdminPassword1
+export adminlogin=ServerAdmin
+export password=ChangeYourAdminPassword1
 # The logical server name has to be unique in the system
-servername=server-$RANDOM
+export servername=server-$RANDOM
 
 # Create a resource group
 az group create \

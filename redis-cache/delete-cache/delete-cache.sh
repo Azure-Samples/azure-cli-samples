@@ -1,8 +1,4 @@
 #/bin/bash
 
-# Variables
-resourceGroupName="myResourceGroup"
-cacheName="myCache"
-
-# Delete a Redis Cache
-az redis delete --name $cacheName --resource-group $resourceGroupName
+# Delete a Redis Cache named contosoCache from the Resource Group contosoGroup
+az redis delete --name contosoCache --resource-group contosoGroup
