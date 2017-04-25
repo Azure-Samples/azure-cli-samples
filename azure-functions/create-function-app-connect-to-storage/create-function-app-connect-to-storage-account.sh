@@ -6,3 +6,6 @@ az storage account create --name myfunctionappstorage --location westeurope --re
 
 # create a new function app, assign it to the resource group you have just created
 az functionapp create --name myFunction --resource-group myResourceGroup --storage-account myfunctionappstorage --consumption-plan-location westeurope
+
+# update function app settings to connect to storage account
+az functionapp config appsettings update --name MyFunction --resource-group myResourceGroup --settings setting=value
