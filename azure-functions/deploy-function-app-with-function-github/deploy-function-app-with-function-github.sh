@@ -10,7 +10,7 @@ az group create --name myResourceGroup --location westeurope
 az storage account create --name $storageName --location westeurope --resource-group myResourceGroup
 
 # Create Function App
-az functionapp create --name myFunctionApp --storage-account $storageName --consumption --resource-group myResourceGroup
+az functionapp create --name myFunctionApp --storage-account $storageName --consumption-plan-location westeurope --resource-group myResourceGroup
 
 # Deploy code from a public GitHub repository. 
 az appservice web source-control config --name myFunctionApp --resource-group myResourceGroup \
