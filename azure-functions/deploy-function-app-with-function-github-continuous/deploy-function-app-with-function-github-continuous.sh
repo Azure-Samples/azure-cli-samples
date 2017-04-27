@@ -17,6 +17,3 @@ az functionapp create --name myFunctionApp --storage-account $storageName --cons
 # --git-token parameter is required only once per Azure account (Azure remembers token).
 az appservice web source-control config --name myFunctionApp --resource-group myResourceGroup \
 --repo-url $gitrepo --branch master --git-token $token
-
-# Browse to the web app.
-az appservice web browse --name myFunctionApp --resource-group myResourceGroup

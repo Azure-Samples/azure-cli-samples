@@ -15,6 +15,3 @@ az functionapp create --name myFunctionApp --storage-account $storageName --cons
 # Deploy code from a public GitHub repository. 
 az appservice web source-control config --name myFunctionApp --resource-group myResourceGroup \
 --repo-url $gitrepo --branch master --manual-integration
-
-# Browse to the web app.
-az appservice web browse --name $webappname --resource-group myResourceGroup
