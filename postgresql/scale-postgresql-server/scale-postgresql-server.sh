@@ -22,7 +22,6 @@ az postgres server create \
 --compute-units 100 \
 
 # Monitor usage metrics
-<need to update>
 
 # Scale up the server to provision more Compute Units
 az postgres server update \
