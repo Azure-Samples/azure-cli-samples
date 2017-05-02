@@ -128,5 +128,6 @@ az vm create \
    --name MyVm \
    --nics MyNic-FrontEnd MyNic-BackEnd \
    --image UbuntuLTS \
+   --admin-username azureadmin \
    --generate-ssh-keys
 
