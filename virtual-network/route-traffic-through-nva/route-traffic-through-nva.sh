@@ -90,6 +90,7 @@ az vm create \
   --name MyVm-Firewall \
   --nics MyNic-Firewall \
   --image UbuntuLTS \
+  --admin-username azureadmin \
   --generate-ssh-keys
 
 # Get the private IP address from the VM for the user-defined route.
