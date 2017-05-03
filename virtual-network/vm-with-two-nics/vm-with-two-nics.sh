@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RgName="MyResourceGroup"
-Location="westus"
+Location="eastus"
 
 # Create a resource group.
 az group create --name $RgName --location $Location
