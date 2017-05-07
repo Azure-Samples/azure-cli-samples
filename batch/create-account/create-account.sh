@@ -21,7 +21,7 @@ az storage account create -g myresourcegroup -n mystorageaccount -l westeurope -
 az batch account set -g myresourcegroup -n mybatchaccount --storage-account mystorageaccount
 
 # We can view the access keys to the Batch Account for future client authentication.
-az batch account keys list
+az batch account keys list -g myresourcegroup -n mybatchaccount
 
 # Or we can authenticate against the account directly for further CLI interaction.
 az batch account login -g myresourcegroup -n mybatchaccount --shared-key-auth

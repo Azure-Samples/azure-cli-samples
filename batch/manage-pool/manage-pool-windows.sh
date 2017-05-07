@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Authenticate Batch account CLI session.
-az batch account login -g myresource group -n mybatchaccount
+az batch account login -g myresourcegroup -n mybatchaccount
 
 # We want to add an application package reference to the pool, so first
 # we'll list the available applications.

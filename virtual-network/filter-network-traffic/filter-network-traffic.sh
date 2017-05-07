@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RgName="MyResourceGroup"
-Location="westus"
+Location="eastus"
 
 # Create a resource group.
 az group create \
@@ -130,4 +130,5 @@ az vm create \
   --name MyVm \
   --nics MyNic-FrontEnd MyNic-BackEnd \
   --image UbuntuLTS \
+  --admin-username azureadmin \
   --generate-ssh-keys
