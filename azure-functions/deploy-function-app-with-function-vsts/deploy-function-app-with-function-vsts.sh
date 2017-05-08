@@ -1,12 +1,10 @@
 #!/bin/bash
 
-gitrepo=<Replace with your Visual Studio Team Services repo URL>
-token=<Replace with a Visual Studio Team Services personal access token>
-functionappname=funcstorevsts
+#gitrepo=<Replace with your Visual Studio Team Services repo URL e.g. https://samples.visualstudio.com/DefaultCollection/_git/Function-Quickstart>
+#token=<Replace with a Visual Studio Team Services personal access token>
 
-# Enable authenticated git deployment
-az functionapp deployment source update-token \
-  --git-token $token
+gitrepo=https://cfowler.visualstudio.com/DefaultCollection/_git/Function-Quickstart
+token=7ckdjsfqzhkurd4fbqbkbfri3gvy6od22fsubpg73m2joovxuvha
 
 # Create a resource group
 az group create \
@@ -15,15 +13,21 @@ az group create \
 
 # Create an azure storage account
 az storage account create \
-  --name $storageName \
+  --name funcvstsstore \
   --location westeurope \
-  --resource-group myResourceGroup
+  --resource-group myResourceGroup \
+  --sku Standard_LRS
 
 # Create a function app.
 az functionapp create  \
-  --name myFunctionApp \
-  --storage-account $storageName \
+  --name myfuncvsts \
+  --storage-account funcvstsstore \
   --consumption-plan-location westeurope \
+  --resource-group myResourceGroup
+
+az functionapp deployment source config \
+  --name myfuncvsts \
   --resource-group myResourceGroup \
-  --deployment-source-url $gitrepo \
-  --deployment-source-branch master
+  --repo-url $gitrepo \
+  --branch master \
+  --git-token $token
