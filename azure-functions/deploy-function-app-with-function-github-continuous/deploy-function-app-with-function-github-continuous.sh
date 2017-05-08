@@ -1,19 +1,29 @@
 #!/bin/bash
 
-gitrepo=<Replace with your GitHub repo URL>
+gitrepo=<Replace with your GitHub repo URL e.g. https://github.com/Azure-Samples/functions-quickstart.git>
 token=<Replace with a GitHub access token>
-storageName=myfunctionappstorage$RANDOM
+
+# Enable authenticated git deployment
+az functionapp deployment source update-token \
+  --git-token $token
 
 # Create a resource group.
-az group create --location westeurope --name myResourceGroup
+az group create \
+  --name myResourceGroup \
+  --location westeurope
 
 # Create an azure storage account
-az storage account create --name $storageName --location westeurope --resource-group myResourceGroup
+az storage account create \
+  --name funcghcontstore \
+  --location westeurope \
+  --resource-group myResourceGroup \
+  --sku Standard_LRS
 
 # Create Function App
-az functionapp create --name myFunctionApp --storage-account $storageName --consumption-plan-location westeurope --resource-group myResourceGroup
-
-# Configure continuous deployment from GitHub. 
-# --git-token parameter is required only once per Azure account (Azure remembers token).
-az appservice web source-control config --name myFunctionApp --resource-group myResourceGroup \
---repo-url $gitrepo --branch master --git-token $token
+az functionapp create \
+  --name funcgithubcontinuous \
+  --storage-account funcghcontstore \
+  --consumption-plan-location westeurope \
+  --resource-group myResourceGroup \
+  --deployment-source-url $gitrepo \
+  --deployment-source-branch master

@@ -1,19 +1,33 @@
 #!/bin/bash
 
-gitrepo=<Replace with your Visual Studio Team Services repo URL>
-token=<Replace with a Visual Studio Team Services personal access token>
-functionappname=myfuncapp$RANDOM
+#gitrepo=<Replace with your Visual Studio Team Services repo URL e.g. https://samples.visualstudio.com/DefaultCollection/_git/Function-Quickstart>
+#token=<Replace with a Visual Studio Team Services personal access token>
 
-# Create a resource group.
-az group create --location westeurope --name myResourceGroup
+gitrepo=https://cfowler.visualstudio.com/DefaultCollection/_git/Function-Quickstart
+token=7ckdjsfqzhkurd4fbqbkbfri3gvy6od22fsubpg73m2joovxuvha
+
+# Create a resource group
+az group create \
+  --name myResourceGroup \
+  --location westeurope 
 
 # Create an azure storage account
-az storage account create --name $storageName --location westeurope --resource-group myResourceGroup
+az storage account create \
+  --name funcvstsstore \
+  --location westeurope \
+  --resource-group myResourceGroup \
+  --sku Standard_LRS
 
 # Create a function app.
-az functionapp create --name myFunctionApp --storage-account $storageName --consumption-plan-location westeurope --resource-group myResourceGroup
+az functionapp create  \
+  --name myfuncvsts \
+  --storage-account funcvstsstore \
+  --consumption-plan-location westeurope \
+  --resource-group myResourceGroup
 
-# Configure continuous deployment from Visual Studio Team Services. 
-# --git-token parameter is required only once per Azure account (Azure remembers token).
-az appservice web source-control config --name $functionappname --resource-group myResourceGroup \
---repo-url $gitrepo --branch master --git-token $token
+az functionapp deployment source config \
+  --name myfuncvsts \
+  --resource-group myResourceGroup \
+  --repo-url $gitrepo \
+  --branch master \
+  --git-token $token
