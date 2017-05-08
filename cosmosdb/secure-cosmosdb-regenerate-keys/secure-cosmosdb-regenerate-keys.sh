@@ -1,34 +1,31 @@
 #!/bin/bash
 
 # Set variables for the new account, database, and collection
-resourceGroupName=docdbgetstarted
-location="South Central US"
-name=docdb-test
-databaseName=docdb-test-database
-collectionName=docdb-test-collection
-keyType=secondary
+resourceGroupName='myResourceGroup'
+location='southcentralus'
+name='docdb-test'
 
 # Create a resource group
 az group create \
 	--name $resourceGroupName \
 	--location $location
 
-# Create a DocumentDB account
-az documentdb create \
+# Create a DocumentDB API Cosmos DB account
+az cosmosdb create \
 	--name $name \
-	--resource-group $resourceGroupName \
 	--kind GlobalDocumentDB \
-	--locations $location  \
+	--locations "South Central US"=0 "North Central US"=1 \
+	--resource-group $resourceGroupName \
 	--max-interval 10 \
 	--max-staleness-prefix 200
 
 # List account keys
-az documentdb list-keys \
-    --name $name \
-    --resource-group $resourceGroupName 
+az cosmosdb list-keys \
+	--name $name \
+	--resource-group $resourceGroupName 
 
-# Regenerate account keys
+# Regenerate an account key
 az documentdb regenerate-key \
-    --name $name \
-    --resource-group $resourceGroupName \
-	--key-kind $keyType
+	--name $name \
+	--resource-group $resourceGroupName \
+	--key-kind secondary
