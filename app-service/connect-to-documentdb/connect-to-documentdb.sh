@@ -1,22 +1,22 @@
 #/bin/bash
 
 # Variables
-appName="webappwithdocumentdb$random"
-storageName="webappwithdocumentdb$random"
+appName="webappwithcosmosdb$random"
+storageName="webappwithcosmosdb$random"
 location="WestUS"
 
 # Create a Resource Group 
 az group create --name myResourceGroup --location $location
 
 # Create an App Service Plan
-az appservice plan create --name WebAppWithDocumentDBPlan --resource-group myResourceGroup --location $location
+az appservice plan create --name WebAppWithCosmosDBPlan --resource-group myResourceGroup --location $location
 
 # Create a Web App
-az appservice web create --name $appName --plan WebAppWithDocumentDBPlan --resource-group myResourceGroup 
+az appservice web create --name $appName --plan WebAppWithCosmosDBPlan --resource-group myResourceGroup 
 
-# Create a DocumentDB
-docdb=$(az documentdb create --name $appName --resource-group myResourceGroup --query documentEndpoint --output tsv)
-docCreds=$(az documentdb list-keys --name $appName --resource-group myResourceGroup --query primaryMasterKey --output tsv)
+# Create a Cosmos DB
+cosmosdb=$(az cosmosdb create --name $appName --resource-group myResourceGroup --query documentEndpoint --output tsv)
+cosmosCreds=$(az cosmosdb list-keys --name $appName --resource-group myResourceGroup --query primaryMasterKey --output tsv)
 
 # Assign the connection string to an App Setting in the Web App
-az appservice web config appsettings update --settings "DOCDB_URL=$docdb" "DOCDB_KEY=$docCreds" --name $appName --resource-group myResourceGroup
+az appservice web config appsettings update --settings "COSMOSDB_URL=$cosmosdb" "COSMOSDB_KEY=$cosmosCreds" --name $appName --resource-group myResourceGroup
