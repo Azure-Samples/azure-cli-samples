@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Set variables for the new account, database, and collection
-resourceGroupName=docdbgetstarted
-location="South Central US"
-name=docdb-test
-databaseName=docdb-test-database
-collectionName=docdb-test-collection
+resourceGroupName='myResourceGroup'
+location='southcentralus'
+name='docdb-test'
+databaseName='docdb-test-database'
+collectionName='docdb-test-collection'
 originalThroughput=400 
 newThroughput=700
 
@@ -14,32 +14,33 @@ az group create \
 	--name $resourceGroupName \
 	--location $location
 
-# Create a DocumentDB account
-az documentdb create \
+# Create a DocumentDB API Cosmos DB account
+az cosmosdb create \
 	--name $name \
-	--resource-group $resourceGroupName \
 	--kind GlobalDocumentDB \
-	--locations $location  \
+	--locations "South Central US"=0 "North Central US"=1 \
+	--resource-group $resourceGroupName \
 	--max-interval 10 \
-	--max-staleness-prefix 200
+	--max-staleness-prefix 200 
 
-# Create a DocumentDB database 
-az documentdb add-database \
-	--resource-group $resourceGroupName \
+# Create a database 
+az cosmosdb database create \
 	--name $name \
-	--dbname $databaseName \
+	--db-name $databaseName \
+	--resource-group $resourceGroupName
 
-# Create a DocumentDB collection
-az documentdb add-collection \
-	--resource-group $resourceGroupName \
+# Create a collection
+az cosmosdb collection create \
+	--collection-name $collectionName \
 	--name $name \
-	--dbname $databaseName \
-	--collname $collectionName \
-    --througput $originalThrougput
+	--db-name $databaseName \
+	--resource-group $resourceGroupName \
+	--througput $originalThrougput
 
 # Scale throughput
-az documentdb update \
+az cosmosdb collection update \
+	--collection-name $collectionName \
 	--name $name \
-    --resource-group $resourceGroupName \
-    --collname $collectionName \
+	--db-name $databaseName \
+	--resource-group $resourceGroupName \
 	--throughput $newThroughput

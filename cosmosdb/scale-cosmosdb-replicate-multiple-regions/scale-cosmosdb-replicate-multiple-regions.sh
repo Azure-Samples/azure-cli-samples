@@ -1,38 +1,33 @@
 #!/bin/bash
 
 # Set variables for the new account, database, and collection
-resourceGroupName=docdbgetstarted
-location="South Central US"
-name=docdb-test
-databaseName=docdb-test-database
-collectionName=docdb-test-collection
-distributedLocations="East US"=2 "West US"=1 "South Central US"=0
-newDistributedLocations="South Central US"=2 "East US"=1 "West US"=0  
+resourceGroupName='myResourceGroup'
+location='southcentralus'
+name='docdb-test'
 
 # Create a resource group
 az group create \
 	--name $resourceGroupName \
 	--location $location
 
-# Create a DocumentDB account
-az documentdb create \
+# Create a DocumentDB API Cosmos DB account
+az cosmosdb create \
 	--name $name \
-	--resource-group $resourceGroupName \
 	--kind GlobalDocumentDB \
-	--locations $location  \
+	--resource-group $resourceGroupName \
 	--max-interval 10 \
-	--max-staleness-prefix 200
+	--max-staleness-prefix 200 
 
-# Replicate DocumentDB in multiple regions 
-az documentdb update \
+# Replicate in multiple regions
+az cosmosdb update \
 	--name $name \
 	--resource-group $resourceGroupName \
-	--locations $distributedLocations  
+	--locations "South Central US"=0 "North Central US"=1 "East US"=2 "West US"=3
 
-# Modify regional failover priorities 
-az documentdb update \
+# Modify regional failover priorities
+az cosmosdb update \
 	--name $name \
 	--resource-group $resourceGroupName \
-	--locations $newDistributedLocations 
+	--locations "South Central US"=3 "North Central US"=2 "East US"=1 "West US"=0
 
 
