@@ -1,34 +1,27 @@
 #!/bin/bash
-# Set an admin login and password for your server
-adminlogin=ServerAdmin
-password=ChangeYourAdminPassword1
-# The server name has to be unique in the system
-servername=server-$RANDOM
-# The ip address range that you want to allow to access your server
-startip=0.0.0.0
-endip=255.255.255.255
 
-# Create a resource group in the westus region
+# Create a resource group
 az group create \
---name myResourceGroup \
+--name myresourcegroup \
 --location westus
 
 # Create a PostgreSQL server in the resource group
+# Name of a server maps to DNS name and is thus required to be globally unique in Azure.
+# Substitute the <server_admin_password> with your own value.
 az postgres server create \
---name $servername \
---resource-group myResourceGroup \
+--name mypgserver-20170401 \
+--resource-group myresourcegroup \
 --location westus \
---admin-user $adminlogin \
---admin-password $password \
---performance-tier Standard \
---compute-units 100 \
+--admin-user mylogin \
+--admin-password <server_admin_password> \
+--performance-tier Basic \
+--compute-units 50
 
 # Configure a firewall rule for the server
+# The ip address range that you want to allow to access your server
 az postgres server firewall-rule create \
---resource-group myResourceGroup \
---server $servername \
+--resource-group myresourcegroup \
+--server mypgserver-20170401 \
 --name AllowIps \
---start-ip-address $startip \
---end-ip-address $endip
-
-# Default database 'postgres' gets created on the server.
+--start-ip-address 0.0.0.0 \
+--end-ip-address 255.255.255.255
