@@ -7,12 +7,6 @@ resourceGroupName=myResourceGroupName
 #Provide the name of the snapshot that will be used to create Managed Disks
 snapshotName=mySnapshotName
 
-#Provide the Azure region (e.g. westus) where VM will be located.
-#This location should be same as the snapshot location that your are using to create Managed Disks
-#Get all the Azure location supported for your subscription using command below:
-#az account list-locations
-location = westus
-
 #Provide the name of the Managed Disk
 osDiskName=myOSDiskName
 
