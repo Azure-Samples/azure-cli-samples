@@ -15,7 +15,7 @@ az mysql server create \
 --admin-user myadmin \
 --admin-password <server_admin_password> \
 --performance-tier Basic \
---compute-units 50 \
+--compute-units 50
 
 # Monitor usage metrics - Compute
 az monitor metrics list \
