@@ -17,16 +17,16 @@ managedDiskId=$(az disk show --name $managedDiskName --resource-group $sourceRes
 echo 'source managed disk Id is: ' $managedDiskId
 
 #Provide the subscription Id of the subscription where managed disk will be copied to
-#If snapshot is copied to the same subscription then you can skip this step
+#If managed disk is copied to the same subscription then you can skip this step
 targetSubscriptionId=6492b1f7-f219-446b-b509-314e17e1efb0
 
-#Name of the resource group where snapshot will be copied to
+#Name of the resource group where managed disk will be copied to
 targetResourceGroupName=mytargetResourceGroupName
 
-#Set the context to the subscription Id where snapshot will be copied to
-#If snapshot is copied to the same subscription then you can skip this step
+#Set the context to the subscription Id where managed disk will be copied to
+#If managed disk is copied to the same subscription then you can skip this step
 az account set --subscription $targetSubscriptionId
 
-#Copy snapshot to different subscription using the snapshot Id
+#Copy managed disk to different subscription using the snapshot Id
 az disk create --resource-group $targetResourceGroupName --name $managedDiskName --source $managedDiskId
 
