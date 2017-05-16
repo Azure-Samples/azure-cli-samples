@@ -1,12 +1,18 @@
 #!/bin/bash
 
-storageName=myfunctionappstorage$RANDOM
-
 # Create resource group
 az group create --name myResourceGroup --location westeurope
 
 # Create an azure storage account
-az storage account create --name $storageName --location westeurope --resource-group myResourceGroup
+az storage account create \
+  --name myconsumptionstore \
+  --location westeurope \
+  --resource-group myResourceGroup \
+  --sku Standard_LRS
 
 # Create Function App
-az functionapp create --name myFunctionApp --storage-account $storageName --consumption --resource-group myResourceGroup
+az functionapp create \
+  --name myconsumptionfunc \
+  --storage-account myconsumptionstore \
+  --consumption-plan-location westeurope \
+  --resource-group myResourceGroup

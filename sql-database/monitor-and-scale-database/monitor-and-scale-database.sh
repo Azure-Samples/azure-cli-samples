@@ -27,7 +27,7 @@ az sql db create \
 	--service-objective S0
 
 # Monitor database size
-az sql db show-usage \
+az sql db list-usages \
 	--name mySampleDatabase \
 	--resource-group myResourceGroup \
 	--name $servername

@@ -2,8 +2,8 @@
 
 RgName1="MyResourceGroup1"
 RgName2="MyResourceGroup2"
-Location1="westus"
-Location2="eastus"
+Location1="eastus"
+Location2="westeurope"
 
 # The values of the variables below must be unique (replace with your own names).
 WebApp="MyWebApp"
