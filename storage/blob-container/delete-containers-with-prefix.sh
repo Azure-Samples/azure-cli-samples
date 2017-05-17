@@ -1,6 +1,6 @@
 #!/bin/bash
-export AZURE_STORAGE_ACCOUNT=marsmastg001
-export AZURE_STORAGE_ACCESS_KEY=eam2XpcO3zG+Jfy8c+cYnKPvNLhBKN4nxdoL7kAE4szPhsRHJtP6GazBrJeDST6Tyrzi0nQ4Z3NVzOiRi+xW+g==
+export AZURE_STORAGE_ACCOUNT=<storage-account-name>
+export AZURE_STORAGE_ACCESS_KEY=<storage-account-key>
 
 # Create a resource group
 az group create --name myResourceGroup --location eastus
