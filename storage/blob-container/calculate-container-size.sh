@@ -14,7 +14,7 @@ for i in `seq 1 3`; do
 done
 
 # Upload sample text files to container
-az storage blob upload-batch --pattern "*.txt" --source . --destination mycontainer
+az storage blob upload-batch --pattern "container_size_sample_file_*.txt" --source . --destination mycontainer
 
 # Calculate total size of container
 bytes=`az storage blob list --container-name mycontainer --query "[*].[properties.contentLength]" --output tsv | paste --serial --delimiters=+ | bc`
