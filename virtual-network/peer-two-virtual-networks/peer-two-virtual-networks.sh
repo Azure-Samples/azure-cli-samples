@@ -40,11 +40,13 @@ az network vnet peering create \
   --name LinkVnet1ToVnet2 \
   --resource-group $RgName \
   --vnet-name VNet1 \
-  --remote-vnet-id $VNet2Id
+  --remote-vnet-id $VNet2Id \
+  --allow-vnet-access
 
 # Peer VNet2 to VNet1.
 az network vnet peering create \
   --name LinkVnet2ToVnet1 \
   --resource-group $RgName \
   --vnet-name VNet2 \
-  --remote-vnet-id $VNet1Id
+  --remote-vnet-id $VNet1Id \
+  --allow-vnet-access
