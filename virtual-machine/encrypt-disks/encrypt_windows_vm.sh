@@ -32,7 +32,7 @@ az vm create \
     --admin-password myPassword12
 
 # Encrypt the VM disks.
-az vm encryption enable --resource-group myResourceGroup --name myVM \
+az vm encryption enable --resource-group myResourceGroup2 --name myVM \
   --aad-client-id $sp_id \
   --aad-client-secret $sp_password \
   --disk-encryption-keyvault $keyvault_name \
@@ -44,6 +44,6 @@ echo "The encryption process can take some time. View status with:
 
     az vm encryption show --resource-group myResourceGroup --name myVM --query [osDisk] -o tsv
 
-When encryption status shows \`VMRestartPending\`, restart the VM with:
+When encryption status shows \`Encrypted\`, restart the VM with:
 
     az vm restart --resource-group myResourceGroup --name myVM"
