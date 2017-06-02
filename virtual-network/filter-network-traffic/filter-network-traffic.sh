@@ -93,7 +93,7 @@ az network nsg rule create \
   --direction Outbound --priority 100 \
   --source-address-prefix "*" \
   --source-port-range "*" \
-  --destination-address-prefix "*" \
+  --destination-address-prefix "Internet" \
   --destination-port-range "*"
 
 # Associate the back-end NSG to the back-end subnet.
