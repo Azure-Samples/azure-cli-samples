@@ -15,3 +15,15 @@ az storage account create \
 az storage account keys list \
     --resource-group myResourceGroup \
     --account-name mystorageaccount 
+
+# Renew (rotate) the PRIMARY access key
+az storage account keys renew \
+    --resource-group myResourceGroup \
+    --account-name mystorageaccount \
+    --key primary
+
+# Renew (rotate) the SECONDARY access key
+az storage account keys renew \
+    --resource-group myResourceGroup \
+    --account-name mystorageaccount \
+    --key secondary
