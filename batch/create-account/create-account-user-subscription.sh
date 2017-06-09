@@ -3,6 +3,9 @@
 # Authenticate CLI session.
 az login
 
+# Allow Azure Batch to access the subscription (one-time operation).
+az role assignment create --assignee MicrosoftAzureBatch --role contributor
+
 # Create a resource group.
 az group create --name myresourcegroup --location westeurope
 
@@ -20,7 +23,7 @@ az keyvault create \
 az keyvault set-policy \
     --resource-group myresourcegroup \
     --name mykevault \
-    --object-id f520d84c-3fd3-4cc8-88d4-2ed25b00d27a \
+    --spn ddbf3205-c6bd-46ae-8127-60eb93363864 \
     --key-permissions all \
     --secret-permissions all
 
