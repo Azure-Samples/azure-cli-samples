@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gitrepo=<replace-with-URL-of-a-public-GitHub-repo>
+gitrepo=<replace-with-URL-of-your-own-GitHub-repo>
 token=<replace-with-a-GitHub-access-token>
 webappname=mywebapp$RANDOM
 
