@@ -1,6 +1,7 @@
 #!/bin/bash
 
-gitrepo=<Replace with your GitHub repo URL>
+# Replace the following URL with a public GitHub repo URL
+gitrepo=https://github.com/Azure-Samples/php-docs-hello-world
 token=<Replace with a GitHub access token>
 webappname=mywebapp$RANDOM
 
@@ -11,12 +12,12 @@ az group create --location westeurope --name myResourceGroup
 az appservice plan create --name $webappname --resource-group myResourceGroup --sku FREE
 
 # Create a web app.
-az appservice web create --name $webappname --resource-group myResourceGroup --plan $webappname
+az webapp create --name $webappname --resource-group myResourceGroup --plan $webappname
 
 # Configure continuous deployment from GitHub. 
 # --git-token parameter is required only once per Azure account (Azure remembers token).
-az appservice web source-control config --name $webappname --resource-group myResourceGroup \
+az webapp deployment source config --name $webappname --resource-group myResourceGroup \
 --repo-url $gitrepo --branch master --git-token $token
 
 # Browse to the web app.
-az appservice web browse --name $webappname --resource-group myResourceGroup
+az webapp browse --name $webappname --resource-group myResourceGroup

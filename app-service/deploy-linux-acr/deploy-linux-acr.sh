@@ -24,7 +24,7 @@ docker push ${acrUrl}/$dockerHubContainerName:$dockerContainerVersion
 az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myResourceGroup --location $location --is-linux --sku S1
 
 # Create a Web App
-az appservice web create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
+az webapp create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
 
 # Configure Web App with a Custom Docker Container from Docker Hub
-az appservice web config container update --docker-registry-server-url http://${acrUrl} --docker-custom-image-name ${acrUrl}/$dockerHubContainerName:$dockerContainerVersion --docker-registry-server-user ${acrCreds[0]} --docker-registry-server-password ${acrCreds[1]} --name $appName --resource-group myResourceGroup
+az webapp config container set --docker-registry-server-url http://${acrUrl} --docker-custom-image-name ${acrUrl}/$dockerHubContainerName:$dockerContainerVersion --docker-registry-server-user ${acrCreds[0]} --docker-registry-server-password ${acrCreds[1]} --name $appName --resource-group myResourceGroup
