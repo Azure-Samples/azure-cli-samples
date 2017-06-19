@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Replace the following URL with a public GitHub repo URL
-gitrepo=https://github.com/Azure-Samples/php-docs-hello-world
-token=<Replace with a GitHub access token>
+gitrepo=<replace-with-URL-of-a-public-GitHub-repo>
+token=<replace-with-a-GitHub-access-token>
 webappname=mywebapp$RANDOM
 
 # Create a resource group.
