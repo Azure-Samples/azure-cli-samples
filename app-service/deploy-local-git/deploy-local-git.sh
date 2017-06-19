@@ -12,13 +12,13 @@ az group create --location westeurope --name myResourceGroup
 az appservice plan create --name $webappname --resource-group myResourceGroup --sku FREE
 
 # Create a web app.
-az appservice web create --name $webappname --resource-group myResourceGroup --plan $webappname
+az webapp create --name $webappname --resource-group myResourceGroup --plan $webappname
 
 # Set the account-level deployment credentials
-az appservice web deployment user set --user-name $username --password $password
+az webapp deployment user set --user-name $username --password $password
 
 # Configure local Git and get deployment URL
-url=$(az appservice web source-control config-local-git --name $webappname \
+url=$(az webapp deployment source config-local-git --name $webappname \
 --resource-group myResourceGroup --query url --output tsv)
 
 # Add the Azure remote to your local Git respository and push your code
@@ -29,5 +29,5 @@ git push azure master
 # When prompted for password, use the value of $password that you specified
 
 # Browse to the deployed web app.
-az appservice web browse --name $webappname --resource-group myResourceGroup
+az webapp browse --name $webappname --resource-group myResourceGroup
 

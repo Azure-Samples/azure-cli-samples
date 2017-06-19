@@ -10,7 +10,7 @@ az group create --location westeurope --name myResourceGroup
 az appservice plan create --name $webappname --resource-group myResourceGroup --sku SHARED
 
 # Create a web app.
-az appservice web create --name $webappname --resource-group myResourceGroup \
+az webapp create --name $webappname --resource-group myResourceGroup \
 --plan $webappname
 
 echo "Configure a CNAME record that maps $fqdn to $webappname.azurewebsites.net"
@@ -21,7 +21,7 @@ read -p "Press [Enter] key when ready ..."
 # hostname "www" and point it your web app's default domain name.
 
 # Map your prepared custom domain name to the web app.
-az appservice web config hostname add --webapp $webappname --resource-group myResourceGroup \
---name $fqdn
+az webapp config hostname add --webapp-name $webappname --resource-group myResourceGroup \
+--hostname $fqdn
 
 echo "You can now browse to http://$fqdn"

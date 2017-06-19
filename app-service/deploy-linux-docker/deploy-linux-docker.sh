@@ -12,7 +12,7 @@ az group create --name myResourceGroup --location $location
 az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myResourceGroup --location $location --is-linux --sku S1
 
 # Create a Web App
-az appservice web create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
+az webapp create --name $appName --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup
 
 # Configure Web App with a Custom Docker Container from Docker Hub
-az appservice web config container update --docker-custom-image-name $dockerHubContainerPath --name $appName --resource-group myResourceGroup
+az webapp config container set --docker-custom-image-name $dockerHubContainerPath --name $appName --resource-group myResourceGroup
