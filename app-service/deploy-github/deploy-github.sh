@@ -18,4 +18,4 @@ az webapp deployment source config --name $webappname --resource-group myResourc
 --repo-url $gitrepo --branch master --manual-integration
 
 # Browse to the web app.
-az webapp log browse --name $webappname --resource-group myResourceGroup
+az webapp browse --name $webappname --resource-group myResourceGroup
