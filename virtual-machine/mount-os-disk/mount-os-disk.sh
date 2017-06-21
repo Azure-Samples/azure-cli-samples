@@ -8,7 +8,7 @@ resourcegroup=<Replace with resource group name>
 diskid="$(az vm show -g $resourcegroup -n $sourcevm --query [storageProfile.osDisk.managedDisk.id] -o tsv)"
  
 # Delete the source virtual machine, this will not delete the disk.
-az vm delete -g $resourcegroup -n $sourcevm --force
+az vm delete -g $resourcegroup -n $sourcevm --yes
 
 # Create a new virtual machine, this creates SSH keys if not present.
 az vm create --resource-group $resourcegroup --name myVM --image UbuntuLTS --generate-ssh-keys
