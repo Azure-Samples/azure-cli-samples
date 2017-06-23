@@ -16,8 +16,15 @@ done
 # Upload sample files to container
 az storage blob upload-batch --pattern "container_size_sample_file_*.txt" --source . --destination mycontainer
 
-# Calculate total size of container
-bytes=`az storage blob list --container-name mycontainer --query "[*].[properties.contentLength]" --output tsv | paste --serial --delimiters=+ | bc`
+# Calculate total size of container. Use the --query parameter to display only
+# blob contentLength and output it in TSV format so only the values are
+# returned. Then pipe the results to the paste and bc utilities to total the
+# size of the blobs in the container.
+bytes=`az storage blob list \
+    --container-name mycontainer \
+    --query "[*].[properties.contentLength]" \
+    --output tsv \
+    | paste --serial --delimiters=+ | bc`
 
 # Display total bytes
 echo "Total bytes in container: $bytes"
