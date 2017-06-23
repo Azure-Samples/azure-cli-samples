@@ -23,8 +23,8 @@ az storage blob upload-batch --pattern "container_size_sample_file_*.txt" --sour
 bytes=`az storage blob list \
     --container-name mycontainer \
     --query "[*].[properties.contentLength]" \
-    --output tsv \
-    | paste --serial --delimiters=+ | bc`
+    --output tsv |
+    paste --serial --delimiters=+ | bc`
 
 # Display total bytes
 echo "Total bytes in container: $bytes"
