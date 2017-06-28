@@ -8,16 +8,26 @@ az group create --name myResourceGroup --location eastus
 # Create a container
 az storage container create --name mycontainer
 
-# Create sample text files
+# Create sample files to upload as blobs
 for i in `seq 1 3`; do
-    hexdump -n 16 -v -e '/1 "%02X"' -e '/16 "\n"' /dev/urandom > container_size_sample_file_$i.txt
+    echo $RANDOM > container_size_sample_file_$i.txt
 done
 
-# Upload sample text files to container
-az storage blob upload-batch --pattern "container_size_sample_file_*.txt" --source . --destination mycontainer
+# Upload sample files to container
+az storage blob upload-batch \
+    --pattern "container_size_sample_file_*.txt" \
+    --source . \
+    --destination mycontainer
 
-# Calculate total size of container
-bytes=`az storage blob list --container-name mycontainer --query "[*].[properties.contentLength]" --output tsv | paste --serial --delimiters=+ | bc`
+# Calculate total size of container. Use the --query parameter to display only
+# blob contentLength and output it in TSV format so only the values are
+# returned. Then pipe the results to the paste and bc utilities to total the
+# size of the blobs in the container.
+bytes=`az storage blob list \
+    --container-name mycontainer \
+    --query "[*].[properties.contentLength]" \
+    --output tsv |
+    paste --serial --delimiters=+ | bc`
 
 # Display total bytes
 echo "Total bytes in container: $bytes"
