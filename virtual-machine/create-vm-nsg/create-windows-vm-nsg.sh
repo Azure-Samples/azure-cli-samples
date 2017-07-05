@@ -35,7 +35,7 @@ nsgrule=$(az network nsg rule list --resource-group myResourceGroup --nsg-name m
 # Update back-end network security group rule to limit SSH to source prefix (priority 100).
 az network nsg rule update --resource-group myResourceGroup --nsg-name myNetworkSecurityGroupBackEnd \
   --name $nsgrule --protocol tcp --direction inbound --priority 100 \
-  --source-address-prefix 10.0.2.0/24 --source-port-range '*' --destination-address-prefix '*' \
+  --source-address-prefix 10.0.1.0/24 --source-port-range '*' --destination-address-prefix '*' \
   --destination-port-range 22 --access allow
 
 # Create backend NSG rule to block all incoming traffic (priority 200).
