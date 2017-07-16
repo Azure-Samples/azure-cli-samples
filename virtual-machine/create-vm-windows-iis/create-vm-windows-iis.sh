@@ -17,7 +17,7 @@ az vm create \
 # Open port 80 to allow web traffic to host.
 az vm open-port --port 80 --resource-group myResourceGroup --name myVM 
 
-# Use CustomScript extension to install Apache.
+# Use CustomScript extension to install IIS.
 az vm extension set \
   --publisher Microsoft.Compute \
   --version 1.8 \
