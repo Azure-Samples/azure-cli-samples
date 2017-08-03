@@ -35,7 +35,7 @@ az cosmosdb collection create \
 	--name $name \
 	--db-name $databaseName \
 	--resource-group $resourceGroupName \
-	--througput $originalThrougput
+	--throughput $originalThrougput
 
 # Scale throughput
 az cosmosdb collection update \
