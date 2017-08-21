@@ -16,5 +16,5 @@ sfctl application unprovision \
     --timeout 500
 
 # Delete the application files from the image store
-sfctl application package-delete \
+sfctl store delete \
     --content-path myappfolder
