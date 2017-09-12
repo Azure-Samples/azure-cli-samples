@@ -28,3 +28,6 @@ az webapp create --name $appName --plan AppServiceLinuxDockerPlan --resource-gro
 
 # Configure Web App with a Custom Docker Container from Docker Hub
 az webapp config container set --docker-registry-server-url http://${acrUrl} --docker-custom-image-name ${acrUrl}/$dockerHubContainerName:$dockerContainerVersion --docker-registry-server-user ${acrCreds[0]} --docker-registry-server-password ${acrCreds[1]} --name $appName --resource-group myResourceGroup
+
+# Copy the result of the following command into a browser to see the web app.
+echo http://$appName.azurewebsites.net

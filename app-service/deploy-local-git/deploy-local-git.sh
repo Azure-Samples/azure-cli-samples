@@ -28,6 +28,5 @@ git push azure master
 
 # When prompted for password, use the value of $password that you specified
 
-# Browse to the deployed web app.
-az webapp browse --name $webappname --resource-group myResourceGroup
-
+# Copy the result of the following command into a browser to see the web app.
+echo http://$webappname.azurewebsites.net
