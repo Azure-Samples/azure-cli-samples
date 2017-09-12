@@ -29,5 +29,5 @@ az webapp browse --name $webappname --resource-group myResourceGroup --slot stag
 az webapp deployment slot swap --name $webappname --resource-group myResourceGroup \
 --slot staging
 
-# Browse to the production slot. 
-az webapp browse --name $webappname --resource-group myResourceGroup
+# Copy the result of the following command into a browser to see the web app in the production slot.
+echo http://$webappname.azurewebsites.net

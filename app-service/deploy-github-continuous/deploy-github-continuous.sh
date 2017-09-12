@@ -18,5 +18,5 @@ az webapp create --name $webappname --resource-group myResourceGroup --plan $web
 az webapp deployment source config --name $webappname --resource-group myResourceGroup \
 --repo-url $gitrepo --branch master --git-token $token
 
-# Browse to the web app.
-az webapp browse --name $webappname --resource-group myResourceGroup
+# Copy the result of the following command into a browser to see the web app.
+echo http://$webappname.azurewebsites.net
