@@ -4,8 +4,8 @@ groupname="myResourceGroup"
 planname="myAppServicePlan"
 webappname=mywebapp$RANDOM
 storagename=mywebappstorage$RANDOM
-container="appbackup"
 location="WestEurope"
+container="appbackup"
 expirydate=$(date -I -d "$(date) + 1 month")
 
 # Create a Resource Group 
