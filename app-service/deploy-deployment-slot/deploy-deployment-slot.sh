@@ -22,8 +22,8 @@ az webapp deployment slot create --name $webappname --resource-group myResourceG
 az webapp deployment source config --name $webappname --resource-group myResourceGroup \
 --slot staging --repo-url $gitrepo --branch master --manual-integration
 
-# Browse to the deployed web app on staging. Deployment may be in progress, so rerun this if necessary.
-az webapp browse --name $webappname --resource-group myResourceGroup --slot staging
+# Copy the result of the following command into a browser to see the staging slot.
+echo http://$webappname-staging.azurewebsites.net
 
 # Swap the verified/warmed up staging slot into production.
 az webapp deployment slot swap --name $webappname --resource-group myResourceGroup \
