@@ -1,31 +1,44 @@
 #/bin/bash
 
 # Variables
-appName="webappwithSQL$random"
-serverName="webappwithsql$random"
+appName="webappwithSQL$RANDOM"
+serverName="webappwithsql$RANDOM"
 location="WestUS"
 startip="0.0.0.0"
 endip="0.0.0.0"
 username="<replace-with-username>"
 sqlServerPassword="<replace-with-password>"
 
-# Create a Resource Group 
+# Create a resource group 
 az group create --name myResourceGroup --location $location
 
-# Create an App Service Plan
-az appservice plan create --name WebAppWithSQLPlan --resource-group myResourceGroup --location $location
+# Create an App Service plan
+az appservice plan create --name myAppServicePlan --resource-group myResourceGroup \
+--location $location
 
-# Create a Web App
-az webapp create --name $appName --plan WebAppWithSQLPlan --resource-group myResourceGroup
+# Create a web app
+az webapp create --name $appName --plan myAppServicePlan --resource-group myResourceGroup
 
-# Create a SQL Server
-az sql server create --name $serverName --resource-group myResourceGroup --location $location --admin-user $username --admin-password $sqlServerPassword
+# Create a SQL Database server
+az sql server create --name $serverName --resource-group myResourceGroup \
+--location $location --admin-user $username --admin-password $sqlServerPassword
 
-# Configure Firewall for Azure Access
-az sql server firewall-rule create --resource-group myResourceGroup --server $serverName --name AllowYourIp --start-ip-address $startip --end-ip-address $endip
+# Configure firewall for Azure access
+az sql server firewall-rule create --server $serverName --resource-group myResourceGroup \
+--name AllowYourIp --start-ip-address $startip --end-ip-address $endip
 
-# Create Database on Server
-az sql db create --resource-group myResourceGroup --server $serverName --name MySampleDatabase --service-objective S0
+# Create a database called 'MySampleDatabase' on server
+az sql db create --server $serverName --resource-group myResourceGroup --name MySampleDatabase \
+--service-objective S0
 
-# Assign the connection string to an App Setting in the Web App
-az webapp config appsettings set --settings "SQLSRV_CONNSTR=Server=tcp:$serverName.database.windows.net;Database=MySampleDatabase;User ID=$username@$serverName;Password=$sqlServerPassword;Trusted_Connection=False;Encrypt=True;" --name $appName --resource-group myResourceGroup
+# Get connection string for the database
+connstring=$(az sql db show-connection-string --name MySampleDatabase --server $serverName \
+--client ado.net --output tsv)
+
+# Add credentials to connection string
+connstring=${connstring//<username>/$username}
+connstring=${connstring//<password>/$sqlServerPassword}
+
+# Assign the connection string to an app setting in the web app
+az webapp config appsettings set --name $appName --resource-group myResourceGroup \
+--settings "SQLSRV_CONNSTR=$connstring" 
