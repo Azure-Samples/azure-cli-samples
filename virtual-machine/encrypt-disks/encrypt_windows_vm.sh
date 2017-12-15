@@ -32,7 +32,7 @@ az vm create \
     --admin-password myPassword12
 
 # Encrypt the VM disks.
-az vm encryption enable --resource-group myResourceGroup2 --name myVM \
+az vm encryption enable --resource-group myResourceGroup --name myVM \
   --aad-client-id $sp_id \
   --aad-client-secret $sp_password \
   --disk-encryption-keyvault $keyvault_name \
