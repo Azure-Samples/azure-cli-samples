@@ -11,7 +11,7 @@ az vmss create \
   --upgrade-policy-mode automatic \
   --admin-username azureuser \
   --generate-ssh-keys \
-  --zone 1
+  --zones 1
 
 # Apply the Custom Script Extension that installs a basic Nginx webserver
 az vmss extension set \
