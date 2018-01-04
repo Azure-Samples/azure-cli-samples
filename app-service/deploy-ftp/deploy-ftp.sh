@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Replace the following URL with a public GitHub repo URL
 warurl=https://raw.githubusercontent.com/Azure-Samples/html-docs-hello-world/master/index.html
 webappname=mywebapp$RANDOM
 
