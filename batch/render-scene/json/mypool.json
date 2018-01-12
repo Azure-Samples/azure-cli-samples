@@ -1,0 +1,21 @@
+{
+  "id": "myrenderpool",
+  "vmSize": "standard_d2_v2",
+  "virtualMachineConfiguration": {
+    "imageReference": {
+      "publisher": "batch",
+      "offer": "rendering-windows2016",
+      "sku": "rendering",
+      "version": "latest"
+    },
+    "nodeAgentSKUId": "batch.node.windows amd64"
+  },
+  "targetDedicatedNodes": 0,
+  "targetLowPriorityNodes": 1,
+  "enableAutoScale": false,
+  "applicationLicenses":[
+         "3dsmax",
+         "arnold"
+      ],
+  "enableInterNodeCommunication": false 
+}
