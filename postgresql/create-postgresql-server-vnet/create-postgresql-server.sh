@@ -24,8 +24,9 @@ az network vnet list-endpoint-services \
 
 # Get available service endpoints for Azure region output is JSON
 # Use the command below to get the list of services supported for endpoints, for an Azure region, say "westus".
-```azurecli-interactive
-az network vnet list-endpoint-services -l westus
+az network vnet list-endpoint-services \
+-l westus
+
 # Add Azure SQL service endpoint to a subnet *mySubnet* while creating the virtual network *myVNet* output is JSON
 az network vnet create \
 -g myRG \
