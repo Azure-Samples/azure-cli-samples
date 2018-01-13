@@ -20,11 +20,6 @@ az mysql server create \
 --performance-tier Standard \
 --compute-units 100
 
-# Get available service endpoints for Azure region
-# Use the command below to get the list of services supported for endpoints, for an Azure region, say "westus".
-az network vnet list-endpoint-services \
--l westus
-
 # Get available service endpoints for Azure region output is JSON
 # Use the command below to get the list of services supported for endpoints, for an Azure region, say "westus".
 az network vnet list-endpoint-services \
