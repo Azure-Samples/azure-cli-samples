@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Substitue <subscription id> with your identifyer
+az account set --subscription <subscription id>
+
 # Create a resource group
 az group create \
 --name myresourcegroup \
