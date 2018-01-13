@@ -47,4 +47,8 @@ az network vnet subnet show \
 --vnet-name myVNet
 
 # Create a VNet rule on the sever to secure it to the subnet
-az postgres vnet-rule create --name myRule --resource-group myRG --server mypgserver-20180111 --subnet mySubnet
+az postgres vnet-rule create \
+--name myRule \
+--resource-group myRG \
+--server mypgserver-20180111 \
+--subnet mySubnet
