@@ -10,8 +10,8 @@ SERVICE_PRINCIPAL_NAME=acr-service-principal
 ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query id --output tsv)
 
 # Create the service principal with rights scoped to the registry.
-# Default permissions are for both docker push and pull access. Modify the
-# '--role' argument value as desired:
+# Default permissions are for docker pull access. Modify the '--role'
+# argument value as desired:
 # reader:      pull only
 # contributor: push and pull
 # owner:       push, pull, and assign roles
