@@ -1,10 +1,22 @@
 #!/bin/bash
 
-# Authenticate Batch account CLI session.
-az batch account login -g myresourcegroup -n mybatchaccount
+# Create a resource group.
+az group create --name myResourceGroup --location westeurope
 
-# We want to add an application package reference to the pool, so first
-# we'll list the available applications.
+# Create a Batch account.
+az batch account create \
+    --resource-group myResourceGroup \
+    --name mybatchaccount \
+    --location westeurope
+
+# Authenticate Batch account CLI session.
+az batch account login \
+    --resource-group myResourceGroup \
+    --name mybatchaccount
+    --shared-key-auth
+
+# To add an application package reference to the pool, first
+# list the available applications.
 az batch application summary list
 
 # Create a new Windows cloud service platform pool with 3 Standard A1 VMs.
@@ -19,18 +31,19 @@ az batch pool create \
     --start-task-wait-for-success \
     --application-package-references myapp
 
-# We can add some metadata to the pool.
+# Add some metadata to the pool.
 az batch pool set --pool-id mypool-windows --metadata IsWindows=true VMSize=StandardA1
 
-# Let's change the pool to enable automatic scaling of compute nodes.
+# Change the pool to enable automatic scaling of compute nodes.
 # This autoscale formula specifies that the number of nodes should be adjusted according
 # to the number of active tasks, up to a maximum of 10 compute nodes.
 az batch pool autoscale enable \
     --pool-id mypool-windows \
     --auto-scale-formula "$averageActiveTaskCount = avg($ActiveTasks.GetSample(TimeInterval_Minute * 15));$TargetDedicated = min(10, $averageActiveTaskCount);"
 
-# We can monitor the resizing of the pool.
+# Monitor the resizing of the pool.
 az batch pool show --pool-id mypool-windows
 
-# Once we no longer require the pool to automatically scale, we can disable it.
-az batch pool autoscale disable --pool-id mypool-windows
+# Disable autoscaling when we no longer require the pool to automatically scale.
+az batch pool autoscale disable \
+    --pool-id mypool-windows
