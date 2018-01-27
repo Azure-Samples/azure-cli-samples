@@ -41,10 +41,10 @@ az batch job create \
 az batch task create \
     --job-id myjob \
     --task-id task1 \
-    --command-line "cmd /c %AZ_BATCH_APP_PACKAGE_MYAPP#1.0%\\myapp.exe"
+    --command-line "/bin/bash -c 'printenv AZ_BATCH_TASK_WORKING_DIR'"
 
 # To add many tasks at once, specify the tasks
-# in a JSON file, and passing it into the command. See tasks.json for formatting.
+# in a JSON file, and pass it to the command. See tasks.json for formatting.
 az batch task create \
     --job-id myjob \
     --json-file tasks.json
