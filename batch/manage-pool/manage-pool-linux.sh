@@ -21,7 +21,7 @@ az batch pool node-agent-skus list
 # Create a new Linux pool with a virtual machine configuration. The image reference 
 # and node agent SKUs ID can be selected from the ouptputs of the above list command.
 # The image reference is in the format: {publisher}:{offer}:{sku}:{version} where {version} is
-# optional and will default to 'latest'.
+# optional and defaults to 'latest'.
 az batch pool create \
     --id mypool-linux \
     --vm-size Standard_A1 \
@@ -43,7 +43,7 @@ az batch node list \
 
 # If a particular node in the pool is having issues, it can be rebooted or reimaged.
 # The ID of the node can be retrieved with the list command above.
-# A typical node ID will be in the format 'tvm-xxxxxxxxxx_1-<timestamp>'.
+# A typical node ID is in the format 'tvm-xxxxxxxxxx_1-<timestamp>'.
 az batch node reboot \
     --pool-id mypool-linux \
     --node-id tvm-123_1-20170316t000000z

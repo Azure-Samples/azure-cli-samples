@@ -21,7 +21,7 @@ az batch application summary list
 
 # Create a new Windows cloud service platform pool with 3 Standard A1 VMs.
 # The pool has an application package reference (taken from the output of the
-# above command) and a start task that will copy the application files to a shared directory.
+# above command) and a start task that copies the application files to a shared directory.
 az batch pool create \
     --id mypool-windows \
     --os-family 4 \

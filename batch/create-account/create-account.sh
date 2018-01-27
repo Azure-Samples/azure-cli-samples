@@ -9,13 +9,13 @@ az batch account create \
     --name mybatchaccount \
     --location westeurope
 
-# Display the details of our created account.
+# Display the details of the created account.
 az batch account show \
     --resource-group myResourceGroup \ 
     --name mybatchaccount
 
 # Add a storage account reference to the Batch account for use as 'auto-storage'
-# for applications.Start by creating the storage account.
+# for applications. Start by creating the storage account.
 az storage account create \
     --resource-group myResourceGroup \
     --name mystorageaccount \

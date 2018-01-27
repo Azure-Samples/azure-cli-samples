@@ -32,7 +32,7 @@ az batch pool create \
     --node-agent-sku-id "batch.node.ubuntu 16.04"
 
 
-# Create a new job to encapsulate the tasks that we want to add.
+# Create a new job to encapsulate the tasks that are added.
 az batch job create \
     --id myjob \
     --pool-id mypool
@@ -49,8 +49,8 @@ az batch task create \
     --job-id myjob \
     --json-file tasks.json
 
-# Now that all the tasks are added - we can update the job so that it will automatically
-# be marked as completed once all the tasks are finished.
+# Update the job so that it is automatically
+# marked as completed once all the tasks are finished.
 az batch job set \
 --job-id myjob \
 --on-all-tasks-complete terminateJob
