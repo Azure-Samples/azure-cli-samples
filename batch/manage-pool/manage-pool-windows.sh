@@ -23,7 +23,7 @@ az batch pool create \
     --os-family 4 \
     --target-dedicated 3 \
     --vm-size small \
-    --start-task-command-line "cmd /c dir /s""cmd /c dir /s" \
+    --start-task-command-line "cmd /c dir /s" \
     --start-task-wait-for-success \
     --application-package-references myapp
 
