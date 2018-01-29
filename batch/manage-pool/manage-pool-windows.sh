@@ -15,19 +15,15 @@ az batch account login \
     --name mybatchaccount
     --shared-key-auth
 
-# To add an application package reference to the pool, first
-# list the available applications.
-az batch application summary list
-
 # Create a new Windows cloud service platform pool with 3 Standard A1 VMs.
-# The pool has an application package reference (taken from the output of the
-# above command) and a start task that copies the application files to a shared directory.
+# The pool has a start task that runs a basic shell command. Typically a 
+# start task copies application files to the pool nodes.
 az batch pool create \
     --id mypool-windows \
     --os-family 4 \
     --target-dedicated 3 \
     --vm-size small \
-    --start-task-command-line "cmd /c xcopy %AZ_BATCH_APP_PACKAGE_MYAPP% %AZ_BATCH_NODE_SHARED_DIR%" \
+    --start-task-command-line "cmd /c dir /s""cmd /c dir /s" \
     --start-task-wait-for-success \
     --application-package-references myapp
 
