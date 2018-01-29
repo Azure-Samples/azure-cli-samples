@@ -1,30 +1,50 @@
 #!/bin/bash
 
-# Authenticate CLI session.
-az login
+# Create a resource group.
+az group create --name myResourceGroup --location westeurope
+
+# Create a general-purpose storage account in your resource group.
+az storage account create \
+    --resource-group myResourceGroup \
+    --name mystorageaccount \
+    --location eastus \
+    --sku Standard_LRS
+
+# Create a Batch account.
+az batch account create \
+    --name mybatchaccount \
+    --storage-account mystorageaccount \
+    --resource-group myResourceGroup \
+    --location eastus
+
+# Authenticate against the account directly for further CLI interaction.
+az batch account login \
+    --name mybatchaccount \
+    --resource-group myResourceGroup \
+    --shared-key-auth
 
 # Create a new application.
 az batch application create \
-    --resource-group myresourcegroup \
+    --resource-group myResourceGroup \
     --name mybatchaccount \
     --application-id myapp \
     --display-name "My Application"
 
 # An application can reference multiple application executable packages
-# of different versions. The executables and any dependencies will need
-# to be zipped up for the package. Once uploaded, the CLI will attempt
+# of different versions. The executables and any dependencies need
+# to be zipped up for the package. Once uploaded, the CLI attempts
 # to activate the package so that it's ready for use.
 az batch application package create \
-    --resource-group myresourcegroup \
+    --resource-group myResourceGroup \
     --name mybatchaccount \
     --application-id myapp \
     --package-file my-application-exe.zip \
     --version 1.0
 
-# We will update our application to assign the newly added application
+# Update the application to assign the newly added application
 # package as the default version.
 az batch application set \
-    --resource-group myresourcegroup \
+    --resource-group myResourceGroup \
     --name mybatchaccount \
     --application-id myapp \
     --default-version 1.0

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Authenticate CLI session.
-az login
-
 # Create a resource group.
 az group create --name myResourceGroup --location eastus
 
