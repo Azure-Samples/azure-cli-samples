@@ -12,7 +12,7 @@ az group create \
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
 # Substitute the <server_admin_password> with your own value.
 az mysql server create \
---name mysqlserver-20180112 \
+--name mydemoserver \
 --resource-group myresourcegroup \
 --location westus \
 --admin-user mylogin \
@@ -47,8 +47,9 @@ az network vnet subnet show \
 --vnet-name myVNet
 
 # Create a VNet rule on the sever to secure it to the subnet
-az mysql vnet-rule create \
---name myRule \
---resource-group myRG \
---server mysqlserver-20180112 \
+az mysql server vnet-rule create \
+-n myRule \
+-g myRG \
+-s mydemoserver \
+--vnet-name myVNet \
 --subnet mySubnet
