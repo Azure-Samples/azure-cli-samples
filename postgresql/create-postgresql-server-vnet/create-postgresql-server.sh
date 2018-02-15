@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Substitue <subscription id> with your identifyer
+az account set --subscription <subscription id>
+
 # Create a resource group
 az group create \
 --name myresourcegroup \
@@ -9,7 +12,7 @@ az group create \
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
 # Substitute the <server_admin_password> with your own value.
 az postgres server create \
---name mypgserver-20180111 \
+--name mydemoserver \
 --resource-group myresourcegroup \
 --location westus \
 --admin-user mylogin \
