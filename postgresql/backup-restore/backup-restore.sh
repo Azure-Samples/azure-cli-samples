@@ -9,17 +9,16 @@ az group create \
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
 # Substitute the <server_admin_password> with your own value.
 az postgres server create \
---name mypgserver-20170401 \
+--name mydemoserver \
 --resource-group myresourcegroup \
 --location westus \
---admin-user mylogin \
+--admin-user myadmin \
 --admin-password <server_admin_password> \
---performance-tier Basic \
---compute-units 50
+--sku-name GP_Gen4_2 \
 
 # Restore a server from backup to a new server
 az postgres server restore \
---name mypgserver-restored \
+--name mydemoserver-restored \
 --resource-group myresourcegroup \
---restore-point-in-time "2017-10-13T13:10:00Z" \
---source-server mypgserver-20170401
+--restore-point-in-time "2018-02-11T13:10:00Z" \
+--source-server mydemoserver

@@ -9,37 +9,36 @@ az group create \
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure
 # Substitute the <server_admin_password> with your own value
 az postgres server create \
---name pgserver-20170401 \
---resource-group myresourcegroup  \
+--name mydemoserver \
+--resource-group myresourcegroup \
 --location westus \
 --admin-user myadmin \
 --admin-password <server_admin_password> \
---performance-tier Basic \
---compute-units 50
+--sku-name GP_Gen4_2 \
 
 # List the configuration options for review
 az postgres server configuration list \
 --resource-group myresourcegroup  \
---server mypgserver-20170401
+--server mydemoserver
 
 # Turn on statement level log
 az postgres server configuration set \
 --name log_statement \
 --resource-group myresourcegroup \
---server mypgserver-20170401 \
+--server mydemoserver \
 --value all
 
 # Set log_min_duration_statement time to 10 sec
 az postgres server configuration set \
 --name log_min_duration_statement \
 --resource-group myresourcegroup \
---server mypgserver-20170401 \
+--server mydemoserver \
 --value 10000
 
 # List the available log files and direct to a text file
 az postgres server-logs list \
---resource-group myresource \
---server mypgserver-20170401 > log_files_list.txt
+--resource-group myresourcegroup \
+--server mydemoserver > log_files_list.txt
 
 # Download log file from Azure 
 # Review log_files_list.txt to find the server log file name for the desired timeframe
@@ -48,4 +47,4 @@ az postgres server-logs list \
 az postgres server-logs download \
 --name <log_file_name> \
 --resource-group myresourcegroup \
---server mypgserver-20170401
+--server mydemoserver
