@@ -28,4 +28,4 @@ az vmss extension set \
   --name CustomScript \
   --resource-group myResourceGroup \
   --vmss-name myScaleSet \
-  --settings '{"fileUris":["https://raw.githubusercontent.com/iainfoulds/compute-automation-configurations/preparevmdisks/prepare_vm_disks.sh"],"commandToExecute":"./prepare_vm_disks.sh"}'
+  --settings '{"fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/prepare_vm_disks.sh"],"commandToExecute":"./prepare_vm_disks.sh"}'
