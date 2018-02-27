@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Download the Azure CLI extension 
+# Add the Azure CLI extension 
 az extension add --name rdbms
 
 # Create a resource group
