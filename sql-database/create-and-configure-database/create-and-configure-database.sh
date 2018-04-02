@@ -30,11 +30,18 @@ az sql server firewall-rule create \
 	--start-ip-address $startip \
 	--end-ip-address $endip
 
-# Create a database in the server
+# Create a database in the server with zone redundancy as true
 az sql db create \
 	--resource-group myResourceGroup \
 	--server $servername \
 	--name mySampleDatabase \
 	--sample-name AdventureWorksLT \
 	--service-objective S0
+	--zone-redundant
 
+# Update database and set zone redundancy as false
+az sql db update 
+	--resource-group myResourceGroup \
+	--server $servername \
+	--name mySampleDatabase \
+	--zone-redundant false
