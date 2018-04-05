@@ -21,15 +21,15 @@ az mysql server create \
 
 # Monitor usage metrics - CPU
 az monitor metrics list \
---resource-id "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myresourcegroup/providers/Microsoft.DBforMySQL/servers/mydemoserver" \
---metric-names cpu_percent \
---time-grain PT1M
+--resource "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myresourcegroup/providers/Microsoft.DBforMySQL/servers/mydemoserver" \
+--metric cpu_percent \
+--interval PT1M
 
 # Monitor usage metrics - Storage
 az monitor metrics list \
 --resource-id "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myresourcegroup/providers/Microsoft.DBforMySQL/servers/mydemoserver" \
---metric-names storage_used \
---time-grain PT1M
+--metric storage_used \
+--interval PT1M
 
 # Scale up the server to provision more vCores within the same Tier
 az mysql server update \
