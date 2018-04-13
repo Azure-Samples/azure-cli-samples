@@ -14,3 +14,4 @@ az storage account create --name $storageAccountName \
 az ams account create --name $mediaServicesAccountName \
 --resource-group $resourceGroupName \
 --storage-account $storageAccountName
+
