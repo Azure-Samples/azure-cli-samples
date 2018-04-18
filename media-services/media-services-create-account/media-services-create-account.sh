@@ -1,6 +1,6 @@
 #!/bin/bash
 
-resourceGroup=myResourceGroup
+resourceGroup=amsResourceGroup
 storageName=amsstorename
 amsLocation=westus2
 amsAccountName=amsmediaaccountname
