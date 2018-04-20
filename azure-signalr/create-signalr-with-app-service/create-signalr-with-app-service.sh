@@ -3,19 +3,21 @@
 # Generate a unique suffix for the service name
 let randomNum=$RANDOM*$RANDOM
 
-# Generate unique names for SignalR service, resource group, 
+# Generate unique names for the SignalR service, resource group, 
 # app service, and app service plan
-myResourceName=SignalRTestSvc$randomNum
-myResourceGroupName=$signalrsvcname"Group"
+SignalRName=SignalRTestSvc$randomNum
+#resource name must be lowercase
+mySignalRSvcName=${SignalRName,,}
+myResourceGroupName=$SignalRName"Group"
 myAppSvcName=SignalRTestWebApp$randomNum
-myAppSvcPlanName="SignalRTestWebApp"$randomNum"Plan"
+myAppSvcPlanName=$myAppSvcName"Plan"
 
 # Create resource group 
 az group create --name $myResourceGroupName --location eastus
 
 # Create the Azure SignalR Service resource
 az signalr create \
-  --name $myResourceName \
+  --name $mySignalRSvcName \
   --resource-group $myResourceGroupName \
   --sku Basic_DS2 \
   --unit-count 1
