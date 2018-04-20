@@ -11,17 +11,17 @@ myAppSvcName=SignalRTestWebApp$randomNum
 myAppSvcPlanName="SignalRTestWebApp"$randomNum"Plan"
 
 # Create resource group 
-az group create --name $myResourceGroup --location eastus
+az group create --name $myResourceGroupName --location eastus
 
 # Create the Azure SignalR Service resource
 az signalr create \
   --name $myResourceName \
-  --resource-group $myResourceGroup \
+  --resource-group $myResourceGroupName \
   --sku Basic_DS2 \
   --unit-count 1
 
 # Create an App Service plan.
-az appservice plan create --name $myAppSvcPlanName --resource-group $myResourceGroup --sku FREE
+az appservice plan create --name $myAppSvcPlanName --resource-group $myResourceGroupName --sku FREE
 
 # Create the Web App
-az webapp create --name $myAppSvcName --resource-group $myResourceGroup --plan $myAppSvcPlanName  
+az webapp create --name $myAppSvcName --resource-group $myResourceGroupName --plan $myAppSvcPlanName  

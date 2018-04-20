@@ -8,11 +8,11 @@ myResourceName=SignalRTestSvc$randomNum
 myResourceGroupName=$signalrsvcname"Group"
 
 # Create resource group 
-az group create --name $myResourceGroup --location eastus
+az group create --name $myResourceGroupName --location eastus
 
 # Create the Azure SignalR Service resource
 az signalr create \
   --name $myResourceName \
-  --resource-group $myResourceGroup \
+  --resource-group $myResourceGroupName \
   --sku Basic_DS2 \
   --unit-count 1
