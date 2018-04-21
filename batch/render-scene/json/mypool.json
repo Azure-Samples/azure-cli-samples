@@ -6,7 +6,7 @@
       "publisher": "batch",
       "offer": "rendering-windows2016",
       "sku": "rendering",
-      "version": "latest"
+      "version": "1.2.1"
     },
     "nodeAgentSKUId": "batch.node.windows amd64"
   },
