@@ -39,4 +39,4 @@ connstring="Endpoint=https://$signalRhostname;AccessKey=$signalRprimarykey;"
 
 #Add an app setting to the web app for the SignalR connection
 az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
-  --settings "SignalRConnectionString=$connstring" 
+  --settings "AzureSignalRConnectionString=$connstring" 
