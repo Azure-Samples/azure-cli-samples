@@ -15,7 +15,9 @@ az group create \
 # Create an azure storage account
 az storage account create \
   --name $storageName \
-  --location $amsLocation \
+  --kind StorageV2 \
+  --sku Standard_RAGRS \
+  --location amsLocation \
   --resource-group $resourceGroup
 
 # Create an azure media service account
