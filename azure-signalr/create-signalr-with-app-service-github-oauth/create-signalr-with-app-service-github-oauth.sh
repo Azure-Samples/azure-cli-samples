@@ -1,5 +1,19 @@
 #!/bin/bash
 
+#========================================================================
+#=== Update these values based on your desired deployment username    ===
+#=== and password.                                                    ===
+#========================================================================
+deploymentUser=<Replace with your desired username>
+deploymentUserPassword=<Replace with your desired password>
+
+#========================================================================
+#=== Update these values based on your GitHub OAuth App registration. ===
+#========================================================================
+GitHubClientId=<Replace with your GitHub OAuth app Client ID>
+GitHubClientSecret=<Replace with your GitHub OAuth app Client Secret>
+
+
 # Generate a unique suffix for the service name
 let randomNum=$RANDOM*$RANDOM
 
@@ -40,3 +54,18 @@ connstring="Endpoint=https://$signalRhostname;AccessKey=$signalRprimarykey;"
 #Add an app setting to the web app for the SignalR connection
 az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
   --settings "AzureSignalRConnectionString=$connstring" 
+
+#Add app settings to use with GitHub authentication
+az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
+  --settings "GitHubClientId=$GitHubClientId" 
+az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
+  --settings "GitHubClientSecret=$GitHubClientSecret" 
+
+# Add the desired deployment user name and password
+az webapp deployment user set --user-name $deploymentUser --password $deploymentUserPassword
+
+# Configure Git deployment and note the deployment URL in the output
+az webapp deployment source config-local-git --name $myWebAppName --resource-group $myResourceGroupName \
+  --query [url] -o tsv
+
+
