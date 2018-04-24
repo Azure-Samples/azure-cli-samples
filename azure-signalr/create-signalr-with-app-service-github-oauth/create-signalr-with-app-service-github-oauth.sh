@@ -67,5 +67,3 @@ az webapp deployment user set --user-name $deploymentUser --password $deployment
 # Configure Git deployment and note the deployment URL in the output
 az webapp deployment source config-local-git --name $myWebAppName --resource-group $myResourceGroupName \
   --query [url] -o tsv
-
-
