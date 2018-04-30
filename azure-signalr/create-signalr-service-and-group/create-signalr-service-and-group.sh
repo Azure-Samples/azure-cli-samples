@@ -12,19 +12,17 @@ myResourceGroupName=$SignalRName"Group"
 # Create resource group 
 az group create --name $myResourceGroupName --location eastus
 
-# Create the Azure SignalR Service resource
-signalRresource=$(az signalr create \
+# Create the Azure SignalR Service resource and query the hostName
+signalRhostname=$(az signalr create \
   --name $mySignalRSvcName \
   --resource-group $myResourceGroupName \
   --sku Basic_DS2 \
-  --unit-count 1)
-echo "$signalRresource"
+  --unit-count 1 \
+  --query hostName)
 
 # Get the SignalR primary key 
-signalRkeys=$(az signalr key list --name $mySignalRSvcName --resource-group $myResourceGroupName)
-signalRprimarykey=$(echo "$signalRkeys" | grep -Po '(?<="primaryKey": ")[^"]*')
+signalRprimarykey=$(az signalr key list --name $mySignalRSvcName --resource-group $myResourceGroupName --query primaryKey)
 
 # Form the connection string for use in your application
-signalRhostname=$(echo "$signalRresource" | grep -Po '(?<="hostName": ")[^"]*')
 connstring="Endpoint=https://$signalRhostname;AccessKey=$signalRprimarykey;"
 echo "$connstring"  
