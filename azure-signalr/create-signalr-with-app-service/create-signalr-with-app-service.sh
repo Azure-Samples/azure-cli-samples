@@ -21,7 +21,8 @@ signalRhostname=$(az signalr create \
   --resource-group $myResourceGroupName \
   --sku Basic_DS2 \
   --unit-count 1 \
-  --query hostName)
+  --query hostName \
+  -o tsv)
 
 # Create an App Service plan.
 az appservice plan create --name $myAppSvcPlanName --resource-group $myResourceGroupName --sku FREE
@@ -30,7 +31,8 @@ az appservice plan create --name $myAppSvcPlanName --resource-group $myResourceG
 az webapp create --name $myWebAppName --resource-group $myResourceGroupName --plan $myAppSvcPlanName  
 
 # Get the SignalR primary key 
-signalRprimarykey=$(az signalr key list --name $mySignalRSvcName --resource-group $myResourceGroupName --query primaryKey)
+signalRprimarykey=$(az signalr key list --name $mySignalRSvcName \
+  --resource-group $myResourceGroupName --query primaryKey -o tsv)
 
 # Form the connection string for use in your application
 connstring="Endpoint=https://$signalRhostname;AccessKey=$signalRprimarykey;"
