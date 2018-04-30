@@ -28,11 +28,11 @@ az appservice plan create \
   --name $WebAppL1 \
   --resource-group $RgName1 \
   --sku S1
-az appservice web create \
+az webapp create \
   --name $WebAppL1 \
   --resource-group $RgName1 \
   --plan $WebAppL1
-az appservice web source-control config \
+az webapp deployment source config \
   --name $WebAppL1 \
   --resource-group $RgName1 \
   --repo-url $gitrepo \
@@ -44,11 +44,11 @@ az appservice plan create \
   --name $WebAppL2 \
   --resource-group $RgName2 \
   --sku S1
-az appservice web create \
+az webapp create \
   --name $WebAppL2 \
   --resource-group $RgName2 \
   --plan $WebAppL2
-az appservice web source-control config \
+az webapp deployment source config \
   --name $WebAppL2 \
   --resource-group $RgName2 \
   --repo-url $gitrepo \
