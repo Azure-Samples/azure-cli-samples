@@ -2,8 +2,8 @@
 
 # Create a resource group.
 az group create \
-  --name myResourceGroup \
-  --location $Location
+  -n myResourceGroup \
+  -l eastus
 
 # Create a DNS zone. Substitute zone name "contoso.com" with the values for your own.
 
