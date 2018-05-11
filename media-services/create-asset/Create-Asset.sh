@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Update the following variables for your own settings:
-resourceGroup=build2018
-amsAccountName=build18
+resourceGroup=amsResourceGroup
+amsAccountName=amsmediaaccountname
 assetName="myAsset-uniqueID"
 expiry=$(date -u +"%Y-%m-%dT%TZ" -d "+23 hours")
 

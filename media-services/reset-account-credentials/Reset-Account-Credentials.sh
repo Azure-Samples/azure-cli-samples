@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Update the following variables for your own settings:
-resourceGroup=build2018
-amsAccountName=build18
+resourceGroup=amsResourceGroup
+amsAccountName=amsmediaaccountname
 amsSPName=build2018demo
 
 # Reset your account credentials and get the app.config settings back
