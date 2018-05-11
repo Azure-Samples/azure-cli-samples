@@ -3,8 +3,8 @@
 # WARNING:  This shell script requires Python 3 to be installed to parse JSON. 
 
 # Update the following variables for your own settings:
-resourceGroup=build2018
-amsAccountName=build18
+resourceGroup=amsResourceGroup
+amsAccountName=amsmediaaccountname
 assetName="myAsset-uniqueID"
 locatorName="myStreamingLocator"
 streamingPolicyName="Predefined_DownloadAndClearStreaming"

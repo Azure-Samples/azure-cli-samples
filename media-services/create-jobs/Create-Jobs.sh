@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Update the following variables for your own settings:
-resourceGroup=build2018
-amsAccountName=build18
+resourceGroup=amsResourceGroup
+amsAccountName=amsmediaaccountname
 outputAssetName=myOutputAsset
 transformName=audioAnalyzerTransform
 
@@ -18,7 +18,7 @@ az ams asset create \
 az ams job start \
     --name myFirstJob_007 \
     --transform-name $transformName \
-    --base-uri 'https://nimbuscdn-nimbuspm.streaming.mediaservices.windows.net/2b533311-b215-4409-80af-529c3e853622/' \
+    --base-uri 'https://nimbuscdn-nimbuspm.streaming.mediaservices.windows.net/00000000-b215-4409-80af-529c3e853622/' \
     --files 'Ignite-short.mp4' \
     --output-asset-names $outputAssetName \
     -a $amsAccountName \
