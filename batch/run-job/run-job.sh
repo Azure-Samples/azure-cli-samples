@@ -7,7 +7,7 @@ az group create --name myResourceGroup --location westeurope
 az storage account create \
     --resource-group myResourceGroup \
     --name mystorageaccount \
-    --location eastus \
+    --location westeurope \
     --sku Standard_LRS
 
 # Create a Batch account.
@@ -15,7 +15,7 @@ az batch account create \
     --name mybatchaccount \
     --storage-account mystorageaccount \
     --resource-group myResourceGroup \
-    --location eastus
+    --location westeurope
 
 # Authenticate against the account directly for further CLI interaction.
 az batch account login \
@@ -27,8 +27,8 @@ az batch account login \
 az batch pool create \
     --id mypool \
     --vm-size Standard_A1 \
-    --target-dedicated 2
-    --image canonical:ubuntuserver:16.04.0-LTS \
+    --target-dedicated 2 \
+    --image canonical:ubuntuserver:16.04-LTS \
     --node-agent-sku-id "batch.node.ubuntu 16.04"
 
 
@@ -44,7 +44,8 @@ az batch task create \
     --command-line "/bin/bash -c 'printenv AZ_BATCH_TASK_WORKING_DIR'"
 
 # To add many tasks at once, specify the tasks
-# in a JSON file, and pass it to the command. See tasks.json for formatting.
+# in a JSON file, and pass it to the command. 
+# For format, see https://github.com/Azure/azure-docs-cli-python-samples/blob/master/batch/run-job/tasks.json.
 az batch task create \
     --job-id myjob \
     --json-file tasks.json
