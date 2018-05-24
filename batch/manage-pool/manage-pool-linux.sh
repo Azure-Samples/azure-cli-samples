@@ -25,7 +25,7 @@ az batch pool node-agent-skus list
 az batch pool create \
     --id mypool-linux \
     --vm-size Standard_A1 \
-    --image canonical:ubuntuserver:16.04.0-LTS \
+    --image canonical:ubuntuserver:16.04-LTS \
     --node-agent-sku-id "batch.node.ubuntu 16.04"
 
 # Resize the pool to start some VMs.

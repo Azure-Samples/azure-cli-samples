@@ -27,8 +27,8 @@ az batch account login \
 az batch pool create \
     --id mypool \
     --vm-size Standard_A1 \
-    --target-dedicated 2
-    --image canonical:ubuntuserver:16.04.0-LTS \
+    --target-dedicated 2 \
+    --image canonical:ubuntuserver:16.04-LTS \
     --node-agent-sku-id "batch.node.ubuntu 16.04"
 
 
