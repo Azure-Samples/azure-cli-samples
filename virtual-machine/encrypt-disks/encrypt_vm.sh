@@ -20,8 +20,8 @@ read sp_id sp_password <<< $(az ad sp create-for-rbac --query [appId,password] -
 
 # Grant permissions on the Key Vault to the AAD service principal.
 az keyvault set-policy --name $keyvault_name --spn $sp_id \
-    --key-permissions all \
-    --secret-permissions all
+    --key-permissions wrapKey \
+    --secret-permissions set
 
 # Create a virtual machine.
 az vm create \

@@ -1,57 +1,53 @@
 #!/bin/bash
 
+# Add the Azure CLI extension 
+az extension add --name rdbms
+
 # Create a resource group
 az group create \
---name myresource \
+--name myresourcegroup  \
 --location westus
 
 # Create a MySQL server in the resource group
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure
 # Substitute the <server_admin_password> with your own value
 az mysql server create \
---name mysqlserver4demo \
---resource-group myresource \
+--name mydemoserver \
+--resource-group myresourcegroup \
 --location westus \
 --admin-user myadmin \
 --admin-password <server_admin_password> \
---performance-tier Basic \
---compute-units 50
+--sku-name GP_Gen4_2 \
 
 # List the configuration options for review
 az mysql server configuration list \
---resource-group myresource \
---server mysqlserver4demo
+--resource-group myresourcegroup  \
+--server mydemoserver
 
-# Turn on slow query log
+# Turn on statement level log
 az mysql server configuration set \
---name slow_query_log \
---resource-group myresource \
---server mysqlserver4demo \
---value ON
+--name log_statement \
+--resource-group myresourcegroup \
+--server mydemoserver \
+--value all
 
-# Set long query time to 10 sec
+# Set log_min_duration_statement time to 10 sec
 az mysql server configuration set \
---name long_query_time \
---resource-group myresource \
---server mysqlserver4demo \
---value 10
-
-# Turn off the logging of slow admin statement
-az mysql server configuration set \
---name log_slow_admin_statements \
---resource-group myresource \
---server mysqlserver4demo \
---value OFF
+--name log_min_duration_statement \
+--resource-group myresourcegroup \
+--server mydemoserver \
+--value 10000
 
 # List the available log files and direct to a text file
 az mysql server-logs list \
---resource-group myresource \
---server mysqlserver4demo > log_files_list.txt
+--resource-group myresourcegroup \
+--server mydemoserver > log_files_list.txt
 
-# Download logs to your environment
-# Use "cat log_files_list.txt" to find the server log file name
+# Download log file from Azure 
+# Review log_files_list.txt to find the server log file name for the desired timeframe
 # Substitute the <log_file_name> with your server log file name
+# Creates the postgresql-<date>_000000.log file in the current command line path
 az mysql server-logs download \
 --name <log_file_name> \
---resource-group myresource \
---server mysqlserver4demo
+--resource-group myresourcegroup \
+--server mydemoserver

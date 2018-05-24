@@ -1,2 +1,2 @@
 #!/bin/bash
-az group delete --name myresource
+az group delete --name myresourcegroup
