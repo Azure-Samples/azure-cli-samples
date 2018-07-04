@@ -29,3 +29,4 @@ az functionapp create \
   --storage-account $storageName \
   --plan myappserviceplan \
   --resource-group myResourceGroup
+  

@@ -32,4 +32,3 @@ az functionapp config appsettings set \
   --name $functionAppName \
   --resource-group myResourceGroup \
   --settings StorageConStr=$connstr
-

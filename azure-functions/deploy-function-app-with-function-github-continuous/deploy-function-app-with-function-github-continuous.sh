@@ -27,7 +27,7 @@ az storage account create \
 
 # Create a function app with source files deployed from the specified GitHub repo.
 az functionapp create \
-  --name funcgithubcontinuous \
+  --name $functionAppName \
   --storage-account $storageName \
   --consumption-plan-location westeurope \
   --resource-group myResourceGroup \

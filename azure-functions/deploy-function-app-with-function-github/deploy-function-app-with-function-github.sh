@@ -34,3 +34,4 @@ az functionapp deployment source config \
   --repo-url $gitrepo \
   --branch master \
   --manual-integration
+  

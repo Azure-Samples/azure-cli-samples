@@ -3,7 +3,7 @@
 # Function app and storage account names must be unique.
 # When using Windows command prompt, replace $RANDOM with %RANDOM%. 
 storageName=mystorageaccount$RANDOM
-functionAppName=myconsumptionfunc$RANDOM
+functionAppName=myserverlessfunc$RANDOM
 
 # Create a resource group.
 az group create --name myResourceGroup --location westeurope
@@ -21,3 +21,4 @@ az functionapp create \
   --storage-account $storageName \
   --consumption-plan-location westeurope \
   --resource-group myResourceGroup
+  
