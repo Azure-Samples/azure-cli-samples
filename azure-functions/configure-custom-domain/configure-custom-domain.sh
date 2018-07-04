@@ -34,11 +34,11 @@ read -p "Press [Enter] key when ready ..."
 
 # Before continuing, go to your DNS configuration UI for your custom domain and follow the 
 # instructions at https://aka.ms/appservicecustomdns to configure an A record 
-# and point it your web app's default domain name.
+# and point it at your function app's default domain name.
 
 # Map your prepared custom domain name to the function app.
-az appservice web config hostname add \
-  --webapp $functionAppName \
+az functionapp config hostname add \
+  --hostname $functionAppName \
   --resource-group myResourceGroup \
   --name $fqdn
 

@@ -40,12 +40,12 @@ read -p "Press [Enter] key when ready ..."
 
 # Map your prepared custom domain name to the function app.
 az functionapp config hostname add \ 
-  --webapp $functionAppName \
+  --name $functionAppName \
   --resource-group myResourceGroup \
-  --name $fqdn
+  --hostname $fqdn
 
 # Upload the SSL certificate and get the thumbprint.
-thumprint=$(az functionapp config ssl upload --certificate-file $pfxPath \
+thumbprint=$(az functionapp config ssl upload --certificate-file $pfxPath \
 --certificate-password $pfxPassword --name $functionAppName --resource-group myResourceGroup \
 --query thumbprint --output tsv)
 
