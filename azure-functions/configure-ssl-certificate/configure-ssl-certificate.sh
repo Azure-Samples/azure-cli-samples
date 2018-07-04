@@ -1,10 +1,14 @@
 #!/bin/bash
 
+# Function app and storage account names must be unique.
+# When using Windows command prompt, replace $RANDOM with %RANDOM%.
+storageName=mystorageaccount$RANDOM
+functionAppName=myconsumptionfunc$RANDOM
+
+# TODO:
 fqdn=<Replace with www.{yourdomain}>
 pfxPath=<Replace with path to your .PFX file>
 pfxPassword=<Replace with your .PFX password>
-storageName=myfuncsslstore
-functionAppName=myfuncssl
 
 # Create a resource resourceGroupName
 az group create \

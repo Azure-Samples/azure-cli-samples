@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# Function app and storage account names must be unique.
+# When using Windows command prompt, replace $RANDOM with %RANDOM%.
+storageName=mystorageaccount$RANDOM
+functionAppName=myconsumptionfunc$RANDOM
+
+# TODO:
 fqdn=<Replace with www.{yourdomain}>
-storageName=myfuncdomainstore
-functionAppName=myfuncdomain
 
 # Create a resource resourceGroupName
 az group create \
