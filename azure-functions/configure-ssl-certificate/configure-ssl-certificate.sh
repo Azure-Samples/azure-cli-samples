@@ -25,7 +25,7 @@ az storage account create \
   --sku Standard_LRS
 
 # Create an App Service plan in Basic tier (minimum required by custom domains).
-az appservice plan create 
+az appservice plan create \
   --name FunctionAppWithAppServicePlan \
   --location westeurope \
   --resource-group myResourceGroup \
@@ -39,7 +39,7 @@ az functionapp create \
   --resource-group myResourceGroup
 
 # Map your prepared custom domain name to the function app.
-az functionapp config hostname add \ 
+az functionapp config hostname add \
   --name $functionAppName \
   --resource-group myResourceGroup \
   --hostname $fqdn
@@ -50,8 +50,8 @@ thumbprint=$(az functionapp config ssl upload --certificate-file $pfxPath \
 --query thumbprint --output tsv)
 
 # Binds the uploaded SSL certificate to the function app.
-az functionapp config ssl bind \ 
-  --certificate-thumbprint $thumbprint 
+az functionapp config ssl bind \
+  --certificate-thumbprint $thumbprint \
   --ssl-type SNI \
   --name $functionAppName \
   --resource-group myResourceGroup
