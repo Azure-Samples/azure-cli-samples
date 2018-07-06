@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Function app and storage account names must be unique.
-# When using Windows command prompt, replace $RANDOM with %RANDOM%. 
 storageName=mystorageaccount$RANDOM
 functionAppName=mygithubfunc$RANDOM
 
@@ -28,7 +27,7 @@ az functionapp create  \
   --consumption-plan-location westeurope \
   --resource-group myResourceGroup
 
-# Set the deployment source to the VSTS repo.
+# Set the deployment source to the VSTS repo using the token.
 az functionapp deployment source config \
   --name $functionAppName \
   --resource-group myResourceGroup \

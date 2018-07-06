@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # Function app and storage account names must be unique.
-# When using Windows command prompt, replace $RANDOM with %RANDOM%.
 storageName=mystorageaccount$RANDOM
 functionAppName=myconsumptionfunc$RANDOM
 
 # TODO:
-fqdn=<Replace with www.{yourdomain}>
+# Before starting, go to your DNS configuration UI for your custom domain and follow the 
+# instructions at https://aka.ms/appservicecustomdns to configure an A record 
+# and point it your web app's default domain name. 
+fqdn=<Replace with www.{yourcustomdomain}>
 pfxPath=<Replace with path to your .PFX file>
 pfxPassword=<Replace with your .PFX password>
 
@@ -19,7 +21,8 @@ az group create \
 az storage account create \
   --name $storageName \
   --location westeurope \
-  --resource-group myResourceGroup
+  --resource-group myResourceGroup \
+  --sku Standard_LRS
 
 # Create an App Service plan in Basic tier (minimum required by custom domains).
 az appservice plan create 
@@ -34,13 +37,6 @@ az functionapp create \
   --storage-account $storageName \
   --plan FunctionAppWithAppServicePlan \
   --resource-group myResourceGroup
-
-echo "Configure an A record that maps $fqdn to $functionAppName.azurewebsites.net"
-read -p "Press [Enter] key when ready ..."
-
-# Before continuing, go to your DNS configuration UI for your custom domain and follow the 
-# instructions at https://aka.ms/appservicecustomdns to configure an A record 
-# and point it your web app's default domain name.
 
 # Map your prepared custom domain name to the function app.
 az functionapp config hostname add \ 
