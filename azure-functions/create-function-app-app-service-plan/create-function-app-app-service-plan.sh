@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Function app and storage account names must be unique.
+storageName=mystorageaccount$RANDOM
+functionAppName=myappsvcpfunc$RANDOM
+
 # Create a resource resourceGroupName
 az group create \
   --name myResourceGroup \
@@ -7,7 +11,7 @@ az group create \
 
 # Create an azure storage account
 az storage account create \
-  --name myappsvcpstore \
+  --name $storageName \
   --location westeurope \
   --resource-group myResourceGroup \
   --sku Standard_LRS
@@ -20,7 +24,8 @@ az appservice plan create \
 
 # Create a Function App
 az functionapp create \
-  --name myappsvcpfunc \
-  --storage-account myappsvcpstore \
+  --name $functionAppName \
+  --storage-account $storageName \
   --plan myappserviceplan \
   --resource-group myResourceGroup
+  

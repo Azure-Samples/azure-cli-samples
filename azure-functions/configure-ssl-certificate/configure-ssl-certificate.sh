@@ -1,10 +1,16 @@
 #!/bin/bash
 
-fqdn=<Replace with www.{yourdomain}>
+# Function app and storage account names must be unique.
+storageName=mystorageaccount$RANDOM
+functionAppName=myconsumptionfunc$RANDOM
+
+# TODO:
+# Before starting, go to your DNS configuration UI for your custom domain and follow the 
+# instructions at https://aka.ms/appservicecustomdns to configure an A record 
+# and point it your web app's default domain name. 
+fqdn=<Replace with www.{yourcustomdomain}>
 pfxPath=<Replace with path to your .PFX file>
 pfxPassword=<Replace with your .PFX password>
-storageName=myfuncsslstore
-functionAppName=myfuncssl
 
 # Create a resource resourceGroupName
 az group create \
@@ -15,10 +21,11 @@ az group create \
 az storage account create \
   --name $storageName \
   --location westeurope \
-  --resource-group myResourceGroup
+  --resource-group myResourceGroup \
+  --sku Standard_LRS
 
 # Create an App Service plan in Basic tier (minimum required by custom domains).
-az appservice plan create 
+az appservice plan create \
   --name FunctionAppWithAppServicePlan \
   --location westeurope \
   --resource-group myResourceGroup \
@@ -31,27 +38,20 @@ az functionapp create \
   --plan FunctionAppWithAppServicePlan \
   --resource-group myResourceGroup
 
-echo "Configure an A record that maps $fqdn to $functionAppName.azurewebsites.net"
-read -p "Press [Enter] key when ready ..."
-
-# Before continuing, go to your DNS configuration UI for your custom domain and follow the 
-# instructions at https://aka.ms/appservicecustomdns to configure an A record 
-# and point it your web app's default domain name.
-
 # Map your prepared custom domain name to the function app.
-az functionapp config hostname add \ 
-  --webapp $functionAppName \
+az functionapp config hostname add \
+  --name $functionAppName \
   --resource-group myResourceGroup \
-  --name $fqdn
+  --hostname $fqdn
 
 # Upload the SSL certificate and get the thumbprint.
-thumprint=$(az functionapp config ssl upload --certificate-file $pfxPath \
+thumbprint=$(az functionapp config ssl upload --certificate-file $pfxPath \
 --certificate-password $pfxPassword --name $functionAppName --resource-group myResourceGroup \
 --query thumbprint --output tsv)
 
 # Binds the uploaded SSL certificate to the function app.
-az functionapp config ssl bind \ 
-  --certificate-thumbprint $thumbprint 
+az functionapp config ssl bind \
+  --certificate-thumbprint $thumbprint \
   --ssl-type SNI \
   --name $functionAppName \
   --resource-group myResourceGroup

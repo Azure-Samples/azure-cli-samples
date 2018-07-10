@@ -1,18 +1,23 @@
 #!/bin/bash
 
-# Create resource group
+# Function app and storage account names must be unique.
+storageName=mystorageaccount$RANDOM
+functionAppName=myserverlessfunc$RANDOM
+
+# Create a resource group.
 az group create --name myResourceGroup --location westeurope
 
-# Create an azure storage account
+# Create an Azure storage account in the resource group.
 az storage account create \
-  --name myconsumptionstore \
+  --name $storageName \
   --location westeurope \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
-# Create Function App
+# Create a serverless function app in the resource group.
 az functionapp create \
-  --name myconsumptionfunc \
-  --storage-account myconsumptionstore \
+  --name $functionAppName \
+  --storage-account $storageName \
   --consumption-plan-location westeurope \
   --resource-group myResourceGroup
+  

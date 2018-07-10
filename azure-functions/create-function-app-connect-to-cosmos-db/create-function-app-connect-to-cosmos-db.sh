@@ -1,44 +1,48 @@
 #!/bin/bash
 
-# create a resource group with location
+# Function app and storage account names must be unique.
+storageName=mystorageaccount$RANDOM
+functionAppName="myfuncwithcosmosdb$RANDOM"
+
+# Create a resource group with location.
 az group create \
   --name myResourceGroup \
   --location westeurope
 
-# create a storage account 
+# Create a storage account for the function app. 
 az storage account create \
-  --name funccosmosdbstore \
+  --name $storageName \
   --location westeurope \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
-# create a new function app, assign it to the resource group you have just created
+# Create a serverless function app in the resource group.
 az functionapp create \
-  --name myfunccosmosdb \
+  --name $functionAppName \
   --resource-group myResourceGroup \
-  --storage-account funccosmosdbstore \
+  --storage-account $storageName \
   --consumption-plan-location westeurope
 
-# create cosmosdb database, name must be lowercase.
+# Create an Azure Cosmos DB database using the same function app name.
 az cosmosdb create \
-  --name myfunccosmosdb \
+  --name $functionAppName \
   --resource-group myResourceGroup
 
-# Retrieve cosmosdb connection string
+# Get the Azure Cosmos DB connection string.
 endpoint=$(az cosmosdb show \
-  --name myfunccosmosdb \
+  --name $functionAppName \
   --resource-group myResourceGroup \
   --query documentEndpoint \
   --output tsv)
 
 key=$(az cosmosdb list-keys \
-  --name myfunccosmosdb \
+  --name $functionAppName \
   --resource-group myResourceGroup \
   --query primaryMasterKey \
   --output tsv)
 
-# configure function app settings to use cosmosdb connection string
+# Configure function app settings to use the Azure Cosmos DB connection string.
 az functionapp config appsettings set \
-  --name myfunccosmosdb \
+  --name $functionAppName \
   --resource-group myResourceGroup \
   --setting CosmosDB_Endpoint=$endpoint CosmosDB_Key=$key
