@@ -22,7 +22,7 @@ az batchai workspace create \
 
 # Create a Batch AI cluster using a cluster configuration file.
 # Sample configuration file is at https://github.com/Azure/azure-docs-cli-python-samples/blob/master/batch-ai/create-cluster/cluster.json
-# Configuration file automatically substitutes name and credentials of storage account name passed in the command.
+# Configuration file automatically substitutes name and credentials of storage account passed in the command.
 az batchai cluster create \
     --name mycluster \
     --workspace myworkspace \
