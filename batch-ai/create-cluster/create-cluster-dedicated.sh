@@ -51,5 +51,5 @@ az batchai cluster show \
 az batchai cluster resize \
     --name mycluster \
     --workspace myworkspace \
-    --resource-group myResourceGroup
+    --resource-group myResourceGroup \
     --target 2
