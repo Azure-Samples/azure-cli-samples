@@ -34,20 +34,6 @@ az batchai cluster node list \
     --workspace myworkspace \
     --resource-group myResourceGroup 
 
-# Show name of file share configured in auto-storage account.
-az batchai cluster show \
-    --name mycluster \
-    --workspace myworkspace \
-    --resource-group myResourceGroup \
-    --query "nodeSetup.mountVolumes.azureFileShares[0].{account:accountName, URL:azureFileUrl}"
-
-# Show name of storage container configured in auto-storage account.
-az batchai cluster show \
-    --name mycluster \
-    --workspace myworkspace \
-    --resource-group myResourceGroup \
-    --query "nodeSetup.mountVolumes.azureBlobFileSystems[0].{account:accountName, container:containerName}"
-
 # Resize cluster to 2 target nodes, or target 0 if you don't run jobs immediately.
 az batchai cluster resize \
     --name mycluster \
