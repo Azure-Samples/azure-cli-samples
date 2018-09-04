@@ -8,14 +8,13 @@ az batchai workspace create \
     --workspace myworkspace \
     --resource-group myResourceGroup 
 
-# Create a Batch AI cluster with auto-storage account, and SSH keys if not present.
+# Create a Batch AI cluster, and generate SSH keys if not present.
 # Cluster contains 1 dedicated size NC6 node, containing 1 NVIDIA Tesla K80 GPU.
 az batchai cluster create \
     --name mycluster \
     --workspace myworkspace \
     --resource-group myResourceGroup \
     --vm-size Standard_NC6 \
-    --use-auto-storage \
     --target 1 \
     --user-name myusername \
     --generate-ssh-keys
