@@ -8,14 +8,13 @@ az batchai workspace create \
     --workspace myworkspace \
     --resource-group myResourceGroup 
 
-# Create a Batch AI cluster with auto-storage account, and SSH keys if not present.
+# Create a Batch AI cluster, and generate SSH keys if not present.
 # Cluster contains 1 dedicated size NC6 node, containing 1 NVIDIA Tesla K80 GPU.
 az batchai cluster create \
     --name mycluster \
     --workspace myworkspace \
     --resource-group myResourceGroup \
     --vm-size Standard_NC6 \
-    --use-auto-storage \
     --target 1 \
     --user-name myusername \
     --generate-ssh-keys
@@ -32,20 +31,6 @@ az batchai cluster node list \
     --cluster mycluster \
     --workspace myworkspace \
     --resource-group myResourceGroup 
-
-# Show name of file share configured in auto-storage account.
-az batchai cluster show \
-    --name mycluster \
-    --workspace myworkspace \
-    --resource-group myResourceGroup \
-    --query "nodeSetup.mountVolumes.azureFileShares[0].{account:accountName, URL:azureFileUrl}"
-
-# Show name of storage container configured in auto-storage account.
-az batchai cluster show \
-    --name mycluster \
-    --workspace myworkspace \
-    --resource-group myResourceGroup \
-    --query "nodeSetup.mountVolumes.azureBlobFileSystems[0].{account:accountName, container:containerName}"
 
 # Resize cluster to 2 target nodes, or target 0 if you don't run jobs immediately.
 az batchai cluster resize \
