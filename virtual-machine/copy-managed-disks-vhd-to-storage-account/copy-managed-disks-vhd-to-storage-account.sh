@@ -17,7 +17,7 @@ storageAccountName=mystorageaccountname
 #Name of the storage container where the downloaded VHD will be stored
 storageContainerName=mystoragecontainername
 
-#Provide the key of the storage account where you want to copy the VHD. 
+#Provide the key of the storage account where you want to copy the VHD 
 storageAccountKey=mystorageaccountkey
 
 #Provide the name of the destination VHD file to which the VHD of the managed disk will be copied.
