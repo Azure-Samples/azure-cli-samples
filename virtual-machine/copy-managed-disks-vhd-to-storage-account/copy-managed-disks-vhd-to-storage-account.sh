@@ -1,5 +1,5 @@
 #Provide the subscription Id where managed disk is created
-subscriptionId=dd80b94e-0463-4a65-8d04-c94f403879dc
+subscriptionId=yourSubscriptionId
 
 #Provide the name of your resource group where managed disk is created
 resourceGroupName=myResourceGroupName
