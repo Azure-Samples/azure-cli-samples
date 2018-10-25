@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Set variables for the new SQL API account, database, and container
+# Set variables for the new Cassandra API account, database, and table
 resourceGroupName='myResourceGroup'
 location='southcentralus'
 accountName='myCosmosDbAccount'
 databaseName='myDatabase'
-containerName='myContainer'
+tableName='myTable'
 
 
 # Create a resource group
@@ -14,11 +14,11 @@ az group create \
     --location $location
 
 
-# Create a SQL API Cosmos DB account with bounded staleness consistency and multi-master enabled
+# Create a Cassandra API Cosmos DB account with bounded staleness (QUORUM) consistency and multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
-    --kind GlobalDocumentDB \
+    --capabilities EnableCassandra \
     --locations "South Central US"=0 "North Central US"=1 \
     --default-consistency-level "BoundedStaleness" \
     --max-interval 5 \
@@ -33,10 +33,10 @@ az cosmosdb database create \
     --db-name $databaseName
 
 
-# Create a SQL API container with a partition key and 1000 RU/s
+# Create a Cassandra table
 az cosmosdb collection create \
     --resource-group $resourceGroupName \
-    --collection-name $containerName \
+    --collection-name $tableName \
     --name $accountName \
     --db-name $databaseName \
     --partition-key-path = "/myPartitionKey" \

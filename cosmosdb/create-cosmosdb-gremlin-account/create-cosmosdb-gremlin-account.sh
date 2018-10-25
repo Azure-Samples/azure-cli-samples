@@ -1,25 +1,29 @@
 #!/bin/bash
 
-# Set variables for the new account, database, and collection
-resourceGroupName='myResourceGroupgraph'
+# Set variables for the new account, database, and graph
+resourceGroupName='myResourceGroup'
 location='southcentralus'
-name='docdb-test-graph'
-databaseName='docdb-graphdb-database'
-collectionName='docdb-graphdb-collection'
+accountName='myCosmosDbAccount'
+databaseName='myDatabase'
+graphName='myGraph'
+
 
 # Create a resource group
 az group create \
 	--name $resourceGroupName \
 	--location $location
 
-# Create a Gremlin API Cosmos DB account
+
+# Create a Gremlin API Cosmos DB account with bounded staleness consistency and multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
+	--name $accountName \
     --capabilities EnableGremlin \
-    --name $name \
     --locations "South Central US"=0 "North Central US"=1 \
-    --max-interval 10 \
-	--max-staleness-prefix 200
+    --default-consistency-level "BoundedStaleness" \
+    --max-interval 5 \
+    --max-staleness-prefix 100 \
+    --enable-multiple-write-locations true
 
 
 # Create a database 
@@ -28,9 +32,10 @@ az cosmosdb database create \
 	--db-name $databaseName \
 	--resource-group $resourceGroupName
 
-# Create a collection
+
+# Create a graph with a partition key and 1000 RU/s
 az cosmosdb collection create \
-	--collection-name $collectionName \
-	--name $name \
+	--collection-name $graphName \
+	--name $accountName \
 	--db-name $databaseName \
 	--resource-group $resourceGroupName
