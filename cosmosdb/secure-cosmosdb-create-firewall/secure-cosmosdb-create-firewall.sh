@@ -3,7 +3,7 @@
 # Set variables for the new account and firewall
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName='myaccountname' #needs to be lower case
 ipRangeFilter="13.91.6.132,13.91.6.1/24"
 
 
@@ -13,15 +13,13 @@ az group create \
 	--location $location
 
 
-# Create a SQL API Cosmos DB account with bounded staleness consistency and multi-master enabled
+# Create a SQL API Cosmos DB account with session consistency and multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
     --kind GlobalDocumentDB \
     --locations "South Central US"=0 "North Central US"=1 \
-    --default-consistency-level "BoundedStaleness" \
-    --max-interval 5 \
-    --max-staleness-prefix 100 \
+    --default-consistency-level "Session" \
     --enable-multiple-write-locations true
 
 

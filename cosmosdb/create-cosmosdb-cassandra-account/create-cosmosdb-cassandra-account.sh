@@ -3,7 +3,7 @@
 # Set variables for the new Cassandra API account, database, and table
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName='myaccountname' #needs to be lower case
 databaseName='myDatabase'
 tableName='myTable'
 
@@ -14,15 +14,13 @@ az group create \
     --location $location
 
 
-# Create a Cassandra API Cosmos DB account with bounded staleness (QUORUM) consistency and multi-master enabled
+# Create a Cassandra API Cosmos DB account with consistent prefix (LOCAL_ONE) consistency and multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
     --capabilities EnableCassandra \
     --locations "South Central US"=0 "North Central US"=1 \
-    --default-consistency-level "BoundedStaleness" \
-    --max-interval 5 \
-    --max-staleness-prefix 100 \
+    --default-consistency-level "ConsistentPrefix" \
     --enable-multiple-write-locations true
 
 
@@ -39,5 +37,5 @@ az cosmosdb collection create \
     --collection-name $tableName \
     --name $accountName \
     --db-name $databaseName \
-    --partition-key-path = "/myPartitionKey" \
+    --partition-key-path /mypartitionkey \
     --throughput 1000

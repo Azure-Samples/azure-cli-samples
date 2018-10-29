@@ -3,7 +3,7 @@
 # Set variables for the new MongoDB API account, database, and collection
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName='mycosmosdbaccount' #needs to be lower case
 databaseName='myDatabase'
 collectionName='myCollection'
 
@@ -14,15 +14,13 @@ az group create \
     --location $location
 
 
-# Create a MongoDB API Cosmos DB account with bounded staleness (Majority) consistency and multi-master enabled
+# Create a MongoDB API Cosmos DB account with consistent prefix (Local) consistency and multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
     --kind MongoDB \
     --locations "South Central US"=0 "North Central US"=1 \
-    --default-consistency-level "BoundedStaleness" \
-    --max-interval 5 \
-    --max-staleness-prefix 100 \
+    --default-consistency-level "ConsistentPrefix" \
     --enable-multiple-write-locations true
 
 
@@ -39,5 +37,5 @@ az cosmosdb collection create \
     --collection-name $collectionName \
     --name $accountName \
     --db-name $databaseName \
-    --partition-key-path = "/myPartitionKey" \
+    --partition-key-path /mypartitionkey \
     --throughput 1000

@@ -12,14 +12,12 @@ az group create \
 	--location $location
 
 
-# Create a SQL API Cosmos DB account with bounded staleness consistency
+# Create a SQL API Cosmos DB account with session consistency
 az cosmosdb create \
 	--name $accountName \
 	--kind GlobalDocumentDB \
 	--resource-group $resourceGroupName \
-    --default-consistency-level "BoundedStaleness" \
-    --max-interval 5 \
-    --max-staleness-prefix 100 \
+    --default-consistency-level "Session"
 
 
 # Replicate in multiple regions

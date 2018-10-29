@@ -3,7 +3,7 @@
 # Set variables for the new account
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName='myaccountname' #needs to be lower case
 
 
 # Create a resource group
@@ -12,15 +12,13 @@ az group create \
 	--location $location
 
 
-# Create a SQL API Cosmos DB account with bounded staleness consistency in two regions
+# Create a SQL API Cosmos DB account with session consistency in two regions
 az cosmosdb create \
 	--name $accountName \
 	--kind GlobalDocumentDB \
 	--locations "South Central US"=0 "North Central US"=1 \
 	--resource-group $resourceGroupName \
-    --default-consistency-level "BoundedStaleness" \
-    --max-interval 5 \
-    --max-staleness-prefix 100 \
+    --default-consistency-level "Session"
 
 
 # List account keys

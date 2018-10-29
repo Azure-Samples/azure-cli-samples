@@ -3,7 +3,7 @@
 # Set variables for the new Table API account, database, and table
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName='myaccountname' #needs to be lower case
 databaseName='myDatabase'
 tableName='myTable'
 
@@ -14,7 +14,7 @@ az group create \
     --location $location
 
 
-# Create a Gremlin API Cosmos DB account with multi-master enabled
+# Create a Table API Cosmos DB account with multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
@@ -31,11 +31,10 @@ az cosmosdb database create \
     --db-name $databaseName
 
 
-# Create a Table API table
+# Create a Table API table with 1000 RU/s
 az cosmosdb collection create \
     --resource-group $resourceGroupName \
     --collection-name $tableName \
     --name $accountName \
     --db-name $databaseName \
-    --partition-key-path = "/myPartitionKey" \
     --throughput 1000

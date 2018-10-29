@@ -16,15 +16,13 @@ az group create \
 	--location $location
 
 
-# Create a SQL API Cosmos DB account with bounded staleness consistency and multi-master enabled
+# Create a SQL API Cosmos DB account with session consistency and multi-master enabled
 az cosmosdb create \
 	--name $accountName \
 	--kind GlobalDocumentDB \
 	--locations "South Central US"=0 "North Central US"=1 \
 	--resource-group $resourceGroupName \
-	--default-consistency-level "BoundedStaleness" \
-    --max-interval 5 \
-    --max-staleness-prefix 100 \
+	--default-consistency-level "Session" \
     --enable-multiple-write-locations true
 
 
@@ -41,7 +39,7 @@ az cosmosdb collection create \
     --collection-name $containerName \
     --name $accountName \
     --db-name $databaseName \
-    --throughput $originalThrougput
+    --throughput $originalThroughput
 
 
 read -p "Wait for resources to provision. Press any key to continue..."
