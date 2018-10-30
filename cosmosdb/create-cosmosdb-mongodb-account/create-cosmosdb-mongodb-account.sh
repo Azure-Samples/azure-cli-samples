@@ -1,35 +1,41 @@
 #!/bin/bash
 
-# Set variables for the new account, database, and collection
+# Set variables for the new MongoDB API account, database, and collection
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-name='docdb-test'
-databaseName='docdb-mongodb-database'
-collectionName='docdb-mongodb-collection'
+accountName='mycosmosdbaccount' #needs to be lower case
+databaseName='myDatabase'
+collectionName='myCollection'
+
 
 # Create a resource group
 az group create \
-	--name $resourceGroupName \
-	--location $location
+    --name $resourceGroupName \
+    --location $location
 
-# Create a MongoDB API Cosmos DB account
+
+# Create a MongoDB API Cosmos DB account with consistent prefix (Local) consistency and multi-master enabled
 az cosmosdb create \
-	--name $name \
-	--kind MongoDB \
-	--locations "South Central US"=0 "North Central US"=1 \
-	--resource-group $resourceGroupName \
-	--max-interval 10 \
-	--max-staleness-prefix 200
+    --resource-group $resourceGroupName \
+    --name $accountName \
+    --kind MongoDB \
+    --locations "South Central US"=0 "North Central US"=1 \
+    --default-consistency-level "ConsistentPrefix" \
+    --enable-multiple-write-locations true
+
 
 # Create a database 
 az cosmosdb database create \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
+    --resource-group $resourceGroupName \
+    --name $accountName \
+    --db-name $databaseName
 
-# Create a collection
+
+# Create a collection with a partition key and 1000 RU/s
 az cosmosdb collection create \
-	--collection-name $collectionName \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
+    --resource-group $resourceGroupName \
+    --collection-name $collectionName \
+    --name $accountName \
+    --db-name $databaseName \
+    --partition-key-path /mypartitionkey \
+    --throughput 1000

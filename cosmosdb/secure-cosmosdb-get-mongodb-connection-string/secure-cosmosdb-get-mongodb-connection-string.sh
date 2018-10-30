@@ -1,39 +1,28 @@
 #!/bin/bash
 
-# Set variables for the new account, database, and collection
+# Set variables for the new MongoDB API account, database, and collection
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-name='docdb-test'
-databaseName='docdb-mongodb-database'
-collectionName='docdb-mongodb-collection'
+accountName='myCosmosDbAccount'
+
 
 # Create a resource group
 az group create \
-	--name $resourceGroupName \
-	--location $location
+    --name $resourceGroupName \
+    --location $location
 
-# Create a MongoDB API Cosmos DB account
+
+# Create a MongoDB API Cosmos DB account with session consistency and multi-master enabled
 az cosmosdb create \
-	--name $name \
-	--kind MongoDB \
-	--resource-group $resourceGroupName \
-	--max-interval 10 \
-	--max-staleness-prefix 200
+    --resource-group $resourceGroupName \
+    --name $accountName \
+    --kind MongoDB \
+    --locations "South Central US"=0 "North Central US"=1 \
+    --default-consistency-level "Session" \
+    --enable-multiple-write-locations true
 
-# Create a database 
-az cosmosdb database create \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
 
-# Create a collection
-az cosmosdb collection create \
-	--collection-name $collectionName \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
-
-# Get the connection string for MongoDB apps
+# Get the connection string for MongoDB API account
 az cosmosdb list-connection-strings \
-	--name $name \
+	--name $accountName \
 	--resource-group $resourceGroupName 
