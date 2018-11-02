@@ -4,7 +4,7 @@
 resourceGroupName='myResourceGroup'
 location='southcentralus'
 accountName='myaccountname' #needs to be lower case
-databaseName='myDatabase'
+keysetName='myKeysetName'
 tableName='myTable'
 
 
@@ -28,14 +28,4 @@ az cosmosdb create \
 az cosmosdb database create \
     --resource-group $resourceGroupName \
     --name $accountName \
-    --db-name $databaseName
-
-
-# Create a Cassandra table
-az cosmosdb collection create \
-    --resource-group $resourceGroupName \
-    --collection-name $tableName \
-    --name $accountName \
-    --db-name $databaseName \
-    --partition-key-path /mypartitionkey \
-    --throughput 1000
+    --db-name $keysetName

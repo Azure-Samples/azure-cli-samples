@@ -6,8 +6,8 @@ location='southcentralus'
 accountName='myCosmosDbAccount'
 databaseName='myDatabase'
 containerName='myContainer'
-originalThroughput=5000 
-newThroughput=1000
+originalThroughput=1000 
+newThroughput=5000
 
 
 # Create a resource group
@@ -42,7 +42,7 @@ az cosmosdb collection create \
     --throughput $originalThroughput
 
 
-read -p "Wait for resources to provision. Press any key to continue..."
+read -p "Press any key to set new throughput..."
 
 
 # Scale throughput

@@ -17,7 +17,7 @@ az group create \
 # Create a Gremlin API Cosmos DB account with session consistency and multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
-	--name $accountName \
+    --name $accountName \
     --capabilities EnableGremlin \
     --locations "South Central US"=0 "North Central US"=1 \
     --default-consistency-level "Session" \
@@ -26,7 +26,7 @@ az cosmosdb create \
 
 # Create a database 
 az cosmosdb database create \
-	--name $name \
+	--name $accountName \
 	--db-name $databaseName \
 	--resource-group $resourceGroupName
 
@@ -36,4 +36,6 @@ az cosmosdb collection create \
 	--collection-name $graphName \
 	--name $accountName \
 	--db-name $databaseName \
-	--resource-group $resourceGroupName
+	--resource-group $resourceGroupName \
+    --partition-key-path /mypartitionkey \
+    --throughput 1000
