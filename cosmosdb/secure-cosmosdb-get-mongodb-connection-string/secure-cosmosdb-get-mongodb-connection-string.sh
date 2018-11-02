@@ -25,4 +25,4 @@ az cosmosdb create \
 # Get the connection string for MongoDB API account
 az cosmosdb list-connection-strings \
 	--name $accountName \
-	--resource-group $resourceGroupName 
+	--resource-group $resourceGroupName

@@ -26,7 +26,7 @@ az cosmosdb create \
 
 # Create a database 
 az cosmosdb database create \
-	--name $name \
+	--name $accountName \
 	--db-name $databaseName \
 	--resource-group $resourceGroupName
 
@@ -36,4 +36,6 @@ az cosmosdb collection create \
 	--collection-name $graphName \
 	--name $accountName \
 	--db-name $databaseName \
-	--resource-group $resourceGroupName
+	--resource-group $resourceGroupName \
+    --partition-key-path /mypartitionkey \
+    --throughput 1000
