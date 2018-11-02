@@ -5,7 +5,6 @@ resourceGroupName='myResourceGroup'
 location='southcentralus'
 accountName='myaccountname' #needs to be lower case
 keysetName='myKeysetName'
-tableName='myTable'
 
 
 # Create a resource group

@@ -17,7 +17,7 @@ az group create \
 # Create a Gremlin API Cosmos DB account with session consistency and multi-master enabled
 az cosmosdb create \
     --resource-group $resourceGroupName \
-    --name $accountName \
+	--name $accountName \
     --capabilities EnableGremlin \
     --locations "South Central US"=0 "North Central US"=1 \
     --default-consistency-level "Session" \

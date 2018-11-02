@@ -88,7 +88,7 @@ for argument in $options
 
 # make sure azure cli is installed
 if ! [ -x "$(command -v az)" ]; then
-  echo 'Error: Azure CLI 2.0 is not installed.  See: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli' >&2
+  echo 'Error: Azure CLI 2.0.46 is not installed.  See: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli' >&2
   exit 1
 fi
 
@@ -107,7 +107,7 @@ fi
 echo "- Azure Disk Encryption Prerequisites Script [version $ADE_SCRIPT_VERSION]"
 
 # initialize script variables
-ADE_UID=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 4 | head -n 1)
+ADE_UID="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 4 | head -n 1)"
 ADE_LOG_SUFFIX=".json"
 if [ -z "$ADE_PREFIX" ]; then 
 	ADE_PREFIX="ade";
@@ -122,7 +122,7 @@ if [ ! -d "$ADE_LOG_DIR" ]; then
 fi
 
 if [ -z "$ADE_SUBSCRIPTION_ID" ]; then 
-	ADE_SUBSCRIPTION_ID="`az account show | jq -r '.id'`"
+	ADE_SUBSCRIPTION_ID="$(az account show | jq -r '.id')"
 fi
 
 if [ -z "$ADE_LOCATION" ]; then
@@ -149,22 +149,22 @@ fi
 
 # KV key encryption key name
 if [ -z "$ADE_KEK_NAME" ]; then 
-	ADE_KEK_SUFFIX="kek"
+	ADE_KEK_SUFFIX="kek" # kek
 	ADE_KEK_NAME=$ADE_PREFIX$ADE_UID$ADE_KEK_SUFFIX 
 fi
 
 # create keyvault and set policy (premium sku offers HSM support)
 az keyvault create --name ${ADE_KV_NAME} --resource-group ${ADE_RG_NAME} --location ${ADE_LOCATION} --sku premium > "$ADE_LOG_DIR/kv_create.json" 2>&1
 echo "- Key vault: $ADE_KV_NAME"
-ADE_KV_URI="`az keyvault show --name ${ADE_KV_NAME} --resource-group ${ADE_RG_NAME} | jq -r '.properties.vaultUri'`"
-ADE_KV_ID="`az keyvault show --name ${ADE_KV_NAME} --resource-group ${ADE_RG_NAME} | jq -r '.id'`"
+ADE_KV_URI="$(az keyvault show --name ${ADE_KV_NAME} --resource-group ${ADE_RG_NAME} | jq -r '.properties.vaultUri')"
+ADE_KV_ID="$(az keyvault show --name ${ADE_KV_NAME} --resource-group ${ADE_RG_NAME} | jq -r '.id')"
 az keyvault update --name "${ADE_KV_NAME}" --resource-group "${ADE_RG_NAME}" --enabled-for-deployment true --enabled-for-disk-encryption true > "$ADE_LOG_DIR/kv_policy_update.json" 2>&1
 echo "- Key vault policy enabled for deployment and disk encryption"
 
 # create key encryption key
 az keyvault key create --vault-name ${ADE_KV_NAME} --name ${ADE_KEK_NAME} --protection HSM  > "$ADE_LOG_DIR/kek_create.json" 2>&1
 ADE_KEK_ID="${ADE_KV_ID}"
-ADE_KEK_URI="`az keyvault key show --name ${ADE_KEK_NAME} --vault-name ${ADE_KV_NAME} | jq -r '.key.kid'`"
+ADE_KEK_URI="$(az keyvault key show --name ${ADE_KEK_NAME} --vault-name ${ADE_KV_NAME} | jq -r '.key.kid')"
 echo "- Key encryption key: $ADE_KEK_NAME" 
 
 # generate corresponding AD application resources if requested
@@ -187,12 +187,12 @@ if [ "$ADE_AAD" = true ]; then
 
     # create ad application
     az ad app create --display-name $ADE_ADAPP_NAME --homepage $ADE_ADAPP_URI --identifier-uris $ADE_ADAPP_URI --password $ADE_ADAPP_SECRET > "$ADE_LOG_DIR/adapp.json" 2>&1
-    ADE_ADSP_APPID="`az ad app list --display-name ${ADE_ADAPP_NAME} | jq -r '.[0] | .appId'`"
+    ADE_ADSP_APPID="$(az ad app list --display-name ${ADE_ADAPP_NAME} | jq -r '.[0] | .appId')"
     echo "- AD application created: $ADE_ADAPP_NAME"
 
     # create service principal for ad application
     az ad sp create --id "${ADE_ADSP_APPID}" > "$ADE_LOG_DIR/adapsp.json" 2>&1
-    ADE_ADSP_OID="`az ad sp list --display-name ${ADE_ADAPP_NAME} | jq -r '.[0] | .objectId'`"
+    ADE_ADSP_OID="$(az ad sp list --display-name ${ADE_ADAPP_NAME} | jq -r '.[0] | .objectId')"
     echo "- AD application service principal created"
 
     # create role assignment for ad app
@@ -248,7 +248,7 @@ if [ "$ADE_AAD" = true ]; then
     az ad sp credential reset --name $ADE_ADAPP_URI --append --cert $ADE_ADAPP_CERT_NAME --keyvault $ADE_KV_NAME --json > $ADE_LOG_DIR/$ADE_KV_NAME$ADE_CERT_THUMB$ADE_LOG_SUFFIX 2>&1
     echo "- AD application client certificate created"
     # get the keyvault certificate secret id for later use in adding that certificate to the vm 
-    ADE_KV_CERT_SID=$(jq -r '.sid' $ADE_LOG_DIR/cert_show_$ADE_ADAPP_CERT_NAME$ADE_LOG_SUFFIX )
+    ADE_KV_CERT_SID="$(jq -r '.sid' $ADE_LOG_DIR/cert_show_$ADE_ADAPP_CERT_NAME$ADE_LOG_SUFFIX)"
 
 fi 
 
@@ -268,7 +268,8 @@ echo "ADE_KEK_NAME=$ADE_KEK_NAME"
 echo "ADE_KEK_ID=$ADE_KV_ID"
 echo "ADE_KEK_URI=$ADE_KEK_URI"
 
-if [ "$ADE_AAD" = true ]; then
+if [ "$ADE_AAD" = true ]
+then
     # if aad was requested, then also print the corresponding AAD information
     echo "ADE_ADAPP_NAME=$ADE_ADAPP_NAME"
     echo "ADE_ADAPP_SECRET=$ADE_ADAPP_SECRET"
