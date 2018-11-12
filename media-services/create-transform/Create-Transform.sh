@@ -7,7 +7,7 @@ amsAccountName=amsmediaaccountname
 # Create a simple Transform for Adaptive Bitrate Encoding
 az ams transform create \
  --name myFirstTransform \
- --preset-names AdaptiveStreaming \
+ --preset AdaptiveStreaming \
  --description 'a simple Transform for Adaptive Bitrate Encoding' \
  -g $resourceGroup \
  -a $amsAccountName \
@@ -15,21 +15,14 @@ az ams transform create \
  # Create a Transform for Video Analyer Preset
 az ams transform create \
  --name videoAnalyzerTransform \
- --preset-names  VideoAnalyzer \
+ --preset  VideoAnalyzer \
  -g $resourceGroup \
  -a $amsAccountName \
 
  # Create a Transform for Audio Analzyer Preset
 az ams transform create \
  --name audioAnalyzerTransform \
- --preset-names  AudioAnalyzer \
- -g $resourceGroup \
- -a $amsAccountName \
-
-# Create a Transform with two built-in Presets executed in sequence
-az ams transform create \
- --name twoPresetTransform \
- --preset-names AdaptiveStreaming VideoAnalyzer \
+ --preset  AudioAnalyzer \
  -g $resourceGroup \
  -a $amsAccountName \
 
