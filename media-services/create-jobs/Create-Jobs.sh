@@ -20,7 +20,7 @@ az ams job start \
     --transform-name $transformName \
     --base-uri 'https://nimbuscdn-nimbuspm.streaming.mediaservices.windows.net/00000000-b215-4409-80af-529c3e853622/' \
     --files 'Ignite-short.mp4' \
-    --output-asset-names $outputAssetName \
+    --output-asset $outputAssetName \
     -a $amsAccountName \
     -g $resourceGroup \
 
