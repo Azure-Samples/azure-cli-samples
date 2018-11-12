@@ -6,13 +6,8 @@ location='southcentralus'
 accountName='myCosmosDbAccount'
 databaseName='myDatabase'
 containerName='myContainer'
-<<<<<<< HEAD
 originalThroughput=1000 
 newThroughput=5000
-=======
-originalThroughput=5000 
-newThroughput=1000
->>>>>>> 08a0bae82c1eb9eaa96d2aea69088f16bf8d4f05
 
 
 # Create a resource group
