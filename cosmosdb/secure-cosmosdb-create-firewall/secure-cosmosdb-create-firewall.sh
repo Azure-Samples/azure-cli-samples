@@ -1,42 +1,29 @@
 #!/bin/bash
 
-# Set variables for the new account, database, and collection
+# Set variables for the new account and firewall
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-name='docdb-test'
-databaseName='docdb-test-database'
-collectionName='docdb-test-collection'
+accountName='myaccountname' #needs to be lower case
 ipRangeFilter="13.91.6.132,13.91.6.1/24"
+
 
 # Create a resource group
 az group create \
 	--name $resourceGroupName \
 	--location $location
 
-# Create a DocumentDB API Cosmos DB account
+
+# Create a SQL API Cosmos DB account with session consistency
 az cosmosdb create \
-	--name $name \
-	--kind GlobalDocumentDB \
-	--locations "South Central US"=0 "North Central US"=1 \
-	--resource-group $resourceGroupName \
-	--max-interval 10 \
-	--max-staleness-prefix 200 
+    --resource-group $resourceGroupName \
+    --name $accountName \
+    --kind GlobalDocumentDB \
+    --locations "South Central US"=0 "North Central US"=1 \
+    --default-consistency-level "Session"
 
-# Create a database 
-az cosmosdb database create \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
-
-# Create a collection
-az cosmosdb collection create \
-	--collection-name $collectionName \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
 
 # Configure the firewall
 az cosmosdb update \
-	--name $name \
+	--name $accountName \
 	--resource-group $resourceGroupName \
 	--ip-range-filter $ipRangeFilter

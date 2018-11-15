@@ -1,8 +1,14 @@
 #!/bin/bash
 
-fqdn=<Replace with www.{yourdomain}>
-storageName=myfuncdomainstore
-functionAppName=myfuncdomain
+# Function app and storage account names must be unique.
+storageName=mystorageaccount$RANDOM
+functionAppName=myconsumptionfunc$RANDOM
+
+# TODO:
+# Before starting, go to your DNS configuration UI for your custom domain and follow the 
+# instructions at https://aka.ms/appservicecustomdns to configure an A record 
+# and point it your web app's default domain name. 
+fqdn=<Replace with www.{yourcustomdomain}>
 
 # Create a resource resourceGroupName
 az group create \
@@ -13,7 +19,8 @@ az group create \
 az storage account create \
   --name $storageName \
   --location westeurope \
-  --resource-group myResourceGroup
+  --resource-group myResourceGroup \
+  --sku Standard_LRS
 
 # Create an App Service plan in Basic tier (minimum required by custom domains).
 az appservice plan create \
@@ -28,17 +35,10 @@ az functionapp create \
   --storage-account $storageName \
   --plan FunctionAppWithAppServicePlan \
   --resource-group myResourceGroup
-
-echo "Configure an A record that maps $fqdn to $functionAppName.azurewebsites.net"
-read -p "Press [Enter] key when ready ..."
-
-# Before continuing, go to your DNS configuration UI for your custom domain and follow the 
-# instructions at https://aka.ms/appservicecustomdns to configure an A record 
-# and point it your web app's default domain name.
-
+  
 # Map your prepared custom domain name to the function app.
-az appservice web config hostname add \
-  --webapp $functionAppName \
+az functionapp config hostname add \
+  --hostname $functionAppName \
   --resource-group myResourceGroup \
   --name $fqdn
 

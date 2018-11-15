@@ -1,32 +1,35 @@
 #!/bin/bash
 
-#gitrepo=<Replace with your Visual Studio Team Services repo URL e.g. https://samples.visualstudio.com/DefaultCollection/_git/Function-Quickstart>
-#token=<Replace with a Visual Studio Team Services personal access token>
+# Function app and storage account names must be unique.
+storageName=mystorageaccount$RANDOM
+functionAppName=mygithubfunc$RANDOM
 
-gitrepo=https://cfowler.visualstudio.com/DefaultCollection/_git/Function-Quickstart
-token=7ckdjsfqzhkurd4fbqbkbfri3gvy6od22fsubpg73m2joovxuvha
+# TODO:
+gitrepo=<Replace with your VSTS repo URL, like https://samples.visualstudio.com/DefaultCollection/_git/Function-Quickstart>
+token=<Replace with a Visual Studio Team Services personal access token>
 
-# Create a resource group
+# Create a resource group.
 az group create \
   --name myResourceGroup \
   --location westeurope 
 
-# Create an azure storage account
+# Create an Azure storage account.
 az storage account create \
-  --name funcvstsstore \
+  --name $storageName \
   --location westeurope \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
-# Create a function app.
+# Create a serverless function app.
 az functionapp create  \
-  --name myfuncvsts \
-  --storage-account funcvstsstore \
+  --name $functionAppName \
+  --storage-account $storageName \
   --consumption-plan-location westeurope \
   --resource-group myResourceGroup
 
+# Set the deployment source to the VSTS repo using the token.
 az functionapp deployment source config \
-  --name myfuncvsts \
+  --name $functionAppName \
   --resource-group myResourceGroup \
   --repo-url $gitrepo \
   --branch master \

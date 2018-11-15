@@ -1,34 +1,41 @@
 #!/bin/bash
 
-# Set variables for the new account, database, and collection
+# Set variables for the new SQL API account, database, and container
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-name='docdb-test'
-databaseName='docdb-test-database'
-collectionName='docdb-test-collection'
+accountName='myaccountname' #needs to be lower case
+databaseName='myDatabase'
+containerName='myContainer'
+
 
 # Create a resource group
 az group create \
-	--name $resourceGroupName \
-	--location $location
+    --name $resourceGroupName \
+    --location $location
 
-# Create a DocumentDB API Cosmos DB account
+
+# Create a SQL API Cosmos DB account with session consistency and multi-master enabled
 az cosmosdb create \
-	--name $name \
-	--kind GlobalDocumentDB \
-	--resource-group $resourceGroupName \
-	--max-interval 10 \
-	--max-staleness-prefix 200 
+    --resource-group $resourceGroupName \
+    --name $accountName \
+    --kind GlobalDocumentDB \
+    --locations "South Central US"=0 "North Central US"=1 \
+    --default-consistency-level "Session" \
+    --enable-multiple-write-locations true
 
-# Create a database 
+
+# Create a database
 az cosmosdb database create \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
+    --resource-group $resourceGroupName \
+    --name $accountName \
+    --db-name $databaseName
 
-# Create a collection
+
+# Create a SQL API container with a partition key and 1000 RU/s
 az cosmosdb collection create \
-	--collection-name $collectionName \
-	--name $name \
-	--db-name $databaseName \
-	--resource-group $resourceGroupName
+    --resource-group $resourceGroupName \
+    --collection-name $containerName \
+    --name $accountName \
+    --db-name $databaseName \
+    --partition-key-path /mypartitionkey \
+    --throughput 1000

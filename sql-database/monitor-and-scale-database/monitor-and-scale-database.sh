@@ -30,7 +30,7 @@ az sql db create \
 az sql db list-usages \
 	--name mySampleDatabase \
 	--resource-group myResourceGroup \
-	--name $servername
+	--server $servername
 
 # Scale up database to S1 performance level (create command executes update if DB already exists)
 az sql db create \

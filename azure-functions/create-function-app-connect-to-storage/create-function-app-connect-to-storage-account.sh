@@ -1,30 +1,33 @@
 #!/bin/bash
 
-# create a resource group with location
+# Function app and storage account names must be unique.
+storageName="mystorageaccount$RANDOM"
+functionAppName="myfuncwithstorage$RANDOM"
+
+# Create a resource group with location.
 az group create \
   --name myResourceGroup \
   --location westeurope
 
-# create a storage account 
+# Create a storage account in the resource group.
 az storage account create \
-  --name myfuncstore \
+  --name $storageName \
   --location westeurope \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
-# create a new function app, assign it to the resource group you have just created
+# Create a serverless function app in the resource group.
 az functionapp create \
-  --name myfuncstorage \
+  --name $functionAppName \
   --resource-group myResourceGroup \
-  --storage-account myfuncstore \
+  --storage-account $storageName \
   --consumption-plan-location westeurope
 
-# Retreive the Storage Account connection string 
-connstr=$(az storage account show-connection-string --name myfuncstore --resource-group myResourceGroup --query connectionString --output tsv)
+# Get the storage account connection string. 
+connstr=$(az storage account show-connection-string --name $storageName --resource-group myResourceGroup --query connectionString --output tsv)
 
-# update function app settings to connect to storage account
+# Update function app settings to connect to the storage account.
 az functionapp config appsettings set \
-  --name myfuncstorage \
+  --name $functionAppName \
   --resource-group myResourceGroup \
   --settings StorageConStr=$connstr
-

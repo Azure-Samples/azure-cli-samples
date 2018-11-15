@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Modify for your environment. The ACR_NAME is the name of your Azure Container
-# Registry, and the SERVICE_PRINCIPAL_NAME can be any unique name within your
-# subscription (you can use the default below).
+# Modify for your environment.
+# ACR_NAME: The name of your Azure Container Registry
+# SERVICE_PRINCIPAL_NAME: Must be unique within your AD tenant
 ACR_NAME=<container-registry-name>
 SERVICE_PRINCIPAL_NAME=acr-service-principal
 

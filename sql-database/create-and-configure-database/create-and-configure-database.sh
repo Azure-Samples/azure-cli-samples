@@ -36,11 +36,11 @@ az sql db create \
 	--server $servername \
 	--name mySampleDatabase \
 	--sample-name AdventureWorksLT \
-	--service-objective S0
+	--service-objective S0 \
 	--zone-redundant
 
 # Update database and set zone redundancy as false
-az sql db update 
+az sql db update \
 	--resource-group myResourceGroup \
 	--server $servername \
 	--name mySampleDatabase \

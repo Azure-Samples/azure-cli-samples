@@ -1,0 +1,42 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/BatchAI/master/schemas/2018-05-01/cluster.json",
+    "properties": {
+        "vmSize": "STANDARD_NC6",
+        "vmPriority": "lowpriority",
+        "virtualMachineConfiguration": {
+            "imageReference": {
+                "publisher":"canonical",
+                "offer": "ubuntuserver",
+                "sku": "16.04-LTS",
+                "version": "latest"
+            }
+        },
+        "scaleSettings": {
+            "autoScale":{
+                "initialNodeCount": 1,
+                "minimumNodeCount": 1,
+                "maximumNodeCount": 3
+             }
+        },
+        "nodeSetup": {
+            "setupTask":{
+                "commandLine": "apt install unzip -y",
+                "stdOutErrPathPrefix": "$AZ_BATCHAI_MOUNT_ROOT/afs"
+            },
+            "mountVolumes":{
+                "azureFileShares":[
+                    {
+                        "accountName": "<AZURE_BATCHAI_STORAGE_ACCOUNT>",
+                        "azureFileUrl": "https://<AZURE_BATCHAI_STORAGE_ACCOUNT>.file.core.windows.net/myshare",
+                        "credentials":{
+                            "accountKey": "<AZURE_BATCHAI_STORAGE_KEY>"
+                        },
+                        "directoryMode": "0777",
+                        "fileMode": "0777",
+                        "relativeMountPath": "afs"
+                    }
+                ]
+            }
+        }        
+    }
+}
