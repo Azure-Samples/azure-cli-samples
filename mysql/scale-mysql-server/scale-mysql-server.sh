@@ -35,7 +35,7 @@ az monitor metrics list \
 az mysql server update \
 --resource-group myresourcegroup \
 --name mydemoserver \
---vcore 4
+--sku-name GP_Gen4_4
 
 # Scale up the server to provision a storage size of 7GB
 az mysql server update \
