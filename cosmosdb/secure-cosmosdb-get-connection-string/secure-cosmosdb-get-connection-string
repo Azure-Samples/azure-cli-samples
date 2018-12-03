@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Set variables for an new account
+resourceGroupName='myResourceGroup'
+location='southcentralus'
+accountName='myCosmosDbAccount'
+
+
+# Create a resource group
+az group create \
+    --name $resourceGroupName \
+    --location $location
+
+
+# Create a SQL API Cosmos DB account with session consistency and multi-master enabled
+az cosmosdb create \
+    --resource-group $resourceGroupName \
+    --name $accountName \
+    --kind GlobalDocumentDB \
+    --locations "South Central US"=0 "North Central US"=1 \
+    --default-consistency-level "Session" \
+    --enable-multiple-write-locations true
+
+
+# Get the connection string with Primary Key for Cosmos DB account
+endpoint=$(az cosmosdb show -g $myRG -n $myDB --query 'documentEndpoint' -o tsv)
+key=$(az cosmosdb list-keys -g $myRG -n $myDB --query 'primaryMasterKey' -o tsv)
+connection="AccountEndpoint=$endpoint/;AccountKey=$key;"
+echo $connection

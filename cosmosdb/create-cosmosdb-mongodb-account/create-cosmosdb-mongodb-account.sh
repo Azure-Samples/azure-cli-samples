@@ -1,11 +1,10 @@
 #!/bin/bash
 
-# Set variables for the new MongoDB API account, database, and collection
+# Set variables for the new MongoDB API account and database
 resourceGroupName='myResourceGroup'
 location='southcentralus'
 accountName='mycosmosdbaccount' #needs to be lower case
 databaseName='myDatabase'
-collectionName='myCollection'
 
 
 # Create a resource group
@@ -29,13 +28,3 @@ az cosmosdb database create \
     --resource-group $resourceGroupName \
     --name $accountName \
     --db-name $databaseName
-
-
-# Create a collection with a partition key and 1000 RU/s
-az cosmosdb collection create \
-    --resource-group $resourceGroupName \
-    --collection-name $collectionName \
-    --name $accountName \
-    --db-name $databaseName \
-    --partition-key-path /mypartitionkey \
-    --throughput 1000
