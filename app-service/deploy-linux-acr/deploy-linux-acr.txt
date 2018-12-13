@@ -1,0 +1,23 @@
+# Create a Resource Group
+az group create --name myResourceGroup --location southcentralus
+
+# Create Azure Container Registry
+az acr create --name <registry_name> --resource-group myResourceGroup --location southcentralus --sku basic --admin-enabled true --query loginServer --output tsv
+
+# View ACR Credentials
+az acr credential show --name <registry_name> --resource-group myResourceGroup --query [username,passwords[?name=='password'].value] --output tsv
+
+# Pull from Docker
+docker login <acr_registry_name>.azurecr.io -u <registry_user>
+docker pull <registry_user/container_name:version>
+docker tag <registry_user/container_name:version> <acr_registry_name>.azurecr.io/<container_name:version>
+docker push <acr_registry_name>.azurecr.io/<container_name:version>
+
+# Create an App Service Plan
+az appservice plan create --name AppServiceLinuxDockerPlan --resource-group myResourceGroup --location <location> --is-linux --sku S1
+
+# Create a Web App
+az webapp create --name <app_name> --plan AppServiceLinuxDockerPlan --resource-group myResourceGroup --deployment-container-image-name <acr_registry_name>.azurecr.io/<container_name:version>
+
+# Configure Web App with a Custom Docker Container from Docker Hub
+az webapp config container set --resource-group myResourceGroup --name <app_name> --docker-registry-server-url http://<acr_registry_name>.azurecr.io --docker-registry-server-user <registry_user> --docker-registry-server-password <registry_password>
