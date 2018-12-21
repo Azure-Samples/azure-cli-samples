@@ -11,7 +11,7 @@ ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query id --output tsv)
 
 # Assign the desired role to the service principal. Modify the '--role' argument
 # value as desired:
-# reader:      pull only
-# contributor: push and pull
+# acrpull:     pull only
+# acrpush:     push and pull
 # owner:       push, pull, and assign roles
-az role assignment create --assignee $SERVICE_PRINCIPAL_ID --scope $ACR_REGISTRY_ID --role reader
+az role assignment create --assignee http://$SERVICE_PRINCIPAL_ID --scope $ACR_REGISTRY_ID --role acrpull

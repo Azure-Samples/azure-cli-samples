@@ -12,10 +12,10 @@ ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query id --output tsv)
 # Create the service principal with rights scoped to the registry.
 # Default permissions are for docker pull access. Modify the '--role'
 # argument value as desired:
-# reader:      pull only
-# contributor: push and pull
+# acrpull:     pull only
+# acrpush:     push and pull
 # owner:       push, pull, and assign roles
-SP_PASSWD=$(az ad sp create-for-rbac --name $SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role reader --query password --output tsv)
+SP_PASSWD=$(az ad sp create-for-rbac --name http://$SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query password --output tsv)
 SP_APP_ID=$(az ad sp show --id http://$SERVICE_PRINCIPAL_NAME --query appId --output tsv)
 
 # Output the service principal's credentials; use these in your services and
