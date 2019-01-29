@@ -14,7 +14,7 @@ appConfigHostname=$(az appconfig create \
   --resource-group $myResourceGroupName \
   --query hostName \
   -o tsv)
-
+  
 # Get the AppConfig primary key 
 appConfigPrimaryKey=$(az appconfig key list --name $myAppConfigHubName \
   --resource-group $myResourceGroupName --query primaryKey -o tsv)

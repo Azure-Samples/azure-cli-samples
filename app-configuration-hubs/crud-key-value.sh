@@ -20,3 +20,4 @@ az appconfig kv delete  --name $appConfigName --key $newKey
 
 # List current key-values
 az appconfig kv list --name $appConfigName
+ 
