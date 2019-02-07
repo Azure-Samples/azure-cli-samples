@@ -3,7 +3,7 @@
 # You must have the latest version of the Azure CLI
 
 # Provide a unique name for the Blob storage account.
-storageName=contosostorage
+storageName="<Name of the storage account>"
 
 # Provide an endpoint for handling the events.
 myEndpoint="<endpoint URL>"
