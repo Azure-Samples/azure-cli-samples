@@ -30,13 +30,10 @@ az appservice plan create --name $myAppSvcPlanName --resource-group $myResourceG
 # Create the Web App
 az webapp create --name $myWebAppName --resource-group $myResourceGroupName --plan $myAppSvcPlanName  
 
-# Get the SignalR primary key 
-signalRprimarykey=$(az signalr key list --name $mySignalRSvcName \
-  --resource-group $myResourceGroupName --query primaryKey -o tsv)
-
-# Form the connection string for use in your application
-connstring="Endpoint=https://$signalRhostname;AccessKey=$signalRprimarykey;"
+# Get the SignalR primary connection string
+primaryConnectionString=$(az signalr key list --name $mySignalRSvcName \
+  --resource-group $myResourceGroupName --query primaryConnectionString -o tsv)
 
 #Add an app setting to the web app for the SignalR connection
 az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
-  --settings "AzureSignalRConnectionString=$connstring" 
+  --settings "AzureSignalRConnectionString=$primaryConnectionString" 
