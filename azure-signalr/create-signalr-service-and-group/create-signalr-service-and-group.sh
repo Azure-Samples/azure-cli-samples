@@ -21,10 +21,8 @@ signalRhostname=$(az signalr create \
   --query hostName \
   -o tsv)
 
-# Get the SignalR primary key 
-signalRprimarykey=$(az signalr key list --name $mySignalRSvcName \
-  --resource-group $myResourceGroupName --query primaryKey -o tsv)
+# Get the SignalR primary connection string 
+primaryConnectionString=$(az signalr key list --name $mySignalRSvcName \
+  --resource-group $myResourceGroupName --query primaryConnectionString -o tsv)
 
-# Form the connection string for use in your application
-connstring="Endpoint=https://$signalRhostname;AccessKey=$signalRprimarykey;"
-echo "$connstring"  
+echo "$primaryConnectionString"

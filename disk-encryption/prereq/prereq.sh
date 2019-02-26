@@ -182,7 +182,7 @@ if [ "$ADE_AAD" = true ]; then
 
     # AD application client secret 
     if [ -z "$ADE_ADAPP_SECRET" ]; then 
-        ADE_ADAPP_SECRET="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
+        ADE_ADAPP_SECRET="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9_![]{}()&@#^+' | fold -w 32 | head -n 1)"
     fi
 
     # create ad application
