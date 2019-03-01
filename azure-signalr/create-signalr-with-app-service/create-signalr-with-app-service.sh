@@ -15,14 +15,12 @@ myAppSvcPlanName=$myAppSvcName"Plan"
 # Create resource group 
 az group create --name $myResourceGroupName --location eastus
 
-# Create the Azure SignalR Service resource and query the hostName
-signalRhostname=$(az signalr create \
+# Create the Azure SignalR Service resource
+az signalr create \
   --name $mySignalRSvcName \
   --resource-group $myResourceGroupName \
   --sku Basic_DS2 \
-  --unit-count 1 \
-  --query hostName \
-  -o tsv)
+  --unit-count 1
 
 # Create an App Service plan.
 az appservice plan create --name $myAppSvcPlanName --resource-group $myResourceGroupName --sku FREE
