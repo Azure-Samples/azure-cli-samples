@@ -62,7 +62,7 @@ az network traffic-manager profile create \
   --unique-dns-name $WebApp
 
 # Create an endpoint for the location one website deployment and set it as the priority target.
-L1Id=$(az appservice web show \
+L1Id=$(az webapp show \
   --resource-group $RgName1 \
   --name $WebAppL1 \
   --query id \
@@ -76,7 +76,7 @@ az network traffic-manager endpoint create \
   --target-resource-id $L1Id
 
 # Create an endpoint for the location two website deployment and set it as the secondary target.
-L2Id=$(az appservice web show \
+L2Id=$(az webapp show \
   --resource-group $RgName2 \
   --name $WebAppL2 \
   --query id --out tsv)
