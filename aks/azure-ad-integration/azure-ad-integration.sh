@@ -22,8 +22,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Define a variable for the AKS cluster name
+# Define a variable for the AKS cluster name, resource group, and location
 aksname="myakscluster"
+resourcegroup="myResourceGroup"
+location="East US"
 
 # Create the Azure AD application
 serverApplicationId="$(az ad app create \
@@ -69,14 +71,14 @@ az ad app permission add --id $clientApplicationId --api $serverApplicationId --
 az ad app permission grant --id $clientApplicationId --api $serverApplicationId
 
 # Create a resource group the AKS cluster
-az group create --name myResourceGroup --location EastUS
+az group create --name $resourcegroup --location $location
 
 # Get the Azure AD tenant ID to integrate with the AKS cluster
 tenantId="$(az account show --query tenantId -o tsv)"
 
 # Create the AKS cluster and provide all the Azure AD integration parameters
 az aks create \
-  --resource-group myResourceGroup \
+  --resource-group $resourcegroup \
   --name $aksname \
   --node-count 1 \
   --generate-ssh-keys \
@@ -86,4 +88,4 @@ az aks create \
   --aad-tenant-id $tenantId
 
 # Get the admin credentials for the kubeconfig context
-az aks get-credentials --resource-group myResourceGroup --name $aksname --admin
+az aks get-credentials --resource-group $resourcegroup --name $aksname --admin
