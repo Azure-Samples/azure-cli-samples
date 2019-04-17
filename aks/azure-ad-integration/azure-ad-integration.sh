@@ -23,15 +23,16 @@
 # SOFTWARE.
 
 # Define a variable for the AKS cluster name, resource group, and location
+# Provide your own unique aksname within the Azure AD tenant
 aksname="myakscluster"
 resourcegroup="myResourceGroup"
-location="East US"
+location="eastus"
 
 # Create the Azure AD application
-serverApplicationId="$(az ad app create \
+serverApplicationId=$(az ad app create \
     --display-name "${aksname}Server" \
     --identifier-uris "https://${aksname}Server" \
-    --query appId -o tsv)"
+    --query appId -o tsv)
 
 # Update the application group memebership claims
 az ad app update --id $serverApplicationId --set groupMembershipClaims=All
@@ -58,13 +59,13 @@ az ad app permission grant --id $serverApplicationId --api 00000003-0000-0000-c0
 az ad app permission admin-consent --id  $serverApplicationId
 
 # Create the Azure AD client application
-clientApplicationId="$(az ad app create --display-name "${aksname}Client" --native-app --reply-urls "https://${aksname}Client" --query appId -o tsv)"
+clientApplicationId=$(az ad app create --display-name "${aksname}Client" --native-app --reply-urls "https://${aksname}Client" --query appId -o tsv)
 
 # Create a service principal for the client application
 az ad sp create --id $clientApplicationId
 
 # Get the oAuth2 ID for the server app to allow authentication flow
-oAuthPermissionId="$(az ad app show --id $serverApplicationId --query "oauth2Permissions[0].id" -o tsv)"
+oAuthPermissionId=$(az ad app show --id $serverApplicationId --query "oauth2Permissions[0].id" -o tsv)
 
 # Assign permissions for the client and server applications to communicate with each other
 az ad app permission add --id $clientApplicationId --api $serverApplicationId --api-permissions $oAuthPermissionId=Scope
@@ -74,7 +75,7 @@ az ad app permission grant --id $clientApplicationId --api $serverApplicationId
 az group create --name $resourcegroup --location $location
 
 # Get the Azure AD tenant ID to integrate with the AKS cluster
-tenantId="$(az account show --query tenantId -o tsv)"
+tenantId=$(az account show --query tenantId -o tsv)
 
 # Create the AKS cluster and provide all the Azure AD integration parameters
 az aks create \
