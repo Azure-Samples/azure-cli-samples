@@ -1,5 +1,7 @@
 # !/bin/sh
 
+# WARNING:  This shell script requires azure-devops extension to be installed.
+
 organization="https://dev.azure.com/mseng"
 
 projects="$(az devops project list --org "${organization}" -o tsv --query [].name)"
