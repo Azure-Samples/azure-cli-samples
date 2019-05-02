@@ -2,7 +2,7 @@
 
 # WARNING:  This shell script requires azure-devops extension to be installed.
 
-organization="https://dev.azure.com/mseng"
+organization="https://dev.azure.com/YOUR_ORGANIZATION"
 
 projects="$(az devops project list --org "${organization}" -o tsv --query [].name)"
 
