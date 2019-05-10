@@ -28,3 +28,13 @@ az cosmosdb database create \
     --resource-group $resourceGroupName \
     --name $accountName \
     --db-name $databaseName
+
+
+# Create a MongoDB container with a partition key and 400 RU/s
+az cosmosdb collection create \
+    --resource-group $resourceGroupName \
+    --collection-name $containerName \
+    --name $accountName \
+    --db-name $databaseName \
+    --partition-key-path /mypartitionkey \
+    --throughput 400
