@@ -21,7 +21,7 @@ storageContainerName=mystoragecontainername
 storageAccountKey=mystorageaccountkey
 
 #Provide the name of the destination VHD file to which the VHD of the managed disk will be copied.
-destinationVHDFileName=myvhdfilename
+destinationVHDFileName=myvhdfilename.vhd
 
 az account set --subscription $subscriptionId
 
