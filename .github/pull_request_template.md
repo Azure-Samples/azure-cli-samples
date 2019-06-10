@@ -21,7 +21,7 @@
 
 - [ ] Scripts in this pull request are written for the `bash` shell.
 - [ ] This pull request was tested with the latest version of the CLI. ([Latest version](https://docs.microsoft.com/cli/azure/install-azure-cli))
-  - __Version tested with__ (`az --version`): 
+  - __CLI version__ (`az --version`): 
 - [ ] This pull request was tested on __at least one of__ the following platforms:
   - [ ] Linux
   - [ ] macOS
