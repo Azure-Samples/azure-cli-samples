@@ -40,7 +40,7 @@
 - [ ] Scripts in this pull request use the classic deployment model
 - [ ] Scripts in this pull request use `#!/bin/bash` ('shabang') and take `ARGV` values
   - [ ] No variables must be edited in the script directly (__REQUIRED__ if above checked)
-- [ ] Scripts in this pull request require extensions ([Extensions list](https://docs.microsoft.com/cli/azure/azure-cli-extensions-list)
+- [ ] Scripts in this pull request require extensions ([Extensions list](https://docs.microsoft.com/cli/azure/azure-cli-extensions-list))
   - [ ] Required extensions are listed at the top of the script below the shabang (if present) (__REQUIRED__ if above checked)
   - [ ] Extensions are installed by the script
   - __List of extensions and versions__:
