@@ -37,7 +37,7 @@
 
 ### Optional
 
-- [ ] User-set variables have initial values guaranteed to cause the script to fail.
+- [ ] User-set variables have initial values guaranteed to cause scripts to fail.
 - [ ] Scripts in this pull request use the classic deployment model.
 - [ ] Scripts using shabang (`#!/bin/bash`) use `ARGV` values.
   - [ ] Users are not required to edit variables in scripts (__REQUIRED__ if above checked).
