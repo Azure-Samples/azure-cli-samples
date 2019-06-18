@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# set execution context (if necessary)
+# az account set --subscription <name or id>
+
+# Set the resource group name and location for your server
+export resourceGroupName=myResourceGroup-$Random
+export location=westus2
+
 # Set an admin login and password for your database
 export adminlogin=ServerAdmin
 export password=ChangeYourAdminPassword1
@@ -11,37 +18,32 @@ export endip=0.0.0.0
 
 # Create a resource group
 az group create \
-	--name myResourceGroup \
-	--location westeurope
+--name $resourceGroupName \
+--location $location
 
 # Create a logical server in the resource group
 az sql server create \
 	--name $servername \
-	--resource-group myResourceGroup \
-	--location westeurope  \
+	--resource-group $resourceGroupName \
+	--location $location  \
 	--admin-user $adminlogin \
 	--admin-password $password
 
 # Configure a firewall rule for the server
 az sql server firewall-rule create \
-	--resource-group myResourceGroup \
+	--resource-group $resourceGroupName \
 	--server $servername \
 	-n AllowYourIp \
 	--start-ip-address $startip \
 	--end-ip-address $endip
 
-# Create a database in the server with zone redundancy as true
+# Create a database in the server with zone redundancy as false
 az sql db create \
-	--resource-group myResourceGroup \
+	--resource-group $resourceGroupName \
 	--server $servername \
 	--name mySampleDatabase \
 	--sample-name AdventureWorksLT \
 	--service-objective S0 \
-	--zone-redundant
-
-# Update database and set zone redundancy as false
-az sql db update \
-	--resource-group myResourceGroup \
-	--server $servername \
-	--name mySampleDatabase \
 	--zone-redundant false
+
+# Zone redundancy is only supported in the premium and business critical service tiers
