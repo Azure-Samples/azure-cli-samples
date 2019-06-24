@@ -9,7 +9,7 @@ export location=westus2
 
 # Set an admin login and password for your database
 export adminlogin=ServerAdmin
-export password=<EnterYourComplexPasswordHere>
+export password=<EnterYourComplexPasswordHere1>
 # export password=P@ssw0rd-$RANDOM
 
 # The logical server name has to be unique in the system
