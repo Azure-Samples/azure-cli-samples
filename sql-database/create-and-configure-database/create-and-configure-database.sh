@@ -4,20 +4,20 @@
 az account set --subscription <replace with your subscription name or id>
 
 # Set the resource group name and location for your server
-export resourceGroupName=myResourceGroup-$RANDOM
-export location=westus2
+resourceGroupName=myResourceGroup-$RANDOM
+location=westus2
 
 # Set an admin login and password for your database
-export adminlogin=ServerAdmin
-export password=<EnterYourComplexPasswordHere1>
-# export password=P@ssw0rd-$RANDOM
+adminlogin=ServerAdmin
+password=`openssl rand -base64 16`
+# password=<EnterYourComplexPasswordHere1>
 
 # The logical server name has to be unique in the system
-export servername=server-$RANDOM
+servername=server-$RANDOM
 
 # The ip address range that you want to allow to access your DB
-export startip=0.0.0.0
-export endip=0.0.0.0
+startip=0.0.0.0
+endip=0.0.0.0
 
 # Create a resource group
 az group create \
