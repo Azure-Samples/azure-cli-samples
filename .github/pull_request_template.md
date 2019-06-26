@@ -16,6 +16,7 @@
 - [ ] Scripts in this pull request are written for the `bash` shell.
 - [ ] This pull request was tested on __at least one of__ the following platforms:
   - [ ] Linux
+  - [ ] Azure Cloud Shell
   - [ ] macOS
   - [ ] Windows Subsystem for Linux
 - [ ] Scripts do not contain passwords or other secret tokens.
