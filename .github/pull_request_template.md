@@ -21,12 +21,13 @@
   - [ ] Windows Subsystem for Linux
 - [ ] Scripts do not contain passwords or other secret tokens.
 - [ ] No deprecated commands or arguments are used. ([Release notes](https://docs.microsoft.com/cli/azure/release-notes-azure-cli))
+- [ ] All Azure resource identifiers which must be universally unique are guaranteed to be so.
 
 ### Testing information
 
 CLI version:
 ```
-az --version output
+az --version
 ```
 
 Extensions required:
