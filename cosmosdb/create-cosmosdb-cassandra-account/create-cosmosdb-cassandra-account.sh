@@ -18,7 +18,8 @@ az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
     --capabilities EnableCassandra \
-    --locations "South Central US"=0 "North Central US"=1 \
+    --locations regionName="South Central US" failoverPriority=0 \
+    --locations regionName="North Central US" failoverPriority=1 \
     --default-consistency-level "ConsistentPrefix" \
     --enable-multiple-write-locations true
 

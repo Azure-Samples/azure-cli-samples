@@ -19,7 +19,8 @@ az cosmosdb create \
     --resource-group $resourceGroupName \
 	--name $accountName \
     --capabilities EnableGremlin \
-    --locations "South Central US"=0 "North Central US"=1 \
+    --locations regionName="South Central US" failoverPriority=0 \
+    --locations regionName="North Central US" failoverPriority=1 \
     --default-consistency-level "Session" \
     --enable-multiple-write-locations true
 
