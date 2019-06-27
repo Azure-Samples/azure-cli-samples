@@ -21,7 +21,7 @@ az cosmosdb create \
 	--name $accountName \
 	--kind GlobalDocumentDB \
 	--locations regionName="South Central US" failoverPriority=0 \
-    --locations regionName="North Central US" failoverPriority=1 \
+	--locations regionName="North Central US" failoverPriority=1 \
 	--resource-group $resourceGroupName \
 	--default-consistency-level "Session" \
     --enable-multiple-write-locations true
