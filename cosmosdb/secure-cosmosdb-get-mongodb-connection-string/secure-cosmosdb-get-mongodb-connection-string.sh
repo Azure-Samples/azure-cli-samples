@@ -3,7 +3,7 @@
 # Set variables for the new MongoDB API account, database, and collection
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName='myaccountname' #needs to be lower case
 
 
 # Create a resource group

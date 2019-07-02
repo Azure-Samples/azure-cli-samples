@@ -3,7 +3,7 @@
 # Set variables for the new account
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName='myaccountname' #needs to be lower case
 
 
 # Create a resource group

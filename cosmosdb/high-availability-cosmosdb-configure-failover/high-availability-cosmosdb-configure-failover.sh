@@ -25,4 +25,4 @@ az cosmosdb create \
 az cosmosdb update \
 	--name $accountName \
 	--resource-group $resourceGroupName \
-	--locations "South Central US"=0 "North Central US"=1 "East US"=2 "West US"=3
+	--locations "South Central US"=0 "North Central US"=1 "East US 2"=2 "West US 2"=3

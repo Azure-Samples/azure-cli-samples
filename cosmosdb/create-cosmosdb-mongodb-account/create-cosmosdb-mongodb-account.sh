@@ -5,6 +5,9 @@ resourceGroupName='myResourceGroup'
 location='southcentralus'
 accountName='mycosmosdbaccount' #needs to be lower case
 databaseName='myDatabase'
+collectionName='myCollection'
+partitionKeyPath='/myPartitionKey' #property to partition data on
+throughput=400
 
 
 # Create a resource group
@@ -13,7 +16,8 @@ az group create \
     --location $location
 
 
-# Create a MongoDB API Cosmos DB account with consistent prefix (Local) consistency and multi-master enabled
+# Create a MongoDB API Cosmos account with consistent prefix (Local) consistency, 
+# multi-master enabled with replicas in two regions
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
@@ -30,11 +34,11 @@ az cosmosdb database create \
     --db-name $databaseName
 
 
-# Create a MongoDB container with a partition key and 400 RU/s
+# Create a MongoDB collection with a partition key and 400 RU/s
 az cosmosdb collection create \
     --resource-group $resourceGroupName \
-    --collection-name $containerName \
+    --collection-name $collectionName \
     --name $accountName \
     --db-name $databaseName \
-    --partition-key-path /mypartitionkey \
-    --throughput 400
+    --partition-key-path $partitionKeyPath \
+    --throughput $throughput

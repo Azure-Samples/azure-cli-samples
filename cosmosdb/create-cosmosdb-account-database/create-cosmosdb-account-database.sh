@@ -6,7 +6,8 @@ location='southcentralus'
 accountName='myaccountname' #needs to be lower case
 databaseName='myDatabase'
 containerName='myContainer'
-
+partitionKeyPath='/myPartitionKey' #property to partition data on
+throughput=400
 
 # Create a resource group
 az group create \
@@ -14,7 +15,8 @@ az group create \
     --location $location
 
 
-# Create a SQL API Cosmos DB account with session consistency and multi-master enabled
+# Create a SQL API Cosmos DB account with session consistency,
+# multi-master enabled with replicas in two regions
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
@@ -31,11 +33,11 @@ az cosmosdb database create \
     --db-name $databaseName
 
 
-# Create a SQL API container with a partition key and 1000 RU/s
+# Create a SQL API container with a partition key and 400 RU/s
 az cosmosdb collection create \
     --resource-group $resourceGroupName \
     --collection-name $containerName \
     --name $accountName \
     --db-name $databaseName \
-    --partition-key-path /mypartitionkey \
-    --throughput 1000
+    --partition-key-path $partitionKeyPath \
+    --throughput $throughput

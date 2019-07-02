@@ -6,7 +6,7 @@ location='southcentralus'
 accountName='myaccountname' #needs to be lower case
 databaseName='myDatabase'
 tableName='myTable'
-
+throughput=400
 
 # Create a resource group
 az group create \
@@ -14,7 +14,8 @@ az group create \
     --location $location
 
 
-# Create a Table API Cosmos DB account with multi-master enabled
+# Create a Table API Cosmos DB account with Session level consistency
+# multi-master enabled with replicas in two regions
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
@@ -31,10 +32,10 @@ az cosmosdb database create \
     --db-name $databaseName
 
 
-# Create a Table API table with 1000 RU/s
+# Create a Table API table with 400 RU/s
 az cosmosdb collection create \
     --resource-group $resourceGroupName \
     --collection-name $tableName \
     --name $accountName \
     --db-name $databaseName \
-    --throughput 1000
+    --throughput $throughput
