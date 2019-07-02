@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# Set variables for the new MongoDB API account, database, and collection
-resourceGroupName='myResourceGroup'
+# Generate a unique 16 character alphanumeric string to ensure unique resource names
+uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 16 | head -n 1)
+
+# Set variables for the new MongoDB API account
+resourceGroupName='myResourceGroup-'$uniqueId
 location='southcentralus'
-accountName='myaccountname' #needs to be lower case
+accountName='mycosmosaccount-'$uniqueId #needs to be lower case
 
 
 # Create a resource group
