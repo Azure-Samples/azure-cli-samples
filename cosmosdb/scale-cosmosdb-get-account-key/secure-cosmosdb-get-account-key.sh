@@ -25,6 +25,6 @@ az cosmosdb create \
 
 
 # List account keys
-az cosmosdb list-keys \
+az cosmosdb keys list \
 	--name $accountName \
 	--resource-group $resourceGroupName 
