@@ -2,13 +2,13 @@
 
 # NOTE: Support to provision Cassandra Tables is not supported at this time
 
-# Generate a unique 16 character alphanumeric string to ensure unique resource names
-uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 16 | head -n 1)
+# Generate a unique 10 character alphanumeric string to ensure unique resource names
+uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
 
 # Set variables for the new Cassandra API account and keyspace
-resourceGroupName='myResourceGroup-'$uniqueId
+resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='mycosmosaccount-'$uniqueId #needs to be lower case
+accountName="mycosmosaccount-$uniqueId" #needs to be lower case
 keyspaceName='myKeyspaceName'
 
 
