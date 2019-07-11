@@ -49,7 +49,7 @@ az sql server firewall-rule create \
    --end-ip-address $endip
 
 # Create a gen5 1vCore database in the server 
-echo "Creating a gen5 1 vCore database..."
+echo "Creating a gen5 2 vCore database..."
 az sql db create \
    --resource-group $resourceGroupName \
    --server $serverName \
@@ -57,7 +57,7 @@ az sql db create \
    --sample-name AdventureWorksLT \
    --edition GeneralPurpose \
    --family Gen5 \
-   --capacity 1
+   --capacity 2
 
 # Create a secondary server in the failover region
 echo "Creating a secondary logical server in the DR region..."
