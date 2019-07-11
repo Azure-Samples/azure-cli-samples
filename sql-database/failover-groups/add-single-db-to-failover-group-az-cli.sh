@@ -1,33 +1,27 @@
 ﻿#!/bin/bash
 # Set variables
-export subscriptionID=<SubscriptionID>
-export resourceGroupName=myResourceGroup-$RANDOM
-export location=WestUS2
-export adminLogin=azureuser
-export password=`openssl rand -base64 16`
-export serverName=mysqlserver-$RANDOM
-export databaseName=mySampleDatabase
-export drLocation=EastUS2
-export drServerName=mysqlsecondary-$RANDOM
-export failoverGroupName=failovergrouptutorial-$RANDOM
+subscriptionID=45651c69-8b71-4c76-8ed8-91d1cd16a176
+resourceGroupName=myResourceGroup-$RANDOM
+location=SouthCentralUS
+adminLogin=azureuser
+password="27!"+`openssl rand -base64 18`
+serverName=mysqlserver-$RANDOM
+databaseName=mySampleDatabase
+drLocation=NorthEurope
+drServerName=mysqlsecondary-$RANDOM
+failoverGroupName=failovergrouptutorial-$RANDOM
 
 # The ip address range that you want to allow access to your DB. 
 # Leaving at 0.0.0.0 will prevent outside-of-azure connections
-export startip=0.0.0.0
-export endip=0.0.0.0
+startip=0.0.0.0
+endip=0.0.0.0
 
 # Print out randomized variables
-echo $resourceGroupName
-echo $password
-echo $serverName
-echo $drServerName
-echo $failoverGroupName
-
-# Connect to Azure
-echo "Connecting to azure..."
-az login
-$ Set subscription ID
-az account set --subscription $subscriptionID
+echo Resource group name is $resourceGroupName
+echo Passowrd is $password
+echo Servername is $serverName
+echo DR Server name $drServerName
+echo Failover group name $failoverGroupName
 
 # Create a resource group
 echo "Creating resource group..."
@@ -63,7 +57,7 @@ az sql db create \
    --sample-name AdventureWorksLT \
    --edition GeneralPurpose \
    --family Gen5 \
-   --capacity 1 
+   --capacity 1
 
 # Create a secondary server in the failover region
 echo "Creating a secondary logical server in the DR region..."
@@ -81,20 +75,20 @@ az sql failover-group create \
    --partner-server $drServerName \
    --resource-group $resourceGroupName \
    --server $serverName \
-   --failover-policy Automatic 
+   --failover-policy Automatic
 
 # Verify which server is secondary
 echo "Verifying which server is in the secondary role..."
 az sql failover-group list \
    --server $serverName \
-   --resource-group $resourceGroupName 
+   --resource-group $resourceGroupName
 
 # Failover to the secondary server
 echo "Failing over group to the secondary server..."
 az sql failover-group set-primary \
    --name $failoverGroupName \
    --resource-group $resourceGroupName \
-   --server $drServerName 
+   --server $drServerName
 echo "Successfully failed failover group over to" $drServerName
 
 # Revert failover group back to the primary server
@@ -102,11 +96,11 @@ echo "Failing over group back to the primary server..."
 az sql failover-group set-primary \
    --name $failoverGroupName \
    --resource-group $resourceGroupName \
-   --server $serverName 
+   --server $serverName
 echo "Successfully failed failover group back to" $serverName
 
 # Clean up resources by removing the resource group
 echo "Cleaning up resources by removing the resource group..."
-az group delete \
-   --name $resourceGroupName 
-echo "Successfully removed resource group" $resourceGroupName
+# az group delete \
+#   --name $resourceGroupName 
+# echo "Successfully removed resource group" $resourceGroupName
