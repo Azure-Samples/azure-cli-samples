@@ -1,6 +1,6 @@
 ﻿#!/bin/bash
 # Set variables
-subscriptionID=45651c69-8b71-4c76-8ed8-91d1cd16a176
+subscriptionID=<SubscriptionID>
 resourceGroupName=myResourceGroup-$RANDOM
 location=SouthCentralUS
 adminLogin=azureuser
