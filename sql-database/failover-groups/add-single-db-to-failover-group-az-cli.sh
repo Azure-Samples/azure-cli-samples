@@ -23,6 +23,9 @@ echo Servername is $serverName
 echo DR Server name $drServerName
 echo Failover group name $failoverGroupName
 
+# Set the subscription context for the Azure account
+az account set -s $subscriptionID
+
 # Create a resource group
 echo "Creating resource group..."
 az group create \
@@ -101,14 +104,13 @@ echo "Successfully failed failover group back to" $serverName
 
 # Print out randomized variables
 echo Resource group name is $resourceGroupName
-echo Passowrd is $password
+echo Password is $password
 echo Servername is $serverName
 echo DR Server name $drServerName
 echo Failover group name $failoverGroupName
 
 # Clean up resources by removing the resource group
-echo "Cleaning up resources by removing the resource group..."
+# echo "Cleaning up resources by removing the resource group..."
 # az group delete \
 #   --name $resourceGroupName 
 # echo "Successfully removed resource group" $resourceGroupName
-
