@@ -113,4 +113,4 @@ echo Failover group name $failoverGroupName
 # echo "Cleaning up resources by removing the resource group..."
 # az group delete \
 #   --name $resourceGroupName 
-# echo "Successfully removed resource group" $resourceGroupName
+# echo "Successfully removed resource group" $resourceGroupName 
