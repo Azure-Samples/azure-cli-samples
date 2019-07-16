@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 # Set variables
 subscriptionID=<SubscriptionID>
 resourceGroupName=myResourceGroup-$RANDOM
