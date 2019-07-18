@@ -29,7 +29,10 @@ read -p "Press any key to add locations..."
 az cosmosdb update \
 	--name $accountName \
 	--resource-group $resourceGroupName \
-	--locations "South Central US"=0 "North Central US"=1 "East US 2"=2 "West US 2"=3
+	--locations regionName="South Central US" failoverPriority=0 \
+	--locations regionName="North Central US" failoverPriority=1 \
+	--locations regionName="East US" failoverPriority=2 \
+	--locations regionName="West US" failoverPriority=3
 
 
 read -p "Press any key to change failover regions..."
@@ -39,4 +42,7 @@ read -p "Press any key to change failover regions..."
 az cosmosdb update \
 	--name $accountName \
 	--resource-group $resourceGroupName \
-	--locations "South Central US"=3 "North Central US"=2 "East US 2"=1 "West US 2"=0
+	--locations regionName="South Central US" failoverPriority=3 \
+	--locations regionName="North Central US" failoverPriority=2 \
+	--locations regionName="East US" failoverPriority=1 \
+	--locations regionName="West US" failoverPriority=0
