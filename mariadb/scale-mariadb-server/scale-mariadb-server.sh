@@ -28,13 +28,20 @@ az monitor metrics list \
 --metric storage_used \
 --interval PT1M
 
-# Scale up the server to provision more vCores within the same Tier
+# Scale up the server by provisionining more vCores within the same tier
 az mariadb server update \
 --resource-group myresourcegroup \
 --name mydemoserver \
 --sku-name GP_Gen5_4
 
+# Scale down the server by provisionining fewer vCores within the same tier
+az mariadb server update \
+--resource-group myresourcegroup \
+--name mydemoserver \
+--sku-name GP_Gen5_2
+
 # Scale up the server to provision a storage size of 7GB
+# Storage size cannot be reduced
 az mariadb server update \
 --resource-group myresourcegroup \
 --name mydemoserver \
