@@ -4,19 +4,21 @@
 RESOURCE_GROUP="myresourcegroup" ;
 SERVER_NAME="mydemoserver-$RANDOM"
 PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12) ; echo password $PASSWORD
+LOCATION="westus"
+ADMIN_USER="myadmin"
 SUBSCRIPTION_ID="" # enter your subscription ID
 
 # Create a resource group
 az group create \
     --name $RESOURCE_GROUP \
-    --location westus
+    --location $LOCATION
 
 # Create a MySQL server in the resource group
 az mysql server create \
     --name $SERVER_NAME \
     --resource-group $RESOURCE_GROUP \
-    --location westus \
-    --admin-user myadmin \
+    --location $LOCATION \
+    --admin-user $ADMIN_USER \
     --admin-password $PASSWORD \
     --sku-name GP_Gen5_2
 
