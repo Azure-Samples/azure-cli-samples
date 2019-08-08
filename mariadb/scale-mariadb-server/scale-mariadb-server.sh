@@ -1,48 +1,52 @@
 #!/bin/bash
 
+# Set up variables
+RESOURCE_GROUP="myresourcegroup" ;
+SERVER_NAME="mydemoserver-$RANDOM"
+PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12) ; echo password $PASSWORD
+SUBSCRIPTION_ID="" # enter your subscription ID
+
 # Create a resource group
 az group create \
---name myresourcegroup \
---location westus
+    --name $RESOURCE_GROUP \
+    --location westus
 
 # Create a MariaDB server in the resource group
-# Name of a server maps to DNS name and is thus required to be globally unique in Azure.
-# Substitute the <server_admin_password> with your own value.
 az mariadb server create \
---name mydemoserver \
---resource-group myresourcegroup \
---location westus \
---admin-user myadmin \
---admin-password <server_admin_password> \
---sku-name GP_Gen5_2 \
+    --name $SERVER_NAME \
+    --resource-group $RESOURCE_GROUP \
+    --location westus \
+    --admin-user myadmin \
+    --admin-password $PASSWORD \
+    --sku-name GP_Gen5_2
 
 # Monitor usage metrics - CPU
 az monitor metrics list \
---resource "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myresourcegroup/providers/Microsoft.DBforMariaDB/servers/mydemoserver" \
---metric cpu_percent \
---interval PT1M
+    --resource "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DBforMariaDB/servers/$SERVER_NAME" \
+    --metric cpu_percent \
+    --interval PT1M
 
 # Monitor usage metrics - Storage
 az monitor metrics list \
---resource-id "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myresourcegroup/providers/Microsoft.DBforMariaDB/servers/mydemoserver" \
---metric storage_used \
---interval PT1M
+    --resource "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DBforMariaDB/servers/$SERVER_NAME" \
+    --metric storage_used \
+    --interval PT1M
 
 # Scale up the server by provisionining more vCores within the same tier
 az mariadb server update \
---resource-group myresourcegroup \
---name mydemoserver \
---sku-name GP_Gen5_4
+    --resource-group $RESOURCE_GROUP \
+    --name $SERVER_NAME \
+    --sku-name GP_Gen5_4
 
-# Scale down the server by provisionining fewer vCores within the same tier
+# Scale down the server by provisioning fewer vCores within the same tier
 az mariadb server update \
---resource-group myresourcegroup \
---name mydemoserver \
---sku-name GP_Gen5_2
+    --resource-group $RESOURCE_GROUP \
+    --name $SERVER_NAME \
+    --sku-name GP_Gen5_2
 
 # Scale up the server to provision a storage size of 7GB
 # Storage size cannot be reduced
 az mariadb server update \
---resource-group myresourcegroup \
---name mydemoserver \
---storage-size 7168
+    --resource-group $RESOURCE_GROUP \
+    --name $SERVER_NAME \
+    --storage-size 7168
