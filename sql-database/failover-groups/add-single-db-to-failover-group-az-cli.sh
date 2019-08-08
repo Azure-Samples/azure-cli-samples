@@ -51,7 +51,7 @@ az sql server firewall-rule create \
    --start-ip-address $startip \
    --end-ip-address $endip
 
-# Create a gen5 1vCore database in the server 
+# Create a gen5 2vCore database in the server 
 echo "Creating a gen5 2 vCore database..."
 az sql db create \
    --resource-group $resourceGroupName \
@@ -78,6 +78,7 @@ az sql failover-group create \
    --partner-server $drServerName \
    --resource-group $resourceGroupName \
    --server $serverName \
+   --add-db $databaseName
    --failover-policy Automatic
 
 # Verify which server is secondary
