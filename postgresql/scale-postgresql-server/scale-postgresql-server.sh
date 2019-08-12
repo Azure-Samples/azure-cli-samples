@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Set up variables
-RESOURCE_GROUP="myresourcegroup" ;
+RESOURCE_GROUP="myresourcegroup"
 SERVER_NAME="mydemoserver-$RANDOM"
-PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12) ; echo password $PASSWORD
+PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12)
+echo password $PASSWORD # returns the generated password
 LOCATION="westus"
 ADMIN_USER="myadmin"
 SUBSCRIPTION_ID="" # enter your subscription ID
