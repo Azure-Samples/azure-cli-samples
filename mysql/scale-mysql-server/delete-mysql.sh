@@ -1,2 +1,3 @@
 #!/bin/bash
-az group delete --name myresourcegroup
+RESOURCE_GROUP = "" # enter your resource group name
+az group delete --name $RESOURCE_GROUP
