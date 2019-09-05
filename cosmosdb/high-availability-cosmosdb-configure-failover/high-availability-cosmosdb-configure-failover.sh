@@ -20,8 +20,9 @@ az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
     --kind GlobalDocumentDB \
-    --locations regionName="South Central US" failoverPriority=0 \
-    --locations regionName="North Central US" failoverPriority=1 \
+    --locations regionName="South Central US" failoverPriority=0 isZoneRedundant=False \
+    --locations regionName="North Central US" failoverPriority=1 isZoneRedundant=False \
+    --locations regionName="East US 2" failoverPriority=2 isZoneRedundant=False \
     --default-consistency-level "Session"
 
 
@@ -29,4 +30,7 @@ az cosmosdb create \
 az cosmosdb update \
 	--name $accountName \
 	--resource-group $resourceGroupName \
-	--locations "South Central US"=0 "North Central US"=1 "East US 2"=2 "West US 2"=3
+	--locations regionName="South Central US" failoverPriority=0 isZoneRedundant=False \
+    --locations regionName="East US 2" failoverPriority=1 isZoneRedundant=False \
+    --locations regionName="North Central US" failoverPriority=2 isZoneRedundant=False \
+

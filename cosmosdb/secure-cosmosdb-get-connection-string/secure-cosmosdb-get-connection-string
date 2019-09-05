@@ -22,11 +22,9 @@ az cosmosdb create \
     --locations regionName="South Central US" failoverPriority=0 \
     --locations regionName="North Central US" failoverPriority=1 \
     --default-consistency-level "Session" \
-    --enable-multiple-write-locations true
+    --enable-multiple-write-locations false
 
 
 # Get the connection string with Primary Key for Cosmos DB account
-endpoint=$(az cosmosdb show -g $myRG -n $myDB --query 'documentEndpoint' -o tsv)
-key=$(az cosmosdb list-keys -g $myRG -n $myDB --query 'primaryMasterKey' -o tsv)
-connection="AccountEndpoint=$endpoint/;AccountKey=$key;"
+connection=$(az cosmosdb list-connection-strings -n $accountName -g $resourceGroupName)
 echo $connection
