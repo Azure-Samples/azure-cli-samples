@@ -44,4 +44,4 @@ az cosmosdb collection create \
 	--db-name $databaseName \
 	--resource-group $resourceGroupName \
     --partition-key-path $partitionKeyPath \
-    --throughput throughput
+    --throughput $throughput
