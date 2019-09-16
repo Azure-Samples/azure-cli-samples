@@ -1,13 +1,17 @@
 #!/bin/bash
 
-# Set variables for the new account, database, and collection
+# Generate a unique 10 character alphanumeric string to ensure unique resource names
+uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
+
+# Set variables for the new SQL API account, database, and container
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myCosmosDbAccount'
+accountName="mycosmosaccount-$uniqueId" #needs to be lower case
 databaseName='myDatabase'
 containerName='myContainer'
-originalThroughput=1000 
-newThroughput=5000
+partitionKeyPath='/myPartitionKey' #property to partition data on
+originalThroughput=400 
+newThroughput=500
 
 
 # Create a resource group
@@ -34,19 +38,20 @@ az cosmosdb database create \
 	--resource-group $resourceGroupName
 
 
-# Create a fixed-size container and 5000 RU/s
+# Create a partitioned container with 400 RU/s
 az cosmosdb collection create \
     --resource-group $resourceGroupName \
     --collection-name $containerName \
     --name $accountName \
     --db-name $databaseName \
+	--partition-key-path $partitionKeyPath \
     --throughput $originalThroughput
 
 
 read -p "Press any key to set new throughput..."
 
 
-# Scale throughput
+# Scale throughput to 500 RU/s
 az cosmosdb collection update \
 	--collection-name $containerName \
 	--name $accountName \

@@ -1,10 +1,15 @@
 #!/bin/bash
 
-# Set variables for the new Cassandra API account, database, and table
+# NOTE: Support to provision Cassandra Tables is not supported at this time
+
+# Generate a unique 10 character alphanumeric string to ensure unique resource names
+uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
+
+# Set variables for the new Cassandra API account and keyspace
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myaccountname' #needs to be lower case
-keysetName='myKeysetName'
+accountName="mycosmosaccount-$uniqueId" #needs to be lower case
+keyspaceName='myKeyspaceName'
 
 
 # Create a resource group
@@ -13,7 +18,8 @@ az group create \
     --location $location
 
 
-# Create a Cassandra API Cosmos DB account with consistent prefix (LOCAL_ONE) consistency and multi-master enabled
+# Create a Cassandra API Cosmos DB account with consistent prefix (LOCAL_ONE) consistency
+# with multi-master enabled and replicas in two regions
 az cosmosdb create \
     --resource-group $resourceGroupName \
     --name $accountName \
@@ -24,8 +30,8 @@ az cosmosdb create \
     --enable-multiple-write-locations true
 
 
-# Create a database
+# Create a Cassandra Keyspace
 az cosmosdb database create \
     --resource-group $resourceGroupName \
     --name $accountName \
-    --db-name $keysetName
+    --db-name $keyspaceName

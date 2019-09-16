@@ -1,12 +1,16 @@
 #!/bin/bash
 
+# Generate a unique 10 character alphanumeric string to ensure unique resource names
+uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
+
 # Set variables for the new account, database, and graph
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myaccountname' #needs to be lower case
+accountName="mycosmosaccount-$uniqueId" #needs to be lower case
 databaseName='myDatabase'
 graphName='myGraph'
-
+partitionKeyPath='/myPartitionKey' #property to partition data on
+throughput=400
 
 # Create a resource group
 az group create \
@@ -14,7 +18,8 @@ az group create \
 	--location $location
 
 
-# Create a Gremlin API Cosmos DB account with session consistency and multi-master enabled
+# Create a Gremlin API Cosmos DB account with session consistency
+# multi-master enabled with replicas in two regions
 az cosmosdb create \
     --resource-group $resourceGroupName \
 	--name $accountName \
@@ -32,11 +37,11 @@ az cosmosdb database create \
 	--resource-group $resourceGroupName
 
 
-# Create a graph with a partition key and 1000 RU/s
+# Create a graph with a partition key and 400 RU/s
 az cosmosdb collection create \
 	--collection-name $graphName \
 	--name $accountName \
 	--db-name $databaseName \
 	--resource-group $resourceGroupName \
-    --partition-key-path /mypartitionkey \
-    --throughput 1000
+    --partition-key-path $partitionKeyPath \
+    --throughput $throughput

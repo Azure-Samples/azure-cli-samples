@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Set variables for the new account
+# Generate a unique 10 character alphanumeric string to ensure unique resource names
+uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
+
+# Set variables for the new SQL API account
 resourceGroupName='myResourceGroup'
 location='southcentralus'
-accountName='myaccountname' #needs to be lower case
-
+accountName="mycosmosaccount-$uniqueId" #needs to be lower case
 
 # Create a resource group
 az group create \
@@ -12,35 +14,18 @@ az group create \
 	--location $location
 
 
-# Create a SQL API Cosmos DB account with session consistency
+# Create a SQL API Cosmos DB account in resource group region
 az cosmosdb create \
 	--name $accountName \
-	--kind GlobalDocumentDB \
-	--resource-group $resourceGroupName \
-    --default-consistency-level "Session"
+	--resource-group $resourceGroupName
 
 
-read -p "Press any key to add locations..."
+read -p "Press any key to add 2 regions..."
 
-
-# Replicate in multiple regions
+# Add additional 2 regions
 az cosmosdb update \
 	--name $accountName \
 	--resource-group $resourceGroupName \
-	--locations regionName="South Central US" failoverPriority=0 \
-	--locations regionName="North Central US" failoverPriority=1 \
-	--locations regionName="East US" failoverPriority=2 \
-	--locations regionName="West US" failoverPriority=3
-
-
-read -p "Press any key to change failover regions..."
-
-
-# Modify regional failover priorities
-az cosmosdb update \
-	--name $accountName \
-	--resource-group $resourceGroupName \
-	--locations regionName="South Central US" failoverPriority=3 \
-	--locations regionName="North Central US" failoverPriority=2 \
-	--locations regionName="East US" failoverPriority=1 \
-	--locations regionName="West US" failoverPriority=0
+	--locations regionName="West US 2" failoverPriority=0 isZoneRedundant=false \
+	--locations regionName="East US 2" failoverPriority=1 isZoneRedundant=false \
+	--locations regionName="North Central US" failoverPriority=2 isZoneRedundant=false
