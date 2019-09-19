@@ -31,7 +31,7 @@ az cosmosdb update \
     --locations regionName='South Central US' failoverPriority=2 isZoneRedundant=False
 
 read -p "Press any key to change the failover priority"
-# Flip East US 2 and South Central US regions
+# Make South Central US the next region to fail over to instea of East US 2
 az cosmosdb failover-priority-change \
     -n $accountName \
     -g $resourceGroupName \
