@@ -29,20 +29,23 @@ az cosmosdb keys list \
 
 read -p "Press any key to list read only account keys"
 # List read-only keys
-az cosmosdb list-read-only-keys \
+az cosmosdb keys list \
     -n $accountName \
-    -g $resourceGroupName
+    -g $resourceGroupName \
+    --type read-only-keys
 
 read -p "Press any key to list connection strings"
 # List connection strings
-az cosmosdb list-connection-strings \
+az cosmosdb keys list \
     -n $accountName \
-    -g $resourceGroupName
+    -g $resourceGroupName \
+    --type connection-strings
 
 read -p "Press any key to regenerate secondary account keys"
 # Regenerate secondary account keys
 # key-kind values: primary, primaryReadonly, secondary, secondaryReadonly
-az cosmosdb regenerate-key \
+az cosmosdb keys regenerate \
     -n $accountName \
     -g $resourceGroupName \
     --key-kind secondary
+    
