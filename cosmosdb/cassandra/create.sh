@@ -34,15 +34,15 @@ az cosmosdb cassandra keyspace create \
 schema=$(cat << EOF 
 {
     "columns": [
-        {"name": "columnA","type": "uuid"},
-        {"name": "columnB","type": "int"},
-        {"name": "columnC","type": "text"}
+        {"name": "columna","type": "uuid"},
+        {"name": "columnb","type": "int"},
+        {"name": "columnc","type": "text"}
     ],
     "partitionKeys": [
-        {"name": "columnA"}
+        {"name": "columna"}
     ],
     "clusterKeys": [
-        { "name": "columnB", "orderBy": "asc" }
+        { "name": "columnb", "orderBy": "asc" }
     ]
 }
 EOF
