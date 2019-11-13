@@ -45,7 +45,7 @@ svcEndpoint=$(az network vnet subnet show -g $resourceGroupName -n $backEnd --vn
 az cosmosdb create -n $accountName -g $resourceGroupName
 
 # Add the virtual network rule but ignore the missing service endpoint on the subnet
-az cosmosdb networ-rule add \
+az cosmosdb network-rule add \
     -n $accountName \
     -g $resourceGroupName \
     --virtual-network $vnetName \
