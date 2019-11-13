@@ -16,8 +16,9 @@ az group create --name $myResourceGroupName --location eastus
 az signalr create \
   --name $mySignalRSvcName \
   --resource-group $myResourceGroupName \
-  --sku Basic_DS2 \
-  --unit-count 1
+  --sku Standard_S1 \
+  --unit-count 1 \
+  --service-mode Default
 
 # Get the SignalR primary connection string 
 primaryConnectionString=$(az signalr key list --name $mySignalRSvcName \
