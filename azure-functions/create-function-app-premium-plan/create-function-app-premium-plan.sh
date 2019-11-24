@@ -16,17 +16,17 @@ az storage account create \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
-# Create an App Service plan
+# Create a Premium plan
 az functionapp plan create \
-  --name myappserviceplan \
+  --name mypremiumplan \
   --resource-group myResourceGroup \
   --location westeurope \
-  --sku B1
+  --sku EP1
 
 # Create a Function App
 az functionapp create \
   --name $functionAppName \
   --storage-account $storageName \
-  --plan myappserviceplan \
+  --plan mypremiumplan \
   --resource-group myResourceGroup
   
