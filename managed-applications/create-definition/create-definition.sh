@@ -18,4 +18,4 @@ az managedapp definition create \
   --display-name "Managed Storage Account" \
   --description "Managed Azure Storage Account" \
   --authorizations "$groupid:$roleid" \
-  --package-file-uri "https://raw.githubusercontent.com/Azure/azure-managedapp-samples/master/samples/201-managed-storage-account/managedstorage.zip"
+  --package-file-uri "https://raw.githubusercontent.com/Azure/azure-managedapp-samples/master/Managed%20Application%20Sample%20Packages/201-managed-storage-account/managedstorage.zip"
