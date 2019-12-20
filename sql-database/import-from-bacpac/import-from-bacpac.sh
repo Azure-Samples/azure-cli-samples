@@ -30,61 +30,24 @@ az storage account create --name $storageAccountName \
     --sku Standard_LRS
 
 # create a storage container 
-$storageContainer = New-AzStorageContainer -Name  `
-    -Context $(New-AzStorageContext -StorageAccountName  `
-        -StorageAccountKey $(Get-AzStorageAccountKey -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName).Value[0])
+$storageKey = az storage account keys list --account-name $storageAccountName \
+    --resource-group $resourceGroupName \
+    -o json --query [0].value
 
-az storage container create --name $storageContainerName
-                            [--account-key]
-                            [--account-name $storageAccountName
-                            [--auth-mode {key, login}]
-                            [--connection-string]
-                            [--fail-on-exist]
-                            [--metadata]
-                            [--public-access {blob, container, off}]
-                            [--sas-token]
-                            [--subscription]
-                            [--timeout]
+az storage container create --name $storageContainerName \
+    --account-key $storageKey \
+    --account-name $storageAccountName
 
-# Download sample database from Github
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 #required by Github
-Invoke-WebRequest -Uri "https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Standard.bacpac" -OutFile $bacpacfilename
+# download sample database from Github
+az rest --uri https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Standard.bacpac \
+    --output-file $bacpacfilename -m get --skip-authorization-header
 
-# Upload sample database into storage container
-Set-AzStorageBlobContent -Container  `
-    -File  `
-    -Context $(New-AzStorageContext -StorageAccountName  `
-        -StorageAccountKey $(Get-AzStorageAccountKey -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName).Value[0])
-
-az storage blob upload --container-name $storagecontainername
-                       --file $bacpacFilename
-                       --name
-                       [--account-key]
-                       [--account-name $storageAccountName
-                       [--auth-mode {key, login}]
-                       [--connection-string]
-                       [--content-cache-control]
-                       [--content-disposition]
-                       [--content-encoding]
-                       [--content-language]
-                       [--content-md5]
-                       [--content-type]
-                       [--if-match]
-                       [--if-modified-since]
-                       [--if-none-match]
-                       [--if-unmodified-since]
-                       [--lease-id]
-                       [--max-connections]
-                       [--maxsize-condition]
-                       [--metadata]
-                       [--no-progress]
-                       [--sas-token]
-                       [--socket-timeout]
-                       [--subscription]
-                       [--tier {P10, P20, P30, P4, P40, P50, P6, P60}]
-                       [--timeout]
-                       [--type {append, block, page}]
-                       [--validate-content]
+# upload sample database into storage container
+az storage blob upload --container-name $storagecontainername \
+    --file $bacpacFilename \
+    --name \
+    --account-key $storageKey \
+    --account-name $storageAccountName
 
 # create a new server with a system wide unique server name
 az sql server create \
@@ -101,37 +64,22 @@ az sql server firewall-rule create --end-ip-address $endIp \
    --server $serverName \
    --start-ip-address $startIp 
 
-# Import bacpac to database with an S3 performance level
-$importRequest = New-AzSqlDatabaseImport -ResourceGroupName $resourceGroupName `
-    -ServerName $serverName `
-    -DatabaseName $databaseName `
-    -DatabaseMaxSizeBytes "262144000" `
-    -StorageKeyType "StorageAccessKey" `
-    -StorageKey $(Get-AzStorageAccountKey -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName).Value[0] `
-    -StorageUri "https://$storageaccountname.blob.core.windows.net/$storageContainerName/$bacpacFilename" `
-    -Edition "Standard" `
-    -ServiceObjectiveName "S3" `
-    -AdministratorLogin "$adminSqlLogin" `
-    -AdministratorLoginPassword $(ConvertTo-SecureString -String $password -AsPlainText -Force)
+# import bacpac to database with an S3 performance level
+az sql db import --admin-password $password \
+    --admin-user $adminSqlLogin \
+    --storage-key $storageKey \
+    --storage-key-type StorageAccessKey \
+    --storage-uri "https://$storageaccountname.blob.core.windows.net/$storageContainerName/$bacpacFilename" \
+    --name $databaseName \
+    --resource-group $resourceGroupName \
+    --server $serverName
 
-# Check import status and wait for the import to complete
-$importStatus = Get-AzSqlDatabaseImportExportStatus -OperationStatusLink $importRequest.OperationStatusLink
-[Console]::Write("Importing")
-while ($importStatus.Status -eq "InProgress")
-{
-    $importStatus = Get-AzSqlDatabaseImportExportStatus -OperationStatusLink $importRequest.OperationStatusLink
-    [Console]::Write(".")
-    Start-Sleep -s 10
-}
-[Console]::WriteLine("")
-$importStatus
-
-# Scale down to S0 after import is complete
-Set-AzSqlDatabase -ResourceGroupName $resourceGroupName `
-    -ServerName $serverName `
-    -DatabaseName $databaseName  `
-    -Edition "Standard" `
-    -RequestedServiceObjectiveName "S0"
+# scale down to S0 after import is complete
+az sql db update --edition "Standard" \
+    --name $databaseName \
+    --resource-group $resourceGroupName \
+    --server $serverName \
+    --service-objective "S0"
 
 # clean up deployment 
 # az group delete --name $resourceGroupName

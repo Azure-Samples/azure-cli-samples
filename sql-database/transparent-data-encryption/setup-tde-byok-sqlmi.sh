@@ -7,6 +7,7 @@ az login
 # set the subscription context for the Azure account
 az account set -s $subscriptionID
 
+
 # 1. Create Resource and setup Azure Key Vault (skip if already done)
 
 # create Resource group (name the resource and specify the location)
@@ -25,7 +26,16 @@ az keyvault create --name $vaultname \
 
 # authorize Managed Instance to use the AKV (wrap/unwrap key and get public part of key, if public part exists): 
 $objectid = (Set-AzSqlInstance -ResourceGroupName  -Name  -AssignIdentity).Identity.PrincipalId
-Set-AzKeyVaultAccessPolicy -BypassObjectIdValidation -VaultName  -ObjectId  -PermissionsToKeys get,wrapKey,unwrapKey
+
+$objectid = az sql mi show --name "MyManagedInstance" \
+    --resource-group $resourcegroup \
+    -o json
+    --query [0].identity.principalid
+
+az keyvault set-policy --name $vaultname \
+    --key-permissions get, unwrapKey, wrapKey \
+    --object-id $objectid
+#-BypassObjectIdValidation
 
 az sql mi update [--add]
                  [--admin-password]
@@ -44,17 +54,7 @@ az sql mi update [--add]
                  [--storage]
                  [--subscription]
 
-az keyvault set-policy --name $vaultname
---key-permissions get, unwrapKey, wrapKey
---object-id $objectid
-                       [--resource-group]
-                       [--secret-permissions {backup, delete, get, list, purge, recover, restore, set}]
-                       [--spn]
-                       [--storage-permissions {backup, delete, deletesas, get, getsas, list, listsas, purge, recover, regeneratekey, restore, set, setsas, update}]
-                       [--subscription]
-                       [--upn]
-
-# Allow access from trusted Azure services: 
+# allow access from trusted Azure services: 
 Update-AzKeyVaultNetworkRuleSet -VaultName  -Bypass AzureServices
 az keyvault network-rule add --name $vaultname
                              [--ip-address]
@@ -63,7 +63,7 @@ az keyvault network-rule add --name $vaultname
                              [--subscription]
                              [--vnet-name]
 
-# Turn the network rules ON by setting the default action to Deny: 
+# turn the network rules ON by setting the default action to Deny: 
 Update-AzKeyVaultNetworkRuleSet -VaultName  -DefaultAction Deny
 az keyvault network-rule add --name $vaultname
                              [--ip-address]
@@ -75,7 +75,7 @@ az keyvault network-rule add --name $vaultname
 
 # 2. Provide TDE Protector key (skip if already done)
 
-# The recommended way is to import an existing key from a .pfx file. Replace "<PFX private key password>" with the actual password below:
+# the recommended way is to import an existing key from a .pfx file. Replace "<PFX private key password>" with the actual password below:
 $keypath = "c:\some_path\mytdekey.pfx" # Supply your .pfx path and name
 $securepfxpwd = ConvertTo-SecureString -String "<PFX private key password>" -AsPlainText -Force 
 $key = Add-AzKeyVaultKey -VaultName  -Name  -KeyFilePath $keypath -KeyFilePassword $securepfxpwd
@@ -94,21 +94,27 @@ az keyvault key create --name "MyTDEKey"
                        [--tags]
 
 # ...or get an existing key from the vault:
-# $key = Get-AzKeyVaultKey -VaultName $vaultname -Name "MyTDEKey"
+$key = az keyvault key show --name "MyTDEKey" \
+    --vault-name $vaultname \
+    -o json
+    --query [0].value
 
-# Alternatively, generate a new key directly in Azure Key Vault (recommended for test purposes only - uncomment below):
-# $key = Add-AzureKeyVaultKey -VaultName $vaultname -Name MyTDEKey -Destination Software -Size 2048
+# alternatively, generate a new key directly in Azure Key Vault (recommended for test purposes only - uncomment below):
+$key = az keyvault key create --name "MyTDEKey" \
+    --vault-name $vaultname \
+    --size 2048 \
+    -o json --query [0].value
+
 
 # 3. Set up BYOK TDE on Managed Instance:
 
 # assign the key to the Managed Instance:
-# $key = 'https://contoso.vault.azure.net/keys/contosokey/01234567890123456789012345678901'
-az sql mi key create --kid $key.id \
+az sql mi key create --kid $key \
     --managed-instance "MyManagedInstance" \
     --resource-group $resourcegroup
 
 # set TDE operation mode to BYOK: 
 az sql mi tde-key set --server-key-type AzureKeyVault \
-    --kid $key.id \
+    --kid $key \
     --managed-instance "MyManagedInstance" \
     --resource-group $resourcegroup

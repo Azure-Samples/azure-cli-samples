@@ -79,14 +79,6 @@ az sql db create --name $databaseName \
    --elastic-pool $primaryPoolName
 
 # establish Active Geo-Replication
-$database = Get-AzSqlDatabase -ResourceGroupName  `
-    -ServerName  `
-    -DatabaseName 
-$database | New-AzSqlDatabaseSecondary -PartnerResourceGroupName  `
-    -PartnerServerName  `
-    -SecondaryElasticPoolName  `
-    -AllowConnections "All"
-
 az sql db replica create --name $databaseName
     --partner-server $secondaryServerName
     --resource-group $primaryResourceGroupName
@@ -95,17 +87,14 @@ az sql db replica create --name $databaseName
     --partner-resource-group $secondaryResourceGroupName
 
 # initiate a planned failover
-$database = Get-AzSqlDatabase -ResourceGroupName $secondaryResourceGroupName `
-    -ServerName $secondaryServerName `
-    -DatabaseName $databaseName 
-$database | Set-AzSqlDatabaseSecondary -PartnerResourceGroupName $primaryResourceGroupName -Failover
+az sql db replica set-primary --name $databaseName \
+    --resource-group $secondaryResourceGroupName \
+    --server $secondaryServerName
 
 # monitor Geo-Replication config and health after failover
-$database = Get-AzSqlDatabase -ResourceGroupName $secondaryResourceGroupName `
-    -ServerName $secondaryServerName `
-    -DatabaseName $databaseName
-$database | Get-AzSqlDatabaseReplicationLink -PartnerResourceGroupName $primaryResourceGroupName `
-    -PartnerServerName $primaryServerName
+az sql db replica list-links --name $databaseName \
+    --resource-group $secondaryResourceGroupName \
+    --server $secondaryServerName
 
 # clean up deployment 
 # az group delete --name $primaryResourceGroupName

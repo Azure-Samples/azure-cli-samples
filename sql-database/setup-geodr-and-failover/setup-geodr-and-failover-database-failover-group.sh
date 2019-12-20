@@ -61,41 +61,29 @@ az sql db create --name $databaseName \
    --server $primaryServerName \
    --service-objective S0
 
-# Establish Active Geo-Replication
-$database = Get-AzSqlDatabase -DatabaseName  -ResourceGroupName  -ServerName 
-$database | New-AzSqlDatabaseSecondary -PartnerResourceGroupName  -PartnerServerName  -AllowConnections "All"
+# establish Active Geo-Replication
+az sql db replica create --name $databaseName \
+    --partner-server $secondaryServerName \
+    --resource-group $primaryResourceGroupName \
+    --server $primaryServerName \
+    --partner-resource-group $secondaryResourceGroupName
 
-az sql db replica create --name $databaseName
---partner-server $secondaryServerName
---resource-group $primaryResourceGroupName
---server $primaryServerName
---partner-resource-group $secondaryResourceGroupName
+# initiate a planned failover
+az sql failover-group set-primary --name $databaseName
+    --resource-group $secondaryResourceGroupName
+    --server $secondaryServerName
 
-# Initiate a planned failover
-$database = Get-AzSqlDatabase -DatabaseName $databaseName -ResourceGroupName $secondaryResourceGroupName -ServerName $secondaryServerName
-$database | Set-AzSqlDatabaseSecondary -PartnerResourceGroupName $primaryResourceGroupName -Failover
+# monitor Geo-Replication config and health after failover
+az sql db replica list-links --name $databaseName \
+    --resource-group $primaryResourceGroupName \
+    --server $primaryServerName
 
-az sql failover-group set-primary --name
-                                  [--allow-data-loss]
-                                  [--ids]
-                                  [--resource-group]
-                                  [--server]
-                                  [--subscription]
-
-# Monitor Geo-Replication config and health after failover
-$database = Get-AzSqlDatabase -DatabaseName $databaseName -ResourceGroupName $secondaryResourceGroupName -ServerName $secondaryServerName
-$database | Get-AzSqlDatabaseReplicationLink -PartnerResourceGroupName $primaryResourceGroupName -PartnerServerName $primaryServerName
-
-az sql db replica list-links [--ids]
-                             [--name]
-                             [--resource-group]
-                             [--server]
-                             [--subscription]
-
-# Remove the replication link after the failover
-$database = Get-AzSqlDatabase -DatabaseName $databaseName -ResourceGroupName $secondaryResourceGroupName -ServerName $secondaryServerName
-$secondaryLink = $database | Get-AzSqlDatabaseReplicationLink -PartnerResourceGroupName $primaryResourceGroupName -PartnerServerName $primaryServerName
-$secondaryLink | Remove-AzSqlDatabaseSecondary
+# remove the replication link after the failover
+az sql db replica delete-link --partner-server $primaryServerName \
+    --name $databaseName \
+    --partner-resource-group $primaryResourceGroupName \
+    --resource-group $secondaryResourceGroupName \
+    --server $secondaryServerName
 
 # clean up deployment 
 # az group delete --name $primaryResourceGroupName
