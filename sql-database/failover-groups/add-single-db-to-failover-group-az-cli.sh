@@ -1,6 +1,6 @@
 #!/bin/bash
-# Set variables
-subscriptionID=<SubscriptionID>
+
+subscriptionID=<subscriptionId>
 resourceGroupName=myResourceGroup-$RANDOM
 location=SouthCentralUS
 adminLogin=azureuser
@@ -16,24 +16,24 @@ failoverGroupName=failovergrouptutorial-$RANDOM
 startip=0.0.0.0
 endip=0.0.0.0
 
-# Print out randomized variables
+# print out randomized variables
 echo Resource group name is $resourceGroupName
 echo Passowrd is $password
 echo Servername is $serverName
 echo DR Server name $drServerName
 echo Failover group name $failoverGroupName
 
-# Set the subscription context for the Azure account
+# set the subscription context for the Azure account
 az account set -s $subscriptionID
 
-# Create a resource group
+# create a resource group
 echo "Creating resource group..."
 az group create \
    --name $resourceGroupName \
    --location $location \
    --tags Owner[=SQLDB-Samples]
 
-# Create a logical server in the resource group
+# create a logical server in the resource group
 echo "Creating primary logical server..."
 az sql server create \
    --name $serverName \
@@ -42,7 +42,7 @@ az sql server create \
    --admin-user $adminLogin \
    --admin-password $password
 
-# Configure a firewall rule for the server
+# configure a firewall rule for the server
 echo "Configuring firewall..."
 az sql server firewall-rule create \
    --resource-group $resourceGroupName \
@@ -51,7 +51,7 @@ az sql server firewall-rule create \
    --start-ip-address $startip \
    --end-ip-address $endip
 
-# Create a gen5 2vCore database in the server 
+# create a gen5 2vCore database in the server 
 echo "Creating a gen5 2 vCore database..."
 az sql db create \
    --resource-group $resourceGroupName \
@@ -62,7 +62,7 @@ az sql db create \
    --family Gen5 \
    --capacity 2
 
-# Create a secondary server in the failover region
+# create a secondary server in the failover region
 echo "Creating a secondary logical server in the DR region..."
 az sql server create \
    --name $drServerName \
@@ -71,7 +71,7 @@ az sql server create \
    --admin-user $adminLogin\
    --admin-password $password
 
-# Create a failover group between the servers and add the database
+# create a failover group between the servers and add the database
 echo "Creating a failover group between the two servers..."
 az sql failover-group create \
    --name $failoverGroupName  \
@@ -81,13 +81,13 @@ az sql failover-group create \
    --add-db $databaseName
    --failover-policy Automatic
 
-# Verify which server is secondary
+# verify which server is secondary
 echo "Verifying which server is in the secondary role..."
 az sql failover-group list \
    --server $serverName \
    --resource-group $resourceGroupName
 
-# Failover to the secondary server
+# failover to the secondary server
 echo "Failing over group to the secondary server..."
 az sql failover-group set-primary \
    --name $failoverGroupName \
@@ -95,7 +95,7 @@ az sql failover-group set-primary \
    --server $drServerName
 echo "Successfully failed failover group over to" $drServerName
 
-# Revert failover group back to the primary server
+# revert failover group back to the primary server
 echo "Failing over group back to the primary server..."
 az sql failover-group set-primary \
    --name $failoverGroupName \
@@ -103,15 +103,7 @@ az sql failover-group set-primary \
    --server $serverName
 echo "Successfully failed failover group back to" $serverName
 
-# Print out randomized variables
-echo Resource group name is $resourceGroupName
-echo Password is $password
-echo Servername is $serverName
-echo DR Server name $drServerName
-echo Failover group name $failoverGroupName
-
-# Clean up resources by removing the resource group
+# clean up resources by removing the resource group
 # echo "Cleaning up resources by removing the resource group..."
-# az group delete \
-#   --name $resourceGroupName 
+# az group delete --name $resourceGroupName 
 # echo "Successfully removed resource group" $resourceGroupName
