@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # You will need an existing Managed Instance as a prerequisite for completing this script.
 # See https://docs.microsoft.com/azure/sql-database/scripts/sql-database-create-configure-managed-instance-cli
 

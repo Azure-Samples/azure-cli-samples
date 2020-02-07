@@ -1,4 +1,6 @@
-﻿$subscriptionId = '<subscriptionId>'
+﻿#!/bin/bash
+
+$subscriptionId = '<subscriptionId>'
 $randomIdentifier = $RANDOM
 $resourceGroupName = "myResourceGroup-$randomIdentifier"
 $location = "East US"

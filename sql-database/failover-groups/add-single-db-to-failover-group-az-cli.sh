@@ -1,3 +1,5 @@
+#!/bin/bash
+
 subscriptionID=<subscriptionId>
 resourceGroupName=myResourceGroup-$RANDOM
 location=SouthCentralUS
