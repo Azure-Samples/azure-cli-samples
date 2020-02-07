@@ -1,6 +1,6 @@
 !/bin/bash
 
-# Update throughput for MongoDB API database and collection
+# Throughput operations for a MongoDB API database and collection
 
 # Generate a unique 10 character alphanumeric string to ensure unique resource names
 uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
@@ -11,59 +11,103 @@ location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 databaseName='database1'
 collectionName='collection1'
+originalThroughput=400
+updateThroughput=500
 
-# Create a resource group
+# Create a resource group, Cosmos account, database and collection
 az group create -n $resourceGroupName -l $location
-
-# Create a Cosmos account for MongoDB API
-az cosmosdb create \
-    -n $accountName \
-    -g $resourceGroupName \
-    --kind MongoDB
-
-# Create a MongoDB API database with shared throughput
-az cosmosdb mongodb database create \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName \
-    --throughput 400
+az cosmosdb create -n $accountName -g $resourceGroupName --kind MongoDB
+az cosmosdb mongodb database create -a $accountName -g $resourceGroupName -n $databaseName --throughput $originalThroughput
 
 # Define a minimal index policy for the collection
 idxpolicy=$(cat << EOF 
-[ 
-    {"key": {"keys": ["user_id"]}}
-]
+    [ {"key": {"keys": ["user_id"]}} ]
 EOF
 )
-# Persist index policy to json file
 echo "$idxpolicy" > "idxpolicy-$uniqueId.json"
 
 # Create a MongoDB API collection
-az cosmosdb mongodb collection create \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $collectionName \
-    --shard 'user_id' \
-    --throughput 400 \
-    --idx @idxpolicy-$uniqueId.json
-
+az cosmosdb mongodb collection create -a $accountName -g $resourceGroupName -d $databaseName -n $collectionName --shard 'user_id' --throughput $originalThroughput --idx @idxpolicy-$uniqueId.json
 # Clean up temporary index policy file
 rm -f "idxpolicy-$uniqueId.json"
 
-read -p 'Press any key to increase Database throughput to 500'
+# Throughput operations for MongoDB API database
+#   Read the current throughput
+#   Read the minimum throughput
+#   Make sure the updated throughput is not less than the minimum
+#   Update the throughput
+
+read -p 'Press any key to read current provisioned throughput on database'
+
+az cosmosdb mongod database throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -n $databaseName \
+    --query resource.throughput \
+    -o tsv
+
+read -p 'Press any key to read minimum throughput on database'
+
+minimumThroughput=$(az cosmosdb mongodb database throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -n $databaseName \
+    --query resource.minimumThroughput \
+    -o tsv)
+
+echo $minimumThroughput
+
+# Make sure the updated throughput is not less than the minimum allowed throughput
+if [ $updateThroughput -lt $minimumThroughput ]; then
+    updateThroughput=$minimumThroughput
+fi
+
+read -p 'Press any key to update Database throughput'
 
 az cosmosdb mongodb database throughput update \
     -a $accountName \
     -g $resourceGroupName \
     -n $databaseName \
-    --throughput 500
+    --throughput $updateThroughput
 
-read -p 'Press any key to increase Collection throughput to 500'
+# Throughput operations for MongoDB API collection
+#   Read the current throughput
+#   Read the minimum throughput
+#   Make sure the updated throughput is not less than the minimum
+#   Update the throughput
+
+read -p 'Press any key to read current provisioned throughput on collection'
+
+az cosmosdb mongodb collection throughput show \
+    -a $accountName \
+    -g $resourceGroupName \
+    -d $databaseName \
+    -n $collectionName \
+    --query resource.throughput \
+    -o tsv
+
+read -p 'Press any key to read minimum throughput on collection'
+
+minimumThroughput=$(az cosmosdb mongodb collection throughput show \
+    -a $accountName \
+    -g $resourceGroupName \
+    -d $databaseName \
+    -n $collectionName \
+    --query resource.minimumThroughput \
+    -o tsv)
+
+echo $minimumThroughput
+
+# Make sure the updated throughput is not less than the minimum allowed throughput
+if [ $updateThroughput -lt $minimumThroughput ]; then
+    updateThroughput=$minimumThroughput
+fi
+
+read -p 'Press any key to update collection throughput'
 
 az cosmosdb mongodb collection throughput update \
     -a $accountName \
     -g $resourceGroupName \
     -d $databaseName \
     -n $collectionName \
-    --throughput 500
+    --throughput $updateThroughput
