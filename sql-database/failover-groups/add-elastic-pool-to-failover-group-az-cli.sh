@@ -1,158 +1,61 @@
 ﻿#!/bin/bash
 
-$subscriptionId = '<subscriptionId>'
-$randomIdentifier = $RANDOM
-$resourceGroupName = "myResourceGroup-$randomIdentifier"
+$subscription = "<subscriptionId>" # add subscription here
 $location = "East US"
-$adminLogin = "azureuser"
-$password = "PWD27!"+(New-Guid).Guid
-$serverName = "mysqlserver-$randomIdentifier"
-$poolName = "myElasticPool"
-$databaseName = "mySampleDatabase"
-$drLocation = "West US"
-$drServerName = "mysqlsecondary-$randomIdentifier"
-$failoverGroupName = "failovergrouptutorial-$randomIdentifier"
 
-# The ip address range that you want to allow to access your server 
-# Leaving at 0.0.0.0 will prevent outside-of-azure connections
-$startIp = "0.0.0.0"
-$endIp = "0.0.0.0"
+$randomIdentifier = $(Get-Random)
 
-# show randomized variables
-echo "Resource group name is" $resourceGroupName 
-echo "Password is" $password  
-echo "Server name is" $serverName 
-echo "DR Server name is" $drServerName 
-echo "Failover group name is" $failoverGroupName
+$resourceGroup = "resource-$randomIdentifier"
+$server = "sqlserver-$randomIdentifier"
+$pool = "pool-$randomIdentifier"
+$database = "database-$randomIdentifier"
 
-# set the subscription context for the Azure account
-az account set -s $subscriptionID
+$failover = "failover-$randomIdentifier"
+$failoverLocation = "West US"
+$failoverServer = "sqlsecondary-$randomIdentifier"
 
-# create a resource group
-echo "Creating resource group..."
-az group create \
-   --name $resourceGroupName \
-   --location $location \
-   --tags Owner[=SQLDB-Samples]
+$login = "sampleLogin"
+$password = "samplePassword123!"
 
-# create a server in the resource group
-echo "Creating server..."
-az sql server create \
-   --name $serverName \
-   --resource-group $resourceGroupName \
-   --location $location  \
-   --admin-user $adminLogin \
-   --admin-password $password
+echo "Using resource group $($resourceGroup) with login: $($login), password: $($password)..."
 
-# create a server firewall rule that allows access from the specified IP range
-echo "Configuring firewall for primary logical server..."
-az sql server firewall-rule create --end-ip-address $endIp \
-   --name "AllowedIPs" \
-   --resource-group $resourceGroupName \
-   --server $serverName \
-   --start-ip-address $startIp 
-echo "Firewall configured"
+echo "Creating $($resourceGroup)..."
+az group create --name $resourceGroup --location $location
 
-# create General Purpose Gen5 database with 2 vCore
-echo "Creating a gen5 2 vCore database..."
-az sql db create --name $databaseName \
-   --resource-group $resourceGroupName \
-   --server $serverName \
-   --edition "GeneralPurpose" \
-   --family Gen5 \
-   --max-size 2 \
-   --min-capacity 1 \
-   --sample-name "AdventureWorksLT"
+echo "Creating $($server) in $($location)..."
+az sql server create --name $server --resource-group $resourceGroup --location $location  --admin-user $login --admin-password $password
 
-# create primary Gen5 elastic 2 vCore pool
-echo "Creating elastic pool..."
-az sql elastic-pool create --name $poolName \
-   --resource-group $resourceGroupName \
-   --server $serverName \
-   --edition "GeneralPurpose" \
-   --family Gen5 \
-   --max-size 2
+echo "Creating $($database) on $($server)..."
+az sql db create --name $database --resource-group $resourceGroup --server $server --sample-name AdventureWorksLT
 
-# add single db into elastic pool
-echo "Adding database to elastic pool..."
-az sql db update --elastic-pool $poolName \
-   --name $databaseName \
-   --resource-group $resourceGroupName \
-   --server $serverName
+echo "Creating $($pool) on $($server)..."
+az sql elastic-pool create --name $pool --resource-group $resourceGroup --server $server
 
-# create a secondary server in the failover region
-echo "Creating secondary server..."
-az sql server create \
-   --name $drServerName \
-   --resource-group $resourceGroupName \
-   --location $drLocation  \
-   --admin-user $adminLogin \
-   --admin-password $password
+echo "Adding $($database) to $($pool)..."
+az sql db update --elastic-pool $pool --name $database --resource-group $resourceGroup --server $server
 
-# create a server firewall rule that allows access from the specified IP range
-echo "Configuring firewall for primary logical server..."
-az sql server firewall-rule create --end-ip-address $endIp \
-   --name "AllowedIPs" \
-   --resource-group $resourceGroupName \
-   --server $drServerName \
-   --start-ip-address $startIp 
-echo "Firewall configured"
+echo "Creating $($failoverServer) in $($failoverLocation)..."
+az sql server create --name $failoverServer --resource-group $resourceGroup --location $failoverLocation  --admin-user $login --admin-password $password
 
-# create secondary Gen5 elastic 2 vCore pool
-echo "Creating secondary elastic pool..."
-az sql elastic-pool create --name $poolName \
-   --resource-group $resourceGroupName \
-   --server $drServerName \
-   --edition "GeneralPurpose" \
-   --family Gen5 \
-   --max-size 2
+echo "Creating $($pool) on $($failoverServer)..."
+az sql elastic-pool create --name $pool --resource-group $resourceGroup --server $failoverServer
 
-# create a failover group between the servers
-echo "Creating failover group..." 
-az sql failover-group create --name $failoverGroupName \
-   --partner-server $drServerName \
-   --resource-group $resourceGroupName \
-   --server $serverName \
-   --failover-policy Automatic \
-   --grace-period 2
-echo "Failover group created successfully."
+echo "Creating $($failover) between $($server) and $($failoverServer)..."
+az sql failover-group create --name $failover --partner-server $failoverServer --resource-group $resourceGroup --server $server --failover-policy Automatic --grace-period 2
 
-# add elastic pool to the failover group
-echo "Enumerating databases in elastic pool...." 
-$databases = az sql elastic-pool list-dbs --name $poolName \
-   --resource-group $resourceGroupName \
-   --server $serverName 
-echo "Adding databases to failover group..." 
-az sql failover-group update --name $failoverGroupName \
-   --add-db $databases \
-   --resource-group $resourceGroupName \
-   --server $serverName
+$databaseId = az sql elastic-pool list-dbs --name $pool --resource-group $resourceGroup --server $server --query [0].name -o json
 
-# check role of secondary replica (note ReplicationRole property)
-echo "Confirming the secondary server is secondary...." 
-az sql failover-group show --name $failoverGroupName \
-   --resource-group $resourceGroupName
+echo "Adding $($database) to $($failover)..."
+az sql failover-group update --name $failoverGroup --add-db $databaseId --resource-group $resourceGroup --server $server
 
-# failover to secondary server
-echo "Failing over failover group to the secondary..." 
-az sql failover-group set-primary --name $failoverGroupName \
-   --resource-group $resourceGroupName \
-   --server $drServerName 
-echo "Failover group failed over to" $drServerName
+echo "Confirming role of $($failoverServer) is secondary..." # note ReplicationRole property
+az sql failover-group show --name $failover --resource-group $resourceGroup --server $server
 
-# check role of secondary replica (note ReplicationRole property)
-echo "Confirming the secondary server is now primary..." 
-az sql failover-group show --name $failoverGroupName \
-   --resource-group $resourceGroupName
+echo "Failing over to $($failoverServer)..."
+az sql failover-group set-primary --name $failover --resource-group $resourceGroup --server $failoverServer 
 
-# revert failover to primary server
-echo "Failing over failover group to the primary...." 
-az sql failover-group set-primary --name $failoverGroupName \
-   --resource-group $resourceGroupName \
-   --server $serverName
-echo "Failover group failed over to" $serverName 
+echo "Confirming role of $($failoverServer) is now primary..." # note ReplicationRole property
+az sql failover-group show --name $failover --resource-group $resourceGroup --server $server
 
-# clean up resources by removing the resource group
-# echo "Removing resource group..."
-# az group delete --name $resourceGroupName
-# echo "Resource group removed"
+echo "Failing back to $($server)...."
+az sql failover-group set-primary --name $failover --resource-group $resourceGroup --server $server

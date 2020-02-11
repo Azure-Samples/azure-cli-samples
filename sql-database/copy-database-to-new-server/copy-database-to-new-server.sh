@@ -1,76 +1,34 @@
 #!/bin/bash
 
-# Connect-AzAccount
+$subscription = "<subscriptionId>" # add subscription here
+$location = "East US"
 
-$subscriptionId = ''
-$sourceResourceGroupName = "mySourceResourceGroup-$(Get-Random)"
-$sourceResourceGroupLocation = "westus2"
-$targetResourceGroupname = "myTargetResourceGroup-$(Get-Random)"
-$targetResourceGroupLocation = "eastus"
-$adminSqlLogin = "SqlAdmin"
-$password = "ChangeYourAdminPassword1"
-$sourceServerName = "source-server-$(Get-Random)"
-$targetServerName = "target-server-$(Get-Random)"
-$sourceDatabaseName = "mySampleDatabase"
-$targetDatabaseName = "CopyOfMySampleDatabase"
+$randomIdentifier = $(Get-Random)
 
-# The ip address range that you want to allow to access your servers
-$sourceStartIp = "0.0.0.0"
-$sourceEndIp = "0.0.0.0"
-$targetStartIp = "0.0.0.0"
-$targetEndIp = "0.0.0.0"
+$resourceGroup = "resource-$randomIdentifier"
+$server = "server-$randomIdentifier"
+$database = "database-$randomIdentifier"
 
-# set the subscription context for the Azure account
-az account set -s $subscriptionID
+$targetResourceGroup = "targetResource-$randomIdentifier"
+$targetLocation = "West US"
+$targetServer = "targetServer-$randomIdentifier"
+$targetDatabase = "targetDatabase-$randomIdentifier"
 
-# create two new resource groups
-az group create \
-   --name $sourceResourceGroupName \
-   --location $sourceResourceGroupLocation
-az group create \
-   --name $targetResourceGroupname \
-   --location $targetResourceGroupLocation
+$login = "sampleLogin"
+$password = "samplePassword123!"
 
-# create a server with a system wide unique server name
-az sql server create \
-   --name $sourceServerName \
-   --resource-group $sourceResourceGroupName \
-   --location $sourceResourceGroupLocation  \
-   --admin-user $adminSqlLogin \
-   --admin-password $password
-az sql server create \
-   --name $targetServerName \
-   --resource-group $targetResourceGroupname \
-   --location $targetResourceGroupLocation  \
-   --admin-user $adminSqlLogin \
-   --admin-password $password
+echo "Using resource group $($resourceGroup) with login: $($login), password: $($password)..."
 
-# create a server firewall rule that allows access from the specified IP range
-az sql server firewall-rule create --end-ip-address $sourceEndIp \
-   --name "AllowedIPs" \
-   --resource-group $sourceResourceGroupName \
-   --server $sourceServerName \
-   --start-ip-address $sourcestartip 
-az sql server firewall-rule create --end-ip-address $targetEndIp \
-   --name "AllowedIPs" \
-   --resource-group $targetResourceGroupname \
-   --server $targetServerName \
-   --start-ip-address $targetStartIp
+echo "Creating $($resourceGroup) (and $($targetResourceGroup))..."
+az group create --name $resourceGroup --location $location
+az group create --name $targetResourceGroup --location $targetLocation
 
-# create a blank database in the source-server with an S0 performance level
-az sql db create --name $sourceDatabaseName \
-   --resource-group $sourceResourceGroupName \
-   --server $sourceServerName \
-   --service-objective S0
+echo "Creating $($server) in $($location) (and $($targetServer) in $($targetLocation))..."
+az sql server create --name $server --resource-group $resourceGroup --location $location --admin-user $login --admin-password $password
+az sql server create --name $targetServer --resource-group $targetResourceGroup --location $targetLocation --admin-user $login --admin-password $password
 
-# copy source database to the target server 
-az sql db copy --dest-name $targetDatabaseName \
-    --dest-resource-group $targetResourceGroupname \
-    --dest-server $targetServerName \
-    --name $sourceDatabaseName \
-    --resource-group $sourceResourceGroupName \
-    --server $sourceServerName
+echo "Creating $($database) on $($server)..."
+az sql db create --name $database --resource-group $resourceGroup --server $server --service-objective S0
 
-# clean up deployment 
-# az group delete --name $sourceResourceGroupName
-# az group delete --name $targetResourceGroupname
+echo "Copying $($database) from $($server) to $($targetDatabase) on $($targetServer)..."
+az sql db copy --dest-name $targetDatabase --dest-resource-group $targetResourceGroup --dest-server $targetServer --name $database --resource-group $resourceGroup --server $server
