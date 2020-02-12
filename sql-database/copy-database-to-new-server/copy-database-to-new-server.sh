@@ -30,5 +30,5 @@ az sql server create --name $targetServer --resource-group $targetResourceGroup 
 echo "Creating $($database) on $($server)..."
 az sql db create --name $database --resource-group $resourceGroup --server $server --service-objective S0
 
-echo "Copying $($database) from $($server) to $($targetDatabase) on $($targetServer)..."
+echo "Copying $($database) (on $($server)) to $($targetDatabase) (on $($targetServer))..."
 az sql db copy --dest-name $targetDatabase --dest-resource-group $targetResourceGroup --dest-server $targetServer --name $database --resource-group $resourceGroup --server $server

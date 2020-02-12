@@ -26,7 +26,7 @@ echo "Creating $($database) on $($server)..."
 az sql db create --resource-group $resourceGroup --server $server --name $database --service-objective S0
 
 echo "Sleeping..."
-Start-Sleep -second 720
+Start-Sleep -second 960
 $restoreDateTime = (Get-Date).ToUniversalTime().AddMinutes(-2)
 $restoreTime = '{0:s}' -f $restoreDateTime
 

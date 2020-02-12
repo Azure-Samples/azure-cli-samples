@@ -31,6 +31,7 @@ az sql db create --name $database --resource-group $resourceGroup --server $serv
 
 echo "Establishing geo-replication on $($database)..."
 az sql db replica create --name $database --partner-server $secondaryServer --resource-group $resourceGroup --server $server --partner-resource-group $secondaryResourceGroup
+az sql db replica list-links --name $database --resource-group $resourceGroup --server $server
 
 echo "Initiating failover..."
 az sql db replica set-primary --name $database --resource-group $secondaryResourceGroup --server $secondaryServer
@@ -39,4 +40,4 @@ echo "Monitoring health of $($database)..."
 az sql db replica list-links --name $database --resource-group $secondaryResourceGroup --server $secondaryServer
 
 echo "Removing replication link after failover..."
-az sql db replica delete-link --partner-server $server --name $database --partner-resource-group $resourceGroup --resource-group $secondaryResourceGroup --server $secondaryServer
+az sql db replica delete-link --resource-group $secondaryResourceGroup --server $secondaryServer --name $database --partner-server $server --yes 

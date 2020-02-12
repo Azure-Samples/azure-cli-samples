@@ -6,6 +6,7 @@ $location = "East US"
 $randomIdentifier = $(Get-Random)
 
 $resourceGroup = "resource-$randomIdentifier"
+$server = "server-$randomIdentifier"
 $database = "database-$randomIdentifier"
 $storage = "storage$randomIdentifier"
 $container = "container-$randomIdentifier"

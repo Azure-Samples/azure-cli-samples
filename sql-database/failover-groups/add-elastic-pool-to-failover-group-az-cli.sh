@@ -46,7 +46,7 @@ az sql failover-group create --name $failover --partner-server $failoverServer -
 $databaseId = az sql elastic-pool list-dbs --name $pool --resource-group $resourceGroup --server $server --query [0].name -o json
 
 echo "Adding $($database) to $($failover)..."
-az sql failover-group update --name $failoverGroup --add-db $databaseId --resource-group $resourceGroup --server $server
+az sql failover-group update --name $failover --add-db $databaseId --resource-group $resourceGroup --server $server
 
 echo "Confirming role of $($failoverServer) is secondary..." # note ReplicationRole property
 az sql failover-group show --name $failover --resource-group $resourceGroup --server $server
