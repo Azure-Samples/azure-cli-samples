@@ -25,7 +25,8 @@ az functionapp create \
   --name $functionAppName \
   --storage-account $storageName \
   --consumption-plan-location $region \
-  --resource-group myResourceGroup 
+  --resource-group myResourceGroup \
+  --functions-version 2
 
 # Connect and deploy function app files from a public GitHub repo.
 az functionapp deployment source config \

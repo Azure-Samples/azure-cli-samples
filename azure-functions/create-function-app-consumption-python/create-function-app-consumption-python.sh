@@ -24,5 +24,6 @@ az functionapp create \
   --resource-group myResourceGroup \
   --os-type Linux \
   --runtime python \
-  --runtime-version $pythonVersion
+  --runtime-version $pythonVersion \
+  --functions-version 2
   

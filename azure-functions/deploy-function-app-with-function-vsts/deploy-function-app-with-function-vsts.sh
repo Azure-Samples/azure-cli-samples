@@ -26,7 +26,8 @@ az functionapp create  \
   --name $functionAppName \
   --storage-account $storageName \
   --consumption-plan-location $region \
-  --resource-group myResourceGroup
+  --resource-group myResourceGroup \
+  --functions-version 2
 
 # Set the deployment source to the VSTS repo using the token.
 az functionapp deployment source config \

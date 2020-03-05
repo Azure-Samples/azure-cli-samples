@@ -22,7 +22,8 @@ az functionapp create \
   --name $functionAppName \
   --resource-group myResourceGroup \
   --storage-account $storageName \
-  --consumption-plan-location $region
+  --consumption-plan-location $region \
+  --functions-version 2
 
 # Create an Azure Cosmos DB database using the same function app name.
 az cosmosdb create \

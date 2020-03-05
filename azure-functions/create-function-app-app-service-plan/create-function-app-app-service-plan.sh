@@ -29,5 +29,6 @@ az functionapp create \
   --name $functionAppName \
   --storage-account $storageName \
   --plan myappserviceplan \
-  --resource-group myResourceGroup
+  --resource-group myResourceGroup \
+  --functions-version 2
   

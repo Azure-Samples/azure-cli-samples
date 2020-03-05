@@ -32,4 +32,5 @@ az functionapp create \
   --consumption-plan-location $region \
   --resource-group myResourceGroup \
   --deployment-source-url $gitrepo \
-  --deployment-source-branch master
+  --deployment-source-branch master \
+  --functions-version 2

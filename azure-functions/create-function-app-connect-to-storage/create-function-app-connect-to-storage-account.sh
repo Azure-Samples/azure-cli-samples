@@ -22,7 +22,8 @@ az functionapp create \
   --name $functionAppName \
   --resource-group myResourceGroup \
   --storage-account $storageName \
-  --consumption-plan-location $region
+  --consumption-plan-location $region \
+  --functions-version 2
 
 # Get the storage account connection string. 
 connstr=$(az storage account show-connection-string --name $storageName --resource-group myResourceGroup --query connectionString --output tsv)

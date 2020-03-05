@@ -20,5 +20,6 @@ az functionapp create \
   --name $functionAppName \
   --storage-account $storageName \
   --consumption-plan-location $region \
-  --resource-group myResourceGroup
+  --resource-group myResourceGroup \
+  --functions-version 2
   
