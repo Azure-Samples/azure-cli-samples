@@ -3,6 +3,7 @@
 # Function app and storage account names must be unique.
 export AZURE_STORAGE_ACCOUNT=mystorageaccount$RANDOM
 functionAppName=myserverlessfunc$RANDOM
+region=westeurope
 pythonVersion=3.7 #3.6 also supported
 shareName=myfileshare
 directoryName=mydir
@@ -10,12 +11,12 @@ shareId=myshare$RANDOM
 mountPath=/mounted
 
 # Create a resource group.
-az group create --name myResourceGroup --location westeurope
+az group create --name myResourceGroup --location $region
 
 # Create an Azure storage account in the resource group.
 az storage account create \
   --name $AZURE_STORAGE_ACCOUNT \
-  --location westeurope \
+  --location $region \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
@@ -26,7 +27,7 @@ export AZURE_STORAGE_KEY=$(az storage account keys list -g myResourceGroup -n $A
 az functionapp create \
   --name $functionAppName \
   --storage-account $AZURE_STORAGE_ACCOUNT \
-  --consumption-plan-location westeurope \
+  --consumption-plan-location $region \
   --resource-group myResourceGroup \
   --os-type Linux \
   --runtime python \
