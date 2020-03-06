@@ -3,16 +3,17 @@
 # Function app and storage account names must be unique.
 storageName=mystorageaccount$RANDOM
 functionAppName="myfuncwithcosmosdb$RANDOM"
+region=westeurope
 
 # Create a resource group with location.
 az group create \
   --name myResourceGroup \
-  --location westeurope
+  --location $region
 
 # Create a storage account for the function app. 
 az storage account create \
   --name $storageName \
-  --location westeurope \
+  --location $region \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
@@ -21,7 +22,8 @@ az functionapp create \
   --name $functionAppName \
   --resource-group myResourceGroup \
   --storage-account $storageName \
-  --consumption-plan-location westeurope
+  --consumption-plan-location $region \
+  --functions-version 2
 
 # Create an Azure Cosmos DB database using the same function app name.
 az cosmosdb create \

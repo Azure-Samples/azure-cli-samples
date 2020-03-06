@@ -3,6 +3,7 @@
 # Function app and storage account names must be unique.
 storageName=mystorageaccount$RANDOM
 functionAppName=mygithubfunc$RANDOM
+region=westeurope
 
 # TODO:
 gitrepo=<Replace with your GitHub repo URL e.g. https://github.com/Azure-Samples/functions-quickstart.git>
@@ -15,12 +16,12 @@ az functionapp deployment source update-token \
 # Create a resource group.
 az group create \
   --name myResourceGroup \
-  --location westeurope
+  --location $region
 
 # Create an Azure storage account in the resource group.
 az storage account create \
   --name $storageName \
-  --location westeurope \
+  --location $region \
   --resource-group myResourceGroup \
   --sku Standard_LRS
 
@@ -28,7 +29,8 @@ az storage account create \
 az functionapp create \
   --name $functionAppName \
   --storage-account $storageName \
-  --consumption-plan-location westeurope \
+  --consumption-plan-location $region \
   --resource-group myResourceGroup \
   --deployment-source-url $gitrepo \
-  --deployment-source-branch master
+  --deployment-source-branch master \
+  --functions-version 2
