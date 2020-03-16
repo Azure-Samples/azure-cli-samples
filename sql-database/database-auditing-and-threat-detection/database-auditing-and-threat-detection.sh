@@ -1,71 +1,36 @@
 #!/bin/bash
 
-# Connect-AzAccount
+$subscription = "<subscriptionId>" # add subscription here
+$location = "East US"
 
-$subscriptionId = ''
-$resourceGroupName = "myResourceGroup-$(Get-Random)"
-$location = "southcentralus"
-$adminSqlLogin = "SqlAdmin"
-$password = "ChangeYourAdminPassword1"
-$serverName = "server-$(Get-Random)"
-$databaseName = "mySampleDatabase"
+$randomIdentifier = $(Get-Random)
 
-# The ip address range that you want to allow to access your server
-$startIp = "0.0.0.0"
-$endIp = "0.0.0.0"
-$storageAccountName = $("sql$(Get-Random)")
-$notificationEmailReceipient = "changeto@your.email;changeto@your.email"
+$resourceGroup = "resource-$randomIdentifier"
+$server = "server-$randomIdentifier"
+$database = "database-$randomIdentifier"
+$storage = "storage$randomIdentifier"
 
-# set the subscription context for the Azure account
-az account set -s $subscriptionID
+$notification = "changeto@your.email;changeto@your.email"
 
-# create a new resource group
-az group create \
-   --name $resourceGroupName \
-   --location $location
+$login = "sampleLogin"
+$password = "samplePassword123!"
 
-# create a new server with a system wide unique server name
-az sql server create \
-   --name $serverName \
-   --resource-group $resourceGroupName \
-   --location $location  \
-   --admin-user $adminSqlLogin \
-   --admin-password $password
+echo "Using resource group $($resourceGroup) with login: $($login), password: $($password)..."
 
-# create a server firewall rule that allows access from the specified IP range
-az sql server firewall-rule create --end-ip-address $endIp \
-   --name "AllowedIPs" \
-   --resource-group $resourceGroupName \
-   --server $serverName \
-   --start-ip-address $startIp 
+echo "Creating $($resourceGroup)..."
+az group create --name $resourceGroup --location $location
 
-# create a blank database with S0 performance level
-az sql db create --name $databaseName \
-   --resource-group $resourceGroupName \
-   --server $serverName \
-   --service-objective S0
+echo "Creating $($server) in $($location) ..."
+az sql server create --name $server --resource-group $resourceGroup --location $location --admin-user $login --admin-password $password
 
-# create a Storage Account 
-az storage account create --name $storageAccountName \
-    --resource-group $resourceGroupName \
-    --location $location \
-    --sku Standard_LRS
+echo "Creating $($database) on $($server)..."
+az sql db create --name $database --resource-group $resourceGroup --server $server --service-objective S0
 
-# set an auditing policy
-az sql db audit-policy update --name $databaseName \
-    --resource-group $resourceGroupName \
-    --server $serverName \
-    --state Enabled \
-    --storage-account $storageAccountName
+echo "Creating $($storage)..."
+az storage account create --name $storage --resource-group $resourceGroup --location $location --sku Standard_LRS
 
-# set a threat detection policy
-az sql db threat-policy update --email-account-admins Disabled \
---email-addresses $notificationEmailReceipient \
---name $databaseName \
---resource-group $resourceGroupName \
---server $serverName \
---state Enabled \
---storage-account $storageAccountName
+echo "Setting access policy on $($storage)..."
+az sql db audit-policy update --name $database --resource-group $resourceGroup --server $server --state Enabled --storage-account $storage
 
-# clean up deployment 
-# az group delete --name $resourceGroupName
+echo "Setting threat detection policy on $($storage)..."
+az sql db threat-policy update --email-account-admins Disabled --email-addresses $notification --name $database --resource-group $resourceGroup --server $server --state Enabled --storage-account $storage
