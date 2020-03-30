@@ -1,69 +1,31 @@
 #!/bin/bash
+location="East US"
+randomIdentifier=random123
 
-# set execution context (if necessary)
-az account set --subscription <replace with your subscription name or id>
+resource="resource-$randomIdentifier"
+server="server-$randomIdentifier"
+database="database-$randomIdentifier"
+pool="pool-$randomIdentifier"
+poolSecondary="poolsecondary-$randomIdentifier"
 
-# Set the resource group name and location for your server
-resourceGroupName=myResourceGroup$RANDOM
-location=westus2
+login="sampleLogin"
+password="samplePassword123!"
 
-# Set an admin login and password for your database
-adminlogin=ServerAdmin
-password=`openssl rand -base64 16`
-# password=<EnterYourComplexPasswordHere1>
+echo "Creating $resource..."
+az group create --name $resource --location "$location"
 
-# The logical server name has to be unique in the system
-servername=server$RANDOM
+echo "Creating $server in $location..."
+az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
 
-# Create a resource group
-az group create \
-	--name $resourceGroupName \
-	--location $location
+echo "Creating $pool and $poolSecondary..."
+az sql elastic-pool create --resource-group $resource --server $server --name $pool --edition GeneralPurpose --family Gen4 --capacity 1
+az sql elastic-pool create --resource-group $resource --server $server --name $poolSecondary --edition GeneralPurpose --family Gen4 --capacity 1
 
-# Create a logical server in the resource group
-az sql server create \
-	--name $servername \
-	--resource-group $resourceGroupName \
-	--location $location \
-	--admin-user $adminlogin \
-	--admin-password $password
+echo "Creating $database in $pool..."
+az sql db create --resource-group $resource --server $server --name $database --elastic-pool $pool
 
-# Create two pools in the logical server
-az sql elastic-pool create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name myFirstPool \
-	--edition GeneralPurpose \
-	--family Gen4 \
-	--capacity 1
-az sql elastic-pool create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name mySecondPool \
-	--edition GeneralPurpose \
-	--family Gen4 \
-	--capacity 1
+echo "Moving $database to $poolSecondary..." # create command updates an existing datatabase
+az sql db create --resource-group $resource --server $server --name $database --elastic-pool $poolSecondary
 
-# Create a database in the first pool
-az sql db create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name mySampleDatabase \
-	--elastic-pool myFirstPool
-
-# Move the database to the second pool - create command updates the db if it exists
-az sql db create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name mySampleDatabase \
-	--elastic-pool mySecondPool
-
-# Move the database to standalone S0 service tier
-az sql db create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name mySampleDatabase \
-	--service-objective S0
-
-# Echo random password
-echo $password
+echo "Upgrade $database tier..."
+az sql db create --resource-group $resource --server $server --name $database --service-objective S0

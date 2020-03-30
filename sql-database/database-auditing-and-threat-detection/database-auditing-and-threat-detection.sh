@@ -1,36 +1,33 @@
 #!/bin/bash
+location="East US"
+randomIdentifier=random123
 
-$subscription = "<subscriptionId>" # add subscription here
-$location = "East US"
+resource="resource-$randomIdentifier"
+server="server-$randomIdentifier"
+database="database-$randomIdentifier"
+storage="storage$randomIdentifier"
 
-$randomIdentifier = $(Get-Random)
+notification="changeto@your.email;changeto@your.email"
 
-$resourceGroup = "resource-$randomIdentifier"
-$server = "server-$randomIdentifier"
-$database = "database-$randomIdentifier"
-$storage = "storage$randomIdentifier"
+login="sampleLogin"
+password="samplePassword123!"
 
-$notification = "changeto@your.email;changeto@your.email"
+echo "Using resource group $resource with login: $login, password: $password..."
 
-$login = "sampleLogin"
-$password = "samplePassword123!"
+echo "Creating $resource..."
+az group create --name $resource --location "$location"
 
-echo "Using resource group $($resourceGroup) with login: $($login), password: $($password)..."
+echo "Creating $server in $location..."
+az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
 
-echo "Creating $($resourceGroup)..."
-az group create --name $resourceGroup --location $location
+echo "Creating $database on $server..."
+az sql db create --name $database --resource-group $resource --server $server --service-objective S0
 
-echo "Creating $($server) in $($location) ..."
-az sql server create --name $server --resource-group $resourceGroup --location $location --admin-user $login --admin-password $password
+echo "Creating $storage..."
+az storage account create --name $storage --resource-group $resource --location "$location" --sku Standard_LRS
 
-echo "Creating $($database) on $($server)..."
-az sql db create --name $database --resource-group $resourceGroup --server $server --service-objective S0
+echo "Setting access policy on $storage..."
+az sql db audit-policy update --name $database --resource-group $resource --server $server --state Enabled --storage-account $storage
 
-echo "Creating $($storage)..."
-az storage account create --name $storage --resource-group $resourceGroup --location $location --sku Standard_LRS
-
-echo "Setting access policy on $($storage)..."
-az sql db audit-policy update --name $database --resource-group $resourceGroup --server $server --state Enabled --storage-account $storage
-
-echo "Setting threat detection policy on $($storage)..."
-az sql db threat-policy update --email-account-admins Disabled --email-addresses $notification --name $database --resource-group $resourceGroup --server $server --state Enabled --storage-account $storage
+echo "Setting threat detection policy on $storage..."
+az sql db threat-policy update --email-account-admins Disabled --email-addresses $notification --name $database --resource-group $resource --server $server --state Enabled --storage-account $storage

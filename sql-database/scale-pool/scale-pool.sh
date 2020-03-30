@@ -1,65 +1,28 @@
 #!/bin/bash
+location="East US"
+randomIdentifier=random123
 
-# set execution context (if necessary)
-az account set --subscription <replace with your subscription name or id>
+resource="resource-$randomIdentifier"
+server="server-$randomIdentifier"
+pool="pool-$randomIdentifier"
+database="database-$randomIdentifier"
+databaseAdditional="databaseadditional-$randomIdentifier"
 
-# Set the resource group name and location for your server
-resourceGroupName=myResourceGroup-$RANDOM
-location=westus2
+login="sampleLogin"
+password="samplePassword123!"
 
-# Set an admin login and password for your database
-adminlogin=ServerAdmin
-password=`openssl rand -base64 16`
-# password=<EnterYourComplexPasswordHere1>
+echo "Creating $resource..."
+az group create --name $resource --location "$location"
 
-# The logical server name has to be unique in the system
-servername=server-$RANDOM
+echo "Creating $server in $location..."
+az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
 
-# Create a resource group
-az group create \
---name $resourceGroupName \
---location $location
+echo "Creating $pool..."
+az sql elastic-pool create --resource-group $resource --server $server --name $pool --edition GeneralPurpose --family Gen4 --capacity 5 --db-max-capacity 4 --db-min-capacity 1 --max-size 756GB
 
-# Create a server
-az sql server create \
-	--name $servername \
-	--resource-group $resourceGroupName \
-	--location $location \
-	--admin-user $adminlogin \
-	--admin-password $password
+echo "Creating $database and $databaseAdditional on $server in $pool..."
+az sql db create --resource-group $resource --server $server --name $database --elastic-pool $pool
+az sql db create --resource-group $resource --server $server --name $databaseAdditional --elastic-pool $pool
 
-# Create a pool with 5 vCores and a max storage of 756 GB
-az sql elastic-pool create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name samplepool \
-	--edition GeneralPurpose \
-	--family Gen4 \
-	--capacity 5 \
-	--db-max-capacity 4 \
-	--db-min-capacity 1 \
-	--max-size 756GB
-
-# Create two database in the pool
-az sql db create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name myFirstSampleDatabase \
-	--elastic-pool samplepool
-
-az sql db create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name mySecondSampleDatabase \
-	--elastic-pool samplepool
-
-# Scale up to the pool to 10 vCores
-az sql elastic-pool update \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name samplepool \
-	--capacity 10 \
-	--max-size 1536GB
-
-# Echo random password
-echo $password
+echo "Scaling $pool..."
+az sql elastic-pool update --resource-group $resource --server $server --name $pool --capacity 10 --max-size 1536GB

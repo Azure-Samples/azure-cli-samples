@@ -1,43 +1,40 @@
 #!/bin/bash
+location="East US"
+randomIdentifier=random123
 
-$subscription = "<subscriptionId>" # add subscription here
-$location = "East US"
+resource="resource-$randomIdentifier"
+server="server-$randomIdentifier"
+database="database-$randomIdentifier"
 
-$randomIdentifier = $(Get-Random)
+secondaryResource="secondaryresource-$randomIdentifier"
+secondaryLocation="West US"
+secondaryServer="secondaryserver-$randomIdentifier"
 
-$resourceGroup = "resource-$randomIdentifier"
-$server = "server-$randomIdentifier"
-$database = "database-$randomIdentifier"
+login="sampleLogin"
+password="samplePassword123!"
 
-$secondaryResourceGroup = "secondaryresource-$randomIdentifier"
-$secondaryLocation = "West US"
-$secondaryServer = "secondaryserver-$randomIdentifier"
+echo "Using resource group $resource with login: $login, password: $password..."
 
-$login = "sampleLogin"
-$password = "samplePassword123!"
+echo "Creating $resource and $secondaryResource..."
+az group create --name $resource --location "$location"
+az group create --name $secondaryResource --location "$secondaryLocation"
 
-echo "Using resource group $($resourceGroup) with login: $($login), password: $($password)..."
+echo "Creating $server in $location and $secondaryServer in $secondaryLocation..."
+az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
+az sql server create --name $secondaryServer --resource-group $secondaryResource --location "$secondaryLocation" --admin-user $login --admin-password $password
 
-echo "Creating $($resourceGroup) (and $($secondaryResourceGroup))..."
-az group create --name $resourceGroup --location $location
-az group create --name $secondaryResourceGroup --location $secondaryLocation
+echo "Creating $database on $server..."
+az sql db create --name $database --resource-group $resource --server $server --service-objective S0
 
-echo "Creating $($server) in $($location) (and $($secondaryServer) in $($secondaryLocation))..."
-az sql server create --name $server --resource-group $resourceGroup --location $location --admin-user $login --admin-password $password
-az sql server create --name $secondaryServer --resource-group $secondaryResourceGroup --location $secondaryLocation --admin-user $login --admin-password $password
-
-echo "Creating $($database) on $($server)..."
-az sql db create --name $database --resource-group $resourceGroup --server $server --service-objective S0
-
-echo "Establishing geo-replication on $($database)..."
-az sql db replica create --name $database --partner-server $secondaryServer --resource-group $resourceGroup --server $server --partner-resource-group $secondaryResourceGroup
-az sql db replica list-links --name $database --resource-group $resourceGroup --server $server
+echo "Establishing geo-replication on $database..."
+az sql db replica create --name $database --partner-server $secondaryServer --resource-group $resource --server $server --partner-resource-group $secondaryResource
+az sql db replica list-links --name $database --resource-group $resource --server $server
 
 echo "Initiating failover..."
-az sql db replica set-primary --name $database --resource-group $secondaryResourceGroup --server $secondaryServer
+az sql db replica set-primary --name $database --resource-group $secondaryResource --server $secondaryServer
 
-echo "Monitoring health of $($database)..."
-az sql db replica list-links --name $database --resource-group $secondaryResourceGroup --server $secondaryServer
+echo "Monitoring health of $database..."
+az sql db replica list-links --name $database --resource-group $secondaryResource --server $secondaryServer
 
 echo "Removing replication link after failover..."
-az sql db replica delete-link --resource-group $secondaryResourceGroup --server $secondaryServer --name $database --partner-server $server --yes 
+az sql db replica delete-link --resource-group $secondaryResource --server $secondaryServer --name $database --partner-server $server --yes 

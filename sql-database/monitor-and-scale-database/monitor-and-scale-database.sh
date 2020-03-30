@@ -1,30 +1,27 @@
 #!/bin/bash
+location="East US"
+randomIdentifier=random123
 
-$subscription = "<subscriptionId>" # add subscription here
-$location = "East US"
+resource="resource-$randomIdentifier"
+server="server-$randomIdentifier"
+database="database-$randomIdentifier"
 
-$randomIdentifier = $(Get-Random)
+login="sampleLogin"
+password="samplePassword123!"
 
-$resourceGroup = "resource-$randomIdentifier"
-$server = "server-$randomIdentifier"
-$database = "database-$randomIdentifier"
+echo "Using resource group $resource with login: $login, password: $password..."
 
-$login = "sampleLogin"
-$password = "samplePassword123!"
+echo "Creating $resource..."
+az group create --name $resource --location "$location"
 
-echo "Using resource group $($resourceGroup) with login: $($login), password: $($password)..."
+echo "Creating $server on $resource..."
+az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
 
-echo "Creating $($resourceGroup)..."
-az group create --name $resourceGroup --location $location
+echo "Creating $database on $server..."
+az sql db create --resource-group $resource --server $server --name $database --edition GeneralPurpose --family Gen4 --capacity 1 
 
-echo "Creating $($server) on $($resourceGroup)..."
-az sql server create --name $server --resource-group $resourceGroup --location $location --admin-user $login --admin-password $password
+echo "Monitoring size of $database..."
+az sql db list-usages --name $database --resource-group $resource --server $server
 
-echo "Creating $($database) on $($server)..."
-az sql db create --resource-group $resourceGroup --server $server --name $database --edition GeneralPurpose --family Gen4 --capacity 1 
-
-echo "Monitoring size of $($database)..."
-az sql db list-usages --name $database --resource-group $resourceGroup --server $server
-
-echo "Scaling up $($database)..." # create command executes update if database already exists
-az sql db create --resource-group $resourceGroup --server $server --name $database --edition GeneralPurpose --family Gen4 --capacity 2
+echo "Scaling up $database..." # create command executes update if database already exists
+az sql db create --resource-group $resource --server $server --name $database --edition GeneralPurpose --family Gen4 --capacity 2

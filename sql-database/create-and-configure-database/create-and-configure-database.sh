@@ -1,57 +1,25 @@
 #!/bin/bash
+location="East US"
+randomIdentifier=random123
 
-# set execution context (if necessary)
-az account set --subscription <replace with your subscription name or id>
+resource="resource-$randomIdentifier"
+server="server-$randomIdentifier"
+database="database-$randomIdentifier"
 
-# Set the resource group name and location for your server
-resourceGroupName=myResourceGroup-$RANDOM
-location=westus2
+login="sampleLogin"
+password="samplePassword123!"
 
-# Set an admin login and password for your database
-adminlogin=ServerAdmin
-password=`openssl rand -base64 16`
-# password=<EnterYourComplexPasswordHere1>
+startIP=0.0.0.0
+endIP=0.0.0.0
 
-# The logical server name has to be unique in the system
-servername=server-$RANDOM
+echo "Creating $resource..."
+az group create --name $resource --location "$location"
 
-# The ip address range that you want to allow to access your DB
-startip=0.0.0.0
-endip=0.0.0.0
+echo "Creating $server in $location..."
+az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
 
-# Create a resource group
-az group create \
-	--name $resourceGroupName \
-	--location $location
+echo "Configuring firewall..."
+az sql server firewall-rule create --resource-group $resource --server $server -n AllowYourIp --start-ip-address $startIP --end-ip-address $endIP
 
-# Create a logical server in the resource group
-az sql server create \
-	--name $servername \
-	--resource-group $resourceGroupName \
-	--location $location  \
-	--admin-user $adminlogin \
-	--admin-password $password
-
-# Configure a firewall rule for the server
-az sql server firewall-rule create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	-n AllowYourIp \
-	--start-ip-address $startip \
-	--end-ip-address $endip
-
-# Create a database in the server with zone redundancy as false
-az sql db create \
-	--resource-group $resourceGroupName \
-	--server $servername \
-	--name mySampleDatabase \
-	--sample-name AdventureWorksLT \
-	--edition GeneralPurpose \
-	--family Gen4 \
-	--capacity 1 \
-	--zone-redundant false
-
-# Zone redundancy is only supported in the premium and business critical service tiers
-
-# Echo random password
-echo $password
+echo "Creating $database on $server..."
+az sql db create --resource-group $resource --server $server --name $database --sample-name AdventureWorksLT --edition GeneralPurpose --family Gen4 --capacity 1 --zone-redundant false # zone redundancy is only supported on premium and business critical service tiers
