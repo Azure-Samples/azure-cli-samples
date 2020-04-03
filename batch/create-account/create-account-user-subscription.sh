@@ -2,7 +2,7 @@
 
 # Allow Azure Batch to access the subscription (one-time operation).
 az role assignment create \
-    --assignee MicrosoftAzureBatch 
+    --assignee MicrosoftAzureBatch \
     --role contributor
 
 # Create a resource group.
