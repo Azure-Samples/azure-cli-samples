@@ -27,8 +27,7 @@ az batch account login \
 az batch application create \
     --resource-group myResourceGroup \
     --name mybatchaccount \
-    --application-id myapp \
-    --display-name "My Application"
+    --application-name "My Application"
 
 # An application can reference multiple application executable packages
 # of different versions. The executables and any dependencies need
@@ -37,14 +36,14 @@ az batch application create \
 az batch application package create \
     --resource-group myResourceGroup \
     --name mybatchaccount \
-    --application-id myapp \
+    --application-name "My Application" \
     --package-file my-application-exe.zip \
-    --version 1.0
+    --version-name 1.0
 
 # Update the application to assign the newly added application
 # package as the default version.
 az batch application set \
     --resource-group myResourceGroup \
     --name mybatchaccount \
-    --application-id myapp \
+    --application-name "My Application" \
     --default-version 1.0
