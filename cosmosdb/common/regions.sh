@@ -35,7 +35,7 @@ read -p "Press any key to change the failover priority"
 az cosmosdb failover-priority-change \
     -n $accountName \
     -g $resourceGroupName \
-    --failover-policies 'West US 2'=0 'South Central US'=1 'East US 2'=2 
+    --failover-policies 'West US 2=0' 'South Central US=1' 'East US 2=2' 
 
 
 read -p "Press any key to trigger a manual failover by changing region 0"
@@ -43,4 +43,4 @@ read -p "Press any key to trigger a manual failover by changing region 0"
 az cosmosdb failover-priority-change \
     -n $accountName \
     -g $resourceGroupName \
-    --failover-policies 'East US 2'=0 'West US 2'=1 'South Central US'=2
+    --failover-policies 'East US 2=0' 'West US 2=1' 'South Central US=2'
