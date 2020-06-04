@@ -1,6 +1,6 @@
 #!/bin/bash
-resourceGroupName='mjbArmTest'
-accountName='mjb-cassandra'
+resourceGroupName='myResourceGroup'
+accountName='my-cosmos-account'
 keyspaceName='keyspace1'
 tableName='table1'
 
