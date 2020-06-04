@@ -1,6 +1,6 @@
 #!/bin/bash
-resourceGroupName='mjbArmTest'
-accountName='mjb-gremlin'
+resourceGroupName='myResourceGroup'
+accountName='my-cosmos-account'
 databaseName='database1'
 graphName='graph1'
 
