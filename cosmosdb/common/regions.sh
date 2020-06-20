@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # This sample shows the following:
 #   Add regions to an existing Cosmos account

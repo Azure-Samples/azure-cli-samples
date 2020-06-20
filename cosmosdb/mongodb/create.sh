@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Create a MongoDB API database and collection
 

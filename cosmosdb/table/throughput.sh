@@ -1,9 +1,9 @@
-!/bin/bash
+#!/bin/bash
 
 # Throughput operations for a Table API table
 
 # Generate a unique 10 character alphanumeric string to ensure unique resource names
-uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
+$uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
 
 # Variables for Cassandra API resources
 resourceGroupName="Group-$uniqueId"
