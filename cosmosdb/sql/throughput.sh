@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Throughput operations for a SQL API database and container
 

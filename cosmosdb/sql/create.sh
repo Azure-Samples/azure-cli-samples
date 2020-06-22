@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Create a SQL API database and container
 

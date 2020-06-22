@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Throughput operations for a MongoDB API database and collection
 
