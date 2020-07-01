@@ -18,8 +18,8 @@ echo "Creating $server in $location..."
 az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
 
 echo "Creating $pool and $poolSecondary..."
-az sql elastic-pool create --resource-group $resource --server $server --name $pool --edition GeneralPurpose --family Gen4 --capacity 1
-az sql elastic-pool create --resource-group $resource --server $server --name $poolSecondary --edition GeneralPurpose --family Gen4 --capacity 1
+az sql elastic-pool create --resource-group $resource --server $server --name $pool --edition GeneralPurpose --family Gen5 --capacity 2
+az sql elastic-pool create --resource-group $resource --server $server --name $poolSecondary --edition GeneralPurpose --family Gen5 --capacity 2
 
 echo "Creating $database in $pool..."
 az sql db create --resource-group $resource --server $server --name $database --elastic-pool $pool
