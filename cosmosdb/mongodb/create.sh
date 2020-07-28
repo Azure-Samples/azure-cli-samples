@@ -9,6 +9,7 @@ uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 
 resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
+serverVersion='3.6' #3.2 or 3.6
 databaseName='database1'
 collectionName='collection1'
 
@@ -20,6 +21,7 @@ az cosmosdb create \
     -n $accountName \
     -g $resourceGroupName \
     --kind MongoDB \
+    --server-version $serverVersion \
     --default-consistency-level Eventual \
     --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False \
     --locations regionName='East US 2' failoverPriority=1 isZoneRedundant=False
