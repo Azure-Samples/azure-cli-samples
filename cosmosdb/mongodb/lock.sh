@@ -1,4 +1,11 @@
 #!/bin/bash
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Resource lock operations for a MongoDB API database and collection
+#
+#
+
 resourceGroupName='myResourceGroup'
 accountName='my-cosmos-account'
 databaseName='myDatabase'

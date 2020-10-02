@@ -1,5 +1,9 @@
 #!/bin/bash
-
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Service endpoint operations for an Azure Cosmos account
+#
 # Create an Azure Cosmos Account with a service endpoint connected to a backend subnet
 # that is not yet enabled for service endpoints.
 

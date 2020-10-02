@@ -1,6 +1,12 @@
 #!/bin/bash
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Account key operations for an Azure Cosmos account
+#
+#
 
-# This sample shows the following:
+# Account key operations:
 #   List all account keys
 #   List read only account keys
 #   List connection strings

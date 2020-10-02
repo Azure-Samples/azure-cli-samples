@@ -1,4 +1,11 @@
 #!/bin/bash
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Resource lock operations for a Cassandra keyspace and table
+#
+#
+
 resourceGroupName='myResourceGroup'
 accountName='my-cosmos-account'
 keyspaceName='keyspace1'
