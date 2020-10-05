@@ -1,6 +1,10 @@
 #!/bin/bash
-
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
 # Throughput operations for a MongoDB API database and collection
+#
+#
 
 # Generate a unique 10 character alphanumeric string to ensure unique resource names
 uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
@@ -36,6 +40,8 @@ rm -f "idxpolicy-$uniqueId.json"
 #   Read the minimum throughput
 #   Make sure the updated throughput is not less than the minimum
 #   Update the throughput
+#   Migrate between standard (manual) and autoscale throughput
+#   Read the autoscale max throughput
 
 read -p 'Press any key to read current provisioned throughput on database'
 
@@ -70,11 +76,30 @@ az cosmosdb mongodb database throughput update \
     -n $databaseName \
     --throughput $updateThroughput
 
+read -p 'Press any key to migrate the database from standard (manual) throughput to autoscale throughput'
+
+az cosmosdb mongodb database throughput migrate \
+    -a $accountName \
+    -g $resourceGroupName \
+    -n $databaseName \
+    -t 'autoscale'
+
+read -p 'Press any key to read current autoscale provisioned max throughput on the database'
+
+az cosmosdb mongodb database throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -n $databaseName \
+    --query resource.autoscaleSettings.maxThroughput \
+    -o tsv
+
 # Throughput operations for MongoDB API collection
 #   Read the current throughput
 #   Read the minimum throughput
 #   Make sure the updated throughput is not less than the minimum
 #   Update the throughput
+#   Migrate between standard (manual) and autoscale throughput
+#   Read the autoscale max throughput
 
 read -p 'Press any key to read current provisioned throughput on collection'
 
@@ -111,3 +136,22 @@ az cosmosdb mongodb collection throughput update \
     -d $databaseName \
     -n $collectionName \
     --throughput $updateThroughput
+
+read -p 'Press any key to migrate the collection from standard (manual) throughput to autoscale throughput'
+
+az cosmosdb sql container throughput migrate \
+    -a $accountName \
+    -g $resourceGroupName \
+    -d $databaseName \
+    -n $collectionName \
+    -t 'autoscale'
+
+read -p 'Press any key to read current autoscale provisioned max throughput on the collection'
+
+az cosmosdb sql container throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -d $databaseName \
+    -n $collectionName \
+    --query resource.autoscaleSettings.maxThroughput \
+    -o tsv

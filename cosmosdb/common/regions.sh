@@ -1,6 +1,10 @@
 #!/bin/bash
-
-# This sample shows the following:
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Region replica operations for an Azure Cosmos account
+#
+# Operations:
 #   Add regions to an existing Cosmos account
 #   Change regional failover priority (applies to accounts using automatic failover)
 #   Trigger a manual failover from primary to secondary region (applies to accounts with manual failover)

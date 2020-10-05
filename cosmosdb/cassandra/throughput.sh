@@ -1,6 +1,11 @@
 #!/bin/bash
-
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
 # Throughput operations for a Cassandra keyspace and table
+#
+#
+ 
 
 # Generate a unique 10 character alphanumeric string to ensure unique resource names
 uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
@@ -38,6 +43,8 @@ rm -f "schema-$uniqueId.json"
 #   Read the minimum throughput
 #   Make sure the updated throughput is not less than the minimum
 #   Update the throughput
+#   Migrate between standard (manual) and autoscale throughput
+#   Read the autoscale max throughput
 
 read -p 'Press any key to get current provisioned Keyspace throughput'
 
@@ -72,11 +79,31 @@ az cosmosdb cassandra keyspace throughput update \
     -n $keySpaceName \
     --throughput $updateThroughput
 
+read -p 'Press any key to migrate the keyspace from standard (manual) throughput to autoscale throughput'
+
+az cosmosdb cassandra keyspace throughput migrate \
+    -a $accountName \
+    -g $resourceGroupName \
+    -n $keySpaceName \
+    -t 'autoscale'
+
+read -p 'Press any key to read current autoscale provisioned max throughput on the keyspace'
+
+az cosmosdb cassandra keyspace throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -n $keySpaceName \
+    --query resource.autoscaleSettings.maxThroughput \
+    -o tsv
+
+
 # Throughput operations for Cassandra API table
 #   Read the current throughput
 #   Read the minimum throughput
 #   Make sure the updated throughput is not less than the minimum
 #   Update the throughput
+#   Migrate between standard (manual) and autoscale throughput
+#   Read the autoscale max throughput
 
 read -p 'Press any key to get current provisioned Table throughput'
 
@@ -113,3 +140,22 @@ az cosmosdb cassandra table throughput update \
     -k $keySpaceName \
     -n $tableName \
     --throughput $updateThroughput
+
+read -p 'Press any key to migrate the table from standard (manual) throughput to autoscale throughput'
+
+az cosmosdb cassandra table throughput migrate \
+    -a $accountName \
+    -g $resourceGroupName \
+    -k $keySpaceName \
+    -n $tableName \
+    -t 'autoscale'
+
+read -p 'Press any key to read current autoscale provisioned max throughput on the table'
+
+az cosmosdb cassandra table throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -k $keySpaceName \
+    -n $tableName \
+    --query resource.autoscaleSettings.maxThroughput \
+    -o tsv

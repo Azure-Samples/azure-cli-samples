@@ -1,5 +1,7 @@
 #!/bin/bash
-
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
 # Create a Cassandra keyspace and table with autoscale
 
 # Generate a unique 10 character alphanumeric string to ensure unique resource names

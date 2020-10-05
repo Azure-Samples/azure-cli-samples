@@ -1,6 +1,10 @@
 #!/bin/bash
-
-# Throughput operations for a SQL API database and container
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Throughput operations for a Gremlin API database and graph
+#
+#
 
 # Generate a unique 10 character alphanumeric string to ensure unique resource names
 uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
@@ -26,6 +30,8 @@ az cosmosdb gremlin graph create -a $accountName -g $resourceGroupName -d $datab
 #   Read the minimum throughput
 #   Make sure the updated throughput is not less than the minimum
 #   Update the throughput
+#   Migrate between standard (manual) and autoscale throughput
+#   Read the autoscale max throughput
 
 read -p 'Press any key to read current provisioned throughput on database'
 
@@ -60,11 +66,30 @@ az cosmosdb gremlin database throughput update \
     -n $databaseName \
     --throughput $updateThroughput
 
+read -p 'Press any key to migrate the database from standard (manual) throughput to autoscale throughput'
+
+az cosmosdb gremlin database throughput migrate \
+    -a $accountName \
+    -g $resourceGroupName \
+    -n $databaseName \
+    -t 'autoscale'
+
+read -p 'Press any key to read current autoscale provisioned max throughput on the database'
+
+az cosmosdb gremlin database throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -n $databaseName \
+    --query resource.autoscaleSettings.maxThroughput \
+    -o tsv
+
 # Throughput operations for Gremlin API graph
 #   Read the current throughput
 #   Read the minimum throughput
 #   Make sure the updated throughput is not less than the minimum
 #   Update the throughput
+#   Migrate between standard (manual) and autoscale throughput
+#   Read the autoscale max throughput
 
 read -p 'Press any key to read current provisioned throughput on a graph'
 
@@ -93,9 +118,30 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
+read -p 'Press any key to update graph throughput'
+
 az cosmosdb gremlin graph throughput update \
     -g $resourceGroupName \
     -a $accountName \
     -d $databaseName \
     -n $graphName \
     --throughput $updateThroughput
+
+read -p 'Press any key to migrate the graph from standard (manual) throughput to autoscale throughput'
+
+az cosmosdb gremlin container throughput migrate \
+    -a $accountName \
+    -g $resourceGroupName \
+    -d $databaseName \
+    -n $graphName \
+    -t 'autoscale'
+
+read -p 'Press any key to read current autoscale provisioned max throughput on the graph'
+
+az cosmosdb gremlin container throughput show \
+    -g $resourceGroupName \
+    -a $accountName \
+    -d $databaseName \
+    -n $graphName \
+    --query resource.autoscaleSettings.maxThroughput \
+    -o tsv

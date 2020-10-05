@@ -1,4 +1,12 @@
 #!/bin/bash
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
+# Resource lock operations for a Table API table
+#
+#
+
+
 resourceGroupName='myResourceGroup'
 accountName='my-cosmos-account'
 tableName='myTable'

@@ -1,6 +1,11 @@
 #!/bin/bash
-
+# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
+# --------------------------------------------------
+#
 # Create a MongoDB API database with autoscale and 2 collections that share throughput
+#
+#
+
 
 # Generate a unique 10 character alphanumeric string to ensure unique resource names
 uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
