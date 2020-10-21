@@ -9,7 +9,7 @@ az storage account create \
     --resource-group myResourceGroup \
     --location eastus \
     --sku Standard_RAGRS \
-    --encryption blob
+    --encryption-services blob
 
 # List the storage account access keys
 az storage account keys list \
