@@ -11,11 +11,8 @@
 # the connected subnet is not yet configured for service endpoints.
 # This sample will then configure the subnet for service endpoints.
 
-# Generate a unique 10 character alphanumeric string to ensure unique resource names
-uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
-
 # Resource group and Cosmos account variables
-resourceGroupName="Group-$uniqueId"
+resourceGroupName="Group-$RANDOM"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 
