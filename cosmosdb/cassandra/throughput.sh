@@ -5,13 +5,9 @@
 # Throughput operations for a Cassandra keyspace and table
 #
 #
- 
-
-# Generate a unique 10 character alphanumeric string to ensure unique resource names
-uniqueId=$(env LC_CTYPE=C tr -dc 'a-z0-9' < /dev/urandom | fold -w 10 | head -n 1)
 
 # Variables for Cassandra API resources
-resourceGroupName="Group-$uniqueId"
+resourceGroupName="Group-$RANDOM"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 keySpaceName='keyspace1'
