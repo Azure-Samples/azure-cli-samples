@@ -13,7 +13,8 @@
 #   Regenerate account keys
 
 # Resource group and Cosmos account variables
-resourceGroupName="Group-$RANDOM"
+uniqueId=$RANDOM
+resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 

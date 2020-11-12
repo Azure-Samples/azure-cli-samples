@@ -7,7 +7,8 @@
 #
 
 # Variables for Cassandra API resources
-resourceGroupName="Group-$RANDOM"
+uniqueId=$RANDOM
+resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 tableName='table1'

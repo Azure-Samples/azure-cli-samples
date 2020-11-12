@@ -12,7 +12,8 @@
 # Note: Azure Comos accounts cannot include updates to regions with changes to other properties in the same operation
 
 # Resource group and Cosmos account variables
-resourceGroupName="Group-$RANDOM"
+uniqueId=$RANDOM
+resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 

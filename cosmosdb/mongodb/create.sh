@@ -7,7 +7,8 @@
 #
 
 # Variables for MongoDB API resources
-resourceGroupName="Group-$RANDOM"
+uniqueId=$RANDOM
+resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 serverVersion='3.6' #3.2 or 3.6
