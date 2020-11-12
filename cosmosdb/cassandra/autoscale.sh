@@ -5,7 +5,8 @@
 # Create a Cassandra keyspace and table with autoscale
 
 # Variables for Cassandra API resources
-resourceGroupName="Group-$RANDOM"
+uniqueId=$RANDOM
+resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
 keySpaceName='keyspace1'
