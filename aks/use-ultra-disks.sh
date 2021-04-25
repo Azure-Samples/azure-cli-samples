@@ -1,3 +1,13 @@
+LOCATION=westus2
+G=MyResourceGroup
+N=MyManagedCluster
+L=westus2
+NODE_VM_SIZE=Standard_L8s_v2
+ZONES=1 2
+NODE_COUNT=2
+AKS_CUSTOM_HEADERS=EnableUltraSSD=true
+CLUSTER_NAME=myAKSCluster
+RESOURCE_GROUP=myResourceGroup
 ## Before you begin
 
 az feature register --namespace "Microsoft.ContainerService" --name "EnableUltraSSD"
@@ -8,12 +18,12 @@ az extension add --name aks-preview
 ## Create a new cluster that can use Ultra disks
 
 # Create an Azure resource group
-az group create --name myResourceGroup --location westus2
+az group create --name myResourceGroup --location $LOCATION
 # Create an AKS-managed Azure AD cluster
-az aks create -g MyResourceGroup -n MyManagedCluster -l westus2 --node-vm-size Standard_L8s_v2 --zones 1 2 --node-count 2 --aks-custom-headers EnableUltraSSD=true
+az aks create -g $G -n $N -l $L --node-vm-size $NODE_VM_SIZE --zones $ZONES --node-count $NODE_COUNT --aks-custom-headers $AKS_CUSTOM_HEADERS
 ## Enable Ultra disks on an existing cluster
 
-az aks nodepool add --name ultradisk --cluster-name myAKSCluster --resource-group myResourceGroup --node-vm-size Standard_L8s_v2 --zones 1 2 --node-count 2 --aks-custom-headers EnableUltraSSD=true
+az aks nodepool add --name ultradisk --cluster-name $CLUSTER_NAME --resource-group $RESOURCE_GROUP --node-vm-size $NODE_VM_SIZE --zones $ZONES --node-count $NODE_COUNT --aks-custom-headers $AKS_CUSTOM_HEADERS
 ## Use ultra disks dynamically with a storage class
 
 ## Create a persistent volume claim

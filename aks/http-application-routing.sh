@@ -1,9 +1,11 @@
+ENABLE_ADDONS=http_application_routing
+ADDONS=http_application_routing
 ## HTTP routing solution overview
 
 ## Deploy HTTP routing: CLI
 
-az aks create --resource-group myResourceGroup --name myAKSCluster --enable-addons http_application_routing
-az aks enable-addons --resource-group myResourceGroup --name myAKSCluster --addons http_application_routing
+az aks create --resource-group myResourceGroup --name myAKSCluster --enable-addons $ENABLE_ADDONS
+az aks enable-addons --resource-group myResourceGroup --name myAKSCluster --addons $ADDONS
 az aks show --resource-group myResourceGroup --name myAKSCluster --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o table
 ## Deploy HTTP routing: Portal
 
@@ -15,7 +17,7 @@ az aks get-credentials --resource-group MyResourceGroup --name MyAKSCluster
 
 ## Remove HTTP routing
 
-az aks disable-addons --addons http_application_routing --name myAKSCluster --resource-group myResourceGroup --no-wait
+az aks disable-addons --addons $ADDONS --name myAKSCluster --resource-group myResourceGroup
 ## Troubleshoot
 
 ## Clean up

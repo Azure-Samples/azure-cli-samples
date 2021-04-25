@@ -1,18 +1,17 @@
+NAMESPACE=Microsoft.ContainerService
+RESOURCE_GROUP=myResourceGroup
 ## Before you begin
 
 # Install the aks-preview extension
 az extension add --name aks-preview
-az feature register --name PodSecurityPolicyPreview --namespace Microsoft.ContainerService
+az feature register --name PodSecurityPolicyPreview --namespace $NAMESPACE
 az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/PodSecurityPolicyPreview')].{Name:name,State:properties.state}"
-az provider register --namespace Microsoft.ContainerService
+az provider register --namespace $NAMESPACE
 ## Overview of pod security policies
 
 ## Enable pod security policy on an AKS cluster
 
-az aks update \
-    --resource-group myResourceGroup \
-    --name myAKSCluster \
-    --enable-pod-security-policy
+az aks update --resource-group $RESOURCE_GROUP --name myAKSCluster
 ## Default AKS policies
 
 ## Create a test user in an AKS cluster
@@ -31,8 +30,5 @@ az aks update \
 
 ## Clean up resources
 
-az aks update \
-    --resource-group myResourceGroup \
-    --name myAKSCluster \
-    --disable-pod-security-policy
+az aks update --resource-group $RESOURCE_GROUP --name myAKSCluster
 ## Next steps

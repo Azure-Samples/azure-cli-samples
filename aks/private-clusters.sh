@@ -1,25 +1,27 @@
+L=westus
+LOAD_BALANCER_SKU=standard
+ENABLE_PRIVATE_CLUSTER= 
+RESOURCE_GROUP=<private-cluster-resource-group>
+NETWORK_PLUGIN=azure
+VNET_SUBNET_ID=<subnet-id>
+DOCKER_BRIDGE_ADDRESS=172.17.0.1/16
+DNS_SERVICE_IP=10.2.0.10
+SERVICE_CIDR=10.2.0.0/24 
+ASSIGN_IDENTITY=<ResourceId>
+FQDN_SUBDOMAIN=<subdomain-name>
 ## Region availability
 
 ## Prerequisites
 
 ## Create a private AKS cluster
 
-az group create -l westus -n MyResourceGroup
-az aks create -n <private-cluster-name> -g <private-cluster-resource-group> --load-balancer-sku standard --enable-private-cluster  
-az aks create \
-    --resource-group <private-cluster-resource-group> \
-    --name <private-cluster-name> \
-    --load-balancer-sku standard \
-    --enable-private-cluster \
-    --network-plugin azure \
-    --vnet-subnet-id <subnet-id> \
-    --docker-bridge-address 172.17.0.1/16 \
-    --dns-service-ip 10.2.0.10 \
-    --service-cidr 10.2.0.0/24 
+az group create -l $L -n MyResourceGroup
+az aks create -n <private-cluster-name> -g <private-cluster-resource-group> --load-balancer-sku $LOAD_BALANCER_SKU --enable-private-cluster $ENABLE_PRIVATE_CLUSTER
+az aks create --resource-group $RESOURCE_GROUP --name <private-cluster-name> --load-balancer-sku $LOAD_BALANCER_SKU --network-plugin $NETWORK_PLUGIN --vnet-subnet-id $VNET_SUBNET_ID --docker-bridge-address $DOCKER_BRIDGE_ADDRESS --dns-service-ip $DNS_SERVICE_IP --service-cidr $SERVICE_CIDR
 ## Configure Private DNS Zone 
 
-az aks create -n <private-cluster-name> -g <private-cluster-resource-group> --load-balancer-sku standard --enable-private-cluster --enable-managed-identity --assign-identity <ResourceId> --private-dns-zone [system|none]
-az aks create -n <private-cluster-name> -g <private-cluster-resource-group> --load-balancer-sku standard --enable-private-cluster --enable-managed-identity --assign-identity <ResourceId> --private-dns-zone <custom private dns zone ResourceId> --fqdn-subdomain <subdomain-name>
+az aks create -n <private-cluster-name> -g <private-cluster-resource-group> --load-balancer-sku $LOAD_BALANCER_SKU --assign-identity $ASSIGN_IDENTITY --private-dns-zone [system|none]
+az aks create -n <private-cluster-name> -g <private-cluster-resource-group> --load-balancer-sku $LOAD_BALANCER_SKU --assign-identity $ASSIGN_IDENTITY --private-dns-zone <custom private dns zone ResourceId> --fqdn-subdomain $FQDN_SUBDOMAIN
 ## Options for connecting to the private cluster
 
 az feature register --namespace "Microsoft.ContainerService" --name "RunCommandPreview"

@@ -1,3 +1,4 @@
+RESOURCE_GROUP=myResourceGroup
 ## Before you begin
 
 ## Update an application
@@ -8,7 +9,7 @@
 
 ## Tag and push the image
 
-az acr list --resource-group myResourceGroup --query "[].{acrLoginServer:loginServer}" --output table
+az acr list --resource-group $RESOURCE_GROUP --query "[].{acrLoginServer:loginServer}" --output table
 ## Deploy the updated application
 
 ## Test the updated application

@@ -1,3 +1,6 @@
+L=myAzureRegionName
+G=myResourceGroup
+RESOURCE_GROUP=myResourceGroup
 ## Limitations
 
 ## Prerequisites
@@ -7,7 +10,7 @@
 # Optionally retrieve Azure region short names for use on upcoming commands
 az account list-locations
 # Create new resource group in a supported Azure region
-az group create -l myAzureRegionName -n myResourceGroup
+az group create -l $L -n myResourceGroup
 ## Create an instance of a DiskEncryptionSet
 
 # Retrieve the Key Vault Id and store it in a variable
@@ -25,5 +28,5 @@ diskEncryptionSetId=$(az disk-encryption-set show -n mydiskEncryptionSetName -g 
 # Retrieve your Azure Subscription Id from id property as shown below
 az account list
 # Get credentials
-az aks get-credentials --name myAksCluster --resource-group myResourceGroup --output table
+az aks get-credentials --name myAksCluster --resource-group $RESOURCE_GROUP --output table
 ## Next steps

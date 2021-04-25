@@ -1,3 +1,18 @@
+KUBERNETES_VERSION=1.19.6
+NODE_OSDISK_TYPE=Ephemeral
+NODE_OSDISK_SIZE=30
+NETWORK_PLUGIN=azure
+ADDONS=open-service-mesh
+TYPE=merge
+ALLOCATION_METHOD=Static
+ADDRESS_PREFIX=11.0.0.0/8
+SUBNET_NAME=mySubnet
+SUBNET_PREFIX=11.1.0.0/16
+PUBLIC_IP_ADDRESS=myPublicIp
+VNET_NAME=myVnet
+SUBNET=mySubnet
+DECODE=; echo
+P='{"data":{"tracing_enable":"true", "tracing_address":"jaeger.jaeger.svc.cluster.local", "tracing_port":"9411", "tracing_endpoint":"/api/v2/spans"}}'
 ## Overview
 
 ## Capabilities and Features
@@ -12,11 +27,11 @@ az provider register --namespace Microsoft.ContainerService
 ## Install Open Service Mesh (OSM) Azure Kubernetes Service (AKS) add-on for a new AKS cluster
 
 az group create --name <myosmaksgroup> --location <eastus2>
-az aks create -n osm-addon-cluster -g <myosmaksgroup> --kubernetes-version 1.19.6 --node-osdisk-type Ephemeral --node-osdisk-size 30 --network-plugin azure --enable-managed-identity -a open-service-mesh
+az aks create -n osm-addon-cluster -g <myosmaksgroup> --kubernetes-version $KUBERNETES_VERSION --node-osdisk-type $NODE_OSDISK_TYPE --node-osdisk-size $NODE_OSDISK_SIZE --network-plugin $NETWORK_PLUGIN -a open-service-mesh
 az aks get-credentials -n <myosmakscluster> -g <myosmaksgroup>
 ## Enable Open Service Mesh (OSM) Azure Kubernetes Service (AKS) add-on for an existing AKS cluster
 
-az aks enable-addons --addons open-service-mesh -g <resource group name> -n <AKS cluster name>
+az aks enable-addons --addons $ADDONS -g <resource group name> -n <AKS cluster name>
 ## Validate the AKS OSM add-on installation
 
 az aks list -g <resource group name> -o json | jq -r '.[].addonProfiles.openServiceMesh.enabled'
@@ -292,9 +307,9 @@ EOF
 kubectl get pod -n bookbuyer
 kubectl port-forward bookbuyer-7676c7fcfb-mtnrz -n bookbuyer 8080:14001
 az group create --name myResourceGroup --location eastus2
-az network public-ip create -n myPublicIp -g MyResourceGroup --allocation-method Static --sku Standard
-az network vnet create -n myVnet -g myResourceGroup --address-prefix 11.0.0.0/8 --subnet-name mySubnet --subnet-prefix 11.1.0.0/16
-az network application-gateway create -n myApplicationGateway -l eastus2 -g myResourceGroup --sku Standard_v2 --public-ip-address myPublicIp --vnet-name myVnet --subnet mySubnet
+az network public-ip create -n myPublicIp -g MyResourceGroup --allocation-method $ALLOCATION_METHOD --sku Standard
+az network vnet create -n myVnet -g myResourceGroup --address-prefix $ADDRESS_PREFIX --subnet-name $SUBNET_NAME --subnet-prefix $SUBNET_PREFIX
+az network application-gateway create -n myApplicationGateway -l eastus2 -g myResourceGroup --sku Standard_v2 --public-ip-address $PUBLIC_IP_ADDRESS --vnet-name $VNET_NAME --subnet $SUBNET
 appgwId=$(az network application-gateway show -n myApplicationGateway -g myResourceGroup -o tsv --query "id")
 az aks enable-addons -n myCluster -g myResourceGroup -a ingress-appgw --appgw-id $appgwId
 az aks list -g osm-aks-rg -o json | jq -r .[].addonProfiles.ingressApplicationGateway.enabled

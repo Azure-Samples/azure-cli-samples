@@ -1,3 +1,7 @@
+RESOURCE_GROUP=myResourceGroup
+KUBELET_CONFIG=./kubeletconfig.json
+LINUX_OS_CONFIG=./linuxosconfig.json
+CLUSTER_NAME=myAKSCluster
 ## Register the `CustomNodeConfigPreview` preview feature
 
 az feature register --namespace "Microsoft.ContainerService" --name "CustomNodeConfigPreview"
@@ -9,6 +13,6 @@ az provider register --namespace Microsoft.ContainerService
 az extension add --name aks-preview
 ## Use custom node configuration
 
-az aks create --name myAKSCluster --resource-group myResourceGroup --kubelet-config ./kubeletconfig.json --linux-os-config ./linuxosconfig.json
-az aks nodepool add --name mynodepool1 --cluster-name myAKSCluster --resource-group myResourceGroup --kubelet-config ./kubeletconfig.json
+az aks create --name myAKSCluster --resource-group $RESOURCE_GROUP --kubelet-config $KUBELET_CONFIG --linux-os-config $LINUX_OS_CONFIG
+az aks nodepool add --name mynodepool1 --cluster-name $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kubelet-config $KUBELET_CONFIG
 ## Next steps

@@ -1,3 +1,8 @@
+NAME=myAKSCluster
+LOAD_BALANCER_SKU=Standard
+WINDOWS_ADMIN_PASSWORD='Password1234$'
+WINDOWS_ADMIN_USERNAME=azure
+NETWORK_PLUGIN=azure
 ## Which Windows operating systems are supported?
 
 ## Is Kubernetes different on Windows and Linux?
@@ -36,19 +41,12 @@
 
 ## Can I use Azure Hybrid Benefit with Windows nodes?
 
-az aks create \
-    --resource-group myResourceGroup \
-    --name myAKSCluster \
-    --load-balancer-sku Standard \
-    --windows-admin-password 'Password1234$' \
-    --windows-admin-username azure \
-    --network-plugin azure
+az aks create --resource-group myResourceGroup --name $NAME --load-balancer-sku $LOAD_BALANCER_SKU --windows-admin-password $WINDOWS_ADMIN_PASSWORD --windows-admin-username $WINDOWS_ADMIN_USERNAME --network-plugin $NETWORK_PLUGIN
     --enable-ahub
-az aks update \
-    --resource-group myResourceGroup
+az aks update --resource-group myResourceGroup
     --name myAKSCluster
     --enable-ahub
-az vmss show --name myAKSCluster --resource-group MC_CLUSTERNAME
+az vmss show --name $NAME --resource-group MC_CLUSTERNAME
 ## Can I use the Kubernetes Web Dashboard with Windows containers?
 
 ## What if I need a feature that's not supported?

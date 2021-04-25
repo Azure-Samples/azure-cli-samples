@@ -1,3 +1,4 @@
+LOCATION=eastus
 ## Kubernetes versions
 
 ## Kubernetes version support policy
@@ -6,7 +7,7 @@
 
 ## Azure portal and CLI versions
 
-az aks get-versions --location eastus --output table
+az aks get-versions --location $LOCATION --output table
 ## AKS Kubernetes Release Calendar
 
 ## FAQ

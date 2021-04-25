@@ -1,3 +1,8 @@
+LOCATION=canadacentral
+G=MyResourceGroup
+N=MyManagedCluster
+NETWORK_PLUGIN=azure 
+AKS_CUSTOM_HEADERS=EnableAzureDiskFileCSIDriver=true
 ## Limitations
 
 az feature register --namespace "Microsoft.ContainerService" --name "EnableAzureDiskFileCSIDriver"
@@ -8,7 +13,7 @@ az extension add --name aks-preview
 ## Create a new cluster that can use CSI storage drivers
 
 # Create an Azure resource group
-az group create --name myResourceGroup --location canadacentral
+az group create --name myResourceGroup --location $LOCATION
 # Create an AKS-managed Azure AD cluster
-az aks create -g MyResourceGroup -n MyManagedCluster --network-plugin azure  --aks-custom-headers EnableAzureDiskFileCSIDriver=true
+az aks create -g $G -n $N --network-plugin $NETWORK_PLUGIN --aks-custom-headers $AKS_CUSTOM_HEADERS
 ## Next steps

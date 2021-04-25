@@ -1,3 +1,4 @@
+NAME=myResourceGroup
 ## Review the template
 
 ## Deploy the template
@@ -6,7 +7,7 @@
 
 ## Clean up resources
 
-az group delete --name myResourceGroup --yes --no-wait
+az group delete --name $NAME
 ## Get the code
 
 ## Next steps
