@@ -11,7 +11,7 @@ uniqueId=$RANDOM
 resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
-serverVersion='3.6' #3.2 or 3.6
+serverVersion='4.0' #3.2, 3.6, 4.0
 databaseName='database1'
 collectionName='collection1'
 
@@ -25,6 +25,7 @@ az cosmosdb create \
     --kind MongoDB \
     --server-version $serverVersion \
     --default-consistency-level Eventual \
+    --enable-automatic-failover true \
     --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False \
     --locations regionName='East US 2' failoverPriority=1 isZoneRedundant=False
 
@@ -34,9 +35,15 @@ az cosmosdb mongodb database create \
     -g $resourceGroupName \
     -n $databaseName
 
-# Define the index policy for the collection, include unique index and 30-day TTL
-idxpolicy=$(cat << EOF 
+# Define the index policy for the collection, with _id, wildcard, compound, unique and TTL
+printf ' 
 [ 
+    {
+        "key": {"keys": ["_id"]}
+    },
+    {
+        "key": {"keys": ["$**"]}
+    },
     {
         "key": {"keys": ["user_id", "user_address"]}, 
         "options": {"unique": "true"}
@@ -45,11 +52,7 @@ idxpolicy=$(cat << EOF
         "key": {"keys": ["_ts"]},
         "options": {"expireAfterSeconds": 2629746}
     }
-]
-EOF
-)
-# Persist index policy to json file
-echo "$idxpolicy" > "idxpolicy-$uniqueId.json"
+]' > idxpolicy-$uniqueId.json
 
 # Create a MongoDB API collection
 az cosmosdb mongodb collection create \

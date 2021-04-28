@@ -33,7 +33,7 @@ az cosmosdb gremlin database create \
     -n $databaseName
 
 # Define the index policy for the graph, include spatial and composite indexes
-idxpolicy=$(cat << EOF 
+printf ' 
 {
     "indexingMode": "consistent", 
     "includedPaths": [
@@ -51,11 +51,7 @@ idxpolicy=$(cat << EOF
             { "path":"/age", "order":"descending" }
         ]
     ]
-}
-EOF
-)
-# Persist index policy to json file
-echo "$idxpolicy" > "idxpolicy-$uniqueId.json"
+}' > "idxpolicy-$uniqueId.json"
 
 # Create a Gremlin graph
 az cosmosdb gremlin graph create \

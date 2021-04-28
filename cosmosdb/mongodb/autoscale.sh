@@ -11,7 +11,7 @@ uniqueId=$RANDOM
 resourceGroupName="Group-$uniqueId"
 location='westus2'
 accountName="cosmos-$uniqueId" #needs to be lower case
-serverVersion='3.6' #3.2 or 3.6
+serverVersion='4.0' #3.2, 3.6, 4.0
 databaseName='database1'
 maxThroughput=4000 #minimum = 4000
 collection1Name='collection1'
