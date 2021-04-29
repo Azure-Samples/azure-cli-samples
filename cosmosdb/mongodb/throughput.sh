@@ -22,11 +22,7 @@ az cosmosdb create -n $accountName -g $resourceGroupName --kind MongoDB
 az cosmosdb mongodb database create -a $accountName -g $resourceGroupName -n $databaseName --throughput $originalThroughput
 
 # Define a minimal index policy for the collection
-idxpolicy=$(cat << EOF 
-    [ {"key": {"keys": ["user_id"]}} ]
-EOF
-)
-echo "$idxpolicy" > "idxpolicy-$uniqueId.json"
+printf '[ {"key": {"keys": ["_id"]}} ]' > idxpolicy-$uniqueId.json
 
 # Create a MongoDB API collection
 az cosmosdb mongodb collection create -a $accountName -g $resourceGroupName -d $databaseName -n $collectionName --shard 'user_id' --throughput $originalThroughput --idx @idxpolicy-$uniqueId.json

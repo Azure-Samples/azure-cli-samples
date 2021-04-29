@@ -22,16 +22,14 @@ az cosmosdb create -n $accountName -g $resourceGroupName --capabilities EnableCa
 az cosmosdb cassandra keyspace create -a $accountName -g $resourceGroupName -n $keySpaceName --throughput $originalThroughput
 
 # Define the schema for the table and create the table
-schema=$(cat << EOF 
+printf ' 
 {
     "columns": [
         {"name": "columnA","type": "uuid"}, 
         {"name": "columnB","type": "text"}
     ],
     "partitionKeys": [{"name": "columnA"}]
-} 
-EOF )
-echo "$schema" > "schema-$uniqueId.json"
+}' > "schema-$uniqueId.json"
 az cosmosdb cassandra table create -a $accountName -g $resourceGroupName -k $keySpaceName -n $tableName --throughput $originalThroughput --schema @schema-$uniqueId.json
 rm -f "schema-$uniqueId.json"
 

@@ -33,7 +33,7 @@ az cosmosdb cassandra keyspace create \
     -n $keySpaceName
 
 # Define the schema for the table
-schema=$(cat << EOF 
+printf ' 
 {
     "columns": [
         {"name": "columna","type": "uuid"},
@@ -46,11 +46,7 @@ schema=$(cat << EOF
     "clusterKeys": [
         { "name": "columnb", "orderBy": "asc" }
     ]
-}
-EOF
-)
-# Persist schema to json file
-echo "$schema" > "schema-$uniqueId.json"
+}' > "schema-$uniqueId.json"
 
 # Create the Cassandra table
 az cosmosdb cassandra table create \
