@@ -19,7 +19,7 @@ az group create --name $resource --location "$location"
 
 echo "Creating $vnet with $subnet..."
 az network vnet create --name $vnet --resource-group $resource --location "$location" --address-prefixes 10.0.0.0/16
-az network vnet subnet create --name $subnet --resource-group $resource --vnet-name $vnet --address-prefixes 10.0.0.0/24
+az network vnet subnet create --name $subnet --resource-group $resource --vnet-name $vnet --address-prefixes 10.0.0.0/24 --delegations Microsoft.Sql/managedInstances
 
 echo "Creating $nsg..."
 az network nsg create --name $nsg --resource-group $resource --location "$location"
