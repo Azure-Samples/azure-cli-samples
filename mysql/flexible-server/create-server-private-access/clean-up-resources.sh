@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RESOURCE_GROUP="myresourcegroup" # Enter resource group name.
+RESOURCE_GROUP="myresourcegroup" 
 
 # Delete resource group 
 az group delete --name $RESOURCE_GROUP

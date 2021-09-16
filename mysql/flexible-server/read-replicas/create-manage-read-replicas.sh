@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Create Flexible Server Read Replicas
+# Create and manage Flexible Server Read Replicas
 
 # Set up variables
-RESOURCE_GROUP="myresourcegroup" # Substitute with preferred resource group name
-SOURCE_SERVER="mydemoserver" # Substitute with preferred name for MySQL Flexible Server. Name of a server maps to DNS name and is thus required to be globally unique in Azure.
+RESOURCE_GROUP="myresourcegroup" 
+SOURCE_SERVER="mydemoserver" # Substitute with preferred name for MySQL Flexible Server. 
 LOCATION="westus" 
 ADMIN_USER="mysqladmin" 
 PASSWORD="" # Enter your server admin password
 IP_ADDRESS= # Enter your IP Address for Public Access - https://whatismyipaddress.com
-REPLICA_NAME="mydemoserver-replica" # Substitute with preferred unique name for the replica server. 
+REPLICA_NAME="mydemoserver-replica" # Substitute with preferred name for the replica server. 
 
 # 1. Create resource group
 az group create \

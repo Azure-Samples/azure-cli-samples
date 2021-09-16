@@ -4,8 +4,8 @@
 # and configure Public Access connectivity method
 
 # Set up variables
-RESOURCE_GROUP="myresourcegroup" # Substitute with preferred resource group name
-SERVER_NAME="mydemoserver" # Substitute with preferred name for your MySQL Flexible Server. Name of a server maps to DNS name and is thus required to be globally unique in Azure.
+RESOURCE_GROUP="myresourcegroup" 
+SERVER_NAME="mydemoserver" # Substitute with preferred name for your MySQL Flexible Server. 
 LOCATION="westus" 
 ADMIN_USER="mysqladmin" 
 PASSWORD="" # Enter your server admin password

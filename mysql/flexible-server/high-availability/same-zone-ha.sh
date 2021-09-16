@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Configure Same-zone High Availability
+# Configure Same-Zone High Availability
 
 # Set up variables
-RESOURCE_GROUP="myresourcegroup" # Substitute with preferred resource group name
-SERVER_NAME="mydemoserver" # Substitute with preferred name for MySQL Flexible Server. Name of a server maps to DNS name and is thus required to be globally unique in Azure.
-LOCATION="westus" 
+RESOURCE_GROUP="myresourcegroup" 
+SERVER_NAME="mydemoserver" # Substitute with preferred name for MySQL Flexible Server. 
+LOCATION="eastus" 
 ADMIN_USER="mysqladmin" 
 PASSWORD="" # Enter your server admin password
 IP_ADDRESS= # Enter your IP Address for Public Access - https://whatismyipaddress.com

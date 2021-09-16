@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RESOURCE_GROUP="myresourcegroup" # Enter resource group name.
+RESOURCE_GROUP="myresourcegroup"
 SOURCE_SERVER="mydemoserver" # Enter source server name.
 NEW_SERVER="mydemoserver-restored" # Enter new server name.
 

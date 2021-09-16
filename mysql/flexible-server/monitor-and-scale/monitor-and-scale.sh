@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Monitor your Flexible Server and scale up Compute and Storage
+# Monitor your Flexible Server and scale Compute, Storage and IOPS
 
 # Set up variables
 SUBSCRIPTION_ID="" # Enter your subscription ID
-RESOURCE_GROUP="myresourcegroup" # Substitute with preferred resource group name
-SERVER_NAME="mydemoserver" # Substitute with preferred name for MySQL Flexible Server. Name of a server maps to DNS name and is thus required to be globally unique in Azure.
+RESOURCE_GROUP="myresourcegroup" 
+SERVER_NAME="mydemoserver" # Substitute with preferred name for MySQL Flexible Server.
 LOCATION="westus" 
 ADMIN_USER="mysqladmin" 
 PASSWORD="" # Enter your server admin password
@@ -26,18 +26,24 @@ az mysql flexible-server create \
 --admin-password $PASSWORD \
 --public-access $IP_ADDRESS
 
-# 3. Monitor CPU and Storage usage
+# 3. Monitor CPU percent, storage usage and IO percent
 
-# Monitor CPU Usage
+# Monitor CPU Usage metric
 az monitor metrics list \
     --resource "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DBforMySQL/flexibleservers/$SERVER_NAME" \
     --metric cpu_percent \
     --interval PT1M
 
-# Monitor usage metrics - Storage
+# Monitor Storage usage metric
 az monitor metrics list \
     --resource "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DBforMySQL/flexibleservers/$SERVER_NAME" \
     --metric storage_used \
+    --interval PT1M
+
+# Monitor IO Percent
+az monitor metrics list \
+    --resource "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DBforMySQL/flexibleservers/$SERVER_NAME" \
+    --metric io_consumption_percent \
     --interval PT1M
 
 # 4. Scale up and down
@@ -60,3 +66,9 @@ az mysql flexible-server update \
     --resource-group $RESOURCE_GROUP \
     --name $SERVER_NAME \
     --storage-size 64
+
+# Scale IOPS
+az mysql flexible-server update \
+    --resource-group $RESOURCE_GROUP \
+    --name $SERVER_NAME \
+    --iops 550

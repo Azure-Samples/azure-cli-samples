@@ -3,8 +3,8 @@
 # Create an Azure Database for MySQL - Flexible Server (General Purpose SKU) in VNET - with Private Access connectivity method
 # Connect to the server from a VM within the VNET.
 
-RESOURCE_GROUP="myresourcegroup" # Substitute with preferred resource group name
-SERVER_NAME="mydemoserver" # Substitute with preferred name for your MySQL Flexible Server. Name of a server maps to DNS name and is thus required to be globally unique in Azure.
+RESOURCE_GROUP="myresourcegroup" 
+SERVER_NAME="mydemoserver" # Substitute with preferred name for your MySQL Flexible Server. 
 LOCATION="westus" 
 ADMIN_USER="mysqladmin" 
 PASSWORD="" # Enter your server admin password
@@ -72,4 +72,4 @@ sudo apt-get install mysql-client
 
 wget --no-check-certificate https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
 
-mysql -h <server_name>.mysql.database.azure.com -u <admin_user> -p --ssl-mode=REQUIRED --ssl-ca=DigiCertGlobalRootCA.crt.pem
+mysql -h <replace_with_server_name>.mysql.database.azure.com -u mysqladmin -p --ssl-mode=REQUIRED --ssl-ca=DigiCertGlobalRootCA.crt.pem
