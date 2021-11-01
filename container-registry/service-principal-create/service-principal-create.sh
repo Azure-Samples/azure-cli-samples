@@ -17,7 +17,7 @@ ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query id --output tsv)
 # acrpush:     push and pull
 # owner:       push, pull, and assign roles
 SP_PASSWD=$(az ad sp create-for-rbac --name $SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query password --output tsv)
-SP_APP_ID=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query [].appId --output tsv)
+SP_APP_ID=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query "[].appId" --output tsv)
 
 # Output the service principal's credentials; use these in your services and
 # applications to authenticate to the container registry.
