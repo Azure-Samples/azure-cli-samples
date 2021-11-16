@@ -2,7 +2,7 @@
 # Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
 # --------------------------------------------------
 #
-# Create a Cassandra serverless account
+# Create a Cassandra serverless account, keyspace and table
 #
 #
 
@@ -21,3 +21,36 @@ az cosmosdb create \
     -g $resourceGroupName \
     --capabilities EnableCassandra EnableServerless \
     --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False
+
+# Create a Cassandra Keyspace
+az cosmosdb cassandra keyspace create \
+    -a $accountName \
+    -g $resourceGroupName \
+    -n $keySpaceName
+
+# Define the schema for the table
+printf ' 
+{
+    "columns": [
+        {"name": "columna","type": "uuid"},
+        {"name": "columnb","type": "int"},
+        {"name": "columnc","type": "text"}
+    ],
+    "partitionKeys": [
+        {"name": "columna"}
+    ],
+    "clusterKeys": [
+        { "name": "columnb", "orderBy": "asc" }
+    ]
+}' > "schema-$uniqueId.json"
+
+# Create the Cassandra table
+az cosmosdb cassandra table create \
+    -a $accountName \
+    -g $resourceGroupName \
+    -k $keySpaceName \
+    -n $tableName \
+    --schema @schema-$uniqueId.json
+
+# Clean up temporary schema file
+rm -f "schema-$uniqueId.json"
