@@ -1,16 +1,15 @@
 #!/bin/bash
-location="East US"
-randomIdentifier=random123
+# Passed validation in Cloud Shell 11/17/2021
 
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
 resource="resource-$randomIdentifier"
 server="server-$randomIdentifier"
 database="database-$randomIdentifier"
-storage="storage$randomIdentifier"
-
-notification="changeto@your.email;changeto@your.email"
-
 login="sampleLogin"
-password="samplePassword123!"
+password="P@ssw0rd-$randomIdentifier"
+storage="storage$randomIdentifier"
+notification="changeto@your.email;changeto@your.email"
 
 echo "Using resource group $resource with login: $login, password: $password..."
 
@@ -31,3 +30,6 @@ az sql db audit-policy update --name $database --resource-group $resource --serv
 
 echo "Setting threat detection policy on $storage..."
 az sql db threat-policy update --email-account-admins Disabled --email-addresses $notification --name $database --resource-group $resource --server $server --state Enabled --storage-account $storage
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y

@@ -1,16 +1,16 @@
 #!/bin/bash
-location="East US"
-randomIdentifier=random123
+# Passed validation in Bash 11/22/2021
 
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
 resource="resource-$randomIdentifier"
 vnet="vnet-$randomIdentifier"
 subnet="subnet-$randomIdentifier"
 nsg="nsg-$randomIdentifier"
 route="route-$randomIdentifier"
 instance="instance-$randomIdentifier"
-
 login="sampleLogin"
-password="samplePassword123!"
+password="P@ssw0rd-$randomIdentifier"
 
 echo "Using resource group $resource with login: $login, password: $password..."
 
@@ -41,3 +41,7 @@ az network vnet subnet update --name $subnet --network-security-group $nsg --rou
 
 echo "Creating $instance with $vnet and $subnet..."
 az sql mi create --admin-password $password --admin-user $login --name $instance --resource-group $resource --subnet $subnet --vnet-name $vnet --location "$location"
+# This step will take awhile to complete. You can monitor deployment progress in the activity log within the Azure portal.
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y

@@ -1,18 +1,19 @@
 #!/bin/bash
-location="East US"
-randomIdentifier=random123
+# Passed validation in Cloud Shell 11/17/2021
 
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
 resource="resource-$randomIdentifier"
 server="server-$randomIdentifier"
 database="database-$randomIdentifier"
+login="sampleLogin"
+password="P@ssw0rd-$randomIdentifier"
 
 targetResource="targetResource-$randomIdentifier"
-targetLocation="West US"
+targetLocation="Central US"
 targetServer="targetServer-$randomIdentifier"
 targetDatabase="targetDatabase-$randomIdentifier"
 
-login="sampleLogin"
-password="samplePassword123!"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
@@ -29,3 +30,7 @@ az sql db create --name $database --resource-group $resource --server $server --
 
 echo "Copying $database on $server to $targetDatabase on $targetServer..."
 az sql db copy --dest-name $targetDatabase --dest-resource-group $targetResource --dest-server $targetServer --name $database --resource-group $resource --server $server
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y
+# az group delete --name $targetResource -y

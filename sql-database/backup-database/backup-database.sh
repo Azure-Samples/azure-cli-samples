@@ -1,17 +1,17 @@
 #!/bin/bash
+# Passed validation in Cloud Shell 11/17/2021
+
+let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
-randomIdentifier=random123
+resource="resource-$randomIdentifier"
+server="server-$randomIdentifier"
+database="database-$randomIdentifier"
+login="sampleLogin"
+password="P@ssw0rd-$randomIdentifier"
 
-resource=resource-$randomIdentifier
-server=server-$randomIdentifier
-database=database-$randomIdentifier
-storage=storage$randomIdentifier
-container=container-$randomIdentifier
-
-bacpac=backup.bacpac
-
-login=sampleLogin
-password=samplePassword123!
+storage="storage$randomIdentifier"
+container="container-$randomIdentifier"
+bacpac="backup.bacpac"
 
 echo "Using resource group $resource with login: $login, password: $password..."
 
@@ -34,3 +34,6 @@ az sql db create --name $database --resource-group $resource --server $server --
 
 echo "Backing up $database..."
 az sql db export --admin-password $password --admin-user $login --storage-key $key --storage-key-type StorageAccessKey --storage-uri "https://$storage.blob.core.windows.net/$container/$bacpac" --name $database --resource-group $resource --server $server
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y

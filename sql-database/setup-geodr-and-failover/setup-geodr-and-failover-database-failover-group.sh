@@ -1,17 +1,18 @@
 #!/bin/bash
+# Passed validation in Cloud Shell 11/23/2021
+
+let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
-secondaryLocation="West US"
-randomIdentifier=random123
-
 resource="resource-$randomIdentifier"
-secondaryResource="secondaryResource-$randomIdentifier"
-
 server="server-$randomIdentifier"
-secondaryServer="secondary-server-$randomIdentifier"
 database="database-$randomIdentifier"
-
 login="sampleLogin"
-password="samplePassword123!"
+password="P@ssw0rd-$randomIdentifier"
+
+failoverGroup="failovergroupname-$randomIdentifier"
+secondaryLocation="Central US"
+secondaryResource="secondaryResource-$randomIdentifier"
+secondaryServer="secondary-server-$randomIdentifier"
 
 echo "Using resource groups $resource and $secondaryResource with login: $login, password: $password..."
 
@@ -26,14 +27,18 @@ az sql server create --name $secondaryServer --resource-group $secondaryResource
 echo "Creating $database..."
 az sql db create --name $database --resource-group $resource --server $server --service-objective S0
 
-echo "Replicating $database..."
-az sql db replica create --name $database --partner-server $secondaryServer --resource-group $resource --server $server --partner-resource-group $secondaryResource
+echo "Creating failover group $failoverGroup..."
+az sql failover-group create --name $failoverGroup --partner-server $secondaryServer --resource-group $resource --server $server --partner-resource-group $secondaryResource
 
 echo "Initiating failover..."
-az sql failover-group set-primary --name $database --resource-group $secondaryResource --server $secondaryServer
+az sql failover-group set-primary --name $failoverGroup --resource-group $secondaryResource --server $secondaryServer
 
 echo "Monitoring failover..."
-az sql db replica list-links --name $database --resource-group $resource --server $server
+az sql failover-group show --name $failoverGroup --resource-group $resource --server $server
 
 echo "Removing replication on $database..."
-az sql db replica delete-link --partner-server $server --name $database --partner-resource-group $resource --resource-group $secondaryResource --server $secondaryServer
+az sql failover-group delete --name $failoverGroup --resource-group $secondaryResource --server $secondaryServer
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y
+# az group delete --name $secondaryResource y

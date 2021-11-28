@@ -1,19 +1,20 @@
 #!/bin/bash
-location="East US"
-randomIdentifier=random123
+# Passed validation in Cloud Shell 11/23/2021
 
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
 resource="resource-$randomIdentifier"
 server="server-$randomIdentifier"
 database="database-$randomIdentifier"
+login="sampleLogin"
+password="P@ssw0rd-$randomIdentifier"
+
 pool="pool-$randomIdentifier"
 
+secondaryLocation="Central US"
 secondaryResource="secondaryResource-$randomIdentifier"
-secondaryLocation="West US"
 secondaryServer="secondaryserver-$randomIdentifier"
 secondaryPool="secondarypool-$randomIdentifier"
-
-login="sampleLogin"
-password="samplePassword123!"
 
 echo "Using resource group $resource with login: $login, password: $password..."
 
@@ -40,3 +41,7 @@ az sql db replica set-primary --name $database --resource-group $secondaryResour
 
 echo "Monitoring health of $database on $secondaryServer..."
 az sql db replica list-links --name $database --resource-group $secondaryResource --server $secondaryServer
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y
+# az group delete --name $secondaryResource -y

@@ -1,17 +1,17 @@
 #!/bin/bash
-location="East US"
-randomIdentifier=random123
+# Passed validation in Cloud Shell 11/23/2021
 
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
 resource="resource-$randomIdentifier"
 server="server-$randomIdentifier"
 database="database-$randomIdentifier"
+login="sampleLogin"
+password="P@ssw0rd-$randomIdentifier"
 
 secondaryResource="secondaryresource-$randomIdentifier"
-secondaryLocation="West US"
+secondaryLocation="Central US"
 secondaryServer="secondaryserver-$randomIdentifier"
-
-login="sampleLogin"
-password="samplePassword123!"
 
 echo "Using resource group $resource with login: $login, password: $password..."
 
@@ -38,3 +38,7 @@ az sql db replica list-links --name $database --resource-group $secondaryResourc
 
 echo "Removing replication link after failover..."
 az sql db replica delete-link --resource-group $secondaryResource --server $secondaryServer --name $database --partner-server $server --yes 
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y
+# az group delete --name $secondaryResource -y

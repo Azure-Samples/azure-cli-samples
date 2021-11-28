@@ -1,39 +1,35 @@
 ﻿#!/bin/bash
+# Passed validation in Bash 11/17/2021
 # Due to deployment times, you should plan for a full day to complete the entire script. You can monitor deployment progress in the activity log within the Azure portal. For more information on deployment times, see https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance#managed-instance-management-operations. 
 
+let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
-failoverLocation="West US"
-randomIdentifier=random123
-
 resource="resource-$randomIdentifier"
-failoverResource="failoverResource-$randomIdentifier"
-
 vnet="vnet-$randomIdentifier"
 subnet="subnet-$randomIdentifier"
 nsg="nsg-$randomIdentifier"
 route="route-$randomIdentifier"
 instance="instance-$randomIdentifier"
+login="sampleLogin"
+password="P@ssw0rd-$randomIdentifier"
 
+vpnSharedKey="abc123"
+gateway="gateway-$randomIdentifier"
+gatewayIP="$gateway-ip"
+gatewayConnection="$gateway-connection"
+
+failoverResource="failoverResource-$randomIdentifier"
+failoverLocation="Central US"
 failover="failover-$randomIdentifier"
-
 failoverVnet="failoverVnet-$randomIdentifier"
 failoverSubnet="failoverSubnet-$randomIdentifier"
 failoverNsg="failoverNsg-$randomIdentifier"
 failoverRoute="failoverRoute-$randomIdentifier"
 failoverInstance="failoverInstance-$randomIdentifier"
 
-login="sampleLogin"
-password="samplePassword123!"
-
-vpnSharedKey="abc123"
-
-gateway="gateway-$randomIdentifier"
-gatewayIP="$gateway-ip"
-gatewayConnection="$gateway-connection"
-
-$failoverGateway="failoverGateway-$randomIdentifier"
-$failoverGatewayIP="$failoverGateway-ip"
-$failoverGatewayConnection="$failoverGateway-connection"
+failoverGateway="failoverGateway-$randomIdentifier"
+failoverGatewayIP="$failoverGateway-ip"
+failoverGatewayConnection="$failoverGateway-connection"
 
 echo "Using resource group $resource and $failoverResource with login: $login, password: $password..."
 
@@ -43,7 +39,7 @@ az group create --name $failoverResource --location "$failoverLocation"
 
 echo "Creating $vnet with $subnet..."
 az network vnet create --name $vnet --resource-group $resource --location "$location" --address-prefixes 10.0.0.0/16
-az network vnet subnet create --name $subnet --resource-group $resource --vnet-name $vnet --address-prefixes 10.0.0.0/24
+az network vnet subnet create --name $subnet --resource-group $resource --vnet-name $vnet --address-prefixes 10.0.0.0/24 --delegations Microsoft.Sql/managedInstances
 
 echo "Creating $nsg..."
 az network nsg create --name $nsg --resource-group $resource --location "$location"
@@ -63,12 +59,13 @@ az network route-table route create --address-prefix 10.0.0.0/24 --name "ToLocal
 echo "Configuring $subnet with $nsg and $route..."
 az network vnet subnet update --name $subnet --network-security-group $nsg --route-table $route --vnet-name $vnet --resource-group $resource 
 
-echo "Creating $($instance) with $vnet and $subnet..."
+# This step will take awhile to complete. You can monitor deployment progress in the activity log within the Azure portal.
+echo "Creating $instance with $vnet and $subnet..."
 az sql mi create --admin-password $password --admin-user $login --name $instance --resource-group $resource --subnet $subnet --vnet-name $vnet --location "$location" --assign-identity
 
 echo "Creating $failoverVnet with $failoverSubnet..."
 az network vnet create --name $failoverVnet --resource-group $failoverResource --location "$failoverLocation" --address-prefixes 10.128.0.0/16
-az network vnet subnet create --name $failoverSubnet --resource-group $failoverResource --vnet-name $failoverVnet --address-prefixes 10.128.0.0/24
+az network vnet subnet create --name $failoverSubnet --resource-group $failoverResource --vnet-name $failoverVnet --address-prefixes 10.128.0.0/24  --delegations Microsoft.Sql/managedInstances
 
 echo "Creating $failoverNsg..."
 az network nsg create --name $failoverNsg --resource-group $failoverResource --location "$failoverLocation"
@@ -88,6 +85,7 @@ az network route-table route create --address-prefix 10.128.0.0/24 --name "ToLoc
 echo "Configuring $failoverSubnet with $failoverNsg and $failoverRoute..."
 az network vnet subnet update --name $failoverSubnet --network-security-group $failoverNsg --route-table $failoverRoute --vnet-name $failoverVnet --resource-group $failoverResource 
 
+# This step will take awhile to complete. You can monitor deployment progress in the activity log within the Azure portal.
 echo "Creating $failoverInstance with $failoverVnet and $failoverSubnet..."
 az sql mi create --admin-password $password --admin-user $login --name $failoverInstance --resource-group $failoverResource --subnet $failoverSubnet --vnet-name $failoverVnet --location "$failoverLocation" --assign-identity
 
@@ -116,3 +114,7 @@ az sql instance-failover-group show --location "$failoverLocation" --name $failo
 echo "Failing managed instance back to primary location..."
 az sql instance-failover-group set-primary --location "$location" --name $failover --resource-group $resource
 az sql instance-failover-group show --location "$location" --name $failover --resource-group $resource # verify the primary role
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y
+# az group delete --name $failoverResource -y

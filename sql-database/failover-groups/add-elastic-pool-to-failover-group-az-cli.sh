@@ -1,18 +1,17 @@
 ﻿#!/bin/bash
-location="East US"
-randomIdentifier=random123
+# Passed validation in Cloud Shell 11/17/2021
 
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
 resource="resource-$randomIdentifier"
 server="sqlserver-$randomIdentifier"
 pool="pool-$randomIdentifier"
 database="database-$randomIdentifier"
-
-failover="failover-$randomIdentifier"
-failoverLocation="West US"
-failoverServer="sqlsecondary-$randomIdentifier"
-
 login="sampleLogin"
-password="samplePassword123!"
+password="P@ssw0rd-$randomIdentifier"
+failover="failover-$randomIdentifier"
+failoverLocation="Central US"
+failoverServer="sqlsecondary-$randomIdentifier"
 
 echo "Using resource group $resource with login: $login, password: $password..."
 
@@ -56,3 +55,6 @@ az sql failover-group show --name $failover --resource-group $resource --server 
 
 echo "Failing back to $server...."
 az sql failover-group set-primary --name $failover --resource-group $resource --server $server
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y

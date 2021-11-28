@@ -1,15 +1,16 @@
 #!/bin/bash
-location="East US"
-randomIdentifier=random123
+# Passed validation in Cloud Shell 11/17/2021
 
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
 resource="resource-$randomIdentifier"
 server="server-$randomIdentifier"
 database="database-$randomIdentifier"
+login="sampleLogin"
+password="P@ssw0rd-$randomIdentifier"
+
 pool="pool-$randomIdentifier"
 poolSecondary="poolsecondary-$randomIdentifier"
-
-login="sampleLogin"
-password="samplePassword123!"
 
 echo "Creating $resource..."
 az group create --name $resource --location "$location"
@@ -29,3 +30,6 @@ az sql db create --resource-group $resource --server $server --name $database --
 
 echo "Upgrade $database tier..."
 az sql db create --resource-group $resource --server $server --name $database --service-objective S0
+
+# echo "Deleting all resources"
+# az group delete --name $resource -y
