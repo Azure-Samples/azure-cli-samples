@@ -1,65 +1,38 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 11/23/2021
+# Passed validation in Bash 12/01/2021
+# Cloud Shell not used due to its timeout at 20 minutes when no interactive activity 
 
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
-resource="resource-$randomIdentifier"
-server="server-$randomIdentifier"
-database="database-$randomIdentifier"
+resourceGroup="msdocs-sql-rg-$randomIdentifier"
+tags="restore-database.sh"
+server="msdocs-azuresql-server-$randomIdentifier"
+database="msdocs-azuresql-db-$randomIdentifier"
 restore="restore-$randomIdentifier"
-login="sampleLogin"
-password="P@ssw0rd-$randomIdentifier"
+login="msdocsAdminUser"
+password="Pa$$w0rD-$randomIdentifier"
 
-echo "Using resource group $resource with login: $login, password: $password..."
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resource..."
-az group create --name $resource --location "$location"
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $server..."
-az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
+az sql server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password
 
 echo "Creating $database on $server..."
-az sql db create --resource-group $resource --server $server --name $database --service-objective S0
+az sql db create --resource-group $resourceGroup --server $server --name $database --service-objective S0
 
-# Multiple sleep commands to keep Cloud Shell open for testing purposes until database created long enough for automatic backup to be created
+# Sleeping  commands to wait long enough for automatic backup to be created
 echo "Sleeping..."
+sleep 40m
 restoreDateTime=$(date +%s)
 restoreDateTime=$(expr $restoreDateTime - 60)
 restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
 echo $restoreDateTime
 
-sleep 10m
-restoreDateTime=$(date +%s)
-restoreDateTime=$(expr $restoreDateTime - 60)
-restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
-echo $restoreDateTime
-
-sleep 10m
-restoreDateTime=$(date +%s)
-restoreDateTime=$(expr $restoreDateTime - 60)
-restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
-echo $restoreDateTime
-
-sleep 10m
-restoreDateTime=$(date +%s)
-restoreDateTime=$(expr $restoreDateTime - 60)
-restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
-echo $restoreDateTime
-
-sleep 10m
-restoreDateTime=$(date +%s)
-restoreDateTime=$(expr $restoreDateTime - 60)
-restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
-echo $restoreDateTime
-
-sleep 10m
-restoreDateTime=$(date +%s)
-restoreDateTime=$(expr $restoreDateTime - 60)
-restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
-echo $restoreDateTime
-
-echo "Restoring $database to $restoreDateTime..." # restore database to its state 2 minutes ago, point-in-time restore requires database to be at least 5 minutes old
-az sql db restore --dest-name $restore --edition Standard --name $database --resource-group $resource --server $server --service-objective S0 --time $restoreDateTime
+echo "Restoring $database to $restoreDateTime..." # restore database to its state 2 minutes ago
+az sql db restore --dest-name $restore --edition Standard --name $database --resource-group $resourceGroup --server $server --service-objective S0 --time $restoreDateTime
 
 # echo "Deleting all resources"
-# az group delete --name $resource -y
+# az group delete --name $resourceGroup -y

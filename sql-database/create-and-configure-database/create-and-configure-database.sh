@@ -1,28 +1,32 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 11/17/2021
+# Passed validation in Cloud Shell 12/01/2021
 
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
-resource="resource-$randomIdentifier"
-server="server-$randomIdentifier"
-database="database-$randomIdentifier"
-login="sampleLogin"
-password="P@ssw0rd-$randomIdentifier"
+resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
+tag="create-and-configure-database.sh"
+server="msdocs-azuresql-server-$randomIdentifier"
+database="msdocs-azuresql-db-$randomIdentifier"
+login="msdocsAdminUser"
+password="Pa$$w0rD-$randomIdentifier"
 
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
+
+#Specify values for your environment to limit access to the SQL Database server
 startIP=0.0.0.0
 endIP=0.0.0.0
 
 echo "Creating $resource..."
-az group create --name $resource --location "$location"
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $server in $location..."
-az sql server create --name $server --resource-group $resource --location "$location" --admin-user $login --admin-password $password
+az sql server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password
 
 echo "Configuring firewall..."
-az sql server firewall-rule create --resource-group $resource --server $server -n AllowYourIp --start-ip-address $startIP --end-ip-address $endIP
+az sql server firewall-rule create --resource-group $resourceGroup --server $server -n AllowYourIp --start-ip-address $startIP --end-ip-address $endIP
 
 echo "Creating $database on $server..."
-az sql db create --resource-group $resource --server $server --name $database --sample-name AdventureWorksLT --edition GeneralPurpose --family Gen5 --capacity 2 --zone-redundant true # zone redundancy is only supported on premium and business critical service tiers
+az sql db create --resource-group $resourceGroup --server $server --name $database --sample-name AdventureWorksLT --edition GeneralPurpose --family Gen5 --capacity 2 --zone-redundant true # zone redundancy is only supported on premium and business critical service tiers
 
 # echo "Deleting all resources"
-# az group delete --name $resource -y
+# az group delete --name $resourceGroup -y
