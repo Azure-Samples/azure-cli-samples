@@ -4,8 +4,8 @@
 let randomIdentifier=$RANDOM*$RANDOM
 
 #Run this script after create-manage-instance.sh script creates a managed instance
-#instance="<instanceId>" # add instance here
-#resource="<resourceId>" # add resource here
+instance="<msdocs-azuresql-instance>" # add instance here
+resourceGroup="<msdocs-azuresql-rg>" # add resource here
 
 location="East US"
 vault="msdocs-azuresql-vault-$randomIdentifier"
