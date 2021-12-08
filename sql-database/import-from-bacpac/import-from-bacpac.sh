@@ -2,8 +2,8 @@
 # Passed validation in Cloud Shell 12/01/2021
 
 let randomIdentifier=$RANDOM*$RANDOM
-location="East USo"
-resourceGroup="msdcs-azuresql-rg-$randomIdentifier"
+location="East US"
+resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="import-from-bacpac.sh"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocs-azuresql-db-$randomIdentifier"

@@ -28,6 +28,5 @@ az sql server firewall-rule create --resource-group $resourceGroup --server $ser
 echo "Creating $database on $server..."
 az sql db create --resource-group $resourceGroup --server $server --name $database --sample-name AdventureWorksLT --edition GeneralPurpose --family Gen5 --capacity 2 --zone-redundant true # zone redundancy is only supported on premium and business critical service tiers
 
-# 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
