@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 12/01/2021
+# Failed validation in Cloud Shell 12/08/2021
 
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
