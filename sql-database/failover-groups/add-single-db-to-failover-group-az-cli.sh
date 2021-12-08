@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell 12/01/2021
 
 let randomIdentifier=$RANDOM*$RANDOM
-
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="add-single-db-to-failover-group-az-cli.sh"

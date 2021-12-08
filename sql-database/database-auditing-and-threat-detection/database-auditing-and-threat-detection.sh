@@ -12,7 +12,6 @@ password="Pa$$w0rD-$randomIdentifier"
 storage="msdocsazuresql$randomIdentifier"
 notification="changeto@your.email;changeto@your.email"
 
-
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resource..."
