@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 12/01/2021
+# Passed validation in Bash 12/08/2021
 
 #Run this script after create-manage-instance.sh script creates a managed instance, using the same variables from previous script
 #If running this script against a different existing instance, uncomment and add appropriate values to next 3 lines of code

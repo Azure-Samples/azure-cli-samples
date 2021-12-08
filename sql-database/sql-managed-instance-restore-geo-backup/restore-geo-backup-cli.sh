@@ -1,6 +1,7 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 12/07/2021
+# Passed validation in Bash 12/07/2021
 
+# Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
 $instance = "<msdocs-azuresql-instance>" # add instance here
 $targetInstance = "<msdocs-azuresql-target-instance>" # add target instance here
 $resourceGroup = "<msdocs-azuresql-rg>" # add resource here
