@@ -1,5 +1,8 @@
 ﻿#!/bin/bash
-# Passed validation in Bash 12/01/2021
+# Failed validation in Bash 12/01/2021 - not yet supported in Managed Instance using Azure CLI.
+# In order to establish failover group between two SQL MIs, both of them have to be part of the same DNS zone. 
+# To achieve this, you need to provide instance partner to the secondary instance during creation. 
+# However, this property is not yet available in CLI 
 # Due to deployment times, you should plan for a full day to complete the entire script. You can monitor deployment progress in the activity log within the Azure portal. For more information on deployment times, see https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance#managed-instance-management-operations. 
 
 let randomIdentifier=$RANDOM*$RANDOM
