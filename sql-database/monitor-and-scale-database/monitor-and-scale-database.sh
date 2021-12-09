@@ -4,7 +4,7 @@
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tags="monitor-and-scale-database.sh"
+tags="monitor-and-scale-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocs-azuresql-db-$randomIdentifier"
 login="msdocsAdminUser"

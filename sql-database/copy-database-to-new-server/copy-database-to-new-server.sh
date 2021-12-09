@@ -4,7 +4,7 @@
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="copy-database-to-new-server.sh"
+tag="copy-database-to-new-server"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocs-azuresql-db-$randomIdentifier"
 login="msdocsAdminUser"

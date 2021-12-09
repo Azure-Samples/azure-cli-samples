@@ -4,7 +4,7 @@
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="setup-geodr-and-failover-single-database.sh"
+tag="setup-geodr-and-failover-single-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocs-azuresql-db-$randomIdentifier"
 login="msdocsAdminUser"

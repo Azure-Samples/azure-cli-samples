@@ -6,7 +6,7 @@
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="create-managed-instance.sh"
+tag="create-managed-instance"
 vnet="msdocs-azuresql-vnet-$randomIdentifier"
 subnet="msdocs-azuresql-subnet-$randomIdentifier"
 nsg="msdocs-azuresql-nsg-$randomIdentifier"

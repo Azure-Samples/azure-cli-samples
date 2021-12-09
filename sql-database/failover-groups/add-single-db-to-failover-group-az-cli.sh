@@ -4,7 +4,7 @@
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="add-single-db-to-failover-group-az-cli.sh"
+tag="add-single-db-to-failover-group-az-cli"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocs-azuresql-db-$randomIdentifier"
 login="msdocsAdminUser"
