@@ -4,7 +4,7 @@
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="add-elastic-pool-to-failover-group-az-cli.sh"
+tag="add-elastic-pool-to-failover-group-az-cli"
 server="msdocs-azuresql-server-$randomIdentifier"
 pool="msdocs-azuresql-pool-$randomIdentifier"
 database="msdocs-azuresql-db-$randomIdentifier"

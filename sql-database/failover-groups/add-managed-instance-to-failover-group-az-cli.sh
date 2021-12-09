@@ -9,7 +9,7 @@
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="add-managed-instance-to-failover-group-az-cli.sh"
+tag="add-managed-instance-to-failover-group-az-cli"
 vnet="msdocs-azuresql-vnet-$randomIdentifier"
 subnet="msdocs-azuresql-subnet-$randomIdentifier"
 nsg="msdocs-azuresql-nsg-$randomIdentifier"
