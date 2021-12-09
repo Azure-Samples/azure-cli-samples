@@ -1,17 +1,17 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 12/01/2021
+# Passed validation in Bash 12/08/2021
 
-#Run this script after create-manage-instance.sh script creates a managed instance, using the same variables from previous script
-#If running this script against a different existing instance, uncomment and add appropriate values to next 3 lines of code
-#let randomIdentifier=$RANDOM*$RANDOM
-#instance="<msdocs-azuresql-instance>" # add instance here
-#resourceGroup="<msdocs-azuresql-rg>" # add resource here
+# Run this script after create-manage-instance.sh script creates a managed instance, using the same variables from previous script
+# If running this script against a different existing instance, uncomment and add appropriate values to next 3 lines of code
+# let randomIdentifier=$RANDOM*$RANDOM
+# instance="<msdocs-azuresql-instance>" # add instance here
+# resourceGroup="<msdocs-azuresql-rg>" # add resource here
 
 location="East US"
 vault="msdocssqlvault$randomIdentifier"
 key="msdocs-azuresql-key-$randomIdentifier"
 
-#echo assigning identity to service principal in the instance
+# echo assigning identity to service principal in the instance
 az sql mi update --name $instance --resource-group $resourceGroup --assign-identity
 
 echo "Creating $vault..."
@@ -26,9 +26,9 @@ az keyvault set-policy --name $vault --object-id $instanceId --key-permissions g
 echo "Creating $key..."
 az keyvault key create --name $key --vault-name $vault --size 2048 
 
-#keyPath="C:\yourFolder\yourCert.pfx"
-#keyPassword="yourPassword" 
-#az keyvault certificate import --file $keyPath --name $key --vault-name $vault --password $keyPassword
+# keyPath="C:\yourFolder\yourCert.pfx"
+# keyPassword="yourPassword" 
+# az keyvault certificate import --file $keyPath --name $key --vault-name $vault --password $keyPassword
 
 echo "Setting security on $instance with $key..."
 keyId=$(az keyvault key show --name $key --vault-name $vault -o json --query key.kid | tr -d '"')

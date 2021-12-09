@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Bash 12/01/2021
-# Cloud Shell not used due to its timeout at 20 minutes when no interactive activity 
 
+# Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
 let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-sql-rg-$randomIdentifier"
