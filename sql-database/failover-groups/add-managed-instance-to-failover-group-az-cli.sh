@@ -35,7 +35,7 @@ failoverGatewayConnection="$failoverGateway-connection"
 
 echo "Using resource groups $resourceGroup and $failoverResourceGroup  with login: $login, password: $password..."
 
-echo "Creating $resource..."
+echo "Creating $resource in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 az group create --name $failoverResourceGroup  --location "$failoverLocation"
 

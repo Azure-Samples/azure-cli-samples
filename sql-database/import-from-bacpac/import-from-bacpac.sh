@@ -16,7 +16,7 @@ bacpac="sample.bacpac"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resource..."
+echo "Creating $resource in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $storage..."
@@ -33,7 +33,7 @@ az rest --uri https://github.com/Microsoft/sql-server-samples/releases/download/
 echo "Uploading sample database to $container..."
 az storage blob upload --container-name $container --file $bacpac --name $bacpac --account-key $key --account-name $storage
 
-echo "Creating $server..."
+echo "Creating $server in $location..."
 az sql server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password
 az sql server firewall-rule create --resource-group $resourceGroup --server $server --name AllowAzureServices --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 
