@@ -2,6 +2,8 @@
 # Passed validation in Bash 12/07/2021
 
 # Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
+# Run this script after running the create-manage-instance.sh script twice to create two managed instances
+# Provide the values for these three variables
 $instance = "<msdocs-azuresql-instance>" # add instance here
 $targetInstance = "<msdocs-azuresql-target-instance>" # add target instance here
 $resourceGroup = "<msdocs-azuresql-rg>" # add resource here
