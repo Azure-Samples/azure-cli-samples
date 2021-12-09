@@ -6,7 +6,7 @@ location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tags="monitor-and-scale-database"
 server="msdocs-azuresql-server-$randomIdentifier"
-database="msdocs-azuresql-db-$randomIdentifier"
+database="msdocsazuresqldb$randomIdentifier"
 login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
 
