@@ -9,12 +9,12 @@ server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocs-azuresql-db-$randomIdentifier"
 login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
-
-echo "Using resource group $resourceGroup with login: $login, password: $password..."
-
-#Specify values for your environment to limit access to the SQL Database server
+# Specify appropriate IP address values for your environment
+# to limit access to the SQL Database server
 startIP=0.0.0.0
 endIP=0.0.0.0
+
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resource..."
 az group create --name $resourceGroup --location "$location" --tag $tag
