@@ -2,11 +2,11 @@
 # Passed validation in Cloud Shell 12/01/2021
 
 let randomIdentifier=$RANDOM*$RANDOM
-location="East US"
+location="eastus"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="create-and-configure-database"
 server="msdocs-azuresql-server-$randomIdentifier"
-database="msdocs-azuresql-db-$randomIdentifier"
+database="msdocsazuresqldb$randomIdentifier"
 login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
 # Specify appropriate IP address values for your environment
