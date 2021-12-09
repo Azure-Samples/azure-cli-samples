@@ -25,7 +25,7 @@ echo "Creating $container on $storage..."
 key=$(az storage account keys list --account-name $storage --resource-group $resourceGroup -o json --query [0].value | tr -d '"')
 az storage container create --name $container --account-key $key --account-name $storage
 
-echo "Creating $server..."
+echo "Creating $server in $location..."
 az sql server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password
 az sql server firewall-rule create --resource-group $resourceGroup --server $server --name AllowAzureServices --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 

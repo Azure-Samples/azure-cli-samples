@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell 12/01/2021
 
 let randomIdentifier=$RANDOM*$RANDOM
-location="eastus"
+location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="create-and-configure-database"
 server="msdocs-azuresql-server-$randomIdentifier"
@@ -16,7 +16,7 @@ endIP=0.0.0.0
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resource..."
+echo "Creating $resource in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $server in $location..."

@@ -14,7 +14,7 @@ notification="changeto@your.email;changeto@your.email"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resource..."
+echo "Creating $resource in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $server in $location..."
