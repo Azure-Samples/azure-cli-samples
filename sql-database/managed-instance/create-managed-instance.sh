@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Bash 12/01/2021
+# Passed validation in Bash in Docker container on Windows 12/01/2021
 
 # Due to deployment times, you should plan for a full day to complete the entire script. You can monitor deployment progress in the activity log within the Azure portal. For more information on deployment times, see https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance#managed-instance-management-operations. 
 # Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
