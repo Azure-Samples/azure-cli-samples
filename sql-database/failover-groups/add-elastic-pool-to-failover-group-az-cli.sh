@@ -6,10 +6,10 @@ location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="add-elastic-pool-to-failover-group-az-cli"
 server="msdocs-azuresql-server-$randomIdentifier"
-pool="msdocs-azuresql-pool-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
 login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
+pool="msdocs-azuresql-pool-$randomIdentifier"
 failoverGroup="msdocs-azuresql-failover-group-$randomIdentifier"
 failoverLocation="Central US"
 failoverServer="msdocs-azuresql-failover-server-$randomIdentifier"
@@ -42,7 +42,7 @@ az sql failover-group create --name $failoverGroup --partner-server $failoverSer
 
 databaseId=$(az sql elastic-pool list-dbs --name $pool --resource-group $resourceGroup --server $server --query [0].name -o json | tr -d '"')
 
-echo "Adding $database to $failover..."
+echo "Adding $database to $failoverGroup..."
 az sql failover-group update --name $failoverGroup --add-db $databaseId --resource-group $resourceGroup --server $server
 
 echo "Confirming role of $failoverServer is secondary..." # note ReplicationRole property
