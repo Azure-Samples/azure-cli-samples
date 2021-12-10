@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Bash 12/08/2021
+# Passed validation in Bash in Docker container on Windows 12/01/2021
 
 # Run this script after the script in https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/scripts/create-configure-managed-instance-cli creates a managed instance.
 # You can use the same variables in both scripts/
