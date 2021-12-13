@@ -30,7 +30,7 @@ az sql server create --name $failoverServer --resource-group $resourceGroup --lo
 echo "Creating $failoverGroup between $server and $failoverServer..."
 az sql failover-group create --name $failoverGroup --partner-server $failoverServer --resource-group $resourceGroup --server $server --failover-policy Automatic --grace-period 2 --add-db $database
 
-echo "Confirming role of $failoverServer is secondary..." # note ReplicationRole property
+echo "Confirming the role of each server in the failover group..." # note ReplicationRole property
 az sql failover-group show --name $failoverGroup --resource-group $resourceGroup --server $server
 
 echo "Failing over to $failoverServer..."
