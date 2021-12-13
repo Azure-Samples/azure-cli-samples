@@ -7,7 +7,7 @@ let randomIdentifier=$RANDOM*$RANDOM
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="create-managed-instance"
-vnet="msdocs-azuresql-vnet-$randomIdentifier"
+vNet="msdocs-azuresql-vnet-$randomIdentifier"
 subnet="msdocs-azuresql-subnet-$randomIdentifier"
 nsg="msdocs-azuresql-nsg-$randomIdentifier"
 route="msdocs-azuresql-route-$randomIdentifier"
@@ -20,9 +20,9 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 echo "Creating $resource in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag 
 
-echo "Creating $vnet with $subnet..."
-az network vnet create --name $vnet --resource-group $resourceGroup --location "$location" --address-prefixes 10.0.0.0/16
-az network vnet subnet create --name $subnet --resource-group $resourceGroup --vnet-name $vnet --address-prefixes 10.0.0.0/24 --delegations Microsoft.Sql/managedInstances
+echo "Creating $vNet with $subnet..."
+az network vnet create --name $vNet --resource-group $resourceGroup --location "$location" --address-prefixes 10.0.0.0/16
+az network vnet subnet create --name $subnet --resource-group $resourceGroup --vnet-name $vNet --address-prefixes 10.0.0.0/24 --delegations Microsoft.Sql/managedInstances
 
 echo "Creating $nsg..."
 az network nsg create --name $nsg --resource-group $resourceGroup --location "$location"
@@ -40,11 +40,11 @@ az network route-table route create --address-prefix 0.0.0.0/0 --name "primaryTo
 az network route-table route create --address-prefix 10.0.0.0/24 --name "ToLocalClusterNode" --next-hop-type VnetLocal --resource-group $resourceGroup --route-table-name $route
 
 echo "Configuring $subnet with $nsg and $route..."
-az network vnet subnet update --name $subnet --network-security-group $nsg --route-table $route --vnet-name $vnet --resource-group $resourceGroup 
+az network vnet subnet update --name $subnet --network-security-group $nsg --route-table $route --vnet-name $vNet --resource-group $resourceGroup 
 
 # This step will take awhile to complete. You can monitor deployment progress in the activity log within the Azure portal.
-echo "Creating $instance with $vnet and $subnet..."
-az sql mi create --admin-password $password --admin-user $login --name $instance --resource-group $resourceGroup --subnet $subnet --vnet-name $vnet --location "$location"
+echo "Creating $instance with $vNet and $subnet..."
+az sql mi create --admin-password $password --admin-user $login --name $instance --resource-group $resourceGroup --subnet $subnet --vnet-name $vNet --location "$location"
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
