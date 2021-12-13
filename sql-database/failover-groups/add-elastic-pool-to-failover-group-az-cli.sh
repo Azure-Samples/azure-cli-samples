@@ -10,6 +10,7 @@ database="msdocsazuresqldb$randomIdentifier"
 login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
 pool="msdocs-azuresql-pool-$randomIdentifier"
+
 failoverGroup="msdocs-azuresql-failover-group-$randomIdentifier"
 failoverLocation="Central US"
 failoverServer="msdocs-azuresql-failover-server-$randomIdentifier"
