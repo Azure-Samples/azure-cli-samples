@@ -19,7 +19,7 @@ login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
 vpnSharedKey="abc123"
 gateway="msdocs-azuresql-gateway-$randomIdentifier"
-gatewayIP="$gateway-ip"
+gatewayIp="$gateway-ip"
 gatewayConnection="$gateway-connection"
 failoverResourceGroup="msdocs-azuresql-failover-rg-$randomIdentifier"
 failoverLocation="Central US"
@@ -93,8 +93,8 @@ az sql mi create --admin-password $password --admin-user $login --name $failover
 
 echo "Creating gateway..."
 az network vnet subnet create --name "GatewaySubnet" --resource-group $resourceGroup --vnet-name $vnet --address-prefixes 10.0.255.0/27
-az network public-ip create --name $gatewayIP --resource-group $resourceGroup --allocation-method Dynamic --location "$location"
-az network vnet-gateway create --name $gateway --public-ip-addresses $gatewayIP --resource-group $resourceGroup --vnet $vnet --asn 61000 --gateway-type Vpn --location "$location" --sku VpnGw1 --vpn-type RouteBased #-EnableBgp $true
+az network public-ip create --name $gatewayIp --resource-group $resourceGroup --allocation-method Dynamic --location "$location"
+az network vnet-gateway create --name $gateway --public-ip-addresses $gatewayIp --resource-group $resourceGroup --vnet $vnet --asn 61000 --gateway-type Vpn --location "$location" --sku VpnGw1 --vpn-type RouteBased #-EnableBgp $true
 
 echo "Creating failover gateway..."
 az network vnet subnet create --name "GatewaySubnet" --resource-group $failoverResourceGroup  --vnet-name $failoverVnet --address-prefixes 10.128.255.0/27
