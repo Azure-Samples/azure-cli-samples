@@ -46,7 +46,7 @@ databaseId=$(az sql elastic-pool list-dbs --name $pool --resource-group $resourc
 echo "Adding $database to $failoverGroup..."
 az sql failover-group update --name $failoverGroup --add-db $databaseId --resource-group $resourceGroup --server $server
 
-echo "Confirming role of $failoverServer is secondary..." # note ReplicationRole property
+echo "Confirming the role of each server in the failover group..." # note ReplicationRole property
 az sql failover-group show --name $failoverGroup --resource-group $resourceGroup --server $server
 
 echo "Failing over to $failoverServer..."
