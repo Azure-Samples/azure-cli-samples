@@ -13,7 +13,7 @@ pool="msdocs-azuresql-pool-$randomIdentifier"
 
 failoverGroup="msdocs-azuresql-failover-group-$randomIdentifier"
 failoverLocation="Central US"
-failoverServer="msdocs-azuresql-failover-server-$randomIdentifier"
+secondaryServer="msdocs-azuresql-secondary-server-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
@@ -32,14 +32,14 @@ az sql elastic-pool create --name $pool --resource-group $resourceGroup --server
 echo "Adding $database to $pool..."
 az sql db update --elastic-pool $pool --name $database --resource-group $resourceGroup --server $server
 
-echo "Creating $failoverServer in $failoverLocation..."
-az sql server create --name $failoverServer --resource-group $resourceGroup --location "$failoverLocation"  --admin-user $login --admin-password $password
+echo "Creating $secondaryServer in $failoverLocation..."
+az sql server create --name $secondaryServer --resource-group $resourceGroup --location "$failoverLocation"  --admin-user $login --admin-password $password
 
-echo "Creating $pool on $failoverServer..."
-az sql elastic-pool create --name $pool --resource-group $resourceGroup --server $failoverServer
+echo "Creating $pool on $secondaryServer..."
+az sql elastic-pool create --name $pool --resource-group $resourceGroup --server $secondaryServer
 
-echo "Creating $failoverGroup between $server and $failoverServer..."
-az sql failover-group create --name $failoverGroup --partner-server $failoverServer --resource-group $resourceGroup --server $server --failover-policy Automatic --grace-period 2
+echo "Creating $failoverGroup between $server and $secondaryServer..."
+az sql failover-group create --name $failoverGroup --partner-server $secondaryServer --resource-group $resourceGroup --server $server --failover-policy Automatic --grace-period 2
 
 databaseId=$(az sql elastic-pool list-dbs --name $pool --resource-group $resourceGroup --server $server --query [0].name -o json | tr -d '"')
 
@@ -49,10 +49,10 @@ az sql failover-group update --name $failoverGroup --add-db $databaseId --resour
 echo "Confirming the role of each server in the failover group..." # note ReplicationRole property
 az sql failover-group show --name $failoverGroup --resource-group $resourceGroup --server $server
 
-echo "Failing over to $failoverServer..."
-az sql failover-group set-primary --name $failoverGroup --resource-group $resourceGroup --server $failoverServer 
+echo "Failing over to $secondaryServer..."
+az sql failover-group set-primary --name $failoverGroup --resource-group $resourceGroup --server $secondaryServer 
 
-echo "Confirming role of $failoverServer is now primary..." # note ReplicationRole property
+echo "Confirming role of $secondaryServer is now primary..." # note ReplicationRole property
 az sql failover-group show --name $failoverGroup --resource-group $resourceGroup --server $server
 
 echo "Failing back to $server...."
