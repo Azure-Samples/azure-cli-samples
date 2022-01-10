@@ -9,7 +9,7 @@ resourceGroup="msdocs-sql-rg-$randomIdentifier"
 tags="restore-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-restore="restore-$randomIdentifier"
+restoreServer="restoreServer-$randomIdentifier"
 login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
 
@@ -33,7 +33,7 @@ restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
 echo $restoreDateTime
 
 echo "Restoring $database to $restoreDateTime..." # restore database to its state 2 minutes ago
-az sql db restore --dest-name $restore --edition Standard --name $database --resource-group $resourceGroup --server $server --service-objective S0 --time $restoreDateTime
+az sql db restore --dest-name $restoreServer --edition Standard --name $database --resource-group $resourceGroup --server $server --service-objective S0 --time $restoreDateTime
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
