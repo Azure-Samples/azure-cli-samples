@@ -1,50 +1,49 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 1/11/2022
+
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
+resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
+tags="server-logs-mariadb"
+server="msdocs-mariadb-server-$randomIdentifier"
+sku="GP_Gen5_2"
+login="msdocsAdminUser"
+password="Pa$$w0rD-$randomIdentifier"
+configurationParameter="slow_query_log"
+logValue="On"
+durationStatementLog="durationStatementLog-$randomIdentifier"
+logDuration="10000"
+logFileList="logFileList"
+
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-az group create \
---name myresourcegroup  \
---location westus
+echo "Creating $resource in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a MariaDB server in the resource group
-# Name of a server maps to DNS name and is thus required to be globally unique in Azure
-# Substitute the <server_admin_password> with your own value
-az mariadb server create \
---name mydemoserver \
---resource-group myresourcegroup \
---location westus \
---admin-user myadmin \
---admin-password <server_admin_password> \
---sku-name GP_Gen5_2 \
+# Name of a server maps to DNS name and is thus required to be globally unique in Azure.
+echo "Creating $server in $location..."
+az mariadb server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
 # List the configuration options for review
-az mariadb server configuration list \
---resource-group myresourcegroup  \
---server mydemoserver
+az mariadb server configuration list --resource-group $resourceGroup --server $server
 
-# Turn on statement level log
-az mariadb server configuration set \
---name log_statement \
---resource-group myresourcegroup \
---server mydemoserver \
---value all
+# Show the details of the slow_query_log server configuration parameter
+az mariadb server configuration show --name $configurationParameter --resource-group $resourceGroup --server $server
 
-# Set log_min_duration_statement time to 10 sec
-az mariadb server configuration set \
---name log_min_duration_statement \
---resource-group myresourcegroup \
---server mydemoserver \
---value 10000
+# Enable the slow_query_log 
+az mariadb server configuration set --name slow_query_log --resource-group $resourceGroup --server $server --value On
 
 # List the available log files and direct to a text file
-az mariadb server-logs list \
---resource-group myresourcegroup \
---server mydemoserver > log_files_list.txt
+az mariadb server-logs list --resource-group $resourceGroup --server $server
 
-# Download log file from Azure 
-# Review log_files_list.txt to find the server log file name for the desired timeframe
-# Substitute the <log_file_name> with your server log file name
-# Creates the postgresql-<date>_000000.log file in the current command line path
-az mariadb server-logs download \
---name <log_file_name> \
---resource-group myresourcegroup \
---server mydemoserver
+# To download log file from Azure, direct the output of the previous comment to a text file 
+# "> log_files_list.txt"
+# Review the text file to find the server log file name for the desired timeframe
+# Substitute the <log_file_name> in the script below with your server log file name
+# Creates the log file in the current command line path
+# az mariadb server-logs download --name <log_file_name> $resourceGroup --server $server
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
