@@ -1,55 +1,45 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 1/11/2022
 
-# Set up variables
-RESOURCE_GROUP="myresourcegroup"
-SERVER_NAME="mydemoserver-$RANDOM"
-PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12)
-echo password $PASSWORD # returns the generated password
-LOCATION="westus"
-ADMIN_USER="myadmin"
-SUBSCRIPTION_ID="" # enter your subscription ID
+let randomIdentifier=$RANDOM*$RANDOM
+subscriptionId="<enter your subscriptionId here>"
+location="East US"
+resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
+tags="scale-mariadb-server"
+server="msdocs-mariadb-server-$randomIdentifier"
+sku="GP_Gen5_2"
+login="msdocsAdminUser"
+password="Pa$$w0rD-$randomIdentifier"
+scaleUpSku="GP_Gen5_4"
+scaleDownSku="GP_Gen5_2"
+storageSize="102400"
+
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-az group create \
-    --name $RESOURCE_GROUP \
-    --location $LOCATION
+echo "Creating $resource in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a MariaDB server in the resource group
-az mariadb server create \
-    --name $SERVER_NAME \
-    --resource-group $RESOURCE_GROUP \
-    --location $LOCATION \
-    --admin-user $ADMIN_USER \
-    --admin-password $PASSWORD \
-    --sku-name GP_Gen5_2
+# Name of a server maps to DNS name and is thus required to be globally unique in Azure.
+echo "Creating $server in $location..."
+az mariadb server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
 # Monitor usage metrics - CPU
-az monitor metrics list \
-    --resource "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DBforMariaDB/servers/$SERVER_NAME" \
-    --metric cpu_percent \
-    --interval PT1M
+az monitor metrics list --resource "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.DBforMariaDB/servers/$server" --metric cpu_percent --interval PT1M
 
 # Monitor usage metrics - Storage
-az monitor metrics list \
-    --resource "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.DBforMariaDB/servers/$SERVER_NAME" \
-    --metric storage_used \
-    --interval PT1M
+az monitor metrics list --resource "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.DBforMariaDB/servers/$server" --metric storage_used --interval PT1M
 
 # Scale up the server by provisionining more vCores within the same tier
-az mariadb server update \
-    --resource-group $RESOURCE_GROUP \
-    --name $SERVER_NAME \
-    --sku-name GP_Gen5_4
+az mariadb server update --resource-group $resourceGroup --name $server --sku-name $scaleUpSku
 
 # Scale down the server by provisioning fewer vCores within the same tier
-az mariadb server update \
-    --resource-group $RESOURCE_GROUP \
-    --name $SERVER_NAME \
-    --sku-name GP_Gen5_2
+az mariadb server update --resource-group $resourceGroup --name $server --sku-name $scaleDownSku
 
 # Scale up the server to provision a storage size of 7GB
 # Storage size cannot be reduced
-az mariadb server update \
-    --resource-group $RESOURCE_GROUP \
-    --name $SERVER_NAME \
-    --storage-size 7168
+az mariadb server update --resource-group $resourceGroup --name $server --storage-size $storageSize
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
