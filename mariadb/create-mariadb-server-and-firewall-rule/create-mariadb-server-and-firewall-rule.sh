@@ -10,7 +10,7 @@ sku="GP_Gen5_2"
 login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
 # Specify appropriate IP address values for your environment
-# to limit access to the MariaDB server
+# to limit / allow access to the MariaDB server
 startIp=0.0.0.0
 endIp=0.0.0.0
 
@@ -25,8 +25,8 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 echo "Creating $server in $location..."
 az mariadb server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
-# Configure a firewall rule for the server
-# The ip address range that you want to allow to access your server
+# Configure a firewall rule for the server 
+echo "Configuring a firewall rule for $server for the IP address range of $startIp to $endIp"
 az mariadb server firewall-rule create --resource-group $resourceGroup --server $server --name AllowIps --start-ip-address $startIp --end-ip-address $endIp
 
 # echo "Deleting all resources"

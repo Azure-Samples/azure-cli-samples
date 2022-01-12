@@ -27,19 +27,24 @@ echo "Creating $server in $location..."
 az mariadb server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
 # Get available service endpoints for Azure region output is JSON
-# Use the command below to get the list of services supported for endpoints, for an Azure region, say "westus".
+echo "List of available service endpoints for $location"
 az network vnet list-endpoint-services --location "$location"
 
-# Add Azure SQL service endpoint to a subnet *mySubnet* while creating the virtual network *myVNet* output is JSON
+# Add Azure SQL service endpoint to a subnet while creating the virtual network
+echo "Adding service endpoint to $subnet in $vNet"
 az network vnet create --resource-group $resourceGroup --name $vNet --address-prefixes $vNetAddressPrefix --location "$location"
 
 # Creates the service endpoint
+echo "Creating a service endpoint to $subnet in $vNet"
 az network vnet subnet create --resource-group $resourceGroup --name $subnet --vnet-name $vNet --address-prefix $subnetAddressPrefix --service-endpoints Microsoft.SQL
 
 # View service endpoints configured on a subnet
+echo "Viewing the service endpoint to $subnet in $vNet"
 az network vnet subnet show --resource-group $resourceGroup --name $subnet --vnet-name $vNet
 
-# Create a VNet rule on the sever to secure it to the subnet Note: resource group (-g) parameter is where the database exists. VNet resource group if different should be specified using subnet id (URI) instead of subnet, VNet pair.
+# Create a VNet rule on the sever to secure it to the subnet Note: resource group (-g) parameter is where the database exists.
+# VNet resource group if different should be specified using subnet id (URI) instead of subnet, VNet pair.
+echo "Creating a VNet rule on $server to secure it to $subnet in $vNet"
 az mariadb server vnet-rule create --name $rule --resource-group $resourceGroup --server $server --vnet-name $vNet --subnet $subnet
 
 # echo "Deleting all resources"

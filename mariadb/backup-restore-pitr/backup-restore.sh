@@ -33,6 +33,7 @@ restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
 echo $restoreDateTime
 
 # Restore a server from backup to a new server
+echo "Restoring $server to $restoreServer"
 az mariadb server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restoreDateTime --source-server $server
 
 # echo "Deleting all resources"
