@@ -27,15 +27,19 @@ echo "Creating $server in $location..."
 az mariadb server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
 # List the configuration options for review
+echo "Returning the configuration options on $server"
 az mariadb server configuration list --resource-group $resourceGroup --server $server
 
-# Show the details of the slow_query_log server configuration parameter
+# Show the value of the slow_query_log server configuration parameter
+echo "Returning the value of the slow_query_log server configuration parameter on $server"
 az mariadb server configuration show --name $configurationParameter --resource-group $resourceGroup --server $server
 
 # Enable the slow_query_log 
+echo "Enabling the slow_query_log on $server"
 az mariadb server configuration set --name slow_query_log --resource-group $resourceGroup --server $server --value On
 
-# List the available log files and direct to a text file
+# List the available log files
+echo "Returning the list of available log files on $server"
 az mariadb server-logs list --resource-group $resourceGroup --server $server
 
 # To download log file from Azure, direct the output of the previous comment to a text file 

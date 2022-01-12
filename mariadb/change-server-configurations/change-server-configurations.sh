@@ -25,9 +25,11 @@ az mariadb server create --name $server --resource-group $resourceGroup --locati
 az mariadb server configuration list --resource-group $resourceGroup --server-name $server
 
 # Set value of *innodb_lock_wait_timeout*
+echo "Setting value of the innodb_lock_wait_timeout setting on $server"
 az mariadb server configuration set --resource-group $resourceGroup --server-name $server --name innodb_lock_wait_timeout --value 120
 
 # Check the value of *innodb_lock_wait_timeout*
+echo "Checking the value of the innodb_lock_wait_timeout setting on $server"
 az mariadb server configuration show --resource-group $resourceGroup --server-name $server --name innodb_lock_wait_timeout
 
 # echo "Deleting all resources"
