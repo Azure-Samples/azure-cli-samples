@@ -42,7 +42,8 @@ az network vnet subnet create --resource-group $resourceGroup --name $subnet --v
 echo "Viewing the service endpoint to $subnet in $vNet"
 az network vnet subnet show --resource-group $resourceGroup --name $subnet --vnet-name $vNet
 
-# Create a VNet rule on the server to secure it to the subnet Note: resource group (-g) parameter is where the database exists.
+# Create a VNet rule on the server to secure it to the subnet
+# Note: resource group (-g) parameter is where the database exists.
 # VNet resource group if different should be specified using subnet id (URI) instead of subnet, VNet pair.
 echo "Creating a VNet rule on $server to secure it to $subnet in $vNet"
 az mariadb server vnet-rule create --name $rule --resource-group $resourceGroup --server $server --vnet-name $vNet --subnet $subnet
