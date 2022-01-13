@@ -1,35 +1,36 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 1/13/2022
+
+let randomIdentifier=$RANDOM*$RANDOM
+location="East US"
+resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
+tags="change-server-cofigurations-postgresql"
+server="msdocs-postgresql-server-$randomIdentifier"
+sku="GP_Gen5_2"
+login="msdocsAdminUser"
+password="Pa$$w0rD-$randomIdentifier"
+
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-az group create \
---name myresourcegroup \
---location westus
+echo "Creating $resource in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a PostgreSQL server in the resource group
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
-# Substitute the <server_admin_password> with your own value.
-az postgres server create \
---name mydemoserver \
---resource-group myresourcegroup \
---location westus \
---admin-user myadmin \
---admin-password <server_admin_password> \
---sku-name GP_Gen4_2 \
+echo "Creating $server in $location..."
+az postgres server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
 # Display all available configurations with valid values of an Azure Database for PostgreSQL server
-az postgres server configuration list \
---resource-group myresourcegroup \
---server-name mydemoserver
+az postgres server configuration list --resource-group $resourceGroup --server-name $server
 
 # Set value of **log_retention_days**
-az postgres server configuration set \
---resource-group myresourcegroup \
---server-name mydemoserver \
---name log_retention_days \
---value 7
+echo "Setting value of the log_retention_days setting on $server"
+az postgres server configuration set --resource-group $resourceGroup --server-name $server --name log_retention_days --value 7
 
 # Check the value of **log_retention_days**
-az postgres server configuration show \
---resource-group myresourcegroup \
---server-name mydemoserver \
---name log_retention_days 
+echo "Checking the value of the log_retention_days setting on $server"
+az postgres server configuration show --resource-group $resourceGroup --server-name $server --name log_retention_days
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
