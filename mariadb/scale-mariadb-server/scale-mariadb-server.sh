@@ -42,7 +42,7 @@ az mariadb server update --resource-group $resourceGroup --name $server --sku-na
 echo "Scaling down $server by changing the SKU to $scaleDownSku"
 az mariadb server update --resource-group $resourceGroup --name $server --sku-name $scaleDownSku
 
-# Scale up the server to provision a storage size of 7GB
+# Scale up the server to provision a storage size of 10GB
 # Storage size cannot be reduced
 echo "Scaling up the storage size for $server to $storageSize"
 az mariadb server update --resource-group $resourceGroup --name $server --storage-size $storageSize
