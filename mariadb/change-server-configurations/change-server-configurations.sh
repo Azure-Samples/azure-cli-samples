@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/11/2022
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
 tags="change-server-cofigurations-mariadb"
@@ -13,7 +13,7 @@ password="Pa$$w0rD-$randomIdentifier"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a MariaDB server in the resource group

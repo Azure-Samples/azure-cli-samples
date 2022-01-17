@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 1/11/2022
 
 # Enter your subscriptionID before executing this script
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="<enter your subscriptionId here>"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
@@ -18,7 +18,7 @@ storageSize="102400"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a MariaDB server in the resource group
