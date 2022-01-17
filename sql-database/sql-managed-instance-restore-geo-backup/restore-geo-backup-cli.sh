@@ -9,7 +9,7 @@ $instance = "<msdocs-azuresql-instance>" # add instance here
 $targetInstance = "<msdocs-azuresql-target-instance>" # add target instance here
 $resourceGroup = "<msdocs-azuresql-rg>" # add resource here
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 $managedDatabase = "managedDatabase-$randomIdentifier"
 
 echo "Creating $($managedDatabase) on $($instance)..."

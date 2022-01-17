@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="copy-database-to-new-server"
@@ -16,7 +16,7 @@ targetDatabase="msdocs-azuresql-targetDatabase-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resourceGroup and $targetResourceGroup..."
+echo "Creating $resourceGroup in location $location and $targetResourceGroup in $targetLocation..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 az group create --name $targetResourceGroup --location "$targetLocation"
 

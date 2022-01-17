@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="setup-geodr-and-failover-elastic-pool"
@@ -17,7 +17,7 @@ secondaryPool="msdocs-azuresql-secondary-pool-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resourceGroup and $failoverResourceGroup..."
+echo "Creating $resourceGroup in $location and $failoverResourceGroup in $failoverLocation..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 az group create --name $failoverResourceGroup --location "$failoverLocation"
 
