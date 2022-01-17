@@ -6,7 +6,7 @@
 # So, not surfaced in md file or in TOC
 # Due to deployment times, you should plan for a full day to complete the entire script. You can monitor deployment progress in the activity log within the Azure portal. For more information on deployment times, see https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance#managed-instance-management-operations. 
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="add-managed-instance-to-failover-group-az-cli"
@@ -35,7 +35,7 @@ failoverGatewayConnection="$failoverGateway-connection"
 
 echo "Using resource groups $resourceGroup and $failoverResourceGroup  with login: $login, password: $password..."
 
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location and $failoverResourceGroup in $failoverLocation..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 az group create --name $failoverResourceGroup  --location "$failoverLocation"
 

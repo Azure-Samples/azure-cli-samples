@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="backup-database"
@@ -15,7 +15,7 @@ bacpac="backup.bacpac"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating resource group $resource..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $storage..."
