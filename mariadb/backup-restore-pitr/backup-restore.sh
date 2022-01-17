@@ -3,7 +3,7 @@
 
 # Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
 # In Windows, run Bash in a Docker container to sync time zones between Azure and Bash.
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
 tags="backup-restore-mariadb"
@@ -16,7 +16,7 @@ password="Pa$$w0rD-$randomIdentifier"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a MariaDB server in the resource group
@@ -33,6 +33,9 @@ restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
 echo $restoreDateTime
 
 # Restore a server from backup to a new server
+# To specify a specific point-in-time (in UTC) to restore from, use the ISO8601 format:
+# restoreDateTime=“2021-07-09T13:10:00Z”
+
 echo "Restoring $server to $restoreServer"
 az mariadb server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restoreDateTime --source-server $server
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/11/2022
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
 tags="server-logs-mariadb"
@@ -11,14 +11,11 @@ login="msdocsAdminUser"
 password="Pa$$w0rD-$randomIdentifier"
 configurationParameter="slow_query_log"
 logValue="On"
-durationStatementLog="durationStatementLog-$randomIdentifier"
-logDuration="10000"
-logFileList="logFileList"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a MariaDB server in the resource group
@@ -36,7 +33,7 @@ az mariadb server configuration show --name $configurationParameter --resource-g
 
 # Enable the slow_query_log 
 echo "Enabling the slow_query_log on $server"
-az mariadb server configuration set --name slow_query_log --resource-group $resourceGroup --server $server --value On
+az mariadb server configuration set --name $configurationParameter --resource-group $resourceGroup --server $server --value $logValue
 
 # List the available log files
 echo "Returning the list of available log files on $server"
