@@ -1,9 +1,8 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/11/2022
 
-# Enter your subscriptionID before executing this script
 let "randomIdentifier=$RANDOM*$RANDOM"
-subscriptionId="<enter your subscriptionId here>"
+subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
 tags="scale-mariadb-server"
