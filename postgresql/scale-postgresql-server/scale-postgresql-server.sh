@@ -3,7 +3,7 @@
 
 # Enter your subscriptionID before executing this script
 let "randomIdentifier=$RANDOM*$RANDOM"
-subscriptionId="<enter your subscriptionId here>"
+subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
 tags="scale-postgresql-server"
@@ -28,11 +28,11 @@ az postgres server create --name $server --resource-group $resourceGroup --locat
 
 # Monitor usage metrics - CPU
 echo "Returning the CPU usage metrics for $server"
-az monitor metrics list --resource "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.DBforMariaDB/servers/$server" --metric cpu_percent --interval PT1M
+az monitor metrics list --resource "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.DBforPostgresql/servers/$server" --metric cpu_percent --interval PT1M
 
 # Monitor usage metrics - Storage
 echo "Returning the storage usage metrics for $server"
-az monitor metrics list --resource "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.DBforMariaDB/servers/$server" --metric storage_used --interval PT1M
+az monitor metrics list --resource "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.DBforPostgresql/servers/$server" --metric storage_used --interval PT1M
 
 # Scale up the server by provisionining more vCores within the same tier
 echo "Scaling up $server by changing the SKU to $scaleUpSku"
