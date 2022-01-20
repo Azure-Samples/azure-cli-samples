@@ -1,7 +1,6 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/13/2022
 
-# Enter your subscriptionID before executing this script
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
