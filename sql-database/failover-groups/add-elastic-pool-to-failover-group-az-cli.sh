@@ -60,3 +60,6 @@ az sql failover-group set-primary --name $failoverGroup --resource-group $resour
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
+
+# The script is used in the following file, adding or removing lines may require you update the range value in this file
+# articles\azure-sql\database\failover-group-add-elastic-pool-tutorial.md

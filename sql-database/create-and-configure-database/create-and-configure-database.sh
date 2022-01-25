@@ -30,3 +30,9 @@ az sql db create --resource-group $resourceGroup --server $server --name $databa
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
+
+# The script is used in the following files, adding or removing lines may require you update the range value in these files
+# articles\azure-sql\database\single-database-create-quickstart.md
+# articles\azure-sql\database\failover-group-add-single-database-tutorial.md
+# articles\azure-sql\database\failover-group-add-elastic-pool-tutorial.md
+# includes\sql-database-create-single-database.md
