@@ -29,5 +29,13 @@ az postgres server create --name $server --resource-group $resourceGroup --locat
 echo "Configuring a firewall rule for $server for the IP address range of $startIp to $endIp"
 az postgres server firewall-rule create --resource-group $resourceGroup --server $server --name AllowIps --start-ip-address $startIp --end-ip-address $endIp
 
+# List firewall rules for the server
+echo "List of server-based firewall rules for $server"
+az postgres server firewall-rule list --resource-group $resourceGroup --server-name $server
+# You may use the switch `--output table` for a more readable table format as the output.
+
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
+
+# The script is used in the following file, adding or removing lines may require you update the range value in this file
+# articles\postgresql\quickstart-create-server-database-azure-cli.md
