@@ -1,3 +1,0 @@
-{
-  "commandToExecute": "yum update -y --exclude=WALinuxAgent && yum install -y epel-release && yum install -y ansible git iptables-services && git clone https://github.com/Azure/azure-docs-cli-python-samples.git && cd azure-docs-cli-python-samples/virtual-machine/create-scaleset-php-ansible/php && ansible-playbook site.yml -i hosts --connection=local"
-}
