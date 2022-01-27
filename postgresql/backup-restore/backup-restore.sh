@@ -10,7 +10,7 @@ tags="backup-restore-postgresql"
 server="msdocs-postgresql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 restoreServer="restore-server$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."

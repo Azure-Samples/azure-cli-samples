@@ -12,7 +12,7 @@ subnet="msdocs-azuresql-subnet-$randomIdentifier"
 nsg="msdocs-azuresql-nsg-$randomIdentifier"
 route="msdocs-azuresql-route-$randomIdentifier"
 instance="msdocs-azuresql-instance-$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."

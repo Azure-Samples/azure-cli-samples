@@ -7,7 +7,7 @@ resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tags="monitor-and-scale-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
