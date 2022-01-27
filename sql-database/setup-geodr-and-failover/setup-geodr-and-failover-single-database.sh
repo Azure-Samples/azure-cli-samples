@@ -7,7 +7,7 @@ resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="setup-geodr-and-failover-single-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 failoverResourceGroup="msdocs-azuresql-failover-rg-$randomIdentifier"

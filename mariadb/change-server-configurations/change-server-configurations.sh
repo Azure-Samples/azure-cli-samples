@@ -7,7 +7,7 @@ resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
 tags="change-server-cofigurations-mariadb"
 server="msdocs-mariadb-server-$randomIdentifier"
 sku="GP_Gen5_2"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."

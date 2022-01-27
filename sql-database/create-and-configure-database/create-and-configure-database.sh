@@ -7,7 +7,7 @@ resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="create-and-configure-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 # Specify appropriate IP address values for your environment
 # to limit access to the SQL Database server
