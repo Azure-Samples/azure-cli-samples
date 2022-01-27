@@ -1,14 +1,23 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 1/27/2022
+
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-vmss-rg-$randomIdentifier"
+tags="simple-scale-set-vmss"
+image="UbuntuLTS"
+scaleSet="msdocs-scaleSet-$randomIdentifier"
+upgradePolicyMode="automatic"
+instanceCount="2"
+login="azureuser"
 
 # Create a resource group
-az group create --name myResourceGroup --location eastus
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created
-az vmss create \
-  --resource-group myResourceGroup \
-  --name myScaleSet \
-  --image UbuntuLTS \
-  --upgrade-policy-mode automatic \
-  --admin-username azureuser \
-  --generate-ssh-keys
+az vmss create --resource-group $resourceGroup --name $scaleSet --image $image --upgrade-policy-mode $upgradePolicyMode --instance-count $instanceCount --admin-username $login --generate-ssh-keys
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

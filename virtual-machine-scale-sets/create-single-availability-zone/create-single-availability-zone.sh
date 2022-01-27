@@ -1,30 +1,31 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 1/27/2022
+
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-vmss-rg-$randomIdentifier"
+tags="create-single-availability-zone-vmss"
+image="UbuntuLTS"
+scaleSet="msdocs-scaleSet-$randomIdentifier"
+upgradePolicyMode="automatic"
+instanceCount="2"
+login="azureuser"
+zones="1"
 
 # Create a resource group
-az group create --name myResourceGroup --location eastus2
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a scale set in Availability Zone 1
-az vmss create \
-  --resource-group myResourceGroup \
-  --name myScaleSet \
-  --image UbuntuLTS \
-  --upgrade-policy-mode automatic \
-  --admin-username azureuser \
-  --generate-ssh-keys \
-  --zones 1
+# This command also creates a 'Standard' SKU public IP address and load balancer
+# For the Load Balancer Standard SKU, a Network Security Group and rules are also created
+az vmss create --resource-group $resourceGroup --name $scaleSet --image $image --upgrade-policy-mode $upgradePolicyMode --instance-count $instanceCount --admin-username $login --generate-ssh-keys --zones $zones
 
 # Apply the Custom Script Extension that installs a basic Nginx webserver
-az vmss extension set \
-  --publisher Microsoft.Azure.Extensions \
-  --version 2.0 \
-  --name CustomScript \
-  --resource-group myResourceGroup \
-  --vmss-name myScaleSet \
-  --settings '{"fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/automate_nginx.sh"],"commandToExecute":"./automate_nginx.sh"}'
+az vmss extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --resource-group $resourceGroup --vmss-name $scaleSet --settings '{"fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/automate_nginx.sh"],"commandToExecute":"./automate_nginx.sh"}'
 
 # Output the public IP address to access the site in a web browser
-az network public-ip show \
-  --resource-group myResourceGroup \
-  --name myScaleSetLBPublicIP \
-  --query [ipAddress] \
-  --output tsv
+az network public-ip show --resource-group $resourceGroup --name $scaleSet"LBPublicIP" --query [ipAddress] --output tsv
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

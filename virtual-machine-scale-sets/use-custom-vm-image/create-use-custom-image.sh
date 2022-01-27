@@ -1,11 +1,11 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 1/26/2022
+# Passed validation in Cloud Shell on 1/27/2022
 
 let "randomIdentifier=$RANDOM*$RANDOM"
 subcriptionId=$(az account show --query id -o tsv)
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
-tags="create-custom-image-vmss"
+tags="create-use-custom-image-vmss"
 image="UbuntuLTS"
 virtualMachine="msdocs-vm-$randomIdentifier"
 login="azureuser"

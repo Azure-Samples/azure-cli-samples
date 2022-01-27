@@ -1,41 +1,41 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 1/27/2022
+
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-vmss-rg-$randomIdentifier"
+tags="install-apps-vmss"
+image="UbuntuLTS"
+scaleSet="msdocs-scaleSet-$randomIdentifier"
+upgradePolicyMode="automatic"
+instanceCount="2"
+login="azureuser"
+nlbWebRule="msdocs-nlb-web-rule-vmss"
 
 # Create a resource group
-az group create --name myResourceGroup --location eastus
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created
-az vmss create \
-  --resource-group myResourceGroup \
-  --name myScaleSet \
-  --image UbuntuLTS \
-  --upgrade-policy-mode automatic \
-  --admin-username azureuser \
-  --generate-ssh-keys
+az vmss create --resource-group $resourceGroup --name $scaleSet --image $image --upgrade-policy-mode $upgradePolicyMode --instance-count $instanceCount --admin-username $login --generate-ssh-keys
 
 # Install the Azure Custom Script Extension to run an install script
-az vmss extension set \
-  --publisher Microsoft.Azure.Extensions \
-  --version 2.0 \
-  --name CustomScript \
-  --resource-group myResourceGroup \
-  --vmss-name myScaleSet \
-  --settings '{"fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/automate_nginx.sh"],"commandToExecute":"./automate_nginx.sh"}'
+az vmss extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --resource-group $resourceGroup --vmss-name $scaleSet --settings '{"fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/automate_nginx.sh"],"commandToExecute":"./automate_nginx.sh"}'
 
 # Create a load balancer rule to allow web traffic to reach VM instances
 az network lb rule create \
-  --resource-group myResourceGroup \
-  --name myLoadBalancerRuleWeb \
-  --lb-name myScaleSetLB \
-  --backend-pool-name myScaleSetLBBEPool \
+  --resource-group $resourceGroup \
+  --name $nlbWebRule \
+  --lb-name $scaleSet"LB" \
+  --backend-pool-name $scaleSet"LBBEPool" \
   --backend-port 80 \
   --frontend-ip-name loadBalancerFrontEnd \
   --frontend-port 80 \
   --protocol tcp
 
-# Show the public IP address of the load balancer and view your web servers
-az network public-ip show \
-  --resource-group myResourceGroup \
-  --name myScaleSetLBPublicIP \
-  --query [ipAddress] \
-  --output tsv
+# Output the public IP address to access the site in a web browser
+az network public-ip show --resource-group $resourceGroup --name $scaleSet"LBPublicIP" --query [ipAddress] --output tsv
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
