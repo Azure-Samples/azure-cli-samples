@@ -7,7 +7,7 @@ resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tags="move-database-between-pools"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 pool="msdocs-azuresql-pool-$randomIdentifier"

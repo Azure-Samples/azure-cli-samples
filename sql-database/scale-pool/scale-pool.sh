@@ -8,7 +8,7 @@ tags="scale-pool"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
 databaseAdditional="msdocs-azuresql-additional-db-$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 pool="msdocs-azuresql-pool-$randomIdentifier"
 
