@@ -1,3 +1,4 @@
+# to be deleted - replaced by create-use-custom-image.sh
 #!/bin/bash
 
 # Create a resource group
