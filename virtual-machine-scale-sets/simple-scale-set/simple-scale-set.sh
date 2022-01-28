@@ -17,6 +17,7 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created
+echo "Creating $scaleSet with $instanceCount instances"
 az vmss create --resource-group $resourceGroup --name $scaleSet --image $image --upgrade-policy-mode $upgradePolicyMode --instance-count $instanceCount --admin-username $login --generate-ssh-keys
 
 # echo "Deleting all resources"

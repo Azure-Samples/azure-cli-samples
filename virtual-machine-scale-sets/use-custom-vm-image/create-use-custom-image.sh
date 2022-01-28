@@ -21,12 +21,7 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create virtual machine from UbuntuLTS image
 echo "Create $virtualMachine from $image image"
-az vm create --resource-group $resourceGroup \
-  --name $virtualMachine \
-  --image $image \
-  --admin-username $login \
-  --generate-ssh-keys \
-  --public-ip-sku Standard
+az vm create --resource-group $resourceGroup --name $virtualMachine --image $image --admin-username $login --generate-ssh-keys --public-ip-sku Standard
 
 # Create a resource group for images
 # echo "Creating $resourceGroup in $location..."
@@ -52,20 +47,11 @@ az sig image-definition create --resource-group $resourceGroup \
 
 # Create image version
 echo "Creating $imageVersion from $imageDefinition"
-az sig image-version create \
-   --resource-group $resourceGroup \
-   --gallery-name $imageGallery \
-   --gallery-image-definition $imageDefinition \
-   --gallery-image-version 1.0.0 \
-   --target-regions "southcentralus=1" "eastus=1" \
-   --managed-image "/subscriptions/$subcriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Compute/virtualMachines/$virtualMachine"
+az sig image-version create  --resource-group $resourceGroup  --gallery-name $imageGallery  --gallery-image-definition $imageDefinition  --gallery-image-version 1.0.0  --target-regions "southcentralus=1" "eastus=1"  --managed-image "/subscriptions/$subcriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Compute/virtualMachines/$virtualMachine"
 
 # Create a scale set from custom image
-az vmss create \
-  --resource-group $resourceGroup \
-  --name $scaleSet \
-  --image "/subscriptions/$subcriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Compute/galleries/$imageGallery/images/$imageDefinition" \
-  --specialized
+echo "Creating $scaleSet from custom image"
+az vmss create --resource-group $resourceGroup --name $scaleSet --image "/subscriptions/$subcriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Compute/galleries/$imageGallery/images/$imageDefinition" --specialized
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

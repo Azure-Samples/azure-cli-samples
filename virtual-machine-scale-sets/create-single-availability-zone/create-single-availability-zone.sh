@@ -19,12 +19,15 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 # Create a scale set in Availability Zone 1
 # This command also creates a 'Standard' SKU public IP address and load balancer
 # For the Load Balancer Standard SKU, a Network Security Group and rules are also created
+echo "Creating $scaleSet with $instanceCount instances"
 az vmss create --resource-group $resourceGroup --name $scaleSet --image $image --upgrade-policy-mode $upgradePolicyMode --instance-count $instanceCount --admin-username $login --generate-ssh-keys --zones $zones
 
 # Apply the Custom Script Extension that installs a basic Nginx webserver
+echo "Installing a basic Nginx webserver"
 az vmss extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --resource-group $resourceGroup --vmss-name $scaleSet --settings '{"fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/automate_nginx.sh"],"commandToExecute":"./automate_nginx.sh"}'
 
 # Output the public IP address to access the site in a web browser
+echo "Displaying the public IP address"
 az network public-ip show --resource-group $resourceGroup --name $scaleSet"LBPublicIP" --query [ipAddress] --output tsv
 
 # echo "Deleting all resources"

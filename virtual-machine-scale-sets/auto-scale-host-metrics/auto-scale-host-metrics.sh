@@ -23,23 +23,25 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created
+echo "Creating $scaleSet with $instanceCount instances"
 az vmss create --resource-group $resourceGroup --name $scaleSet --image $image --upgrade-policy-mode $upgradePolicyMode --instance-count $instanceCount --admin-username $login --generate-ssh-keys
 
 # Define an autoscale profile
 # The following script sets the default, and minimum, capacity of *2* VM instances, and a maximum of *10*
+echo "Setting an autoscale profile with the default, and minimum, capacity of 2 VM instances, and a maximum of 10"
 az monitor autoscale create --resource-group $resourceGroup --resource=$scaleSet --resource-type Microsoft.Compute/virtualMachineScaleSets --name $autoscale --min-count $minCount --max-count $maxCount --count $count
 
 # Create a rule to autoscale out
 # The following script increases the number of VM instances in a scale set when the average CPU load
 # is greater than 70% over a 5-minute period.
 # When the rule triggers, the number of VM instances is increased by three.
-
+echo "Creating an autoscale out rule"
 az monitor autoscale rule create --resource-group $resourceGroup --autoscale-name $autoscale --condition "Percentage CPU > 70 avg 5m" --scale out $scaleOut
 
 # Create a rule to autoscale in
 # The following script decreases the number of VM instances in a scale set when the average CPU load 
 # then drops below 30% over a 5-minute period
-
+echo "Creating an autoscale in rule"
 az monitor autoscale rule create --resource-group $resourceGroup --autoscale-name $autoscale --condition "Percentage CPU < 30 avg 5m" --scale in $scaleIn
 
 # echo "Deleting all resources"
