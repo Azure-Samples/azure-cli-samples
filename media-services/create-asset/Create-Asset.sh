@@ -21,7 +21,7 @@ az ams asset get-sas-urls \
     -n $assetName \
     -a $amsAccountName \
     -g $resourceGroup \
-    --expiry  $expiry\
+    --expiry  $expiry \
     --permissions ReadWrite \
 
 # Use the az storage modules to upload a local file to the container using the SAS URL from previous step.
