@@ -53,11 +53,11 @@ echo "Associate the $subnetFrontEnd to the $nsgFrontEnd subnet"
 az network vnet subnet update --vnet-name $vNet --name $subnetFrontEnd --resource-group $resourceGroup --network-security-group $nsgFrontEnd
 
 # Create a network security group for the back-end subnet.
-echo "Creating $nsgBackEnd for the back-end subnet"
+echo "Creating $nsgBackEnd for $subnetBackEnd"
 az network nsg create --resource-group $resourceGroup --name $nsgBackEnd --location "$location"
 
 # Create an NSG rule to block all outbound traffic from the back-end subnet to the Internet (inbound blocked by default).
-echo "Creating $nsgBackEnd rule to block all outbound traffic from the back-end subnet"
+echo "Creating $nsgBackEnd rule to block all outbound traffic from $subnetBackEnd"
 az network nsg rule create --resource-group $resourceGroup --nsg-name $nsgBackEnd --name Deny-Internet-All --access Deny --protocol Tcp --direction Outbound --priority 100 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "Internet" --destination-port-range "*"
 
 # Associate the back-end NSG to the back-end subnet.
@@ -65,7 +65,7 @@ echo "Associate $nsgBackEnd to the $subnetBackEnd"
 az network vnet subnet update --vnet-name $vNet --name $subnetBackEnd --resource-group $resourceGroup --network-security-group $nsgBackEnd
 
 # Create a public IP address for the VM front-end network interface.
-echo "Creating a public IP address for $publicIpFrontEnd"
+echo "Creating $publicIpFrontEnd address for $publicIpFrontEnd"
 az network public-ip create --resource-group $resourceGroup --name $publicIpFrontEnd --allocation-method Dynamic
 
 # Create a network interface for the VM attached to the front-end subnet.
