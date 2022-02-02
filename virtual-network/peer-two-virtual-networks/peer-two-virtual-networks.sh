@@ -1,52 +1,44 @@
 #!/bin/bash
+# Passed validation in Cloud Shell 02/01/2022
 
-RgName="MyResourceGroup"
-Location="eastus"
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
+tag="peer-two-virtual-networks"
+vNet1="msdocs-vNet-$randomIdentifier"
+addressPrefixVNet1="10.0.0.0/16"
+vNet2="msdocs-vNet2-$randomIdentifier"
+addressPrefixVNet2="10.1.0.0/16"
 
-# Create a resource group.
-az group create \
-  --name $RgName \
-  --location $Location
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
+
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create virtual network 1.
-az network vnet create \
-  --name Vnet1 \
-  --resource-group $RgName \
-  --location $Location \
-  --address-prefix 10.0.0.0/16
+echo "Creating $vNet1"
+az network vnet create --name $vNet1 --resource-group $resourceGroup --location "$location" --address-prefix $addressPrefixVNet1
 
 # Create virtual network 2.
-az network vnet create \
-  --name Vnet2 \
-  --resource-group $RgName \
-  --location $Location \
-  --address-prefix 10.1.0.0/16
+echo "Creating $vNet2"
+az network vnet create --name $vNet2 --resource-group $resourceGroup --location "$location" --address-prefix $addressPrefixVNet2
 
 # Get the id for VNet1.
-VNet1Id=$(az network vnet show \
-  --resource-group $RgName \
-  --name Vnet1 \
-  --query id --out tsv)
+echo "Getting the id for $vNet1"
+VNet1Id=$(az network vnet show --resource-group $resourceGroup --name $vNet1 --query id --out tsv)
 
 # Get the id for VNet2.
-VNet2Id=$(az network vnet show \
-  --resource-group $RgName \
-  --name Vnet2 \
-  --query id \
-  --out tsv)
+echo "Getting the id for $vNet2"
+VNet2Id=$(az network vnet show --resource-group $resourceGroup --name $vNet2 --query id --out tsv)
 
 # Peer VNet1 to VNet2.
-az network vnet peering create \
-  --name LinkVnet1ToVnet2 \
-  --resource-group $RgName \
-  --vnet-name VNet1 \
-  --remote-vnet-id $VNet2Id \
-  --allow-vnet-access
+echo "Peering $vNet1 to $vNet2"
+az network vnet peering create --name "Link"$vNet1"To"$vNet2 --resource-group $resourceGroup --vnet-name $vNet1 --remote-vnet $VNet2Id --allow-vnet-access
 
 # Peer VNet2 to VNet1.
-az network vnet peering create \
-  --name LinkVnet2ToVnet1 \
-  --resource-group $RgName \
-  --vnet-name VNet2 \
-  --remote-vnet-id $VNet1Id \
-  --allow-vnet-access
+echo "Peering $vNet2 to $vNet1"
+az network vnet peering create --name "Link"$vNet2"To"$vNet1 --resource-group $resourceGroup --vnet-name $vNet2 --remote-vnet $VNet1Id --allow-vnet-access
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
