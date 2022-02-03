@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 02/01/2022
+# Passed validation in Cloud Shell 02/03/2022
 
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
@@ -10,7 +10,7 @@ addressPrefixVNet1="10.0.0.0/16"
 vNet2="msdocs-vNet2-$randomIdentifier"
 addressPrefixVNet2="10.1.0.0/16"
 
-echo "Using resource group $resourceGroup with login: $login, password: $password..."
+echo "Using resource group $resourceGroup with login: $login"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
