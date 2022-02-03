@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 02/01/2022
+# Passed validation in Cloud Shell 02/03/2022
 
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
@@ -17,10 +17,11 @@ publicIpFrontEnd="msdocs-public-ip-frontend-$randomIdentifier"
 nicFrontEnd="msdocs-nic-front-end-$randomIdentifier"
 nicBackEnd="msdocs-nic-backend-$randomIdentifier"
 image="UbuntuLTS"
-login="image"
+login="azureuser"
 vm="msdocs-vm-$randomIdentifier"
+sku="BASIC"
 
-echo "Using resource group $resourceGroup with login: $login, password: $password..."
+echo "Using resource group $resourceGroup with login: $login"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
@@ -77,7 +78,7 @@ az network nic create --resource-group $resourceGroup --vnet-name $vNet --subnet
 
 # Create the VM with both the FrontEnd and BackEnd NICs.
 echo "Creating $vm with both NICs"
-az vm create --resource-group $resourceGroup --name $vm --nics $nicFrontEnd $nicBackEnd --image $image --admin-username $login --generate-ssh-keys --public-ip-sku Standard
+az vm create --resource-group $resourceGroup --name $vm --nics $nicFrontEnd $nicBackEnd --image $image --admin-username $login --generate-ssh-keys --public-ip-sku $sku
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 02/01/2022
+# Passed validation in Cloud Shell 02/03/2022
 
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
@@ -18,11 +18,12 @@ publicIpSql="msdocs-public-ip-sql-$randomIdentifier"
 nicWeb="msdocs-nic-web-$randomIdentifier"
 nicSql="msdocs-nic-sql-$randomIdentifier"
 image="UbuntuLTS"
-login="image"
-vmWeb="msdocs-vm-web-$randomIdentifier"
-vmSql="msdocs-vm-sql-$randomIdentifier"
+login="azureuser"
+vmWeb="msdocs-vm-web$randomIdentifier"
+vmSql="msdocs-vm-sql$randomIdentifier"
+sku="BASIC"
 
-echo "Using resource group $resourceGroup with login: $login, password: $password..."
+echo "Using resource group $resourceGroup with login: $login"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
@@ -83,7 +84,7 @@ az network nic create --resource-group $resourceGroup --name $nicWeb --vnet-name
 
 # Create a Web Server VM in the front-end subnet.
 echo "Creating $vmWeb in $subnetFrontEnd"
-az vm create --resource-group $resourceGroup --name $vmWeb --nics $nicWeb --image $image --admin-username $login --generate-ssh-keys  --public-ip-sku Standard
+az vm create --resource-group $resourceGroup --name $vmWeb --nics $nicWeb --image $image --admin-username $login --generate-ssh-keys  --public-ip-sku $sku
 
 # Create a public IP address for the MySQL VM.
 echo "Creating $publicIpSql for $vmSql"
@@ -95,7 +96,7 @@ az network nic create --resource-group $resourceGroup --name $nicSql --vnet-name
 
 # Create a MySQL VM in the backend subnet.
 echo "Creating $vmSql in $subnetBackEnd"
-az vm create --resource-group $resourceGroup --name $vmSql --nics $nicSql --image $image --admin-username $login --generate-ssh-keys  --public-ip-sku Standard
+az vm create --resource-group $resourceGroup --name $vmSql --nics $nicSql --image $image --admin-username $login --generate-ssh-keys  --public-ip-sku $sku
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

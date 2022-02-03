@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 02/01/2022
+# Passed validation in Cloud Shell 02/03/2022
 
 # IMPORTANT
 # To use the IPv6 for Azure virtual network feature, you must configure your subscription only once as follows:
@@ -14,12 +14,13 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
-tag="virtual-network-cli-sample-ipv6-dual-stack-$randomIdentifier"
+tag="virtual-network-cli-sample-ipv6-dual-stack"
 ipV4PublicIp="msdocs-ipV4-public-ip-address-$randomIdentifier"
 ipV6PublicIp="msdocs-ipV6-public-ip-address-$randomIdentifier"
 ipV4RemoteAccessVm0="msdocs-ipV4-pubic-ip-for-vm0-remote-access-$randomIdentifier"
 ipV4RemoteAccessVm1="msdocs-ipV4-pubic-ip-for-vm1-remote-access-$randomIdentifier"
 sku="BASIC"
+allocationMethod="dynamic"
 loadBalancer="msdocs-load-balancer-$randomIdentifier"
 lbFrontEndV4="msdocs-frontend-ip--$randomIdentifier"
 lbPublicIpV4="msdocs-public-ip-$randomIdentifier"
@@ -38,10 +39,14 @@ nic0="msdocs-nic0-$randomIdentifier"
 nic1="msdocs-nic1-$randomIdentifier"
 nic0ConfigIpV6="msdocs-ipV6-config-nic0-$randomIdentifier"
 nic1ConfigIpV6="msdocs-ipV6-config-nic1-$randomIdentifier"
-vm0="msdocs-virtual-machine0-$randomIdentifier"
-vm1="msdocs-virtual-machine1-$randomIdentifier"
+vm0="docvm0$randomIdentifier"
+vm1="docvm1$randomIdentifier"
 image="MicrosoftWindowsServer:WindowsServer:2016-Datacenter:latest"
 vmSize="Standard_A2"
+login="azureuser"
+password="Pa$$w0rD-$randomIdentifier"
+
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
@@ -49,16 +54,16 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create an IPV4 IP address
 echo "Creating $ipV4PublicIp"
-az network public-ip create --name $ipV4PublicIp --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method dynamic --version IPv4
+az network public-ip create --name $ipV4PublicIp --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method $allocationMethod --version IPv4
 
 # Create an IPV6 IP address
 echo "Creating $ipV6PublicIp"
-az network public-ip create --name $ipV6PublicIp --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method dynamic --version IPv6
+az network public-ip create --name $ipV6PublicIp --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method $allocationMethod --version IPv6
 
 # Create public IP addresses for remote access to VMs
 echo "Creating $ipV4RemoteAccessVm0 and $ipV4RemoteAccessVm1"
-az network public-ip create --name $ipV4RemoteAccessVm0 --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method dynamic --version IPv4
-az network public-ip create --name $ipV4RemoteAccessVm1 --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method dynamic --version IPv4
+az network public-ip create --name $ipV4RemoteAccessVm0 --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method $allocationMethod --version IPv4
+az network public-ip create --name $ipV4RemoteAccessVm1 --resource-group $resourceGroup --location "$location" --sku $sku --allocation-method $allocationMethod --version IPv4
 
 # Create load balancer
 echo "Creating $loadBalancer"
@@ -112,10 +117,9 @@ az network nic ip-config create --name $nic0ConfigIpV6 --nic-name $nic0 --resour
 az network nic ip-config create --name $nic1ConfigIpV6 --nic-name $nic1 --resource-group $resourceGroup --vnet-name $vNet --subnet $subnet --private-ip-address-version IPv6 --lb-address-pools $loadBalancerBackEndPool_v6 --lb-name $loadBalancer
 
 # Create virtual machines
-# When prompted, provide a complex password for the admin account for each Windows virtual machine
 Creating "$vm0 and $vm1"
-az vm create --name $vm0 --resource-group $resourceGroup --nics $nic0 --size Standard_A2 --availability-set $availabilitySet --image $image --public-ip-sku Standard 
-az vm create --name $vm1 --resource-group $resourceGroup --nics $nic1 --size $vmSize --availability-set $availabilitySet --image $image --public-ip-sku Standard
+az vm create --name $vm0 --resource-group $resourceGroup --nics $nic0 --size $vmSize --availability-set $availabilitySet --image $image --public-ip-sku $sku --admin-user $login --admin-password $password
+az vm create --name $vm1 --resource-group $resourceGroup --nics $nic1 --size $vmSize --availability-set $availabilitySet --image $image --public-ip-sku $sku --admin-user $login --admin-password $password
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

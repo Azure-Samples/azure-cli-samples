@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell 02/01/2022
+# Passed validation in Cloud Shell 02/03/2022
 
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
@@ -16,9 +16,10 @@ dmzSubnet="msdocs-dmz-$randomIdentifier"
 dmzPrefix="10.0.0.0/24"
 publicIpFirewall="msdocs-publicIpFirewall-$randomIdentifier"
 nicFirewall="msdocs-nic-firewall-$randomIdentifier"
-vmFirewall="msdocs-vm-firewall-$randomIdentifier"
+vmFirewall="msdocs-vm-$randomIdentifier"
+sku="BASIC"
 image="UbuntuLTS"
-login="image"
+login="azureuser"
 routeTableFrontEndSubnet="msdocs-route-table-frontend-subnet-$randomIdentifier"
 routeToBackEnd="msdocs-route-backend-$randomIdentifier"
 routeToInternetFrontEnd="msdocs-route-internet-frontend-$randomIdentifier"
@@ -27,7 +28,7 @@ routeTableBackEndSubnet="msdocs-route-table-backend-subnet-$randomIdentifier"
 routeToFrontEnd="msdocs-route-frontend-$randomIdentifier"
 routeToInternetBackEnd="msdocs-route-internet-backend-$randomIdentifier"
 
-echo "Using resource group $resourceGroup with login: $login, password: $password..."
+echo "Using resource group $resourceGroup with login: $login"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
@@ -68,7 +69,7 @@ az network nic create --resource-group $resourceGroup --name $nicFirewall --vnet
 
 #Create a firewall VM to accept all traffic between the front and backend subnets.
 echo "Creating $vmFirewall"
-az vm create --resource-group $resourceGroup --name $vmFirewall --nics $nicFirewall --image $image --admin-username $login --generate-ssh-keys --public-ip-sku Standard
+az vm create --resource-group $resourceGroup --name $vmFirewall --nics $nicFirewall --image $image --admin-username $login --generate-ssh-keys --public-ip-sku $sku
 
 # Get the private IP address from the VM for the user-defined route.
 echo "Get the private IP address from $vmFirewall"
