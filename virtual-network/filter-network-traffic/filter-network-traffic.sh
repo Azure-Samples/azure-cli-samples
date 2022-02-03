@@ -3,7 +3,7 @@
 
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
-resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
+resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
 tag="filter-network-traffic-virtual-network"
 vNet="msdocs-vNet-$randomIdentifier"
 addressPrefixVNet="10.0.0.0/16"
