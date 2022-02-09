@@ -1,10 +1,11 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 1/11/2022
+# Passed validation in Cloud Shell on 2/9/2022
 
+# Set up variables
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="create-mysql-server"
+tags="create-connect-server-in-vnet-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="Standard_D2ds_v4"
 tier="GeneralPurpose"
@@ -48,8 +49,7 @@ az network vnet subnet show --resource-group $resourceGroup --name $mySqlSubnet 
 
 # Create private DNS zone
 echo "Creating $dns"
-az network private-dns zone create -g $resourceGroup \
-   -n $dns
+az network private-dns zone create -g $resourceGroup    -n $dns
 
 # OPTIONAL : View all SKUs for Flexible Server
 # az mysql flexible-server list-skus --location "$location"
@@ -57,46 +57,19 @@ az network private-dns zone create -g $resourceGroup \
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
 # Create a MySQL Flexible server in the resource group
 echo "Creating $server within $mySqlSubnet"
-az mysql flexible-server create \
---name $server \
---resource-group $resourceGroup \
---location "$location" \
---sku-name $sku \
---tier $tier \
---storage-size $storageSize \
---storage-auto-grow $storageAutoGrow \
---admin-user $login \
---admin-password $password \
---vnet $vNet \
---subnet $mySqlSubnet \
---private-dns-zone $dns
+az mysql flexible-server create --name $server --resource-group $resourceGroup --location "$location" --sku-name $sku --tier $tier --storage-size $storageSize --storage-auto-grow $storageAutoGrow --admin-user $login --admin-password $password --vnet $vNet --subnet $mySqlSubnet --private-dns-zone $dns
 
 # Create a subnet for the virtual machine within the virtual network
 echo "Creating $vmSubnet within $vNet"
-az network vnet subnet create \
---resource-group $resourceGroup \
---vnet-name $vNet \
---name $vmSubnet \
---address-prefixes $vmSubnetAddressPrefix
+az network vnet subnet create --resource-group $resourceGroup --vnet-name $vNet --name $vmSubnet --address-prefixes $vmSubnetAddressPrefix
 
 # Create a VM within the VNET to connect to MySQL Flex Server
 echo "Creating $vm within $vmSubnet"
-az vm create \
---resource-group $resourceGroup \
---name $vm \
---location "$location" \
---image $image \
---admin-username $login \
---generate-ssh-keys \
---vnet-name $vNet \
---subnet $vmSubnet \
---public-ip-sku $ipSku
+az vm create --resource-group $resourceGroup --name $vm --location "$location" --image $image --admin-username $login --generate-ssh-keys --vnet-name $vNet --subnet $vmSubnet --public-ip-sku $ipSku
 
 # Open port 80 for web traffic
 echo "Opening port 80 for web traffic"
-az vm open-port --port 80 \
---resource-group $resourceGroup \
---name $vm
+az vm open-port --port 80 --resource-group $resourceGroup --name $vm
 
 # To SSH into the VM, start by getting the public IP address and then use MySQL tools to connect
 # publicIp=$(az vm list-ip-addresses --resource-group $resourceGroup --name $vm --query "[].virtualMachine.network.publicIpAddresses[0].ipAddress" --output tsv)
@@ -114,4 +87,3 @@ az vm open-port --port 80 \
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
-

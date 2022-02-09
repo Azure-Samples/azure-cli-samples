@@ -1,6 +1,7 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 1/11/2022
+# Passed validation in Cloud Shell on 2/9/2022
 
+# Set up variables
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
