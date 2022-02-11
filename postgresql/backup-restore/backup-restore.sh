@@ -1,8 +1,6 @@
 #!/bin/bash
-# Passed validation in Bash in Docker container on Windows on 1/13/2022
+# Passed validation in Cloud Shell on 2/11/2022
 
-# Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
-# In Windows, run Bash in a Docker container to sync time zones between Azure and Bash.
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"

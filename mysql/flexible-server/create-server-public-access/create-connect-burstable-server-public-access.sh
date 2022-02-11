@@ -1,10 +1,8 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/9/2022
+# Passed validation in Cloud Shell on 2/11/2022
 
 # Create an Azure Database for MySQL - Flexible Server Burstable B1ms instance
 # and configure Public Access connectivity method
-
-# Use Bash rather than Cloud Shell because Azure CLI extensions not permitted in Cloud Shell
 
 # Set up variables
 let "randomIdentifier=$RANDOM*$RANDOM"
