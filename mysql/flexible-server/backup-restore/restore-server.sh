@@ -28,7 +28,7 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 az mysql flexible-server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --public-access $ipAddress
 
-# Sleeping  commands to wait long enough for automatic backup to be created
+# Sleeping commands to wait long enough for automatic backup to be created
 echo "Sleeping..."
 sleep 15m
 

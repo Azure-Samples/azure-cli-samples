@@ -24,7 +24,7 @@ az sql server create --name $server --resource-group $resourceGroup --location "
 echo "Creating $database on $server..."
 az sql db create --resource-group $resourceGroup --server $server --name $database --service-objective S0
 
-# Sleeping  commands to wait long enough for automatic backup to be created
+# Sleeping commands to wait long enough for automatic backup to be created
 echo "Sleeping..."
 sleep 30m
 
