@@ -1,8 +1,6 @@
 #!/bin/bash
-# Passed validation in Bash on Windows in a Docker container 12/08/2021
+# Passed validation in Cloud Shell on 2/11/2022
 
-# Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
-# In Windows, run Bash in a Docker container to sync time zones between Azure and Bash.
 # Run this script after running the script in https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/scripts/create-configure-managed-instance-cli twice to create two managed instances
 # Provide the values for these three variables before running this rest of this script
 $instance = "<msdocs-azuresql-instance>" # add instance here
