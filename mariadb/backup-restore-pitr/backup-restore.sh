@@ -24,7 +24,7 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 echo "Creating $server in $location..."
 az mariadb server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
-# Sleeping  commands to wait long enough for automatic backup to be created
+# Sleeping commands to wait long enough for automatic backup to be created
 echo "Sleeping..."
 sleep 10m
 
