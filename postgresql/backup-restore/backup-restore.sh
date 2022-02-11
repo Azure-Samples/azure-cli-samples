@@ -26,17 +26,18 @@ az postgres server create --name $server --resource-group $resourceGroup --locat
 
 # Sleeping  commands to wait long enough for automatic backup to be created
 echo "Sleeping..."
-sleep 40m
-restoreDateTime=$(date +%s)
-restoreDateTime=$(expr $restoreDateTime - 60)
-restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
-echo $restoreDateTime
+sleep 10m
 
 # Restore a server from backup to a new server
 # To specify a specific point-in-time (in UTC) to restore from, use the ISO8601 format:
-# restoreDateTime=“2021-07-09T13:10:00Z”
-echo "Restoring $server to $restoreServer"
-az postgres server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restoreDateTime --source-server $server
+# restorePoint=“2021-07-09T13:10:00Z”
+restorePoint=$(date +%s)
+restorePoint=$(expr $restorePoint - 60)
+restorePoint=$(date -d @$restorePoint +"%Y-%m-%dT%T")
+echo $restorePoint
+
+echo "Restoring $restoreServer"
+az postgres server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restorePoint --source-server $server
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

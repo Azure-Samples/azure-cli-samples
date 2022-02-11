@@ -29,9 +29,11 @@ sleep 10m
 
 # Restore a server from backup to a new server
 # To specify a specific point-in-time (in UTC) to restore from, use the ISO8601 format:
-# restoreDateTime=“2021-07-09T13:10:00Z”
-# Retrieve earliest restore point for use in this script
-restorePoint=$(az mysql server show --resource-group $resourceGroup --name $server --query earliestRestoreDate --output tsv)
+# restorePoint=“2021-07-09T13:10:00Z”
+restorePoint=$(date +%s)
+restorePoint=$(expr $restorePoint - 60)
+restorePoint=$(date -d @$restorePoint +"%Y-%m-%dT%T")
+echo $restorePoint
 
 echo "Restoring $restoreServer"
 az mysql server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restorePoint --source-server $server
