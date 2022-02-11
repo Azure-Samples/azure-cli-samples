@@ -1,8 +1,5 @@
 #!/bin/bash
-# Passed validation in Bash in Docker container on Windows on 2/9/2022
-
-# Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
-# In Windows, run Bash in a Docker container to sync time zones between Azure and Bash.
+# Passed validation in Cloud Shell on 2/11/2022
 
 # Set up variables
 let "randomIdentifier=$RANDOM*$RANDOM"
@@ -28,18 +25,16 @@ az mysql server create --name $server --resource-group $resourceGroup --location
 
 # Sleeping  commands to wait long enough for automatic backup to be created
 echo "Sleeping..."
-sleep 40m
-restoreDateTime=$(date +%s)
-restoreDateTime=$(expr $restoreDateTime - 60)
-restoreDateTime=$(date -d @$restoreDateTime +"%Y-%m-%dT%T")
-echo $restoreDateTime
+sleep 10m
 
 # Restore a server from backup to a new server
 # To specify a specific point-in-time (in UTC) to restore from, use the ISO8601 format:
 # restoreDateTime=“2021-07-09T13:10:00Z”
+# Retrieve earliest restore point for use in this script
+restorePoint=$(az mysql server show --resource-group $resourceGroup --name $server --query earliestRestoreDate --output tsv)
 
-echo "Restoring $server to $restoreServer"
-az mysql server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restoreDateTime --source-server $server
+echo "Restoring $restoreServer"
+az mysql server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restorePoint --source-server $server
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
