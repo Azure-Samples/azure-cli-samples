@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Bash in Docker container on Windows on 2/9/2022
+# Passed validation in Cloud Shell on 2/9/2022
 
 # Create an Azure Database for MySQL - Flexible Server Burstable B1ms instance
 # and configure Public Access connectivity method
@@ -36,6 +36,7 @@ echo "Adding firewall for IP address range"
 az mysql flexible-server firewall-rule create --name $server --resource-group $resourceGroup --rule-name AllowAzureIPs --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 
 # Connect to server in interactive mode
+# Note: This currently does not work in Cloud Shell
 # az mysql flexible-server connect --name $server --admin-user $login --admin-password $password --interactive
 
 # echo "Deleting all resources"
