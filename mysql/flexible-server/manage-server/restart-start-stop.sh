@@ -36,10 +36,12 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 echo "Stopping $server"
 az mysql flexible-server stop --resource-group $resourceGroup --name $server
 
-# 4. Start the stopped server
+# Start the stopped server
+echo "Starting $server"
 az mysql flexible-server start --resource-group $resourceGroup --name $server
 
-# 5. Restart the server
+# Restart the server
+echo "Restarting $server"
 az mysql flexible-server restart --resource-group $resourceGroup --name $server
 
 # echo "Deleting all resources"
