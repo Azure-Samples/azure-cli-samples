@@ -1,7 +1,6 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/14/2022
+
 # Service endpoint operations for an Azure Cosmos account
 #
 # Create an Azure Cosmos Account with a service endpoint connected to a backend subnet
@@ -12,52 +11,40 @@
 # This sample will then configure the subnet for service endpoints.
 
 # Resource group and Cosmos account variables
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
-
-# Variables for a new Virtual Network with two subnets
-vnetName='myVnet'
-frontEnd='FrontEnd'
-backEnd='BackEnd'
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="service-endpoints-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+vNet='msdocs-vnet-cosmosdb'
+frontEnd='msdocs-front-end-cosmosdb'
+backEnd='msdocs-back-end-cosmosdb'
 
 # Create a resource group
-az group create -n $resourceGroupName -l $location
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a virtual network with a front-end subnet
-az network vnet create \
-    -n $vnetName \
-    -g $resourceGroupName \
-    --address-prefix 10.0.0.0/16 \
-    --subnet-name $frontEnd \
-    --subnet-prefix 10.0.1.0/24
+echo "Creating $vnet"
+az network vnet create --name $vNet --resource-group $resourceGroup --address-prefix 10.0.0.0/16 --subnet-name $frontEnd --subnet-prefix 10.0.1.0/24
 
 # Create a back-end subnet but without specifying --service-endpoints Microsoft.AzureCosmosDB
-az network vnet subnet create \
-    -n $backEnd \
-    -g $resourceGroupName \
-    --address-prefix 10.0.2.0/24 \
-    --vnet-name $vnetName
+echo "Creating $backend in $vNet"
+az network vnet subnet create --name $backEnd --resource-group $resourceGroup --address-prefix 10.0.2.0/24 --vnet-name $vNet
 
-svcEndpoint=$(az network vnet subnet show -g $resourceGroupName -n $backEnd --vnet-name $vnetName --query 'id' -o tsv)
+# Retrieve the value of the service endpoint
+svcEndpoint=$(az network vnet subnet show --resource-group $resourceGroup --name $backEnd --vnet-name $vNet --query 'id' -o tsv)
 
 # Create a Cosmos DB account with default values
 # Use appropriate values for --kind or --capabilities for other APIs
-az cosmosdb create -n $accountName -g $resourceGroupName
+echo "Creating $account for CosmosDB"
+az cosmosdb create --name $account --resource-group $resourceGroup --enable-virtual-network
 
 # Add the virtual network rule but ignore the missing service endpoint on the subnet
-az cosmosdb network-rule add \
-    -n $accountName \
-    -g $resourceGroupName \
-    --virtual-network $vnetName \
-    --subnet svcEndpoint \
-    --ignore-missing-vnet-service-endpoint true
+az cosmosdb network-rule add --name $account --resource-group $resourceGroup --virtual-network $vNet --subnet $svcEndpoint --ignore-missing-vnet-service-endpoint true
 
-read -p'Press any key to configure the subnet for service endpoints'
+# Update vNet update
+az network vnet subnet update --name $backEnd --resource-group $resourceGroup --vnet-name $vNet --service-endpoints Microsoft.AzureCosmosDB
 
-az network vnet subnet update \
-    -n $backEnd \
-    -g $resourceGroupName \
-    --vnet-name $vnetName \
-    --service-endpoints Microsoft.AzureCosmosDB
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
