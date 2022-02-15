@@ -27,13 +27,13 @@ echo "Creating $account for CosmosDB"
 az cosmosdb create --name $account --resource-group $resourceGroup
 
 # Specify region failover locations and priorities
-az cosmosdb update --name $account --resource-group $resourceGroup --locations regionName='East US' failoverPriority=0 isZoneRedundant=False --locations regionName='West US 2' failoverPriority=1 isZoneRedundant=False --locations regionName='South Central US' failoverPriority=2 isZoneRedundant=False
+az cosmosdb update --name $account --resource-group $resourceGroup --locations regionName='East US' failoverPriority=0 isZoneRedundant=False --locations regionName='West US 2' failoverPriority=1 isZoneRedundant=False --locations regionName='Central US' failoverPriority=2 isZoneRedundant=False
 
-# Make South Central US the next region to fail over to instead of West US 2
-az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies 'East US=0' 'West US 2=2' 'South Central US=1' 
+# Make Central US the next region to fail over to instead of West US 2
+az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies 'East US=0' 'West US 2=2' 'Central US' 
 
 # Initiate a manual failover and promote East US 2 as primary write region
-az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies 'East US=1' 'West US 2=0' 'South Central US=2'
+az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies 'East US=1' 'West US 2=0' 'Central US'
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
