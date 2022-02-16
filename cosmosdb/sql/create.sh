@@ -1,35 +1,32 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/15/2022
+
 # Create a SQL API database and container
-#
-#
 
 # Variables for SQL API resources
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
-databaseName='database1'
-containerName='container1'
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="create-sql-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+database="msdocs-db-sql-cosmos"
+container='container1'
+partitionKey='/zipcode'
 
 # Create a resource group
-az group create -n $resourceGroupName -l $location
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a Cosmos account for SQL API
-az cosmosdb create \
-    -n $accountName \
-    -g $resourceGroupName \
+echo "Creating $account"
+az cosmosdb create --name $account --resource-group $resourceGroup \
     --default-consistency-level Eventual \
     --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False \
     --locations regionName='East US 2' failoverPriority=1 isZoneRedundant=False
 
 # Create a SQL API database
-az cosmosdb sql database create \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName
+echo "Creating $database"
+az cosmosdb sql database create --account-name $account --resource-group $resourceGroup --name $database
 
 # Define the index policy for the container, include spatial and composite indexes
 printf ' 
@@ -53,14 +50,15 @@ printf '
 }' > "idxpolicy-$uniqueId.json"
 
 # Create a SQL API container
-az cosmosdb sql container create \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $containerName \
-    -p '/zipcode' \
+echo "Creating $container with $maxThroughput"
+az cosmosdb sql container create --account-name $account --resource-group $resourceGroup --database-name $database \
+    --name $container \
+    --partition-key-path $partitionKey \
     --throughput 400 \
     --idx @idxpolicy-$uniqueId.json
 
 # Clean up temporary index policy file
 rm -f "idxpolicy-$uniqueId.json"
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

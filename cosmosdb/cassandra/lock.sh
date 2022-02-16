@@ -19,40 +19,18 @@ tableLockName="$tableName-Lock"
 
 
 # Create a delete lock on keyspace
-az lock create --name $keyspaceLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/cassandraKeyspaces \
-    --lock-type $lockType \
-    --parent $keyspaceParent \
-    --resource $keyspaceName
+az lock create --name $keyspaceLockName --resource-group $resourceGroupName --resource-type Microsoft.DocumentDB/cassandraKeyspaces --lock-type $lockType --parent $keyspaceParent --resource $keyspaceName
 
 # Create a delete lock on table
-az lock create --name $tableLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/tables \
-    --lock-type $lockType \
-    --parent $tableParent \
-    --resource $tableName
+az lock create --name $tableLockName --resource-group $resourceGroupName --resource-type Microsoft.DocumentDB/tables --lock-type $lockType --parent $tableParent --resource $tableName
 
 # List all locks on a Cosmos account
-az lock list --resource-group $resourceGroupName \
-    --resource-name $accountName \
-    --namespace Microsoft.DocumentDB \
-    --resource-type databaseAccounts
+az lock list --resource-group $resourceGroupName --resource-name $accountName --namespace Microsoft.DocumentDB --resource-type databaseAccounts
 
 # Delete lock on keyspace
-lockid=$(az lock show --name $keyspaceLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/cassandraKeyspaces \
-        --resource $keyspaceName --parent $keyspaceParent \
-        --output tsv --query id)
+lockid=$(az lock show --name $keyspaceLockName     --resource-group $resourceGroupName     --resource-type Microsoft.DocumentDB/cassandraKeyspaces     --resource $keyspaceName --parent $keyspaceParent     --output tsv --query id)
 az lock delete --ids $lockid
 
 # Delete lock on table
-lockid=$(az lock show --name $tableLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/tables \
-        --resource-name $tableName \
-        --parent $tableParent \
-        --output tsv --query id)
+lockid=$(az lock show --name $tableLockName     --resource-group $resourceGroupName     --resource-type Microsoft.DocumentDB/tables     --resource-name $tableName     --parent $tableParent     --output tsv --query id)
 az lock delete --ids $lockid

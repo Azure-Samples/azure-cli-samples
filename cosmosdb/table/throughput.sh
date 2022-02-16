@@ -7,17 +7,23 @@
 #
 
 # Variables for Cassandra API resources
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
+et "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="throughput-table-cosmosdb"
 accountName="cosmos-$uniqueId" #needs to be lower case
 tableName='table1'
 originalThroughput=400
 updateThroughput=500
 
-# Create a resource group, Cosmos account and table
-az group create -n $resourceGroupName -l $location
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
+
+# Create a Cosmos account for Table API
+echo "Creating $account"
 az cosmosdb create -n $accountName -g $resourceGroupName --capabilities EnableTable
+
 az cosmosdb table create -a $accountName -g $resourceGroupName -n $tableName --throughput $originalThroughput
 
 
@@ -78,3 +84,6 @@ az cosmosdb table throughput show \
     -n $tableName \
     --query resource.autoscaleSettings.maxThroughput \
     -o tsv
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

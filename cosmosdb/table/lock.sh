@@ -10,7 +10,7 @@
 resourceGroupName='myResourceGroup'
 accountName='my-cosmos-account'
 tableName='myTable'
-
+tags="lock-table-cosmosdb""
 lockType='CanNotDelete' # CanNotDelete or ReadOnly
 tableParent="databaseAccounts/$accountName"
 tableResourceType="$nameSpace/tables"
@@ -38,3 +38,6 @@ lockid=$(az lock show --name $tableLockName \
         --resource $tableName --parent $tableParent \
         --output tsv --query id)
 az lock delete --ids $lockid
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
