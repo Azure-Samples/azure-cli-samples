@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/15/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Create a Gremlin API database and graph with autoscale
 
@@ -10,8 +10,8 @@ resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="autoscale-gremlin-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-gremlin-cosmos"
-graph='msdocs-graph1-gremlin-cosmos'
-partitionKey='/partitionKey'
+graph="msdocs-graph1-gremlin-cosmos"
+partitionKey="/partitionKey"
 maxThroughput=4000 #minimum = 4000
 
 # Create a resource group

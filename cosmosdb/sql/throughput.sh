@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/15/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Throughput operations for a SQL API database and container
 
@@ -10,8 +10,8 @@ resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="throughput-sql-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-sql-cosmos"
-container='container1'
-partitionKey='/partitionKey'
+container="container1"
+partitionKey="/partitionKey"
 originalThroughput=400
 updateThroughput=500
 
@@ -57,7 +57,7 @@ echo "Updating $database throughput to $updateThroughput"
 az cosmosdb sql database throughput update --account-name $account --resource-group $resourceGroup --name $database --throughput $updateThroughput
 
 # Migrate the database from standard (manual) throughput to autoscale throughput
-az cosmosdb sql database throughput migrate --account-name $account --resource-group $resourceGroup --name $database --throughput-type 'autoscale'
+az cosmosdb sql database throughput migrate --account-name $account --resource-group $resourceGroup --name $database --throughput-type "autoscale"
 
 # Retrieve current autoscale provisioned max database throughput
 az cosmosdb sql database throughput show --account-name $account --resource-group $resourceGroup --name $database --query resource.autoscaleSettings.maxThroughput -o tsv
@@ -88,7 +88,7 @@ echo "Updating $container throughput to $updateThroughput"
 az cosmosdb sql container throughput update --account-name $account --resource-group $resourceGroup --database-name $database --name $container --throughput $updateThroughput
 
 # Migrate the container from standard (manual) throughput to autoscale throughput
-az cosmosdb sql container throughput migrate --account-name $account --resource-group $resourceGroup --database-name $database --name $container --throughput 'autoscale'
+az cosmosdb sql container throughput migrate --account-name $account --resource-group $resourceGroup --database-name $database --name $container --throughput "autoscale"
 
 # Retrieve the current autoscale provisioned max container throughput
 az cosmosdb sql container throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $container --query resource.autoscaleSettings.maxThroughput -o tsv

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/15/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Throughput operations for a Gremlin API database and graph
 
@@ -10,8 +10,8 @@ resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="throughput-gremlin-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-gremlin-cosmos"
-graph='msdocs-graph1-gremlin-cosmos'
-partitionKey='/partitionKey'
+graph="msdocs-graph1-gremlin-cosmos"
+partitionKey="/partitionKey"
 originalThroughput=400
 updateThroughput=500
 
@@ -56,7 +56,7 @@ echo "Updating $database throughput to $updateThroughput"
 az cosmosdb gremlin database throughput update --account-name $account --resource-group $resourceGroup --name $database --throughput $updateThroughput
 
 # Migrate the database from standard (manual) throughput to autoscale throughput
-az cosmosdb gremlin database throughput migrate --account-name $account --resource-group $resourceGroup --name $database --throughput-type 'autoscale'
+az cosmosdb gremlin database throughput migrate --account-name $account --resource-group $resourceGroup --name $database --throughput-type "autoscale"
 
 # Retrieve current autoscale provisioned max database throughput
 az cosmosdb gremlin database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.autoscaleSettings.maxThroughput -o tsv
@@ -87,7 +87,7 @@ echo "Updating $graph throughput to $updateThroughput"
 az cosmosdb gremlin graph throughput update --resource-group $resourceGroup --account-name $account --database $database --name $graph --throughput $updateThroughput
 
 # Migrate the graph from standard (manual) throughput to autoscale throughput
-az cosmosdb gremlin graph throughput migrate --account-name $account --resource-group $resourceGroup --database $database --name $graph --throughput-type 'autoscale'
+az cosmosdb gremlin graph throughput migrate --account-name $account --resource-group $resourceGroup --database $database --name $graph --throughput-type "autoscale"
 
 # Retrieve the current autoscale provisioned max graph throughput
 az cosmosdb gremlin graph throughput show --resource-group $resourceGroup --account-name $account --database $database --name $graph --query resource.autoscaleSettings.maxThroughput -o tsv

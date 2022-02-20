@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/14/2022
+# Passed validation in Cloud Shell on 2/20/2022
 #
 # Create a Cassandra serverless account, keyspace and table
 #
@@ -11,7 +11,7 @@ resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="serverless-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 keySpace="keyspace1"
-table='table1'
+table="table1"
 maxThroughput=4000 #minimum = 4000
 
 # Create a resource group

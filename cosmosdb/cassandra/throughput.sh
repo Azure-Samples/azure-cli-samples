@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/14/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Throughput operations for a Cassandra keyspace and table
 
@@ -10,7 +10,7 @@ resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="serverless-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 keySpace="keyspace1"
-table='table1'
+table="table1"
 originalThroughput=400
 updateThroughput=500
 
@@ -69,7 +69,7 @@ echo "Updating $keyspace throughput to $updateThroughput"
 az cosmosdb cassandra keyspace throughput update --account-name $account --resource-group $resourceGroup --name $keySpace --throughput $updateThroughput
 
 # Migrate the keyspace from standard (manual) throughput to autoscale throughput
-az cosmosdb cassandra keyspace throughput migrate --account-name $account --resource-group $resourceGroup --name $keySpace --throughput-type 'autoscale'
+az cosmosdb cassandra keyspace throughput migrate --account-name $account --resource-group $resourceGroup --name $keySpace --throughput-type "autoscale"
 
 # Retrieve current autoscale provisioned max keyspace throughput
 az cosmosdb cassandra keyspace throughput show --account-name $account --resource-group $resourceGroup --name $keySpace --query resource.autoscaleSettings.maxThroughput -o tsv
@@ -100,7 +100,7 @@ echo "Updating $table throughput to $updateThroughput"
 az cosmosdb cassandra table throughput update --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput $updateThroughput
 
 # Migrate the table from standard (manual) throughput to autoscale throughput
-az cosmosdb cassandra table throughput migrate --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput-type 'autoscale'
+az cosmosdb cassandra table throughput migrate --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput-type "autoscale"
 
 # Retrieve the current autoscale provisioned max table throughput
 az cosmosdb cassandra table throughput show --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --query resource.autoscaleSettings.maxThroughput -o tsv

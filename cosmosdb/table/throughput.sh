@@ -1,18 +1,15 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
-# Throughput operations for a Table API table
-#
-#
+# Passed validation in Cloud Shell on 2/20/2022
 
-# Variables for Cassandra API resources
-et "randomIdentifier=$RANDOM*$RANDOM"
+# Throughput operations for a Table API table
+
+# Variables for Table API resources
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="throughput-table-cosmosdb"
-accountName="cosmos-$uniqueId" #needs to be lower case
-tableName='table1'
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+table="msdocs-table-cosmos-$randomIdentifier"
 originalThroughput=400
 updateThroughput=500
 
@@ -22,10 +19,11 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a Cosmos account for Table API
 echo "Creating $account"
-az cosmosdb create -n $accountName -g $resourceGroupName --capabilities EnableTable
+az cosmosdb create --name $account --resource-group $resourceGroup --capabilities EnableTable
 
-az cosmosdb table create -a $accountName -g $resourceGroupName -n $tableName --throughput $originalThroughput
-
+# Create a Table API Table with autoscale
+echo "Create $table with $maxThroughput"
+az cosmosdb table create --account-name $account --resource-group $resourceGroup --name $table --throughput $originalThroughput
 
 # Throughput operations for Table API table
 #   Read the current throughput
@@ -35,23 +33,11 @@ az cosmosdb table create -a $accountName -g $resourceGroupName -n $tableName --t
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to get current provisioned table throughput'
+# Retrieve the current provisioned table throughput
+az cosmosdb table throughput show --name $table --resource-group $resourceGroup --account-name $account --query resource.throughput -o tsv
 
-az cosmosdb table throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $tableName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to get minimum allowable table throughput'
-
-minimumThroughput=$(az cosmosdb table throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $tableName \
-    --query resource.minimumThroughput \
-    -o tsv)
+# Retrieve the minimum allowable table throughput
+minimumThroughput=$(az cosmosdb table throughput show --resource-group $resourceGroup --account-name $account --name $table --query resource.minimumThroughput -o tsv)
 
 echo $minimumThroughput
 
@@ -60,30 +46,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update table throughput'
+# Update table throughput
+echo "Updating $table throughput to $updateThroughput"
+az cosmosdb table throughput update --account-name $account --resource-group $resourceGroup --name $table --throughput $updateThroughput
 
-az cosmosdb table throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $tableName \
-    --throughput $updateThroughput
+# Migrate the table from standard (manual) throughput to autoscale throughput
+az cosmosdb table throughput migrate --account-name $account --resource-group $resourceGroup --name $table --throughput-type 'autoscale'
 
-read -p 'Press any key to migrate the table from standard (manual) throughput to autoscale throughput'
-
-az cosmosdb table throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $tableName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the table'
-
-az cosmosdb table throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $tableName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# Retrieve current autoscale provisioned max table throughput
+az cosmosdb table throughput show --account-name $account --resource-group $resourceGroup --name $table --query resource.autoscaleSettings.maxThroughput -o tsv
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

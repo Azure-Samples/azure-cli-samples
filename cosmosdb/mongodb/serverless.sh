@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/15/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Create a MongoDB API serverless account database and collection
 

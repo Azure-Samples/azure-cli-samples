@@ -1,18 +1,16 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
-# Create a Table API table
-#
-#
+# Passed validation in Cloud Shell on 2/20/2022
 
-# Variables for Cassandra API resources
-et "randomIdentifier=$RANDOM*$RANDOM"
+# Create a Table API table
+
+# Variables for Table API resources
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
+failoverLocation="Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="create-table-cosmosdb"
-accountName="cosmos-$uniqueId" #needs to be lower case
-tableName='table1'
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+table="msdocs-table-cosmos-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
@@ -20,20 +18,11 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a Cosmos account for Table API
 echo "Creating $account"
-az cosmosdb create \
-    -n $accountName \
-    -g $resourceGroupName \
-    --capabilities EnableTable \
-    --default-consistency-level Eventual \
-    --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False \
-    --locations regionName='East US 2' failoverPriority=1 isZoneRedundant=False
+az cosmosdb create --name $account --resource-group $resourceGroup --capabilities EnableTable --default-consistency-level Eventual --locations regionName="$location" failoverPriority=0 isZoneRedundant=False --locations regionName="$failoverLocation" failoverPriority=1 isZoneRedundant=False
 
 # Create a Table API Table
-az cosmosdb table create \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $tableName \
-    --throughput 400
+echo "Creating $table"
+az cosmosdb table create --account-name $account --resource-group $resourceGroup --name $table --throughput 400
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

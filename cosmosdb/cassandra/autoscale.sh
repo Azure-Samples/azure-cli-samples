@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/14/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Create a Cassandra keyspace and table with autoscale
 
@@ -9,8 +9,8 @@ location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="autoscale-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
-keySpace='keyspace1-$randomIdentifier'
-table='table1-$randomIdentifier'
+keySpace="keyspace1-$randomIdentifier"
+table="table1-$randomIdentifier"
 maxThroughput=4000 #minimum = 4000
 
 # Create a resource group

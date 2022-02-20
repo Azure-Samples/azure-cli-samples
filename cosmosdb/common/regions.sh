@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/14/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Region replica operations for an Azure Cosmos account
 #
@@ -27,13 +27,13 @@ echo "Creating $account for CosmosDB"
 az cosmosdb create --name $account --resource-group $resourceGroup
 
 # Specify region failover locations and priorities
-az cosmosdb update --name $account --resource-group $resourceGroup --locations regionName='East US' failoverPriority=0 isZoneRedundant=False --locations regionName='West US 2' failoverPriority=1 isZoneRedundant=False --locations regionName='Central US' failoverPriority=2 isZoneRedundant=False
+az cosmosdb update --name $account --resource-group $resourceGroup --locations regionName="East US" failoverPriority=0 isZoneRedundant=False --locations regionName="Central US" failoverPriority=1 isZoneRedundant=False --locations regionName="South Central US" failoverPriority=2 isZoneRedundant=False
 
-# Make Central US the next region to fail over to instead of West US 2
-az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies 'East US=0' 'West US 2=2' 'Central US' 
+# Make Central US the next region to fail over to instead of South Central US
+az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies "East US=0" "South Central US=2" "Central US=1"
 
-# Initiate a manual failover and promote East US 2 as primary write region
-az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies 'East US=1' 'West US 2=0' 'Central US'
+# Initiate a manual failover and promote South Central US as primary write region
+az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies "East US=2" "South Central US=0" "Central US=1"
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

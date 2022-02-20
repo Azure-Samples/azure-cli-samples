@@ -1,42 +1,35 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+# Tested after running the "create.sh" script
 # Resource lock operations for a Table API table
-#
-#
 
+# Subscription owner permissions required for this script
 
-resourceGroupName='myResourceGroup'
-accountName='my-cosmos-account'
-tableName='myTable'
-tags="lock-table-cosmosdb""
+# Run this script after running
+# "https://docs.microsoft.com/azure/cosmos-db/scripts/cli/table/create#sample-script"
+
+# Variables for Table API resources
+# Use values from prerequisite script or from your environment
+# resourceGroup="your resource group name"
+# account="your account name"
+# table="your table name"
+
 lockType='CanNotDelete' # CanNotDelete or ReadOnly
-tableParent="databaseAccounts/$accountName"
-tableResourceType="$nameSpace/tables"
-tableLockName='$tableName-Lock'
-
+tableParent="databaseAccounts/$account"
+tableResourceType="Microsoft.DocumentDB/tables"
+tableLock='$table-Lock'
 
 # Create a delete lock on table
-az lock create --name $tableLockName \
-    --resource-group $resourceGroupName \
-    --resource-type $tableResourceType \
-    --lock-type $lockType \
-    --parent $tableParent \
-    --resource $tableName
+echo "Creating $lockType lock on $table"
+az lock create --name $tableLock --resource-group $resourceGroup --resource-type $tableResourceType --lock-type $lockType --parent $tableParent --resource $table 
 
 # List all locks on a Cosmos account
-az lock list --resource-group $resourceGroupName \
-    --resource-name $accountName \
-    --namespace Microsoft.DocumentDB \
-    --resource-type databaseAccounts
+echo "Listing locks on $account"
+az lock list --resource-group $resourceGroup --resource-name $account --namespace Microsoft.DocumentDB --resource-type databaseAccounts
 
 # Delete lock on table
-lockid=$(az lock show --name $tableLockName \
-        --resource-group $resourceGroupName \
-        --resource-type $tableResourceType \
-        --resource $tableName --parent $tableParent \
-        --output tsv --query id)
+echo "Deleting $tableLock on $table"
+lockid=$(az lock show --name $tableLock --resource-group $resourceGroup --resource-type $tableResourceType --resource $table --parent $tableParent --output tsv --query id)
 az lock delete --ids $lockid
 
 # echo "Deleting all resources"

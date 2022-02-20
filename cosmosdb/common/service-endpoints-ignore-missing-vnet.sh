@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 2/14/2022
+# Passed validation in Cloud Shell on 2/20/2022
 
 # Service endpoint operations for an Azure Cosmos account
 #
