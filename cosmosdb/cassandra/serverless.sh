@@ -1,9 +1,8 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
-#
+
 # Create a Cassandra serverless account, keyspace and table
-#
-#
+
 # Variables for Cassandra API resources
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
