@@ -1,27 +1,34 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+
 # Throughput operations for a Gremlin API database and graph
-#
-#
 
 # Variables for Gremlin API resources
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
-databaseName='database1'
-graphName='graph1'
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="throughput-gremlin-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+database="msdocs-db-gremlin-cosmos"
+graph="msdocs-graph1-gremlin-cosmos"
+partitionKey="/partitionKey"
 originalThroughput=400
 updateThroughput=500
 
-# Create a resource group, Cosmos account, database with throughput and graph with throughput
-az group create -n $resourceGroupName -l $location
-az cosmosdb create -n $accountName -g $resourceGroupName --capabilities EnableGremlin
-az cosmosdb gremlin database create -a $accountName -g $resourceGroupName -n $databaseName --throughput $originalThroughput
-az cosmosdb gremlin graph create -a $accountName -g $resourceGroupName -d $databaseName -n $graphName -p '/zipcode' --throughput $originalThroughput
+# Create a resource group 
+az group create --name $resourceGroup --location "$location" --tag $tag
 
+# Create a Cosmos account for Gremlin API
+echo "Creating $account"
+az cosmosdb create --name $account --resource-group $resourceGroup --capabilities EnableGremlin
+
+# Create Gremlin database with throughput
+echo "Creating $database with $originalThroughput"
+az cosmosdb gremlin database create --account-name $account --resource-group $resourceGroup --name $database --throughput $originalThroughput
+
+# Create Gremlin graph with throughput 
+echo "Creating $graph with $originalThroughput"
+az cosmosdb gremlin graph create --account-name $account --resource-group $resourceGroup --database-name $database --name $graph --partition-key-path $partitionKey --throughput $originalThroughput
 
 # Throughput operations for Gremlin API database
 #   Read the current throughput
@@ -31,23 +38,11 @@ az cosmosdb gremlin graph create -a $accountName -g $resourceGroupName -d $datab
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to read current provisioned throughput on database'
+# Retrieve the current provisioned database throughput
+az cosmosdb gremlin database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.throughput -o tsv
 
-az cosmosdb gremlin database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to read minimum throughput on database'
-
-minimumThroughput=$(az cosmosdb gremlin database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.minimumThroughput \
-    -o tsv)
+# Retrieve the minimum allowable database throughput
+minimumThroughput=$(az cosmosdb gremlin database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.minimumThroughput -o tsv)
 
 echo $minimumThroughput
 
@@ -56,30 +51,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update database throughput'
+# Update database throughput
+echo "Updating $database throughput to $updateThroughput"
+az cosmosdb gremlin database throughput update --account-name $account --resource-group $resourceGroup --name $database --throughput $updateThroughput
 
-az cosmosdb gremlin database throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName \
-    --throughput $updateThroughput
+# Migrate the database from standard (manual) throughput to autoscale throughput
+az cosmosdb gremlin database throughput migrate --account-name $account --resource-group $resourceGroup --name $database --throughput-type "autoscale"
 
-read -p 'Press any key to migrate the database from standard (manual) throughput to autoscale throughput'
-
-az cosmosdb gremlin database throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the database'
-
-az cosmosdb gremlin database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# Retrieve current autoscale provisioned max database throughput
+az cosmosdb gremlin database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.autoscaleSettings.maxThroughput -o tsv
 
 # Throughput operations for Gremlin API graph
 #   Read the current throughput
@@ -89,25 +69,11 @@ az cosmosdb gremlin database throughput show \
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to read current provisioned throughput on a graph'
+# Retrieve the current provisioned graph throughput
+az cosmosdb gremlin graph throughput show --resource-group $resourceGroup --account-name $account --database $database --name $graph --query resource.throughput -o tsv
 
-az cosmosdb gremlin graph throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $graphName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to read minimum throughput on graph'
-
-minimumThroughput=$(az cosmosdb gremlin graph throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $graphName \
-    --query resource.minimumThroughput \
-    -o tsv)
+# Retrieve the minimum allowable graph throughput
+minimumThroughput=$(az cosmosdb gremlin graph throughput show --resource-group $resourceGroup --account-name $account --database $database --name $graph --query resource.minimumThroughput -o tsv)
 
 echo $minimumThroughput
 
@@ -116,30 +82,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update graph throughput'
+# Update graph throughput
+echo "Updating $graph throughput to $updateThroughput"
+az cosmosdb gremlin graph throughput update --resource-group $resourceGroup --account-name $account --database $database --name $graph --throughput $updateThroughput
 
-az cosmosdb gremlin graph throughput update \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $graphName \
-    --throughput $updateThroughput
+# Migrate the graph from standard (manual) throughput to autoscale throughput
+az cosmosdb gremlin graph throughput migrate --account-name $account --resource-group $resourceGroup --database $database --name $graph --throughput-type "autoscale"
 
-read -p 'Press any key to migrate the graph from standard (manual) throughput to autoscale throughput'
+# Retrieve the current autoscale provisioned max graph throughput
+az cosmosdb gremlin graph throughput show --resource-group $resourceGroup --account-name $account --database $database --name $graph --query resource.autoscaleSettings.maxThroughput -o tsv
 
-az cosmosdb gremlin container throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $graphName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the graph'
-
-az cosmosdb gremlin container throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $graphName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

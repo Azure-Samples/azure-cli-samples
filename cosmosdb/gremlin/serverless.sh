@@ -1,41 +1,34 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+
 # Create a Gremlin serverless account, database and graph
-#
-#
 
 # Variables for Gremlin API resources
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
-databaseName='database1'
-graphName='graph1'
-partitionKey='/pk'
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+failoverLocation="Central US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="serverless-gremlin-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+database="msdocs-db-gremlin-cosmos"
+graph="msdocs-graph1-gremlin-cosmos"
+partitionKey="/partitionKey"
 
 # Create a resource group
-az group create -n $resourceGroupName -l $location
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a Cosmos account for Gremlin API
-az cosmosdb create \
-    -n $accountName \
-    -g $resourceGroupName \
-    --capabilities EnableGremlin EnableServerless \
-    --default-consistency-level Eventual \
-    --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False \
+echo "Creating $account"
+az cosmosdb create --name $account --resource-group $resourceGroup --capabilities EnableGremlin EnableServerless --default-consistency-level Eventual --locations regionName="$failoverLocation" failoverPriority=0 isZoneRedundant=False
 
 # Create a Gremlin database
-az cosmosdb gremlin database create \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName
+echo "Creating $database with $account"
+az cosmosdb gremlin database create --account-name $account --resource-group $resourceGroup --name $database
 
 # Create a Gremlin graph
-az cosmosdb gremlin graph create \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $graphName \
-    -p $partitionKey 
+echo "Creating $graph"
+az cosmosdb gremlin graph create --account-name $account --resource-group $resourceGroup --database-name $database --name $graph --partition-key-path $partitionKey
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

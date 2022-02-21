@@ -1,58 +1,47 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+# Tested after running the "create.sh" script
 # Resource lock operations for a Cassandra keyspace and table
-#
-#
 
-resourceGroupName='myResourceGroup'
-accountName='my-cosmos-account'
-keyspaceName='keyspace1'
-tableName='table1'
+# Subscription owner permissions required for this script
 
-lockType='CanNotDelete' # CanNotDelete or ReadOnly
-keyspaceParent="databaseAccounts/$accountName"
-tableParent="databaseAccounts/$accountName/cassandraKeyspaces/$keyspaceName"
-keyspaceLockName="$keyspaceName-Lock"
-tableLockName="$tableName-Lock"
+# Run this script after running
+# "https://docs.microsoft.com/azure/cosmos-db/scripts/cli/cassandra/create#sample-script"
 
+# Variables for Cassandra API resources
+# Use values from prerequisite script or from your environment
+# resourceGroup="your resource group name"
+# account="your account name"
+# keySpace="your keyspace name"
+# table="your table name"
+
+lockType="CanNotDelete" # CanNotDelete or ReadOnly
+keySpaceParent="databaseAccounts/$account"
+tableParent="databaseAccounts/$account/cassandraKeyspaces/$keySpace"
+keySpaceLock="$keySpace-Lock"
+tableLock="$table-Lock"
 
 # Create a delete lock on keyspace
-az lock create --name $keyspaceLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/cassandraKeyspaces \
-    --lock-type $lockType \
-    --parent $keyspaceParent \
-    --resource $keyspaceName
+echo "Creating lock $lockType on $keySpaceLock"
+az lock create --name $keySpaceLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/cassandraKeyspaces --lock-type $lockType --parent $keySpaceParent --resource $keySpace
 
 # Create a delete lock on table
-az lock create --name $tableLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/tables \
-    --lock-type $lockType \
-    --parent $tableParent \
-    --resource $tableName
+echo "Creating $lockType lock on $table"
+az lock create --name $tableLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/tables --lock-type $lockType --parent $tableParent --resource $table
 
 # List all locks on a Cosmos account
-az lock list --resource-group $resourceGroupName \
-    --resource-name $accountName \
-    --namespace Microsoft.DocumentDB \
-    --resource-type databaseAccounts
+echo "Listing locks on $account"
+az lock list --resource-group $resourceGroup --resource-name $account --namespace Microsoft.DocumentDB --resource-type databaseAccounts
 
 # Delete lock on keyspace
-lockid=$(az lock show --name $keyspaceLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/cassandraKeyspaces \
-        --resource $keyspaceName --parent $keyspaceParent \
-        --output tsv --query id)
+echo "Deleting $keySpaceLock on $keySpace"
+lockid=$(az lock show --name $keySpaceLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/cassandraKeyspaces --resource $keySpace --parent $keySpaceParent --output tsv --query id)
 az lock delete --ids $lockid
 
 # Delete lock on table
-lockid=$(az lock show --name $tableLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/tables \
-        --resource-name $tableName \
-        --parent $tableParent \
-        --output tsv --query id)
+echo "Deleting $tableLock on $table"
+lockid=$(az lock show --name $tableLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/tables --resource-name $table --parent $tableParent --output tsv --query id)
 az lock delete --ids $lockid
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

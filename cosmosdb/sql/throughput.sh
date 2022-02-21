@@ -1,27 +1,35 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+
 # Throughput operations for a SQL API database and container
-#
-#
 
 # Variables for SQL API resources
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
-databaseName='database1'
-containerName='container1'
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="throughput-sql-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+database="msdocs-db-sql-cosmos"
+container="container1"
+partitionKey="/partitionKey"
 originalThroughput=400
 updateThroughput=500
 
-# Create a resource group, Cosmos account, a database and container each with standard (manual) throughput
-az group create -n $resourceGroupName -l $location
-az cosmosdb create -n $accountName -g $resourceGroupName
-az cosmosdb sql database create -a $accountName -g $resourceGroupName -n $databaseName --throughput $originalThroughput
-az cosmosdb sql container create -a $accountName -g $resourceGroupName -d $databaseName -n $containerName -p '/myPk' --throughput $originalThroughput
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
+# Create a Cosmos account for SQL API
+echo "Creating $account"
+az cosmosdb create --name $account --resource-group $resourceGroup
+
+# Create a SQL API database
+echo "Creating $database with $originalThroughput"
+az cosmosdb sql database create --account-name $account --resource-group $resourceGroup --name $database --throughput $originalThroughput
+
+# Create a SQL API container
+echo "Creating $container with $maxThroughput"
+az cosmosdb sql container create --account-name $account --resource-group $resourceGroup --database-name $database --name $container --partition-key-path $partitionKey --throughput $originalThroughput
 
 # Throughput operations for SQL API database
 #   Read the current throughput
@@ -31,23 +39,11 @@ az cosmosdb sql container create -a $accountName -g $resourceGroupName -d $datab
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to read current standard (manual) provisioned throughput on database'
+# Retrieve the current provisioned database throughput
+az cosmosdb sql database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.throughput -o tsv
 
-az cosmosdb sql database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to read minimum throughput on database'
-
-minimumThroughput=$(az cosmosdb sql database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.minimumThroughput \
-    -o tsv)
+# Retrieve the minimum allowable database throughput
+minimumThroughput=$(az cosmosdb sql database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.minimumThroughput -o tsv)
 
 echo $minimumThroughput
 
@@ -56,30 +52,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update database throughput'
+# Update database throughput
+echo "Updating $database throughput to $updateThroughput"
+az cosmosdb sql database throughput update --account-name $account --resource-group $resourceGroup --name $database --throughput $updateThroughput
 
-az cosmosdb sql database throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName \
-    --throughput $updateThroughput
+# Migrate the database from standard (manual) throughput to autoscale throughput
+az cosmosdb sql database throughput migrate --account-name $account --resource-group $resourceGroup --name $database --throughput-type "autoscale"
 
-read -p 'Press any key to migrate the database from standard (manual) throughput to autoscale throughput'
-
-az cosmosdb sql database throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the database'
-
-az cosmosdb sql database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# Retrieve current autoscale provisioned max database throughput
+az cosmosdb sql database throughput show --account-name $account --resource-group $resourceGroup --name $database --query resource.autoscaleSettings.maxThroughput -o tsv
 
 # Throughput operations for SQL API container
 #   Read the current throughput
@@ -89,25 +70,11 @@ az cosmosdb sql database throughput show \
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to read current provisioned throughput on container'
+# Retrieve the current provisioned container throughput
+az cosmosdb sql container throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $container --query resource.throughput -o tsv
 
-az cosmosdb sql container throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $containerName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to read minimum throughput on container'
-
-minimumThroughput=$(az cosmosdb sql container throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $containerName \
-    --query resource.minimumThroughput \
-    -o tsv)
+# Retrieve the minimum allowable container throughput
+minimumThroughput=$(az cosmosdb sql container throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $container --query resource.minimumThroughput -o tsv)
 
 echo $minimumThroughput
 
@@ -116,30 +83,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update container throughput'
+# Update container throughput
+echo "Updating $container throughput to $updateThroughput"
+az cosmosdb sql container throughput update --account-name $account --resource-group $resourceGroup --database-name $database --name $container --throughput $updateThroughput
 
-az cosmosdb sql container throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $containerName \
-    --throughput $updateThroughput
+# Migrate the container from standard (manual) throughput to autoscale throughput
+az cosmosdb sql container throughput migrate --account-name $account --resource-group $resourceGroup --database-name $database --name $container --throughput "autoscale"
 
-read -p 'Press any key to migrate the container from standard (manual) throughput to autoscale throughput'
+# Retrieve the current autoscale provisioned max container throughput
+az cosmosdb sql container throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $container --query resource.autoscaleSettings.maxThroughput -o tsv
 
-az cosmosdb sql container throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $containerName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the container'
-
-az cosmosdb sql container throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $containerName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
