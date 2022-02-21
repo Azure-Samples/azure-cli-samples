@@ -2,11 +2,6 @@
 # Passed validation in Cloud Shell on 2/20/2022
 
 # Region replica operations for an Azure Cosmos account
-#
-# Operations:
-#   Add regions to an existing Cosmos account
-#   Change regional failover priority (applies to accounts using automatic failover)
-#   Trigger a manual failover from primary to secondary region (applies to accounts with manual failover)
 
 # Note: Azure Comos accounts cannot include updates to regions with changes to other properties in the same operation
 

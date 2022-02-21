@@ -2,8 +2,6 @@
 # Passed validation in Cloud Shell on 2/20/2022
 
 # Service endpoint operations for an Azure Cosmos account
-#
-# Create an Azure Cosmos Account with a service endpoint connected to a backend subnet
 
 # Resource group and Cosmos account variables
 let "randomIdentifier=$RANDOM*$RANDOM"

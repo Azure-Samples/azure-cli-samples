@@ -2,13 +2,6 @@
 # Passed validation in Cloud Shell on 2/20/2022
 
 # Service endpoint operations for an Azure Cosmos account
-#
-# Create an Azure Cosmos Account with a service endpoint connected to a backend subnet
-# that is not yet enabled for service endpoints.
-
-# This sample demonstrates how to configure service endpoints for existing Cosmos account where
-# the connected subnet is not yet configured for service endpoints.
-# This sample will then configure the subnet for service endpoints.
 
 # Resource group and Cosmos account variables
 let "randomIdentifier=$RANDOM*$RANDOM"
