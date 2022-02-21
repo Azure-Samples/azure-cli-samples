@@ -3,12 +3,6 @@
 
 # Account key operations for an Azure Cosmos account
 
-# Account key operations:
-#   List all account keys
-#   List read only account keys
-#   List connection strings
-#   Regenerate account keys
-
 # Resource group and Cosmos account variables
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
