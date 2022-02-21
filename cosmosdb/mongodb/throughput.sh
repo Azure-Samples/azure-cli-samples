@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 2/20/2022
 
 # Throughput operations for a MongoDB API database and collection
-#
+
 # Variables for MongoDB API resources
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"

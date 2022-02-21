@@ -3,7 +3,6 @@
 
 # Create a Gremlin database and graph
 
-
 # Variables for Gremlin API resources
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
