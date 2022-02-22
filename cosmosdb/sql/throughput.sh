@@ -75,7 +75,6 @@ az cosmosdb sql container throughput show --account-name $account --resource-gro
 
 # Retrieve the minimum allowable container throughput
 minimumThroughput=$(az cosmosdb sql container throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $container --query resource.minimumThroughput -o tsv)
-
 echo $minimumThroughput
 
 # Make sure the updated throughput is not less than the minimum allowed throughput

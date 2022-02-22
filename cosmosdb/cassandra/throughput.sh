@@ -87,7 +87,6 @@ az cosmosdb cassandra table throughput show --account-name $account --resource-g
 
 # Retrieve the minimum allowable table throughput
 minimumThroughput=$(az cosmosdb cassandra table throughput show --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --query resource.minimumThroughput -o tsv)
-
 echo $minimumThroughput
 
 # Make sure the updated throughput is not less than the minimum allowed throughput

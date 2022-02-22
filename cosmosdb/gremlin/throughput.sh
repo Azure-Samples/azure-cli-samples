@@ -74,7 +74,6 @@ az cosmosdb gremlin graph throughput show --resource-group $resourceGroup --acco
 
 # Retrieve the minimum allowable graph throughput
 minimumThroughput=$(az cosmosdb gremlin graph throughput show --resource-group $resourceGroup --account-name $account --database $database --name $graph --query resource.minimumThroughput -o tsv)
-
 echo $minimumThroughput
 
 # Make sure the updated throughput is not less than the minimum allowed throughput
