@@ -29,7 +29,8 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Enable Zone-redundant HA while creating a MySQL Flexible server in the resource group
 # HA is not available for burstable tier
-# zone and standby-zone parameters are optional
+# Zone and standby-zone parameters are optional
+# HA cannot be enabled post create
 
 echo "Creating $server"
 az mysql flexible-server create --name $server --resource-group $resourceGroup --location "$location" --sku-name $sku --tier $tier --admin-user $login --admin-password $password --public-access $ipAddress --high-availability ZoneRedundant --zone $primaryZone --standby-zone $standbyZone

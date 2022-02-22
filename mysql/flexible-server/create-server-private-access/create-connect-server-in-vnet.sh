@@ -27,6 +27,8 @@ ipSku="basic"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
+# Create MySQL server in a VNET 
+
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
@@ -58,6 +60,8 @@ az network private-dns zone create -g $resourceGroup    -n $dns
 # Create a MySQL Flexible server in the resource group
 echo "Creating $server within $mySqlSubnet"
 az mysql flexible-server create --name $server --resource-group $resourceGroup --location "$location" --sku-name $sku --tier $tier --storage-size $storageSize --storage-auto-grow $storageAutoGrow --admin-user $login --admin-password $password --vnet $vNet --subnet $mySqlSubnet --private-dns-zone $dns
+
+# Connect to the MySQL server from a VM in the same VNET 
 
 # Create a subnet for the virtual machine within the virtual network
 echo "Creating $vmSubnet within $vNet"
