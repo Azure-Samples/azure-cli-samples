@@ -37,11 +37,11 @@ echo "List parameters and values"
 az mysql flexible-server parameter list --resource-group $resourceGroup --server-name $server
 
 # Set value of max_connections parameter
-echo "Set maximim connections"
+echo "Set maximum connections"
 az mysql flexible-server parameter set --resource-group $resourceGroup --server-name $server --name max_connections --value 250
 
 # Check value of max_connections paramater
-echo "Check maximim connections"
+echo "Check maximum connections"
 az mysql flexible-server parameter show --resource-group $resourceGroup --server-name $server --name max_connections
 
 # Set value of max_connections parameter back to default
