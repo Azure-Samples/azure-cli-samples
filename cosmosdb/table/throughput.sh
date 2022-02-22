@@ -38,7 +38,6 @@ az cosmosdb table throughput show --name $table --resource-group $resourceGroup 
 
 # Retrieve the minimum allowable table throughput
 minimumThroughput=$(az cosmosdb table throughput show --resource-group $resourceGroup --account-name $account --name $table --query resource.minimumThroughput -o tsv)
-
 echo $minimumThroughput
 
 # Make sure the updated throughput is not less than the minimum allowed throughput

@@ -48,7 +48,6 @@ az cosmosdb mongodb database throughput show --resource-group $resourceGroup --a
 
 # Retrieve the minimum allowable database throughput
 minimumThroughput=$(az cosmosdb mongodb database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.minimumThroughput -o tsv)
-
 echo $minimumThroughput
 
 # Make sure the updated throughput is not less than the minimum allowed throughput
