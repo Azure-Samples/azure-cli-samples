@@ -75,19 +75,7 @@ az vm create --resource-group $resourceGroup --name $vm --location "$location" -
 echo "Opening port 80 for web traffic"
 az vm open-port --port 80 --resource-group $resourceGroup --name $vm
 
-# To SSH into the VM, start by getting the public IP address and then use MySQL tools to connect
-# publicIp=$(az vm list-ip-addresses --resource-group $resourceGroup --name $vm --query "[].virtualMachine.network.publicIpAddresses[0].ipAddress" --output tsv)
-# ssh azureuser@$publicIp 
-
-# Download MySQL tools and connect to the server!
-# Substitute <server_name> and <admin_user> with your values
-# 
-# sudo apt-get update
-# sudo apt-get install mysql-client
-#
-# wget --no-check-certificate https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
-#
-# mysql -h <replace_with_server_name>.mysql.database.azure.com -u mysqladmin -p --ssl-mode=REQUIRED --ssl-ca=DigiCertGlobalRootCA.crt.pem
+# Follow steps in the parent article to test connectivity to the MySQL server from the VM
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
