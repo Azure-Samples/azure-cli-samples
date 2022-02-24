@@ -27,13 +27,13 @@ echo "Creating $database with $originalThroughput"
 az cosmosdb mongodb database create --account-name $account --resource-group $resourceGroup --name $database --throughput $originalThroughput
 
 # Define a minimal index policy for the collection
-printf '[ {"key": {"keys": ["_id"]}} ]' > idxpolicy-$uniqueId.json
+printf '[ {"key": {"keys": ["_id"]}} ]' > idxpolicy-$randomIdentifier.json
 
 # Create a MongoDB API collection
-az cosmosdb mongodb collection create --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --shard "user_id" --throughput $originalThroughput --idx @idxpolicy-$uniqueId.json
+az cosmosdb mongodb collection create --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --shard "user_id" --throughput $originalThroughput --idx @idxpolicy-$randomIdentifier.json
 
 # Clean up temporary index policy file
-rm -f "idxpolicy-$uniqueId.json"
+rm -f "idxpolicy-$randomIdentifier.json"
 
 # Throughput operations for MongoDB API database
 #   Read the current throughput
