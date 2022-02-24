@@ -29,4 +29,3 @@ az account set --subscription $targetSubscriptionId
 
 #Copy managed disk to different subscription using managed disk Id
 az disk create --resource-group $targetResourceGroupName --name $managedDiskName --source $managedDiskId
-

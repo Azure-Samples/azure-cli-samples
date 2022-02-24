@@ -34,4 +34,3 @@ az account set --subscription $subscriptionId
 
 #Create the Managed disk from the VHD file 
 az disk create --resource-group $resourceGroupName --name $diskName --sku $storageType --location $location --size-gb $diskSize --source $vhdUri
-

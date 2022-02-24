@@ -27,5 +27,3 @@ snapshotId=$(az snapshot show --name $snapshotName --resource-group $resourceGro
 #Create a new Managed Disks using the snapshot Id
 #Note that managed disk will be created in the same location as the snapshot
 az disk create --resource-group $resourceGroupName --name $diskName --sku $storageType --size-gb $diskSize --source $snapshotId
-
-
