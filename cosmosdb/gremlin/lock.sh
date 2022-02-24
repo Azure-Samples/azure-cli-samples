@@ -1,57 +1,48 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+# Tested after running the "create.sh" script
 # Resource lock operations for a Gremlin database and graph
-#
-#
 
-resourceGroupName='myResourceGroup'
-accountName='my-cosmos-account'
-databaseName='database1'
-graphName='graph1'
+# Subscription owner permissions required for this script
 
-lockType='CanNotDelete' # CanNotDelete or ReadOnly
-databaseParent="databaseAccounts/$accountName"
-graphParent="databaseAccounts/$accountName/gremlinDatabases/$databaseName"
-databaseLockName="$databaseName-Lock"
-graphLockName="$containerName-Lock"
+# Run this script after running
+# "https://docs.microsoft.com/azure/cosmos-db/scripts/cli/gremln/create#sample-script"
 
+# Variables for Gremlin API resources
+# Use values from prerequisite script or from your environment
+# resourceGroup="your resource group name"
+# account="your account name"
+# database="your database name"
+# container="your container name"
+# graph="your graph name"
+
+lockType="CanNotDelete" # CanNotDelete or ReadOnly
+databaseParent="databaseAccounts/$account"
+graphParent="databaseAccounts/$account/gremlinDatabases/$database"
+databaseLock="$database-Lock"
+graphLock="$graph-Lock"
 
 # Create a delete lock on database
-az lock create --name $databaseLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/gremlinDatabases \
-    --lock-type $lockType \
-    --parent $databaseParent \
-    --resource $databaseName
+echo "Creating $lockType lock on $database"
+az lock create --name $databaseLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/gremlinDatabases --lock-type $lockType --parent $databaseParent --resource $database
 
 # Create a delete lock on graph
-az lock create --name $graphLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/graphs \
-    --lock-type $lockType \
-    --parent $graphParent \
-    --resource $graphName
+echo "Creating $lockType lock on $graph"
+az lock create --name $graphLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/graphs --lock-type $lockType --parent $graphParent --resource $graph
 
 # List all locks on a Cosmos account
-az lock list --resource-group $resourceGroupName \
-    --resource-name $accountName \
-    --namespace Microsoft.DocumentDB \
-    --resource-type databaseAccounts
+echo "Listing locks on $account"
+az lock list --resource-group $resourceGroup --resource-name $account --namespace Microsoft.DocumentDB --resource-type databaseAccounts
 
 # Delete lock on database
-lockid=$(az lock show --name $databaseLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/gremlinDatabases \
-        --resource $databaseName --parent $databaseParent \
-        --output tsv --query id)
+echo "Deleting $databaseLock on $database"
+lockid=$(az lock show --name $databaseLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/gremlinDatabases --resource $database --parent $databaseParent --output tsv --query id)
 az lock delete --ids $lockid
 
 # Delete lock on graph
-lockid=$(az lock show --name $graphLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/graphs \
-        --resource-name $graphName --parent $graphParent \
-        --output tsv --query id)
+echo "Deleting $graphLock on $graph"
+lockid=$(az lock show --name $graphLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/graphs --resource-name $graph --parent $graphParent --output tsv --query id)
 az lock delete --ids $lockid
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

@@ -1,87 +1,51 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 1/27/2022
 
-sub=$(az account show --query id -o tsv)
-resourcegroup_name="myResourceGroup"
-scaleset_name="myScaleSet"
-location_name="eastus"
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-vmss-rg-$randomIdentifier"
+tags="auto-scale-host-metrics-vmss"
+image="UbuntuLTS"
+scaleSet="msdocs-scaleSet-$randomIdentifier"
+upgradePolicyMode="automatic"
+instanceCount="2"
+login="azureuser"
+autoscale="autoscale"
+minCount="2"
+maxCount="10"
+count="2"
+scaleOut="3"
+scaleIn="1"
 
 # Create a resource group
-az group create --name $resourcegroup_name --location $location_name
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created
-az vmss create \
-  --resource-group $resourcegroup_name \
-  --name $scaleset_name \
-  --image UbuntuLTS \
-  --upgrade-policy-mode automatic \
-  --instance-count 2 \
-  --admin-username azureuser \
-  --generate-ssh-keys
+echo "Creating $scaleSet with $instanceCount instances"
+az vmss create --resource-group $resourceGroup --name $scaleSet --image $image --upgrade-policy-mode $upgradePolicyMode --instance-count $instanceCount --admin-username $login --generate-ssh-keys
 
-# Define auto scale rules
-# These rules automatically scale up the number of VM instances by 3 instances when the average CPU load over a 5-minute
-# window exceeds 70%
-# The scale set then automatically scales in by 1 instance when the average CPU load over a 5-minute window drops below 30%
-az monitor autoscale-settings create \
-    --resource-group $resourcegroup_name \
-    --name autoscale \
-    --parameters '{"autoscale_setting_resource_name": "autoscale",
-      "enabled": true,
-      "location": "'$location_name'",
-      "notifications": [],
-      "profiles": [
-        {
-          "name": "autoscale by percentage based on CPU usage",
-          "capacity": {
-            "minimum": "2",
-            "maximum": "10",
-            "default": "2"
-          },
-          "rules": [
-            {
-              "metricTrigger": {
-                "metricName": "Percentage CPU",
-                "metricNamespace": "",
-                "metricResourceUri": "/subscriptions/'$sub'/resourceGroups/'$resourcegroup_name'/providers/Microsoft.Compute/virtualMachineScaleSets/'$scaleset_name'",
-                "metricResourceLocation": "'$location_name'",
-                "timeGrain": "PT1M",
-                "statistic": "Average",
-                "timeWindow": "PT5M",
-                "timeAggregation": "Average",
-                "operator": "GreaterThan",
-                "threshold": 70
-              },
-              "scaleAction": {
-                "direction": "Increase",
-                "type": "ChangeCount",
-                "value": "3",
-                "cooldown": "PT5M"
-              }
-            },
-            {
-              "metricTrigger": {
-                "metricName": "Percentage CPU",
-                "metricNamespace": "",
-                "metricResourceUri": "/subscriptions/'$sub'/resourceGroups/'$resourcegroup_name'/providers/Microsoft.Compute/virtualMachineScaleSets/'$scaleset_name'",
-                "metricResourceLocation": "'$location_name'",
-                "timeGrain": "PT1M",
-                "statistic": "Average",
-                "timeWindow": "PT5M",
-                "timeAggregation": "Average",
-                "operator": "LessThan",
-                "threshold": 30
-              },
-              "scaleAction": {
-                "direction": "Decrease",
-                "type": "ChangeCount",
-                "value": "1",
-                "cooldown": "PT5M"
-              }
-            }
-          ]
-        }
-      ],
-      "tags": {},
-      "target_resource_uri": "/subscriptions/'$sub'/resourceGroups/'$resourcegroup_name'/providers/Microsoft.Compute/virtualMachineScaleSets/'$scaleset_name'"
-    }'
+# Define an autoscale profile
+# The following script sets the default, and minimum, capacity of *2* VM instances, and a maximum of *10*
+echo "Setting an autoscale profile with the default, and minimum, capacity of 2 VM instances, and a maximum of 10"
+az monitor autoscale create --resource-group $resourceGroup --resource=$scaleSet --resource-type Microsoft.Compute/virtualMachineScaleSets --name $autoscale --min-count $minCount --max-count $maxCount --count $count
+
+# Create a rule to autoscale out
+# The following script increases the number of VM instances in a scale set when the average CPU load
+# is greater than 70% over a 5-minute period.
+# When the rule triggers, the number of VM instances is increased by three.
+echo "Creating an autoscale out rule"
+az monitor autoscale rule create --resource-group $resourceGroup --autoscale-name $autoscale --condition "Percentage CPU > 70 avg 5m" --scale out $scaleOut
+
+# Create a rule to autoscale in
+# The following script decreases the number of VM instances in a scale set when the average CPU load 
+# then drops below 30% over a 5-minute period
+echo "Creating an autoscale in rule"
+az monitor autoscale rule create --resource-group $resourceGroup --autoscale-name $autoscale --condition "Percentage CPU < 30 avg 5m" --scale in $scaleIn
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
+
+# The script is used in the following file, adding or removing lines may require you update the range value in this files
+# articles\virtual-machine-scale-sets\tutorial-autoscale-cli.md

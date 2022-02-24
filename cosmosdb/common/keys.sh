@@ -1,55 +1,36 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
-# Account key operations for an Azure Cosmos account
-#
-#
+# Passed validation in Cloud Shell on 2/20/2022
 
-# Account key operations:
-#   List all account keys
-#   List read only account keys
-#   List connection strings
-#   Regenerate account keys
+# Account key operations for an Azure Cosmos account
 
 # Resource group and Cosmos account variables
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="keys-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 
 # Create a resource group
-az group create -n $resourceGroupName -l $location
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a Cosmos DB account with default values
 # Use appropriate values for --kind or --capabilities for other APIs
-az cosmosdb create -n $accountName -g $resourceGroupName
+echo "Creating $account for CosmosDB"
+az cosmosdb create --name $account --resource-group $resourceGroup
 
-read -p "Press any key to list account keys"
 # List all account keys
-az cosmosdb keys list \
-    -n $accountName \
-    -g $resourceGroupName
+az cosmosdb keys list --name $account --resource-group $resourceGroup
 
-read -p "Press any key to list read only account keys"
 # List read-only keys
-az cosmosdb keys list \
-    -n $accountName \
-    -g $resourceGroupName \
-    --type read-only-keys
+az cosmosdb keys list --name $account --resource-group $resourceGroup --type read-only-keys
 
-read -p "Press any key to list connection strings"
 # List connection strings
-az cosmosdb keys list \
-    -n $accountName \
-    -g $resourceGroupName \
-    --type connection-strings
+az cosmosdb keys list --name $account --resource-group $resourceGroup --type connection-strings
 
-read -p "Press any key to regenerate secondary account keys"
 # Regenerate secondary account keys
 # key-kind values: primary, primaryReadonly, secondary, secondaryReadonly
-az cosmosdb keys regenerate \
-    -n $accountName \
-    -g $resourceGroupName \
-    --key-kind secondary
-    
+az cosmosdb keys regenerate --name $account --resource-group $resourceGroup --key-kind secondary
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
