@@ -25,7 +25,7 @@ echo "Creating $database"
 az cosmosdb sql database create --account-name $account --resource-group $resourceGroup --name $database
 
 # Create a SQL API container
-echo "Creating $container with $maxThroughput"
+echo "Creating $container with $partitionKey"
 az cosmosdb sql container create --account-name $account --resource-group $resourceGroup --database-name $database --name $container --partition-key-path $partitionKey
 
 # echo "Deleting all resources"

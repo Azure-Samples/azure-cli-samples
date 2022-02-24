@@ -43,14 +43,14 @@ printf '
         "key": {"keys": ["_ts"]},
         "options": {"expireAfterSeconds": 2629746}
     }
-]' > idxpolicy-$uniqueId.json
+]' > idxpolicy-$randomIdentifier.json
 
 # Create a MongoDB API collection
 echo "Creating $collection1"
-az cosmosdb mongodb collection create --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --shard "user_id" --throughput 400 --idx @idxpolicy-$uniqueId.json
+az cosmosdb mongodb collection create --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --shard "user_id" --throughput 400 --idx @idxpolicy-$randomIdentifier.json
 
 # Clean up temporary index policy file
-rm -f "idxpolicy-$uniqueId.json"
+rm -f "idxpolicy-$randomIdentifier.json"
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

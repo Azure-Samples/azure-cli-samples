@@ -44,14 +44,14 @@ printf '
             { "path":"/age", "order":"descending" }
         ]
     ]
-}' > "idxpolicy-$uniqueId.json"
+}' > "idxpolicy-$randomIdentifier.json"
 
 # Create a Gremlin graph
 echo "Creating $graph"
-az cosmosdb gremlin graph create --account-name $account --resource-group $resourceGroup --database-name $database --name $graph -p "/zipcode" --throughput 400 --idx @idxpolicy-$uniqueId.json
+az cosmosdb gremlin graph create --account-name $account --resource-group $resourceGroup --database-name $database --name $graph -p "/zipcode" --throughput 400 --idx @idxpolicy-$randomIdentifier.json
 
 # Clean up temporary index policy file
-rm -f "idxpolicy-$uniqueId.json"
+rm -f "idxpolicy-$randomIdentifier.json"
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

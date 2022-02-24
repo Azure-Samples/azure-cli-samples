@@ -34,14 +34,14 @@ printf '
         {"name": "columnB","type": "text"}
     ],
     "partitionKeys": [{"name": "columnA"}]
-}' > "schema-$uniqueId.json"
+}' > "schema-$randomIdentifier.json"
 
 # Create the Cassandra table
 echo "Creating $table with $originalThroughput"
-az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput $originalThroughput --schema @schema-$uniqueId.json
+az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput $originalThroughput --schema @schema-$randomIdentifier.json
 
 # Clean up temporary schema file
-rm -f "schema-$uniqueId.json"
+rm -f "schema-$randomIdentifier.json"
 
 # Throughput operations for Cassandra API keyspace
 #   Read the current throughput

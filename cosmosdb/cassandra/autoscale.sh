@@ -43,14 +43,14 @@ schema=$(cat << EOF
 EOF
 )
 # Persist schema to json file
-echo "$schema" > "schema-$uniqueId.json"
+echo "$schema" > "schema-$randomIdentifier.json"
 
 # Create the Cassandra table
 echo "Creating $table"
-az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --max-throughput $maxThroughput --schema @schema-$uniqueId.json
+az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --max-throughput $maxThroughput --schema @schema-$randomIdentifier.json
 
 # Clean up temporary schema file
-rm -f "schema-$uniqueId.json"
+rm -f "schema-$randomIdentifier.json"
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
