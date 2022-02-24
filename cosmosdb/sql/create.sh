@@ -6,7 +6,7 @@
 # Variables for SQL API resources
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
-failoverLocation="Central US"
+failoverLocation="South Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tags="create-sql-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
