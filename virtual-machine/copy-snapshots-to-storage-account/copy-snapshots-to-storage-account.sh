@@ -1,5 +1,7 @@
+# Verified per Raman Kumar as of 2/23/2022
+
 #Provide the subscription Id where snapshot is created
-subscriptionId=mySubscriptionId
+subscriptionId="<subscriptionId>"
 
 #Provide the name of your resource group where snapshot is created
 resourceGroupName=myResourceGroupName
