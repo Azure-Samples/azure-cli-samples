@@ -36,6 +36,3 @@ az disk create --resource-group $resourceGroupName --name $osDiskName --sku $sto
 
 #Create VM by attaching created managed disks as OS
 az vm create --name $virtualMachineName --resource-group $resourceGroupName --attach-os-disk $osDiskName --os-type $osType
-
-
-
