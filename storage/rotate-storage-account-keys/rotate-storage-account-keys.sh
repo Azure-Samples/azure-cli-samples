@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 03/01/2022
 
-# Delete rotate storage account keys
+# Rotate storage account keys
 
 # Variables for storage
 let "randomIdentifier=$RANDOM*$RANDOM"
