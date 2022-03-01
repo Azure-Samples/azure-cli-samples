@@ -8,8 +8,8 @@ let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="calculate container size"
-storage="msdocsazuresql$randomIdentifier"
-container="msdocs-azuresql-container-$randomIdentifier"
+storage="msdocsstorage$randomIdentifier"
+container="msdocs-storage-container-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
