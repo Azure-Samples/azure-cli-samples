@@ -16,7 +16,7 @@ password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resourceGroup in $location..."
+echo "Creating $resourceGroup in "$location"..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $server in $location..."
