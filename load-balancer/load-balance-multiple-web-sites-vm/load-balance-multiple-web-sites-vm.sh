@@ -1,6 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 3/3/2022
 
+# <FullScript>
 # Load balance multiple websites
 
 # Variable block for load balancer
@@ -133,6 +134,8 @@ az vm create --resource-group $resourceGroup --name $vm2 --nics $nicVm2 --image 
 
 # List the virtual machines
 az vm list --resource-group $resourceGroup
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

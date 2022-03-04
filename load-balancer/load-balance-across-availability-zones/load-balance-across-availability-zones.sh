@@ -1,6 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 3/4/2022
 
+# <FullScript>
 # Load balance VMs across availability zones
 
 # Variable block for load balancer
@@ -83,6 +84,8 @@ done
 
 # List the virtual machines
 az vm list --resource-group $resourceGroup
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
