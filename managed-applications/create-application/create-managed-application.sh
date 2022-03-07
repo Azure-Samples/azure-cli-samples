@@ -1,17 +1,17 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 1/13/2022
+# Passed validation in Cloud Shell on 3/7/2022
 
 # <FullScript>
 
-# Create, deploy, and manage a managed application
+# Define and create a managed application
 
-# Variable block for managed applications
+# Variable block for managed application
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 appDefinitionResourceGroup="msdocs-managed-applications-app-definition-rg-$randomIdentifier"
 appResourceGroup="msdocs-managed-applications-app-definition-rg-$randomIdentifier"
 tags="create managed application"
-managedApp="msdocs-managed-application-$randomIdentifier"
+managedApp="StorageApp"
 managedAppDisplayName="Managed Storage Account"
 managedAppDescription="Managed Azure Storage Account"
 
@@ -29,7 +29,7 @@ roleid=$(az role definition list --name Owner --query [].name --output tsv)
 
 # Create the definition for a managed application
 az managedapp definition create --name "$managedApp" --location "$location" --resource-group $appDefinitionResourceGroup --lock-level ReadOnly --display-name "Managed Storage Account" --description "Managed Azure Storage Account" --authorizations "$groupid:$roleid" --package-file-uri "https://raw.githubusercontent.com/Azure/azure-managedapp-samples/master/Managed%20Application%20Sample%20Packages/201-managed-storage-account/managedstorage.zip"
-                      https://raw.githubusercontent.com/Azure/azure-managedapp-samples/master/Managed%20Application%20Sample%20Packages/201-managed-web-app/managedwebapp.zip
+
 # Create managed application
 
 # Create application resource group
