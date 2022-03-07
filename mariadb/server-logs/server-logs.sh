@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell on 1/11/2022
 
 # <FullScript>
-
 # Enable server logs for MariaDB
 
 # Variable block
@@ -50,7 +49,6 @@ az mariadb server-logs list --resource-group $resourceGroup --server $server
 # Substitute the <log_file_name> in the script below with your server log file name
 # Creates the log file in the current command line path
 # az mariadb server-logs download --name <log_file_name> $resourceGroup --server $server
-
 # </FullScript>
 
 # echo "Deleting all resources"
