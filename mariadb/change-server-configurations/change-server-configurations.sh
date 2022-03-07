@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell on 1/11/2022
 
 # <FullScript>
-
 # Change server configurations
 
 # Variable block
@@ -36,7 +35,6 @@ az mariadb server configuration set --resource-group $resourceGroup --server-nam
 # Check the value of *innodb_lock_wait_timeout*
 echo "Checking the value of the innodb_lock_wait_timeout setting on $server"
 az mariadb server configuration show --resource-group $resourceGroup --server-name $server --name innodb_lock_wait_timeout
-
 # </FullScript>
 
 # echo "Deleting all resources"

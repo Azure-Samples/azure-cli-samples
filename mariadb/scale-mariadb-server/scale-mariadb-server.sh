@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell on 1/11/2022
 
 # <FullScript>
-
 # Scale MariaDB server
 
 # Variable block
@@ -50,7 +49,6 @@ az mariadb server update --resource-group $resourceGroup --name $server --sku-na
 # Storage size cannot be reduced
 echo "Scaling up the storage size for $server to $storageSize"
 az mariadb server update --resource-group $resourceGroup --name $server --storage-size $storageSize
-
 # </FullScript>
 
 # echo "Deleting all resources"
