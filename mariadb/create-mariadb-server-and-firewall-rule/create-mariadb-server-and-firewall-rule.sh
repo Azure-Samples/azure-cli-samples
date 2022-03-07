@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 1/11/2022
 
 # <FullScript>
-# Create MariaDB server and firewall rull
+# Create MariaDB server and firewall rule
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
