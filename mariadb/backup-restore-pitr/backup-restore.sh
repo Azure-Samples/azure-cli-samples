@@ -2,6 +2,10 @@
 # Passed validation in Cloud Shell on 2/11/2022
 
 # <FullScript>
+
+# Restore a server from backup to a new server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"

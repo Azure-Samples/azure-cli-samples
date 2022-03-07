@@ -3,6 +3,9 @@
 
 # <FullScript>
 
+# Change server configurations
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"

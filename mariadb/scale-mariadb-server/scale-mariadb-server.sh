@@ -3,6 +3,9 @@
 
 # <FullScript>
 
+# Scale MariaDB server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"

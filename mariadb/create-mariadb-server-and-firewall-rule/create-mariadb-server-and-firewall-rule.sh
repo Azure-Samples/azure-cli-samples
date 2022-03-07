@@ -3,6 +3,9 @@
 
 # <FullScript>
 
+# Create MariaDB server and firewall rull
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
