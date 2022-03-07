@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell 02/03/2022
 
 # <FullScript>
-
 # Create vNet for multi-tier application
 
 # Variable block
@@ -102,7 +101,6 @@ az network nic create --resource-group $resourceGroup --name $nicSql --vnet-name
 # Create a MySQL VM in the backend subnet.
 echo "Creating $vmSql in $subnetBackEnd"
 az vm create --resource-group $resourceGroup --name $vmSql --nics $nicSql --image $image --admin-username $login --generate-ssh-keys  --public-ip-sku $sku
-
 # </FullScript>
 
 # echo "Deleting all resources"
