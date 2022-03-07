@@ -5,7 +5,8 @@
 
 # Create NAT gateway
 
-#Variable block
+# <VariableBlock>
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
@@ -30,7 +31,7 @@ image="win2019datacenter"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
-
+# </VariableBlock>
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag

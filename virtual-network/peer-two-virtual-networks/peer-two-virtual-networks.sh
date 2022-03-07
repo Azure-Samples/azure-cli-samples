@@ -5,7 +5,7 @@
 
 # Peer two virtual networks
 
-#Variable block
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"

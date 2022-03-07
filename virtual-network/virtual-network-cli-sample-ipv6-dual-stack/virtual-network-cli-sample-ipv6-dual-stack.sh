@@ -22,7 +22,7 @@
 #
 # az provider register --namespace Microsoft.Network
 
-#Variable block
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
