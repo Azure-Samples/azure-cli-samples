@@ -31,9 +31,11 @@ password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 # </VariableBlock>
+# <ResourceGroup>
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
+# </ResourceGroup>
 
 # Create public IP address
 echo "Creating $publicIP"
