@@ -1,13 +1,13 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tags="move-database-between-pools"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 pool="msdocs-azuresql-pool-$randomIdentifier"
@@ -15,7 +15,7 @@ secondaryPool="msdocs-azuresql-secondary-pool-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $server in $location..."

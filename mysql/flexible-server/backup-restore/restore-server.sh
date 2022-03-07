@@ -1,43 +1,47 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 2/11/2022
 
 # Perform point-in-time-restore of a source server to a new server
 
 # Set up variables
-RESOURCE_GROUP="myresourcegroup" 
-SOURCE_SERVER="mydemoserver" # Substitute with preferred name for MySQL Flexible Server.
-LOCATION="westus" 
-ADMIN_USER="mysqladmin" 
-PASSWORD="" # Enter your server admin password
-IP_ADDRESS= # Enter your IP Address for Public Access - https://whatismyipaddress.com
-NEW_SERVER="mydemoserver-restored" # Substitute with preferred name for new Flexible Server.
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-mysql-rg-$randomIdentifier"
+tags="restore-server-mysql"
+server="msdocs-mysql-server-$randomIdentifier"
+restoreServer="restore-server$randomIdentifier"
+login="azureuser"
+password="Pa$$w0rD-$randomIdentifier"
+ipAddress="None"
+# Specifying an IP address of 0.0.0.0 allows public access from any resources
+# deployed within Azure to access your server. Setting it to "None" sets the server 
+# in public access mode but does not create a firewall rule.
+# For your public IP address, https://whatismyipaddress.com
 
-# 1. Create a resource group
-az group create \
---name $RESOURCE_GROUP \
---location $LOCATION
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-# 2. Create a MySQL Flexible server in the resource group
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
-az mysql flexible-server create \
---name $SOURCE_SERVER \
---resource-group $RESOURCE_GROUP \
---location $LOCATION \
---admin-user $ADMIN_USER \
---admin-password $PASSWORD \
---public-access $IP_ADDRESS
+# Create a MySQL Flexible server in the resource group
 
+az mysql flexible-server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --public-access $ipAddress
 
-# 3. Restore source server to a specific point-in-time as a new server 'mydemoserver-restored'.
-# Substitute the 'restore-time' with your desired value in ISO8601 format
+# Sleeping commands to wait long enough for automatic backup to be created
+echo "Sleeping..."
+sleep 15m
 
-az mysql flexible-server restore \
---name $NEW_SERVER \
---resource-group $RESOURCE_GROUP \
---restore-time "2021-07-09T13:10:00Z" \
---source-server $SOURCE_SERVER
+# Restore a server from backup to a new server
+# To specify a specific point-in-time (in UTC) to restore from, use the ISO8601 format:
+# restorePoint=“2021-07-09T13:10:00Z”
+restorePoint=$(date +%s)
+restorePoint=$(expr $restorePoint - 60)
+restorePoint=$(date -d @$restorePoint +"%Y-%m-%dT%T")
+echo $restorePoint
 
-# 4. Check server parameters and networking options on new server before use
+echo "Restoring to $restoreServer"
+az mysql flexible-server restore --name $restoreServer --resource-group $resourceGroup --restore-time $restorePoint --source-server $server
 
-az mysql flexible-server show \
---resource-group $RESOURCE_GROUP \
---name $NEW_SERVER
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

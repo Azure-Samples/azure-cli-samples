@@ -4,7 +4,7 @@
 # Run this script after the script in https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/scripts/create-configure-managed-instance-cli creates a managed instance.
 # You can use the same variables in both scripts/
 # If running this script against a different existing instance, uncomment and add appropriate values to next 3 lines of code
-# let randomIdentifier=$RANDOM*$RANDOM
+# let "randomIdentifier=$RANDOM*$RANDOM"
 # instance="<msdocs-azuresql-instance>" # add instance here
 # resourceGroup="<msdocs-azuresql-rg>" # add resource here
 

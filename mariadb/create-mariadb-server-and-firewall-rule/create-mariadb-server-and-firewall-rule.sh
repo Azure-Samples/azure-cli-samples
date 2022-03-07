@@ -9,7 +9,7 @@ resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
 tags="create-mariadb-server-and-firewall-rule"
 server="msdocs-mariadb-server-$randomIdentifier"
 sku="GP_Gen5_2"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 # Specify appropriate IP address values for your environment
 # to limit / allow access to the MariaDB server

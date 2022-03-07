@@ -1,35 +1,37 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 2/9/2022
+
+# Set up variables
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-mysql-rg-$randomIdentifier"
+tags="change-server-cofigurations-mysql"
+server="msdocs-mysql-server-$randomIdentifier"
+sku="GP_Gen5_2"
+login="azureuser"
+password="Pa$$w0rD-$randomIdentifier"
+
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 # Create a resource group
-az group create \
---name myresourcegroup \
---location westus
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a MySQL server in the resource group
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
-# Substitute the <server_admin_password> with your own value.
-az mysql server create \
---name mydemoserver \
---resource-group myresourcegroup \
---location westus \
---admin-user myadmin \
---admin-password <server_admin_password> \
---sku-name GP_Gen4_2 \
+echo "Creating $server in $location..."
+az mysql server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --sku-name $sku
 
 # Display all available configurations with valid values of an Azure Database for MySQL server
-az mysql server configuration list \
---resource-group myresourcegroup \
---server-name mydemoserver
+az mysql server configuration list --resource-group $resourceGroup --server-name $server
 
 # Set value of *innodb_lock_wait_timeout*
-az mysql server configuration set \
---resource-group myresourcegroup \
---server-name mydemoserver \
---name innodb_lock_wait_timeout \
---value 120
+echo "Setting value of the innodb_lock_wait_timeout setting on $server"
+az mysql server configuration set --resource-group $resourceGroup --server-name $server --name innodb_lock_wait_timeout --value 120
 
 # Check the value of *innodb_lock_wait_timeout*
-az mysql server configuration show \
---resource-group myresourcegroup \
---server-name mydemoserver \
---name innodb_lock_wait_timeout
+echo "Checking the value of the innodb_lock_wait_timeout setting on $server"
+az mysql server configuration show --resource-group $resourceGroup --server-name $server --name innodb_lock_wait_timeout
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

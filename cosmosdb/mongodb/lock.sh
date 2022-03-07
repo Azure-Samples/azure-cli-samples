@@ -1,58 +1,49 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+# Tested after running the "create.sh" script
 # Resource lock operations for a MongoDB API database and collection
-#
-#
 
-resourceGroupName='myResourceGroup'
-accountName='my-cosmos-account'
-databaseName='myDatabase'
-collectionName='myCollection'
+# Subscription owner permissions required for this script
+
+# Run this script after running
+# "https://docs.microsoft.com/azure/cosmos-db/scripts/cli/mongodb/create#sample-script"
+
+# Variables for MongoDB API resources
+# Use values from prerequisite script or from your environment
+# resourceGroup="your resource group name"
+# account="your account name"
+# database="your database name"
+# collection="your collection name"
 
 lockType='CanNotDelete' # CanNotDelete or ReadOnly
-databaseParent="databaseAccounts/$accountName"
-collectionParent="databaseAccounts/$accountName/mongodbDatabases/$databaseName"
-databaseLockName="$databaseName-Lock"
-collectionLockName="$collectionName-Lock"
-
+databaseParent="databaseAccounts/$account"
+collectionParent="databaseAccounts/$account/mongodbDatabases/$database"
+databaseLock="$database-Lock"
+collectionLock="$collection-Lock"
 
 # Create a delete lock on database
-az lock create --name $databaseLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/mongodbDatabases \
-    --lock-type $lockType \
-    --parent $databaseParent \
-    --resource $databaseName
+echo "Creating $lockType lock on $database"
+az lock create --name $databaseLock \
+--resource-group $resourceGroup \
+--resource-type Microsoft.DocumentDB/mongodbDatabases --lock-type $lockType --parent $databaseParent --resource $database
 
 # Create a delete lock on collection
-az lock create --name $collectionLockName \
-    --resource-group $resourceGroupName \
-    --resource-type Microsoft.DocumentDB/collections \
-    --lock-type $lockType \
-    --parent $collectionParent \
-    --resource $collectionName
+echo "Creating $lockType lock on $collection"
+az lock create --name $collectionLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/collections --lock-type $lockType --parent $collectionParent --resource $collection
 
 # List all locks on a Cosmos account
-az lock list --resource-group $resourceGroupName \
-    --resource-name $accountName \
-    --namespace Microsoft.DocumentDB \
-    --resource-type databaseAccounts
+echo "Listing locks on $account"
+az lock list --resource-group $resourceGroup --resource-name $account --namespace Microsoft.DocumentDB --resource-type databaseAccounts
 
 # Delete lock on database
-lockid=$(az lock show --name $databaseLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/mongodbDatabases \
-        --resource $databaseName --parent $databaseParent \
-        --output tsv --query id)
+echo "Deleting $databaseLock on $database"
+lockid=$(az lock show --name $databaseLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/mongodbDatabases --resource $database --parent $databaseParent --output tsv --query id)
 az lock delete --ids $lockid
 
 # Delete lock on collection
-lockid=$(az lock show --name $collectionLockName \
-        --resource-group $resourceGroupName \
-        --resource-type Microsoft.DocumentDB/collections \
-        --resource-name $collectionName \
-        --parent $collectionParent \
-        --output tsv --query id)
+echo "Deleting $collectionLock on $collection"
+lockid=$(az lock show --name $collectionLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/collections --resource-name $collection --parent $collectionParent --output tsv --query id)
 az lock delete --ids $lockid
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

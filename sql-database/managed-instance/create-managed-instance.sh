@@ -1,9 +1,7 @@
 #!/bin/bash
-# Passed validation in Bash in Docker container on Windows 12/01/2021
+# Passed validation in Cloud Shell on 2/11/2022
 
-# Due to deployment times, you should plan for a full day to complete the entire script. You can monitor deployment progress in the activity log within the Azure portal. For more information on deployment times, see https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance#managed-instance-management-operations. 
-# Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="create-managed-instance"
@@ -12,12 +10,12 @@ subnet="msdocs-azuresql-subnet-$randomIdentifier"
 nsg="msdocs-azuresql-nsg-$randomIdentifier"
 route="msdocs-azuresql-route-$randomIdentifier"
 instance="msdocs-azuresql-instance-$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag 
 
 echo "Creating $vNet with $subnet..."

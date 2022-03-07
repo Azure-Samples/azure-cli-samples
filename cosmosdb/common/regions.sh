@@ -1,48 +1,39 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+
 # Region replica operations for an Azure Cosmos account
-#
-# Operations:
-#   Add regions to an existing Cosmos account
-#   Change regional failover priority (applies to accounts using automatic failover)
-#   Trigger a manual failover from primary to secondary region (applies to accounts with manual failover)
 
 # Note: Azure Comos accounts cannot include updates to regions with changes to other properties in the same operation
 
 # Resource group and Cosmos account variables
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+failoverLocation1="South Central US"
+failoverLocation2="North Central US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="regions-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 
 # Create a resource group
-az group create -n $resourceGroupName -l $location
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create a Cosmos DB account with default values
 # Use appropriate values for --kind or --capabilities for other APIs
-az cosmosdb create -n $accountName -g $resourceGroupName
+echo "Creating $account for CosmosDB"
+az cosmosdb create --name $account --resource-group $resourceGroup
 
-read -p "Press any key to add additional regions to this account"
-az cosmosdb update \
-    -n $accountName \
-    -g $resourceGroupName \
-    --locations regionName='West US 2' failoverPriority=0 isZoneRedundant=False \
-    --locations regionName='East US 2' failoverPriority=1 isZoneRedundant=False \
-    --locations regionName='South Central US' failoverPriority=2 isZoneRedundant=False
+# Specify region failover locations and priorities
+echo "Adding $failoverLocation1 and $failoverLocation2"
+az cosmosdb update --name $account --resource-group $resourceGroup --locations regionName="$location" failoverPriority=0 isZoneRedundant=False --locations regionName="$failoverLocation1" failoverPriority=1 isZoneRedundant=False --locations regionName="$failoverLocation2" failoverPriority=2 isZoneRedundant=False
 
-read -p "Press any key to change the failover priority"
-# Make South Central US the next region to fail over to instea of East US 2
-az cosmosdb failover-priority-change \
-    -n $accountName \
-    -g $resourceGroupName \
-    --failover-policies 'West US 2=0' 'South Central US=1' 'East US 2=2' 
+# Make failoverLocation2 the next region to fail over to instead of failoverLocation1 
+echo "Switching failover priority"
+az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies "$location=0" "$failoverLocation1=2" "$failoverLocation2=1"
 
+# Initiate a manual failover and promote failoverLocation1 as primary write region
+echo "Failing over to $failoverLocation1"
+az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies "$location=2" "$failoverLocation1=0" "$failoverLocation2=1"
 
-read -p "Press any key to trigger a manual failover by changing region 0"
-# Initiate a manual failover and promote East US 2 as primary write region
-az cosmosdb failover-priority-change \
-    -n $accountName \
-    -g $resourceGroupName \
-    --failover-policies 'East US 2=0' 'West US 2=1' 'South Central US=2'
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

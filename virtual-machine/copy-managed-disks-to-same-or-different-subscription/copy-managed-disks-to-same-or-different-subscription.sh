@@ -1,5 +1,7 @@
+# Verified per Raman Kumar as of 2/23/2022
+
 #Provide the subscription Id of the subscription where managed disk exists
-sourceSubscriptionId=dd80b94e-0463-4a65-8d04-c94f403879dc
+sourceSubscriptionId="<subscriptionId>"
 
 #Provide the name of your resource group where managed disk exists
 sourceResourceGroupName=mySourceResourceGroupName
@@ -27,4 +29,3 @@ az account set --subscription $targetSubscriptionId
 
 #Copy managed disk to different subscription using managed disk Id
 az disk create --resource-group $targetResourceGroupName --name $managedDiskName --source $managedDiskId
-

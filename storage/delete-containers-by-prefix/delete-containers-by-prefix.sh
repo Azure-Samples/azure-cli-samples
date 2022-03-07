@@ -1,24 +1,46 @@
 #!/bin/bash
-export AZURE_STORAGE_ACCOUNT=<storage-account-name>
-export AZURE_STORAGE_ACCESS_KEY=<storage-account-key>
+# Passed validation in Cloud Shell 03/01/2022
+
+# Delete containers by prefix
+
+# Variables for storage
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
+tag="delete containers by prefix"
+storage="msdocsstorage$randomIdentifier"
+container1="msdocs-test1-storage-container-$randomIdentifier"
+container2="msdocs-test2-storage-container-test2-$randomIdentifier"
+containerProd="msdocs-prod1-storage-$randomIdentifier"
 
 # Create a resource group
-az group create --name myResourceGroup --location eastus
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
+
+# Create storage account
+echo "Creating $storage..."
+az storage account create --name $storage --resource-group $resourceGroup --location "$location" --sku Standard_LRS
 
 # Create some test containers
-az storage container create --name test-container-001
-az storage container create --name test-container-002
-az storage container create --name production-container-001
+echo "Creating $container1 $container2 and $containerProd on $storage..."
+key=$(az storage account keys list --account-name $storage --resource-group $resourceGroup -o json --query [0].value | tr -d '"')
+
+az storage container create --name $container1 --account-key $key --account-name $storage #--public-access container
+az storage container create --name $container2 --account-key $key --account-name $storage #--public-access container
+az storage container create --name $containerProd --account-key $key --account-name $storage #--public-access container
 
 # List only the containers with a specific prefix
-az storage container list --prefix "test-" --query "[*].[name]" --output tsv
-
-echo "Deleting test- containers..."
+echo "List container with msdocs-test prefix"
+az storage container list --account-key $key --account-name $storage --prefix "msdocs-test" --query "[*].[name]" --output tsv
 
 # Delete 
-for container in `az storage container list --prefix "test-" --query "[*].[name]" --output tsv`; do
-    az storage container delete --name $container
+echo "Deleting msdocs-test containers..."
+for container in `az storage container list --account-key $key --account-name $storage --prefix "msdocs-test" --query "[*].[name]" --output tsv`; do
+    az storage container delete --account-key $key --account-name $storage --name $container
 done
 
-echo "Remaining containers:"
-az storage container list --output table
+echo "Remaining containers..."
+az storage container list --account-key $key --account-name $storage --output table
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

@@ -1,27 +1,32 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+
 # Throughput operations for a Cassandra keyspace and table
-#
-#
 
 # Variables for Cassandra API resources
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
-keySpaceName='keyspace1'
-tableName='table1'
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="serverless-casandra-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+keySpace="keyspace1"
+table="table1"
 originalThroughput=400
 updateThroughput=500
 
-# Create a resource group, Cosmos account, keyspace and table
-az group create -n $resourceGroupName -l $location
-az cosmosdb create -n $accountName -g $resourceGroupName --capabilities EnableCassandra
-az cosmosdb cassandra keyspace create -a $accountName -g $resourceGroupName -n $keySpaceName --throughput $originalThroughput
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location"
 
-# Define the schema for the table and create the table
+# Create a Cosmos account for Cassandra API
+echo "Creating $account"
+az cosmosdb create --name $account --resource-group $resourceGroup --capabilities EnableCassandra
+
+# Create Cassandra keyspace
+echo "Creating $keySpace with $originalThroughput"
+az cosmosdb cassandra keyspace create --account-name $account --resource-group $resourceGroup --name $keySpace --throughput $originalThroughput
+
+# Define the schema for the table
 printf ' 
 {
     "columns": [
@@ -29,9 +34,14 @@ printf '
         {"name": "columnB","type": "text"}
     ],
     "partitionKeys": [{"name": "columnA"}]
-}' > "schema-$uniqueId.json"
-az cosmosdb cassandra table create -a $accountName -g $resourceGroupName -k $keySpaceName -n $tableName --throughput $originalThroughput --schema @schema-$uniqueId.json
-rm -f "schema-$uniqueId.json"
+}' > "schema-$randomIdentifier.json"
+
+# Create the Cassandra table
+echo "Creating $table with $originalThroughput"
+az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput $originalThroughput --schema @schema-$randomIdentifier.json
+
+# Clean up temporary schema file
+rm -f "schema-$randomIdentifier.json"
 
 # Throughput operations for Cassandra API keyspace
 #   Read the current throughput
@@ -41,23 +51,11 @@ rm -f "schema-$uniqueId.json"
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to get current provisioned Keyspace throughput'
+# Retrieve the current provisioned keyspace throughput
+az cosmosdb cassandra keyspace throughput show --account-name $account --resource-group $resourceGroup --name $keySpace --query resource.throughput -o tsv
 
-az cosmosdb cassandra keyspace throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $keySpaceName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to get minimum allowable Keyspace throughput'
-
-minimumThroughput=$(az cosmosdb cassandra keyspace throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $keySpaceName \
-    --query resource.minimumThroughput \
-    -o tsv)
+# Retrieve the minimum allowable keyspace throughput
+minimumThroughput=$(az cosmosdb cassandra keyspace throughput show --account-name $account --resource-group $resourceGroup --name $keySpace --query resource.minimumThroughput -o tsv)
 
 echo $minimumThroughput
 
@@ -66,31 +64,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update Keyspace throughput'
+# Update keyspace throughput
+echo "Updating $keyspace throughput to $updateThroughput"
+az cosmosdb cassandra keyspace throughput update --account-name $account --resource-group $resourceGroup --name $keySpace --throughput $updateThroughput
 
-az cosmosdb cassandra keyspace throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $keySpaceName \
-    --throughput $updateThroughput
+# Migrate the keyspace from standard (manual) throughput to autoscale throughput
+az cosmosdb cassandra keyspace throughput migrate --account-name $account --resource-group $resourceGroup --name $keySpace --throughput-type "autoscale"
 
-read -p 'Press any key to migrate the keyspace from standard (manual) throughput to autoscale throughput'
-
-az cosmosdb cassandra keyspace throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $keySpaceName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the keyspace'
-
-az cosmosdb cassandra keyspace throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $keySpaceName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
-
+# Retrieve current autoscale provisioned max keyspace throughput
+az cosmosdb cassandra keyspace throughput show --account-name $account --resource-group $resourceGroup --name $keySpace --query resource.autoscaleSettings.maxThroughput -o tsv
 
 # Throughput operations for Cassandra API table
 #   Read the current throughput
@@ -100,26 +82,11 @@ az cosmosdb cassandra keyspace throughput show \
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to get current provisioned Table throughput'
+# Retrieve the current provisioned table throughput
+az cosmosdb cassandra table throughput show --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --query resource.throughput -o tsv
 
-az cosmosdb cassandra table throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -k $keySpaceName \
-    -n $tableName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to get minimum allowable Table throughput'
-
-minimumThroughput=$(az cosmosdb cassandra table throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -k $keySpaceName \
-    -n $tableName \
-    --query resource.minimumThroughput \
-    -o tsv)
-
+# Retrieve the minimum allowable table throughput
+minimumThroughput=$(az cosmosdb cassandra table throughput show --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --query resource.minimumThroughput -o tsv)
 echo $minimumThroughput
 
 # Make sure the updated throughput is not less than the minimum allowed throughput
@@ -127,30 +94,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update Table throughput'
+# Update table throughput
+echo "Updating $table throughput to $updateThroughput"
+az cosmosdb cassandra table throughput update --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput $updateThroughput
 
-az cosmosdb cassandra table throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -k $keySpaceName \
-    -n $tableName \
-    --throughput $updateThroughput
+# Migrate the table from standard (manual) throughput to autoscale throughput
+az cosmosdb cassandra table throughput migrate --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput-type "autoscale"
 
-read -p 'Press any key to migrate the table from standard (manual) throughput to autoscale throughput'
+# Retrieve the current autoscale provisioned max table throughput
+az cosmosdb cassandra table throughput show --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --query resource.autoscaleSettings.maxThroughput -o tsv
 
-az cosmosdb cassandra table throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -k $keySpaceName \
-    -n $tableName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the table'
-
-az cosmosdb cassandra table throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -k $keySpaceName \
-    -n $tableName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

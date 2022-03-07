@@ -1,5 +1,7 @@
+# Verified per Raman Kumar as of 2/23/2022
+
 #Provide the subscription Id of the subscription where snapshot exists
-sourceSubscriptionId=dd80b94e-0463-4a65-8d04-c94f403879dc
+sourceSubscriptionId="<subscriptionId>"
 
 #Provide the name of your resource group where snapshot exists
 sourceResourceGroupName=mySourceResourceGroupName
@@ -31,4 +33,3 @@ az account set --subscription $targetSubscriptionId
 #We recommend you to store your snapshots in Standard storage to reduce cost. Please use Standard_ZRS in regions where zone redundant storage (ZRS) is available, otherwise use Standard_LRS
 #Please check out the availability of ZRS here: https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy-zrs#support-coverage-and-regional-availability
 az snapshot create --resource-group $targetResourceGroupName --name $snapshotName --source $snapshotId --sku Standard_LRS
-

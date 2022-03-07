@@ -1,13 +1,13 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="setup-geodr-and-failover-single-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 failoverResourceGroup="msdocs-azuresql-failover-rg-$randomIdentifier"
@@ -16,7 +16,7 @@ secondaryServer="msdocs-azuresql-secondary-server-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resourceGroup and $failoverResourceGroup..."
+echo "Creating $resourceGroup in $location and $failoverResourceGroup in $failoverLocation..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 az group create --name $failoverResourceGroup --location "$failoverLocation"
 

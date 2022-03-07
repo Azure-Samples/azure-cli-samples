@@ -14,7 +14,7 @@ vNetAddressPrefix="10.0.0.0/16"
 subnet="subnet-$randomIdentifier"
 subnetAddressPrefix="10.0.1.0/24"
 rule="rule-$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."

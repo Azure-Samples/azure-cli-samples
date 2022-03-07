@@ -1,43 +1,48 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 2/9/2022
 
 # Configure Zone-redundant High Availability
 
 # Set up variables
-RESOURCE_GROUP="myresourcegroup" 
-SERVER_NAME="mydemoserver" # Substitute with preferred name for MySQL Flexible Server. 
-LOCATION="westus" 
-ADMIN_USER="mysqladmin" 
-PASSWORD="" # Enter your server admin password
-IP_ADDRESS= # Enter your IP Address for Public Access - https://whatismyipaddress.com
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-mysql-rg-$randomIdentifier"
+tags="zone-redundant-ha-mysql"
+server="msdocs-mysql-server-$randomIdentifier"
+sku="Standard_D2ds_v4"
+tier="GeneralPurpose"
+login="azureuser"
+password="Pa$$w0rD-$randomIdentifier"
+ipAddress="None"
+primaryZone="1"
+standbyZone="2"
+# Specifying an IP address of 0.0.0.0 allows public access from any resources
+# deployed within Azure to access your server. Setting it to "None" sets the server 
+# in public access mode but does not create a firewall rule.
+# For your public IP address, https://whatismyipaddress.com
 
-PRIMARY_ZONE=1
-STANDBY_ZONE=2
+echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-# 1. Create resource group
-az group create \
---name $RESOURCE_GROUP \
---location $LOCATION
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
-# 2. Enable Zone-redundant HA while creating a MySQL Flexible server in the resource group
+# Enable Zone-redundant HA while creating a MySQL Flexible server in the resource group
 # HA is not available for burstable tier
-# zone and standby-zone parameters are optional
+# Zone and standby-zone parameters are optional
+# HA cannot be enabled post create
 
-az mysql flexible-server create \
---name $SERVER_NAME \
---resource-group $RESOURCE_GROUP \
---location $LOCATION \
---sku-name Standard_D2ds_v4 \
---tier GeneralPurpose \
---admin-user $ADMIN_USER \
---admin-password $PASSWORD \
---public-access $IP_ADDRESS \
---high-availability ZoneRedundant \
---zone $PRIMARY_ZONE \
---standby-zone $STANDBY_ZONE
+echo "Creating $server"
+az mysql flexible-server create --name $server --resource-group $resourceGroup --location "$location" --sku-name $sku --tier $tier --admin-user $login --admin-password $password --public-access $ipAddress --high-availability ZoneRedundant --zone $primaryZone --standby-zone $standbyZone
 
-# 3. Disable Zone-redundant HA
+# Optional: Add firewall rule to connect from all Azure services
+# To limit to a specific IP address or address range, change start-ip-address and end-ip-address
+echo "Adding firewall for IP address range"
+az mysql flexible-server firewall-rule create --name $server --resource-group $resourceGroup --rule-name AllowAzureIPs --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 
-az mysql flexible-server update \
---resource-group $RESOURCE_GROUP \ 
---name $SERVER_NAME \
---high-availability Disabled
+# Disable Zone-redundant HA
+echo "Disabling zone redundant HA"
+az mysql flexible-server update --resource-group $resourceGroup --name $server --high-availability Disabled
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

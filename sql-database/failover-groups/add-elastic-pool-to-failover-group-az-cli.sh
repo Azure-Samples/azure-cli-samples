@@ -1,13 +1,13 @@
 ﻿#!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
-let randomIdentifier=$RANDOM*$RANDOM
+let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
 tag="add-elastic-pool-to-failover-group-az-cli"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
-login="msdocsAdminUser"
+login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
 pool="msdocs-azuresql-pool-$randomIdentifier"
 
@@ -17,7 +17,7 @@ secondaryServer="msdocs-azuresql-secondary-server-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
-echo "Creating $resource in $location..."
+echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
 
 echo "Creating $server in $location..."
@@ -60,3 +60,6 @@ az sql failover-group set-primary --name $failoverGroup --resource-group $resour
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
+
+# The script is used in the following file, adding or removing lines may require you update the range value in this file
+# articles\azure-sql\database\failover-group-add-elastic-pool-tutorial.md

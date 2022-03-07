@@ -1,33 +1,39 @@
 #!/bin/bash
-# Reference: az cosmosdb | https://docs.microsoft.com/cli/azure/cosmosdb
-# --------------------------------------------------
-#
+# Passed validation in Cloud Shell on 2/20/2022
+
 # Throughput operations for a MongoDB API database and collection
-#
-#
 
 # Variables for MongoDB API resources
-uniqueId=$RANDOM
-resourceGroupName="Group-$uniqueId"
-location='westus2'
-accountName="cosmos-$uniqueId" #needs to be lower case
-databaseName='database1'
-collectionName='collection1'
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
+tags="throughput-mongodb-cosmosdb"
+account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
+database="msdocs-db-mongo-cosmos"
+collection="collection1"
 originalThroughput=400
 updateThroughput=500
 
-# Create a resource group, Cosmos account, database and collection
-az group create -n $resourceGroupName -l $location
-az cosmosdb create -n $accountName -g $resourceGroupName --kind MongoDB
-az cosmosdb mongodb database create -a $accountName -g $resourceGroupName -n $databaseName --throughput $originalThroughput
+# Create a resource group
+echo "Creating $resourceGroup in $location..."
+az group create --name $resourceGroup --location "$location" --tag $tag
+
+# Create a Cosmos account for MongoDB API
+echo "Creating $account"
+az cosmosdb create --name $account --resource-group $resourceGroup --kind MongoDB
+
+# Create a MongoDB API database
+echo "Creating $database with $originalThroughput"
+az cosmosdb mongodb database create --account-name $account --resource-group $resourceGroup --name $database --throughput $originalThroughput
 
 # Define a minimal index policy for the collection
-printf '[ {"key": {"keys": ["_id"]}} ]' > idxpolicy-$uniqueId.json
+printf '[ {"key": {"keys": ["_id"]}} ]' > idxpolicy-$randomIdentifier.json
 
 # Create a MongoDB API collection
-az cosmosdb mongodb collection create -a $accountName -g $resourceGroupName -d $databaseName -n $collectionName --shard 'user_id' --throughput $originalThroughput --idx @idxpolicy-$uniqueId.json
+az cosmosdb mongodb collection create --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --shard "user_id" --throughput $originalThroughput --idx @idxpolicy-$randomIdentifier.json
+
 # Clean up temporary index policy file
-rm -f "idxpolicy-$uniqueId.json"
+rm -f "idxpolicy-$randomIdentifier.json"
 
 # Throughput operations for MongoDB API database
 #   Read the current throughput
@@ -37,24 +43,11 @@ rm -f "idxpolicy-$uniqueId.json"
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to read current provisioned throughput on database'
+# Retrieve the current provisioned database throughput
+az cosmosdb mongodb database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.throughput -o tsv
 
-az cosmosdb mongod database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to read minimum throughput on database'
-
-minimumThroughput=$(az cosmosdb mongodb database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.minimumThroughput \
-    -o tsv)
-
+# Retrieve the minimum allowable database throughput
+minimumThroughput=$(az cosmosdb mongodb database throughput show --resource-group $resourceGroup --account-name $account --name $database --query resource.minimumThroughput -o tsv)
 echo $minimumThroughput
 
 # Make sure the updated throughput is not less than the minimum allowed throughput
@@ -62,30 +55,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update Database throughput'
+# Update database throughput
+echo "Updating $database throughput to $updateThroughput"
+az cosmosdb mongodb database throughput update --account-name $account --resource-group $resourceGroup --name $database --throughput $updateThroughput
 
-az cosmosdb mongodb database throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName \
-    --throughput $updateThroughput
+# Migrate the database from standard (manual) throughput to autoscale throughput
+az cosmosdb mongodb database throughput migrate --account-name $account --resource-group $resourceGroup --name $database --throughput-type 'autoscale'
 
-read -p 'Press any key to migrate the database from standard (manual) throughput to autoscale throughput'
-
-az cosmosdb mongodb database throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -n $databaseName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the database'
-
-az cosmosdb mongodb database throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -n $databaseName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# Retrieve current autoscale provisioned max database throughput
+az cosmosdb mongodb database throughput show --account-name $account --resource-group $resourceGroup --name $database --query resource.autoscaleSettings.maxThroughput -o tsv
 
 # Throughput operations for MongoDB API collection
 #   Read the current throughput
@@ -95,25 +73,11 @@ az cosmosdb mongodb database throughput show \
 #   Migrate between standard (manual) and autoscale throughput
 #   Read the autoscale max throughput
 
-read -p 'Press any key to read current provisioned throughput on collection'
+# Retrieve the current provisioned collection throughput
+az cosmosdb mongodb collection throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --query resource.throughput -o tsv
 
-az cosmosdb mongodb collection throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $collectionName \
-    --query resource.throughput \
-    -o tsv
-
-read -p 'Press any key to read minimum throughput on collection'
-
-minimumThroughput=$(az cosmosdb mongodb collection throughput show \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $collectionName \
-    --query resource.minimumThroughput \
-    -o tsv)
+# Retrieve the minimum allowable collection throughput
+minimumThroughput=$(az cosmosdb mongodb collection throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --query resource.minimumThroughput -o tsv)
 
 echo $minimumThroughput
 
@@ -122,30 +86,15 @@ if [ $updateThroughput -lt $minimumThroughput ]; then
     updateThroughput=$minimumThroughput
 fi
 
-read -p 'Press any key to update collection throughput'
+# Update collection throughput
+echo "Updating collection throughput to $updateThroughput"
+az cosmosdb mongodb collection throughput update --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --throughput $updateThroughput
 
-az cosmosdb mongodb collection throughput update \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $collectionName \
-    --throughput $updateThroughput
+# Migrate the collection from standard (manual) throughput to autoscale throughput
+az cosmosdb mongodb collection throughput migrate --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --throughput 'autoscale'
 
-read -p 'Press any key to migrate the collection from standard (manual) throughput to autoscale throughput'
+# Retrieve the current autoscale provisioned max collection throughput
+az cosmosdb mongodb collection throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --query resource.autoscaleSettings.maxThroughput -o tsv
 
-az cosmosdb sql container throughput migrate \
-    -a $accountName \
-    -g $resourceGroupName \
-    -d $databaseName \
-    -n $collectionName \
-    -t 'autoscale'
-
-read -p 'Press any key to read current autoscale provisioned max throughput on the collection'
-
-az cosmosdb sql container throughput show \
-    -g $resourceGroupName \
-    -a $accountName \
-    -d $databaseName \
-    -n $collectionName \
-    --query resource.autoscaleSettings.maxThroughput \
-    -o tsv
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

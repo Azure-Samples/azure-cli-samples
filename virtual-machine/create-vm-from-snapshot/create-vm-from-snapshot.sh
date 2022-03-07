@@ -1,5 +1,7 @@
+# Verified per Raman Kumar as of 2/23/2022
+
 #Provide the subscription Id of the subscription where you want to create Managed Disks
-subscriptionId=dd80b94e-0463-4a65-8d04-c94f403879dc
+subscriptionId="<subscriptionId>"c
 
 #Provide the name of your resource group
 resourceGroupName=myResourceGroupName
@@ -34,6 +36,3 @@ az disk create --resource-group $resourceGroupName --name $osDiskName --sku $sto
 
 #Create VM by attaching created managed disks as OS
 az vm create --name $virtualMachineName --resource-group $resourceGroupName --attach-os-disk $osDiskName --os-type $osType
-
-
-
