@@ -12,8 +12,6 @@ appDefinitionResourceGroup="msdocs-managed-applications-app-definition-rg-$rando
 appResourceGroup="msdocs-managed-applications-app-definition-rg-$randomIdentifier"
 tags="create managed application"
 managedApp="StorageApp"
-managedAppDisplayName="Managed Storage Account"
-managedAppDescription="Managed Azure Storage Account"
 
 # Create definition for a managed application
 
