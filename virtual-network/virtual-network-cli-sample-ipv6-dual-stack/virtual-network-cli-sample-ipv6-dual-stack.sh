@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 02/03/2022
 
+# <FullScript>
+
+# Use IPv6 for vNet with basic SKU
+
 # IMPORTANT
 # To use the IPv6 for Azure virtual network feature,
 # you must configure your subscription only once as follows:
@@ -18,6 +22,7 @@
 #
 # az provider register --namespace Microsoft.Network
 
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
@@ -127,6 +132,8 @@ az network nic ip-config create --name $nic1ConfigIpV6 --nic-name $nic1 --resour
 Creating "$vm0 and $vm1"
 az vm create --name $vm0 --resource-group $resourceGroup --nics $nic0 --size $vmSize --availability-set $availabilitySet --image $image --public-ip-sku $sku --admin-user $login --admin-password $password
 az vm create --name $vm1 --resource-group $resourceGroup --nics $nic1 --size $vmSize --availability-set $availabilitySet --image $image --public-ip-sku $sku --admin-user $login --admin-password $password
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

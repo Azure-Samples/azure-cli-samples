@@ -1,6 +1,12 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 02/03/2022
 
+# <FullScript>
+
+# Create NAT gateway
+
+# <VariableBlock>
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
@@ -25,7 +31,7 @@ image="win2019datacenter"
 password="Pa$$w0rD-$randomIdentifier"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
-
+# </VariableBlock>
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tag $tag
@@ -61,6 +67,8 @@ az network vnet subnet update --resource-group $resourceGroup --vnet-name $vNet 
 # Create virtual machine
 echo "Creating $vm"
 az vm create --name $vm --resource-group $resourceGroup --admin-username $login --admin-password $password --image $image --public-ip-address "" --subnet $subnet --vnet-name $vNet --public-ip-sku $sku
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
