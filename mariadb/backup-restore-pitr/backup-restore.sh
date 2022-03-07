@@ -1,6 +1,8 @@
 #!/bin/bash
 # Passed validation in Bash in Docker container on Windows on 1/11/2022
 
+# <FullScript>
+
 # Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
 # In Windows, run Bash in a Docker container to sync time zones between Azure and Bash.
 let "randomIdentifier=$RANDOM*$RANDOM"
@@ -38,6 +40,8 @@ echo $restoreDateTime
 
 echo "Restoring $server to $restoreServer"
 az mariadb server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restoreDateTime --source-server $server
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

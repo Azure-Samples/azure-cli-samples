@@ -1,6 +1,8 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/11/2022
 
+# <FullScript>
+
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
@@ -28,6 +30,8 @@ az mariadb server create --name $server --resource-group $resourceGroup --locati
 # Configure a firewall rule for the server 
 echo "Configuring a firewall rule for $server for the IP address range of $startIp to $endIp"
 az mariadb server firewall-rule create --resource-group $resourceGroup --server $server --name AllowIps --start-ip-address $startIp --end-ip-address $endIp
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
