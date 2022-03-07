@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell 02/03/2022
 
 # <FullScript>
-
 # Use IPv6 for vNet with basic SKU
 
 # IMPORTANT
@@ -132,7 +131,6 @@ az network nic ip-config create --name $nic1ConfigIpV6 --nic-name $nic1 --resour
 Creating "$vm0 and $vm1"
 az vm create --name $vm0 --resource-group $resourceGroup --nics $nic0 --size $vmSize --availability-set $availabilitySet --image $image --public-ip-sku $sku --admin-user $login --admin-password $password
 az vm create --name $vm1 --resource-group $resourceGroup --nics $nic1 --size $vmSize --availability-set $availabilitySet --image $image --public-ip-sku $sku --admin-user $login --admin-password $password
-
 # </FullScript>
 
 # echo "Deleting all resources"

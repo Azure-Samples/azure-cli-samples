@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell 02/03/2022
 
 # <FullScript>
-
 # Route traffic through NVA
 
 # Variable block
@@ -111,9 +110,6 @@ az network route-table route create --name $routeToInternetBackEnd --resource-gr
 # Associate the route table to the BackEnd subnet.
 echo "Associate $routeTableBackEndSubnet to $subnetBackEnd"
 az network vnet subnet update --name $subnetBackEnd --vnet-name $vNet --resource-group $resourceGroup --route-table $routeTableBackEndSubnet
-
-# </FullScript>
-
 # </FullScript>
 
 # echo "Deleting all resources"
