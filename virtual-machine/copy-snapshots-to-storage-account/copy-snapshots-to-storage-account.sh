@@ -1,5 +1,6 @@
 # Verified per Raman Kumar as of 2/23/2022
 
+# <FullScript>
 #Provide the subscription Id where snapshot is created
 subscriptionId="<subscriptionId>"
 
@@ -30,3 +31,4 @@ az account set --subscription $subscriptionId
 sas=$(az snapshot grant-access --resource-group $resourceGroupName --name $snapshotName --duration-in-seconds $sasExpiryDuration --query [accessSas] -o tsv)
 
 az storage blob copy start --destination-blob $destinationVHDFileName --destination-container $storageContainerName --account-name $storageAccountName --account-key $storageAccountKey --source-uri $sas
+# </FullScript>

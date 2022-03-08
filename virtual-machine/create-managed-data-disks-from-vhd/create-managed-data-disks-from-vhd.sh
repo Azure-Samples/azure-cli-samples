@@ -1,5 +1,6 @@
 # Verified per Raman Kumar as of 2/23/2022
 
+# <FullScript>
 #Provide the subscription Id
 subscriptionId="<subscriptionId>"
 
@@ -34,3 +35,4 @@ az account set --subscription $subscriptionId
 
 #Create the Managed disk from the VHD file 
 az disk create --resource-group $resourceGroupName --name $diskName --sku $storageType --location $location --size-gb $diskSize --source $vhdUri
+# </FullScript>
