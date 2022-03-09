@@ -1,6 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 03/01/2022
 
+# <FullScript>
 # Rotate storage account keys
 
 # Variables for storage
@@ -34,6 +35,7 @@ az storage account keys renew \
     --resource-group $resourceGroup \
     --account-name $storage \
     --key secondary
+# <FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

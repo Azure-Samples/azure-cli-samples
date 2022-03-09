@@ -1,6 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 03/01/2022
 
+# <FullScript>
 # Delete containers by prefix
 
 # Variables for storage
@@ -41,6 +42,7 @@ done
 
 echo "Remaining containers..."
 az storage container list --account-key $key --account-name $storage --output table
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
