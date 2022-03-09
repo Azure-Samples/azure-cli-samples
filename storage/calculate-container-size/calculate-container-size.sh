@@ -1,6 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 03/01/2022
 
+# <FullScript>
 # Calculate container size
 
 # Variables for storage
@@ -55,6 +56,7 @@ echo "Total bytes in container: $bytes"
 
 # Delete the sample files created by this script
 rm container_size_sample_file_*.txt
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
