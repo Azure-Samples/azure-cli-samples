@@ -35,7 +35,7 @@ az storage account keys renew \
     --resource-group $resourceGroup \
     --account-name $storage \
     --key secondary
-# <FullScript>
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
