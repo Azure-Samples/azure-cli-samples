@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell on 1/27/2022
 
 # <FullScript>
-
 # Attach and use data disks with a virtual machine scale set
 
 # Variable block

@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell on 1/27/2022
 
 # <FullScript>
-
 # Create a virtual machine scale set
 
 # Variable block
