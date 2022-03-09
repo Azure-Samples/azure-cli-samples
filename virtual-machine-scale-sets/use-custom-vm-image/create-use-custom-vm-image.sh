@@ -1,6 +1,11 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript>
+
+# Create a virtual machine scale set from a custom VM image
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subcriptionId=$(az account show --query id -o tsv)
 location="East US"
@@ -52,6 +57,7 @@ az sig image-version create  --resource-group $resourceGroup  --gallery-name $im
 # Create a scale set from custom image
 echo "Creating $scaleSet from custom image"
 az vmss create --resource-group $resourceGroup --name $scaleSet --image "/subscriptions/$subcriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Compute/galleries/$imageGallery/images/$imageDefinition" --specialized
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

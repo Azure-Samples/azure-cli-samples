@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript>
+# Create a zone-redundant virtual machine scale set
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
@@ -32,6 +36,7 @@ az network nsg rule create --resource-group $resourceGroup --nsg-name $scaleSet"
 
 # Output the public IP address to access the site in a web browser
 az network public-ip show --resource-group $resourceGroup --name $scaleSet"LBPublicIP" --query [ipAddress] --output tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

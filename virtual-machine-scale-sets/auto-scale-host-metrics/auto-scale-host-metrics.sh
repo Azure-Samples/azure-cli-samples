@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript>
+# Automatically scale a virtual machine scale set
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
@@ -43,6 +47,7 @@ az monitor autoscale rule create --resource-group $resourceGroup --autoscale-nam
 # then drops below 30% over a 5-minute period
 echo "Creating an autoscale in rule"
 az monitor autoscale rule create --resource-group $resourceGroup --autoscale-name $autoscale --condition "Percentage CPU < 30 avg 5m" --scale in $scaleIn
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

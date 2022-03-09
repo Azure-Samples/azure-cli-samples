@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript>
+# Create a single-zone virtual machine scale set
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
@@ -29,6 +33,7 @@ az vmss extension set --publisher Microsoft.Azure.Extensions --version 2.0 --nam
 # Output the public IP address to access the site in a web browser
 echo "Displaying the public IP address"
 az network public-ip show --resource-group $resourceGroup --name $scaleSet"LBPublicIP" --query [ipAddress] --output tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
