@@ -1,6 +1,7 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/28/2022
 
+# <FullScript>
 # Route traffic for high availability of applications
 
 # Variables for Traffic Manager resources
@@ -103,6 +104,7 @@ az network traffic-manager endpoint create \
   --type azureEndpoints \
   --priority 2 \
   --target-resource-id $l2Id
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup1 -y
