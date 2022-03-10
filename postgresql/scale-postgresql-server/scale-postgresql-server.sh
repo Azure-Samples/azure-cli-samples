@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 1/13/2022
 
 # <FullScript>
-# 
+# Monitor and scale a single PostgreSQL server
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
