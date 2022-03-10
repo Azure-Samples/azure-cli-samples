@@ -1,6 +1,8 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 # Tested after running the "create.sh" script
+
+# <FullScript>
 # Resource lock operations for a Table API table
 
 # Subscription owner permissions required for this script
@@ -8,7 +10,7 @@
 # Run this script after running
 # "https://docs.microsoft.com/azure/cosmos-db/scripts/cli/table/create#sample-script"
 
-# Variables for Table API resources
+# Variable block
 # Use values from prerequisite script or from your environment
 # resourceGroup="your resource group name"
 # account="your account name"
@@ -31,6 +33,7 @@ az lock list --resource-group $resourceGroup --resource-name $account --namespac
 echo "Deleting $tableLock on $table"
 lockid=$(az lock show --name $tableLock --resource-group $resourceGroup --resource-type $tableResourceType --resource $table --parent $tableParent --output tsv --query id)
 az lock delete --ids $lockid
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a SQL API database and container
 
-# Variables for SQL API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 failoverLocation="South Central US"
@@ -53,6 +54,7 @@ az cosmosdb sql container create --account-name $account --resource-group $resou
 
 # Clean up temporary index policy file
 rm -f "idxpolicy-$randomIdentifier.json"
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

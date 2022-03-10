@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Throughput operations for a Cassandra keyspace and table
 
-# Variables for Cassandra API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -103,6 +104,7 @@ az cosmosdb cassandra table throughput migrate --account-name $account --resourc
 
 # Retrieve the current autoscale provisioned max table throughput
 az cosmosdb cassandra table throughput show --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --query resource.autoscaleSettings.maxThroughput -o tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

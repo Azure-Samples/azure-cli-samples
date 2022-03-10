@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a Table API table
 
-# Variables for Table API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 failoverLocation="South Central US"
@@ -23,6 +24,7 @@ az cosmosdb create --name $account --resource-group $resourceGroup --capabilitie
 # Create a Table API Table
 echo "Creating $table"
 az cosmosdb table create --account-name $account --resource-group $resourceGroup --name $table --throughput 400
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

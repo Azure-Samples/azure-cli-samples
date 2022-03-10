@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create an Azure Cosmos Account with IP Firewall
 
-# Resource group and Cosmos account variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -19,6 +20,7 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 # Replace the values for the ip-range-filter with appropriate values for your environment
 echo "Creating $account for CosmosDB"
 az cosmosdb create --name $account --resource-group $resourceGroup --ip-range-filter '0.0.0.0','255.255.255.255'
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

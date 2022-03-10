@@ -1,6 +1,8 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 # Tested after running the "create.sh" script
+
+# <FullScript>
 # Resource lock operations for a MongoDB API database and collection
 
 # Subscription owner permissions required for this script
@@ -8,7 +10,7 @@
 # Run this script after running
 # "https://docs.microsoft.com/azure/cosmos-db/scripts/cli/mongodb/create#sample-script"
 
-# Variables for MongoDB API resources
+# Variable block
 # Use values from prerequisite script or from your environment
 # resourceGroup="your resource group name"
 # account="your account name"
@@ -44,6 +46,7 @@ az lock delete --ids $lockid
 echo "Deleting $collectionLock on $collection"
 lockid=$(az lock show --name $collectionLock --resource-group $resourceGroup --resource-type Microsoft.DocumentDB/collections --resource-name $collection --parent $collectionParent --output tsv --query id)
 az lock delete --ids $lockid
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a Table API serverless account and table
 
-# Variables for Table API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -21,6 +22,7 @@ az cosmosdb create --name $account --resource-group $resourceGroup --capabilitie
 
 # Create a Table API Table
 az cosmosdb table create --account-name $account --resource-group $resourceGroup --name $table
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

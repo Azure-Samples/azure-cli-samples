@@ -1,11 +1,12 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Region replica operations for an Azure Cosmos account
 
 # Note: Azure Comos accounts cannot include updates to regions with changes to other properties in the same operation
 
-# Resource group and Cosmos account variables
+Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 failoverLocation1="South Central US"
@@ -34,6 +35,7 @@ az cosmosdb failover-priority-change --name $account --resource-group $resourceG
 # Initiate a manual failover and promote failoverLocation1 as primary write region
 echo "Failing over to $failoverLocation1"
 az cosmosdb failover-priority-change --name $account --resource-group $resourceGroup --failover-policies "$location=2" "$failoverLocation1=0" "$failoverLocation2=1"
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
