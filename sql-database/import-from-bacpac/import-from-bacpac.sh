@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell 12/01/2021
 
 # <FullScript>
-
 # Import a BACPAC file into a database in SQL Database
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

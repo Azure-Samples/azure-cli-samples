@@ -4,7 +4,6 @@
 # <FullScript>
 # Create a single database and configure a firewall rule
 # <SetParameterValues>
-
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
