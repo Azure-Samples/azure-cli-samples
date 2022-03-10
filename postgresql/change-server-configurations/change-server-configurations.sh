@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/13/2022
 
+# <FullScript>
+# List and update configurations of an Azure Database for PostgreSQL server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
@@ -31,6 +35,7 @@ az postgres server configuration set --resource-group $resourceGroup --server-na
 # Check the value of **log_retention_days**
 echo "Checking the value of the log_retention_days setting on $server"
 az postgres server configuration show --resource-group $resourceGroup --server-name $server --name log_retention_days
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
