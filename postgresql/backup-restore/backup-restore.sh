@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/11/2022
 
+# <FullScript>
+# Restore an Azure Database for PostgreSQL server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
@@ -36,6 +40,7 @@ echo $restorePoint
 
 echo "Restoring $restoreServer"
 az postgres server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restorePoint --source-server $server
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
