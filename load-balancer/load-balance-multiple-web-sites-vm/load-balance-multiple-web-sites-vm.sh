@@ -4,7 +4,7 @@
 # <FullScript>
 # Load balance multiple websites
 
-# Variable block for load balancer
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-load-balancer-rg-$randomIdentifier"
@@ -134,7 +134,6 @@ az vm create --resource-group $resourceGroup --name $vm2 --nics $nicVm2 --image 
 
 # List the virtual machines
 az vm list --resource-group $resourceGroup
-
 # </FullScript>
 
 # echo "Deleting all resources"
