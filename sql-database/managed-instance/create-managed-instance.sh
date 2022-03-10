@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/11/2022
 
+# <FullScript>
+# Create an Azure SQL Managed Instance
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -43,6 +47,8 @@ az network vnet subnet update --name $subnet --network-security-group $nsg --rou
 # This step will take awhile to complete. You can monitor deployment progress in the activity log within the Azure portal.
 echo "Creating $instance with $vNet and $subnet..."
 az sql mi create --admin-password $password --admin-user $login --name $instance --resource-group $resourceGroup --subnet $subnet --vnet-name $vNet --location "$location"
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

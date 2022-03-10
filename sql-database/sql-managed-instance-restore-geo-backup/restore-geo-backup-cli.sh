@@ -1,11 +1,15 @@
 #!/bin/bash
 # Passed validation in Bash in Docker container on Windows 02/11/2021
 
+# <FullScript>
+# Restore a Managed Instance database to another geo-region
 # Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
 # In Windows, run Bash in a Docker container to sync time zones between Azure and Bash.
 
 # Run this script after running the script in https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/scripts/create-configure-managed-instance-cli twice to create two managed instances
 # Provide the values for these three variables before running this rest of this script
+
+# Variable block for additional parameter values
 $instance = "<msdocs-azuresql-instance>" # add instance here
 $targetInstance = "<msdocs-azuresql-target-instance>" # add target instance here
 $resourceGroup = "<msdocs-azuresql-rg>" # add resource here
@@ -29,6 +33,8 @@ echo $restorePoint
 
 echo "Restoring $($managedDatabase) to $($targetInstance)..."
 az sql midb restore -g $resourceGroup --mi $instance -n $managedDatabase --dest-name $targetInstance --time $restorePoint
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

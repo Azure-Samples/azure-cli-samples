@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
+# <FullScript>
+# Configure active geo-replication for a pooled database in Azure SQL Database
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -40,6 +44,8 @@ az sql db replica set-primary --name $database --resource-group $failoverResourc
 
 echo "Monitoring health of $database on $secondaryServer..."
 az sql db replica list-links --name $database --resource-group $failoverResourceGroup --server $secondaryServer
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $failoverResourceGroup -y

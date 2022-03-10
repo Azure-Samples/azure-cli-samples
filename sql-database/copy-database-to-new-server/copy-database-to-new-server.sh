@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
+# <FullScript>
+# Copy a database in Azure SQL Database to a new server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -29,6 +33,8 @@ az sql db create --name $database --resource-group $resourceGroup --server $serv
 
 echo "Copying $database on $server to $targetDatabase on $targetServer..."
 az sql db copy --dest-name $targetDatabase --dest-resource-group $targetResourceGroup --dest-server $targetServer --name $database --resource-group $resourceGroup --server $server
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $targetResourceGroup -y

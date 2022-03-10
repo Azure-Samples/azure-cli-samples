@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
+# <FullScript>
+# Configure active geo-replication for a single database in Azure SQL Database
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -39,6 +43,8 @@ az sql db replica list-links --name $database --resource-group $failoverResource
 
 echo "Removing replication link after failover..."
 az sql db replica delete-link --resource-group $failoverResourceGroup --server $secondaryServer --name $database --partner-server $server --yes 
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $failoverResourceGroup -y
