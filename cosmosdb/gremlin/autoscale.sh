@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a Gremlin API database and graph with autoscale
 
-# Variables for Gremlin API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -29,6 +30,7 @@ az cosmosdb gremlin database create --account-name $account --resource-group $re
 # Create a Gremlin graph with autoscale
 echo "Creating $graph"
 az cosmosdb gremlin graph create --account-name $account --resource-group $resourceGroup --database-name $database --name $graph --partition-key-path $partitionKey --max-throughput $maxThroughput
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

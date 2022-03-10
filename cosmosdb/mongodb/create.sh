@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a MongoDB API database and collection
 
-# Variables for MongoDB API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 failoverLocation="South Central US"
@@ -51,6 +52,7 @@ az cosmosdb mongodb collection create --account-name $account --resource-group $
 
 # Clean up temporary index policy file
 rm -f "idxpolicy-$randomIdentifier.json"
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

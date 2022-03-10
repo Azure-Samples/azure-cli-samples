@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a Table API table with autoscale
 
-# Variables for Table API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -23,6 +24,7 @@ az cosmosdb create --name $account --resource-group $resourceGroup --capabilitie
 # Create a Table API Table with autoscale
 echo "Create $table with $maxThroughput"
 az cosmosdb table create --account-name $account --resource-group $resourceGroup --name $table --max-throughput $maxThroughput
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

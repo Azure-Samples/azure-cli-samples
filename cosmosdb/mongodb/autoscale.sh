@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a MongoDB API database with autoscale and 2 collections that share throughput
 
-# Variables for MongoDB API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -33,6 +34,7 @@ az cosmosdb mongodb collection create --account-name $account --resource-group $
 
 echo "Creating $collection2"
 az cosmosdb mongodb collection create --account-name $account --resource-group $resourceGroup --database-name $database --name $collection2 --shard "ShardKey2"
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

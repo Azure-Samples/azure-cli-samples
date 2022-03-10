@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Account key operations for an Azure Cosmos account
 
-# Resource group and Cosmos account variables
+Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -31,6 +32,7 @@ az cosmosdb keys list --name $account --resource-group $resourceGroup --type con
 # Regenerate secondary account keys
 # key-kind values: primary, primaryReadonly, secondary, secondaryReadonly
 az cosmosdb keys regenerate --name $account --resource-group $resourceGroup --key-kind secondary
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

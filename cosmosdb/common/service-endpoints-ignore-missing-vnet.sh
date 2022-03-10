@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Service endpoint operations for an Azure Cosmos account
 
-# Resource group and Cosmos account variables
+Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -38,6 +39,7 @@ az cosmosdb network-rule add --name $account --resource-group $resourceGroup --v
 
 # Update vNet update
 az network vnet subnet update --name $backEnd --resource-group $resourceGroup --vnet-name $vNet --service-endpoints Microsoft.AzureCosmosDB
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Service endpoint operations for an Azure Cosmos account
 
-# Resource group and Cosmos account variables
+Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -32,6 +33,7 @@ svcEndpoint=$(az network vnet subnet show --resource-group $resourceGroup --name
 # Use appropriate values for --kind or --capabilities for other APIs
 echo "Creating $account for CosmosDB"
 az cosmosdb create --name $account --resource-group $resourceGroup --enable-virtual-network true --virtual-network-rules $svcEndpoint
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

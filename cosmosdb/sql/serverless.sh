@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a SQL API serverless account with database and container
 
-# Variables for SQL API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
@@ -27,6 +28,7 @@ az cosmosdb sql database create --account-name $account --resource-group $resour
 # Create a SQL API container
 echo "Creating $container with $partitionKey"
 az cosmosdb sql container create --account-name $account --resource-group $resourceGroup --database-name $database --name $container --partition-key-path $partitionKey
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
