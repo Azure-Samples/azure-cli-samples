@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell on 3/7/2022
 
 # <FullScript>
-
 # Define and create a managed application
 
 # Variable block
