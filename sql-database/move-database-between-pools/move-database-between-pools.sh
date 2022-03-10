@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
+# <FullScript>
+# Move a database in SQL Database in a SQL elastic pool
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -33,6 +37,8 @@ az sql db create --resource-group $resourceGroup --server $server --name $databa
 
 echo "Upgrade $database tier..."
 az sql db create --resource-group $resourceGroup --server $server --name $database --service-objective S0
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

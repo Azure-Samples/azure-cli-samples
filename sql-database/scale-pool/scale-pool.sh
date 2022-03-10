@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
+# <FullScript>
+# Scale an elastic pool in Azure SQL Database
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -29,6 +33,8 @@ az sql db create --resource-group $resourceGroup --server $server --name $databa
 
 echo "Scaling $pool..."
 az sql elastic-pool update --resource-group $resourceGroup --server $server --name $pool --capacity 10 --max-size 1536GB
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

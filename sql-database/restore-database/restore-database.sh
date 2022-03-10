@@ -1,9 +1,13 @@
 #!/bin/bash
 # Passed validation in Bash in Docker container on Windows 02/11/2021
 
+# <FullScript>
+# Restore a single database in Azure SQL Database to an earlier point in time
+
 # Use Bash rather than Cloud Shell due to its timeout at 20 minutes when no interactive activity 
 # In Windows, run Bash in a Docker container to sync time zones between Azure and Bash.
 
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-sql-rg-$randomIdentifier"
@@ -39,6 +43,8 @@ echo $restorePoint
 
 echo "Restoring to $restoreServer"
 az sql db restore --dest-name $restoreServer --edition Standard --name $database --resource-group $resourceGroup --server $server --service-objective S0 --time $restorePoint 
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
