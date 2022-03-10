@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 1/13/2022
 
 # <FullScript>
-# 
+# Enable and download server slow query logs of an Azure Database for PostgreSQL server
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

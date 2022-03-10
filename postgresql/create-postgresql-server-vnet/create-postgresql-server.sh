@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 1/13/2022
 
 # <FullScript>
-# 
+# Create a PostgreSQL server and configure a vNet rule
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
