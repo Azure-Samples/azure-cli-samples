@@ -4,7 +4,7 @@
 # <FullScript>
 # Load balance VMs across availability zones
 
-# Variable block for load balancer
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-load-balancer-rg-$randomIdentifier"
@@ -84,7 +84,6 @@ done
 
 # List the virtual machines
 az vm list --resource-group $resourceGroup
-
 # </FullScript>
 
 # echo "Deleting all resources"
