@@ -3,6 +3,7 @@
 
 # <FullScript>
 # Create an Azure Database for PostgreSQL server and configure a firewall rule
+
 # <SetParameterValues>
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
@@ -17,7 +18,6 @@ password="Pa$$w0rD-$randomIdentifier"
 # to limit / allow access to the PostgreSQL server
 startIp=0.0.0.0
 endIp=0.0.0.0
-
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 # </SetParameterValues>
 # <CreateResourceGroup>
