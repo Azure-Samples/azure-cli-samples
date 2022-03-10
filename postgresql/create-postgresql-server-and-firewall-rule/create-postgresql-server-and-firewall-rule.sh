@@ -3,6 +3,7 @@
 
 # <FullScript>
 # Create an Azure Database for PostgreSQL server and configure a firewall rule
+
 # <SetParameterValues>
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
