@@ -35,6 +35,7 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 # Enable audit logs
 echo "Enabling audit logs"
 az mysql flexible-server parameter set --resource-group $resourceGroup --server-name $server --name audit_log_enabled --value ON
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

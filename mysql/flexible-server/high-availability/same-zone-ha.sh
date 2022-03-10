@@ -41,6 +41,7 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 # Disable Same-zone HA
 echo "Disabling same-zone HA"
 az mysql flexible-server update --resource-group $resourceGroup --name $server --high-availability Disabled
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

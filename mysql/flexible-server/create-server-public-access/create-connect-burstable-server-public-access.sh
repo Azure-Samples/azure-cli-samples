@@ -35,6 +35,7 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 
 # Connect to server in interactive mode
 az mysql flexible-server connect --name $server --admin-user $login --admin-password $password --interactive
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

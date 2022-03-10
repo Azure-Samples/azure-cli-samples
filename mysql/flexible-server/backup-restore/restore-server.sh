@@ -42,6 +42,7 @@ echo $restorePoint
 
 echo "Restoring to $restoreServer"
 az mysql flexible-server restore --name $restoreServer --resource-group $resourceGroup --restore-time $restorePoint --source-server $server
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

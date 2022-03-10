@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
+# <FullScript>
 # Change server parameters for Azure Database for MySQL - Flexible Server
 
-# Set up variables
+# Variables
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -55,6 +56,7 @@ az mysql flexible-server parameter set --resource-group $resourceGroup --server-
 # Check global level time zone
 echo "Check time zone"
 az mysql flexible-server parameter show --resource-group $resourceGroup --server-name $server --name time_zone
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

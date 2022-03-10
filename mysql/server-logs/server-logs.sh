@@ -1,7 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Set up variables
+# <FullScript>
+# 
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -46,6 +49,7 @@ az mysql server-logs list --resource-group $resourceGroup --server $server
 # Substitute the <log_file_name> in the script below with your server log file name
 # Creates the log file in the current command line path
 # az mysql server-logs download --name <log_file_name> $resourceGroup --server $server
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

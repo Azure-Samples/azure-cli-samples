@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
+# <FullScript>
 # Create and manage Flexible Server Read Replicas
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
@@ -49,6 +50,7 @@ az mysql flexible-server replica list --source-server $server --resource-group $
 # Stop replication to a read replica and make it a read/write server.
 echo "Stop replication to $replica"
 az mysql flexible-server replica stop-replication --resource-group $resourceGroup --name $replica --yes
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

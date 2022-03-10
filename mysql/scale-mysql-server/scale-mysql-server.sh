@@ -1,7 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Set up variables
+# <FullScript>
+#
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
@@ -46,6 +49,7 @@ az mysql server update --resource-group $resourceGroup --name $server --sku-name
 # Storage size cannot be reduced
 echo "Scaling up the storage size for $server to $storageSize"
 az mysql server update --resource-group $resourceGroup --name $server --storage-size $storageSize
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

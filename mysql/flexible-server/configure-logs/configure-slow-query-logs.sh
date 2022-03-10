@@ -44,6 +44,7 @@ az mysql flexible-server parameter set --name long_query_time --resource-group $
 # Allow slow administrative statements (ex. ALTER_TABLE, ANALYZE_TABLE) to be logged.
 echo "Allow logging of slow administrative statements"
 az mysql flexible-server parameter set --resource-group $resourceGroup --server-name $server --name log_slow_admin_statements --value ON
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

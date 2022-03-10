@@ -48,6 +48,7 @@ az network vnet subnet show --resource-group $resourceGroup --name $subnet --vne
 # VNet resource group if different should be specified using subnet id (URI) instead of subnet, VNet pair.
 echo "Creating a VNet rule on $server to secure it to $subnet in $vNet"
 az mysql server vnet-rule create --name $rule --resource-group $resourceGroup --server $server --vnet-name $vNet --subnet $subnet
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

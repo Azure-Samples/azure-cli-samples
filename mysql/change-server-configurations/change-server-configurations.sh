@@ -32,6 +32,7 @@ az mysql server configuration set --resource-group $resourceGroup --server-name 
 # Check the value of *innodb_lock_wait_timeout*
 echo "Checking the value of the innodb_lock_wait_timeout setting on $server"
 az mysql server configuration show --resource-group $resourceGroup --server-name $server --name innodb_lock_wait_timeout
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

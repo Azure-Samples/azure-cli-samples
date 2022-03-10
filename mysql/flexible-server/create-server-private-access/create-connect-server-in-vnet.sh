@@ -76,6 +76,7 @@ echo "Opening port 80 for web traffic"
 az vm open-port --port 80 --resource-group $resourceGroup --name $vm
 
 # Follow steps in the parent article to test connectivity to the MySQL server from the VM
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

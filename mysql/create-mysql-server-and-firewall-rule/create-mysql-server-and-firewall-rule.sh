@@ -29,6 +29,7 @@ az mysql server create --name $server --resource-group $resourceGroup --location
 # Configure a firewall rule for the server 
 echo "Configuring a firewall rule for $server for the IP address range of $startIp to $endIp"
 az mysql server firewall-rule create --resource-group $resourceGroup --server $server --name AllowIps --start-ip-address $startIp --end-ip-address $endIp
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
