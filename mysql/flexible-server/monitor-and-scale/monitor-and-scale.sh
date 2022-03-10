@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 2/9/2022
 
 # <FullScript>
-# Monitor your Flexible Server and scale Compute, Storage and IOPS
+# Monitor your MySQLFlexible Server and scale compute, storage, and IOPS
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

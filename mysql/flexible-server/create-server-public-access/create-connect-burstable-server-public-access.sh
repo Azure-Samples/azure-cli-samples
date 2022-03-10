@@ -1,10 +1,12 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/11/2022
 
+# <FullScript>
+
 # Create an Azure Database for MySQL - Flexible Server Burstable B1ms instance
 # and configure Public Access connectivity method
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"

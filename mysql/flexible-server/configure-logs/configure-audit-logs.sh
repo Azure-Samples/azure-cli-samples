@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Configure audit logs on Azure Database for MySQL Flexible Server
+# <FullScript>
+# Configure audit logs on Azure Database for MySQL - Flexible Server
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"

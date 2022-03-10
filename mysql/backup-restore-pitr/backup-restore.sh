@@ -1,7 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/11/2022
 
-# Set up variables
+# <FullScript>
+# Restore an Azure Database for MySQL server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"

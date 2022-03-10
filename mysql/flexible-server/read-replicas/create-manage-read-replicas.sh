@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 2/9/2022
 
 # <FullScript>
-# Create and manage Flexible Server Read Replicas
+# Create and manage MySQL - Flexible Server read replicas
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

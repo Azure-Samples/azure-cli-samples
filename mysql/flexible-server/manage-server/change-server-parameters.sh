@@ -4,7 +4,7 @@
 # <FullScript>
 # Change server parameters for Azure Database for MySQL - Flexible Server
 
-# Variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -33,7 +33,7 @@ az mysql flexible-server create --name $server --resource-group $resourceGroup -
 echo "Adding firewall for IP address range"
 az mysql flexible-server firewall-rule create --name $server --resource-group $resourceGroup --rule-name AllowAzureIPs --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 
-# List all Flexible Server parameters with their values and parameter descriptions
+# List all MySQL - Flexible Server parameters with their values and parameter descriptions
 echo "List parameters and values"
 az mysql flexible-server parameter list --resource-group $resourceGroup --server-name $server
 
