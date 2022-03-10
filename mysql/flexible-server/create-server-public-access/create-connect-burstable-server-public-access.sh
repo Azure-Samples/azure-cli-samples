@@ -2,7 +2,6 @@
 # Passed validation in Cloud Shell on 2/11/2022
 
 # <FullScript>
-
 # Create an Azure Database for MySQL - Flexible Server Burstable B1ms instance
 # and configure Public Access connectivity method
 
