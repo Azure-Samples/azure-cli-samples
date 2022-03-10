@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
+# <FullScript>
 # Create a server, perform restart / start / stop operations
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -43,6 +44,7 @@ az mysql flexible-server start --resource-group $resourceGroup --name $server
 # Restart the server
 echo "Restarting $server"
 az mysql flexible-server restart --resource-group $resourceGroup --name $server
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

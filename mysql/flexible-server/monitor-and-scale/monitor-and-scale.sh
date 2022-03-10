@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Monitor your Flexible Server and scale Compute, Storage and IOPS
+# <FullScript>
+# Monitor your MySQLFlexible Server and scale compute, storage, and IOPS
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
@@ -84,6 +85,7 @@ az mysql flexible-server update \
     --resource-group $resourceGroup \
     --name $server \
     --iops 550
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Configure slow query logs on Azure Database for MySQL Flexible Server
+# <FullScript>
+# Configure slow query logs on Azure Database for MySQL - Flexible Server
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -44,6 +45,7 @@ az mysql flexible-server parameter set --name long_query_time --resource-group $
 # Allow slow administrative statements (ex. ALTER_TABLE, ANALYZE_TABLE) to be logged.
 echo "Allow logging of slow administrative statements"
 az mysql flexible-server parameter set --resource-group $resourceGroup --server-name $server --name log_slow_admin_statements --value ON
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

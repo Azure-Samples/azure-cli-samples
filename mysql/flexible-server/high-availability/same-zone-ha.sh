@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Configure Same-Zone High Availability
+# <FullScript>
+# Configure same-zone high availability
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -41,6 +42,7 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 # Disable Same-zone HA
 echo "Disabling same-zone HA"
 az mysql flexible-server update --resource-group $resourceGroup --name $server --high-availability Disabled
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

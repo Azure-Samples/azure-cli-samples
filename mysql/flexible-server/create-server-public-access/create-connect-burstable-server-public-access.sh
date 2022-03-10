@@ -1,10 +1,12 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/11/2022
 
+# <FullScript>
+
 # Create an Azure Database for MySQL - Flexible Server Burstable B1ms instance
 # and configure Public Access connectivity method
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -35,6 +37,7 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 
 # Connect to server in interactive mode
 az mysql flexible-server connect --name $server --admin-user $login --admin-password $password --interactive
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

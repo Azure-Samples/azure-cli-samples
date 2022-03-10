@@ -1,7 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Set up variables
+# <FullScript>
+# Create an Azure Database for MySQL - Flexible Server in a VNet
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -76,6 +79,7 @@ echo "Opening port 80 for web traffic"
 az vm open-port --port 80 --resource-group $resourceGroup --name $vm
 
 # Follow steps in the parent article to test connectivity to the MySQL server from the VM
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

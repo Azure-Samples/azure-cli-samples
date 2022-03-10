@@ -1,9 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Configure Zone-redundant High Availability
+# <FullScript>
+# Configure zone-redundant high availability
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
@@ -43,6 +44,7 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 # Disable Zone-redundant HA
 echo "Disabling zone redundant HA"
 az mysql flexible-server update --resource-group $resourceGroup --name $server --high-availability Disabled
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
