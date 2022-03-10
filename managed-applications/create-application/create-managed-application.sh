@@ -5,7 +5,7 @@
 
 # Define and create a managed application
 
-# Variable block for managed application
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 appDefinitionResourceGroup="msdocs-managed-applications-app-definition-rg-$randomIdentifier"
@@ -45,7 +45,6 @@ managedGroupId=/subscriptions/$subid/resourceGroups/infrastructureGroup
 
 # Create the managed application
 az managedapp create --name storageApp --location "$location" --kind "Servicecatalog" --resource-group $appResourceGroup --managedapp-definition-id $appid --managed-rg-id $managedGroupId --parameters "{\"storageAccountNamePrefix\": {\"value\": \"demostorage\"}, \"storageAccountType\": {\"value\": \"Standard_LRS\"}}"
-
 # </FullScript>
 
 # echo "Deleting all resources"
