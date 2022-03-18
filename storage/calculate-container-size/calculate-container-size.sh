@@ -48,8 +48,7 @@ bytes=`az storage blob list \
     --account-key $key \
     --account-name $storage \
     --query "[*].[properties.contentLength]" \
-    --output tsv | 
-    paste --serial --delimiters=+` # | bc 
+    --output tsv | paste -s -d=+` # | bc`
 
 # Display total bytes
 echo "Total bytes in container: $bytes"
