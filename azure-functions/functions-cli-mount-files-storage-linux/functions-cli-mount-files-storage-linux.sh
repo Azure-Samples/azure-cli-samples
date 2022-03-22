@@ -32,7 +32,7 @@ az functionapp create \
   --os-type Linux \
   --runtime python \
   --runtime-version $pythonVersion \
-  --functions-version 2
+  --functions-version 4
 
 # Work with Storage account using the set env variables.
 # Create a share in Azure Files.
