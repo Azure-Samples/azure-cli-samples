@@ -1,34 +1,50 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 3/22/2022
 
+# <FullScript>
 # Function app and storage account names must be unique.
-storageName=mystorageaccount$RANDOM
-functionAppName=myappsvcpfunc$RANDOM
-region=westeurope
 
-# Create a resource resourceGroupName
-az group create \
-  --name myResourceGroup \
-  --location $region
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="eastus"
+resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
+tags="create-function-app-premium-plan"
+storage="msdocsaccount$randomIdentifier"
+premiumPlan="msdocs-premium-plan-$randomIdentifier"
+functionApp="msdocs-function-$randomIdentifier"
+skuStorage="Standard_LRS"
+skuPlan="EP1" # Allowed values: Standard_LRS, Standard_GRS, Standard_RAGRS, Standard_ZRS, Premium_LRS, Premium_ZRS, Standard_GZRS, Standard_RAGZRS
+functionsVersion="4"
 
-# Create an azure storage account
+# Create a resource group
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
+
+# Create an Azure storage account in the resource group.
+echo "Creating $storage"
 az storage account create \
-  --name $storageName \
-  --location $region \
-  --resource-group myResourceGroup \
-  --sku Standard_LRS
+  --name $storage \
+  --location "$location" \
+  --resource-group $resourceGroup \
+  --sku $skuStorage
 
 # Create a Premium plan
+echo "Creating $premiumPlan"
 az functionapp plan create \
-  --name mypremiumplan \
-  --resource-group myResourceGroup \
-  --location $region \
-  --sku EP1
+  --name $premiumPlan \
+  --resource-group $resourceGroup \
+  --location "$location" \
+  --sku $skuPlan
 
 # Create a Function App
+echo "Creating $functionApp"
 az functionapp create \
-  --name $functionAppName \
-  --storage-account $storageName \
-  --plan mypremiumplan \
-  --resource-group myResourceGroup \
-  --functions-version 2
-  
+  --name $functionApp \
+  --storage-account $storage \
+  --plan $premiumPlan \
+  --resource-group $resourceGroup \
+  --functions-version $functionsVersion
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

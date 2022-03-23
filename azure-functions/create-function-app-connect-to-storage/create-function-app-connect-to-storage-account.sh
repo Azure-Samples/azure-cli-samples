@@ -1,35 +1,48 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 3/22/2022
 
+# <FullScript>
 # Function app and storage account names must be unique.
-storageName="mystorageaccount$RANDOM"
-functionAppName="myfuncwithstorage$RANDOM"
-region=westeurope
 
-# Create a resource group with location.
-az group create \
-  --name myResourceGroup \
-  --location $region
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="eastus"
+resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
+tags="create-function-app-connect-to-storage-account"
+functionApp="msdocs-serverless-function-$randomIdentifier"
+skuStorage="Standard_LRS"
+functionsVersion="4"
 
-# Create a storage account in the resource group.
+# Create a resource group
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
+
+# Create an Azure storage account in the resource group.
+echo "Creating $storage"
 az storage account create \
-  --name $storageName \
-  --location $region \
-  --resource-group myResourceGroup \
-  --sku Standard_LRS
+  --name $storage \
+  --location "$location" \
+  --resource-group $resourceGroup \
+  --sku $skuStorage
 
 # Create a serverless function app in the resource group.
+echo "Creating $functionApp"
 az functionapp create \
-  --name $functionAppName \
-  --resource-group myResourceGroup \
-  --storage-account $storageName \
-  --consumption-plan-location $region \
-  --functions-version 2
+  --name $functionApp \
+  --resource-group $resourceGroup \
+  --storage-account $storage \
+  --consumption-plan-location "$location" \
+  --functions-version $functionsVersion
 
 # Get the storage account connection string. 
-connstr=$(az storage account show-connection-string --name $storageName --resource-group myResourceGroup --query connectionString --output tsv)
+connstr=$(az storage account show-connection-string --name $storage --resource-group $resourceGroup --query connectionString --output tsv)
 
 # Update function app settings to connect to the storage account.
 az functionapp config appsettings set \
-  --name $functionAppName \
-  --resource-group myResourceGroup \
+  --name $functionApp \
+  --resource-group $resourceGroup \
   --settings StorageConStr=$connstr
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
