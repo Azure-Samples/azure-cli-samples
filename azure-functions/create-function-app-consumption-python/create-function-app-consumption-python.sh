@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 3/22/2022
+# Passed validation in Cloud Shell on 3/24/2022
 
 # <FullScript>
 # Function app and storage account names must be unique.
@@ -21,23 +21,11 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create an Azure storage account in the resource group.
 echo "Creating $storage"
-az storage account create \
-  --name $storage \
-  --location "$location" \
-  --resource-group $resourceGroup \
-  --sku $skuStorage
+az storage account create --name $storage --location "$location" --resource-group $resourceGroup --sku $skuStorage
 
 # Create a serverless python function app in the resource group.
 echo "Creating $functionApp"
-az functionapp create \
-  --name $functionApp \
-  --storage-account $storage \
-  --consumption-plan-location "$location" \
-  --resource-group $resourceGroup \
-  --os-type Linux \
-  --runtime python \
-  --runtime-version $pythonVersion \
-  --functions-version $functionsVersion
+az functionapp create --name $functionApp --storage-account $storage --consumption-plan-location "$location" --resource-group $resourceGroup --os-type Linux --runtime python --runtime-version $pythonVersion --functions-version $functionsVersion
 # </FullScript>
 
 # echo "Deleting all resources"
