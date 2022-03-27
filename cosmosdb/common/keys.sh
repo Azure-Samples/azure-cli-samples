@@ -8,7 +8,7 @@ Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="keys-cosmosdb"
+tag="keys-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 
 # Create a resource group

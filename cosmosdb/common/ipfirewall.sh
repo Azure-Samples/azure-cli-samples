@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="ipfirewall-cosmosdb"
+tag="ipfirewall-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 
 # Create a resource group

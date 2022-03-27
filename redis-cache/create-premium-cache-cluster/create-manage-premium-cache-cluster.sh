@@ -7,7 +7,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-redis-cache-rg-$randomIdentifier"
-tags="create manage premium cache cluster"
+tag="create manage premium cache cluster"
 cache="msdocs-redis-cache-$randomIdentifier"
 sku="premium"
 size="P1"

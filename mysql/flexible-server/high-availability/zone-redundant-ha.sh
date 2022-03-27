@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="zone-redundant-ha-mysql"
+tag="zone-redundant-ha-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="Standard_D2ds_v4"
 tier="GeneralPurpose"

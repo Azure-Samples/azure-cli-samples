@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="create-connect-server-in-vnet-mysql"
+tag="create-connect-server-in-vnet-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="Standard_D2ds_v4"
 tier="GeneralPurpose"

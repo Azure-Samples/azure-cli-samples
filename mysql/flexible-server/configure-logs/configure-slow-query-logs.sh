@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="slow-query-logs-mysql"
+tag="slow-query-logs-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"

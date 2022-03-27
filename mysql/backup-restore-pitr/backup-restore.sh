@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="backup-restore-mysql"
+tag="backup-restore-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 restoreServer="restore-server$randomIdentifier"

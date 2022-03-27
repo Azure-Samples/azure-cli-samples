@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
-tags="simple-scale-set-vmss"
+tag="simple-scale-set-vmss"
 image="UbuntuLTS"
 scaleSet="msdocs-scaleSet-$randomIdentifier"
 upgradePolicyMode="automatic"

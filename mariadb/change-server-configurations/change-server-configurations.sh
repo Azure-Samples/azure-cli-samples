@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
-tags="change-server-cofigurations-mariadb"
+tag="change-server-cofigurations-mariadb"
 server="msdocs-mariadb-server-$randomIdentifier"
 sku="GP_Gen5_2"
 login="azureuser"

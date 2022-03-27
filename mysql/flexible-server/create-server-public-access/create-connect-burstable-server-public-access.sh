@@ -9,7 +9,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="create-connect-burstable-server-public-access-mysql"
+tag="create-connect-burstable-server-public-access-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"

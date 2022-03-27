@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="autoscale-casandra-cosmosdb"
+tag="autoscale-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 keySpace="keyspace1-$randomIdentifier"
 table="table1-$randomIdentifier"

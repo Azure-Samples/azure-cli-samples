@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
-tags="create-postgresql-server"
+tag="create-postgresql-server"
 server="msdocs-postgresql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 vNet="vNet-$randomIdentifier"

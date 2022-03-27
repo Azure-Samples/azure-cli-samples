@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="eastus"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tags="create-function-app-connect-to-storage-account"
+tag="create-function-app-connect-to-storage-account"
 functionApp="msdocs-serverless-function-$randomIdentifier"
 skuStorage="Standard_LRS"
 functionsVersion="4"

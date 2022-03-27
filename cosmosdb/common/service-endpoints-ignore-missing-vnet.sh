@@ -8,7 +8,7 @@ Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="service-endpoints-cosmosdb"
+tag="service-endpoints-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 vNet='msdocs-vnet-cosmosdb'
 frontEnd='msdocs-front-end-cosmosdb'

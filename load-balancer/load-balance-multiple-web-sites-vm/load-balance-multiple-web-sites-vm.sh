@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-load-balancer-rg-$randomIdentifier"
-tags="load-balance-multiple-web-sites-vm"
+tag="load-balance-multiple-web-sites-vm"
 availabilitySet="msdocs-availablity-set-lb-$randomIdentifier"
 vNet="msdocs-vnet-lb-$randomIdentifier"
 subnet="msdocs-subnet-lb-$randomIdentifier"

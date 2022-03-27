@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="eastus"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tags="create-function-app-premium-plan"
+tag="create-function-app-premium-plan"
 storage="msdocsaccount$randomIdentifier"
 premiumPlan="msdocs-premium-plan-$randomIdentifier"
 functionApp="msdocs-function-$randomIdentifier"

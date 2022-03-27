@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="serverless-mongodb-cosmosdb"
+tag="serverless-mongodb-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 serverVersion="4.0" #3.2, 3.6, 4.0
 database="msdocs-db-mongo-cosmos"

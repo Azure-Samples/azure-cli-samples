@@ -12,7 +12,7 @@ location="East US"
 failoverLocation1="South Central US"
 failoverLocation2="North Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="regions-cosmosdb"
+tag="regions-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 
 # Create a resource group

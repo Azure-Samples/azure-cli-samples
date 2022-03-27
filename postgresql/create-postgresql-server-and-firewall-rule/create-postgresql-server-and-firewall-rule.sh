@@ -9,7 +9,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
-tags="create-postgresql-server-and-firewall-rule"
+tag="create-postgresql-server-and-firewall-rule"
 server="msdocs-postgresql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 login="azureuser"

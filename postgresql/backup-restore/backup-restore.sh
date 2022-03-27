@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
-tags="backup-restore-postgresql"
+tag="backup-restore-postgresql"
 server="msdocs-postgresql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 restoreServer="restore-server$randomIdentifier"

@@ -11,7 +11,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-sql-rg-$randomIdentifier"
-tags="restore-database"
+tag="restore-database"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
 restoreServer="restoreServer-$randomIdentifier"

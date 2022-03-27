@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="autoscale-gremlin-cosmosdb"
+tag="autoscale-gremlin-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-gremlin-cosmos"
 graph="msdocs-graph1-gremlin-cosmos"

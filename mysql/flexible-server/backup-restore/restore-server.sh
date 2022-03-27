@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="restore-server-mysql"
+tag="restore-server-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 restoreServer="restore-server$randomIdentifier"
 login="azureuser"

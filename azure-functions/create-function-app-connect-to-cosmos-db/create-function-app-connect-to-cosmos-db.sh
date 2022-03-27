@@ -9,7 +9,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="eastus"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tags="create-function-app-connect-to-cosmos-db"
+tag="create-function-app-connect-to-cosmos-db"
 storage="msdocsaccount$randomIdentifier"
 functionApp="msdocs-serverless-function-$randomIdentifier"
 skuStorage="Standard_LRS"

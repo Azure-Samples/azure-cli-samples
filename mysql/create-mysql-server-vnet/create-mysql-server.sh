@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="create-mysql-server"
+tag="create-mysql-server"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 vNet="vNet-$randomIdentifier"
