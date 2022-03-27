@@ -9,7 +9,7 @@ let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 appDefinitionResourceGroup="msdocs-managed-applications-app-definition-rg-$randomIdentifier"
 appResourceGroup="msdocs-managed-applications-app-definition-rg-$randomIdentifier"
-tag="create managed application"
+tag="create-managed-application"
 managedApp="StorageApp"
 
 # Create definition for a managed application

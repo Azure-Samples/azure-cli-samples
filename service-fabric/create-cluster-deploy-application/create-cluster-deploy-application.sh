@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-service-fabric-rg-$randomIdentifier"
-tag="create cluster-deploy-application"
+tag="create-cluster-deploy-application"
 cluster="msdocs-cluster-$randomIdentifier"
 password="Pa$$w0rD-$randomIdentifier"
 subject="msdocs-cluster.eastus.cloudapp.azure.com" 

@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="rotate storage account keys"
+tag="rotate-storage-account-keys"
 storage="msdocsstorage$randomIdentifier"
 
 # Create a resource group

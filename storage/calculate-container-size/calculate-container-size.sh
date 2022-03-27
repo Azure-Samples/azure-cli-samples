@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="calculate container size"
+tag="calculate-container-size"
 storage="msdocsstorage$randomIdentifier"
 container="msdocs-storage-container-$randomIdentifier"
 
