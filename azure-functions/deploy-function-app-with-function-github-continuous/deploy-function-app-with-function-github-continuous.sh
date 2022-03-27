@@ -9,6 +9,7 @@ location=eastus
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
 tags="deploy-function-app-with-function-github"
 storage="msdocs$randomIdentifier"
+skuStorage="Standard_LRS"
 functionApp=mygithubfunc$randomIdentifier
 functionsVersion="4"
 runtime="node"
@@ -21,7 +22,7 @@ gitrepo=https://github.com/Azure-Samples/functions-quickstart-javascript
 
 # Create a resource group.
 echo "Creating $resourceGroup in ""$location""..."
-az group create --name $resourceGroup --location "$location"
+az group create --name $resourceGroup --location "$location" --tag $tags
 
 # Create an Azure storage account in the resource group.
 echo "Creating $storage"
