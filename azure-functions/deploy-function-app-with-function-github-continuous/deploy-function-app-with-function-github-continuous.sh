@@ -21,7 +21,7 @@ gitrepo=https://github.com/Azure-Samples/functions-quickstart-javascript
 
 # Create a resource group.
 echo "Creating $resourceGroup in ""$location""..."
-az group create --name $resourceGroup --location "$location"
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create an Azure storage account in the resource group.
 echo "Creating $storage"
