@@ -17,7 +17,7 @@ originalThroughput=400
 updateThroughput=500
 
 # Create a resource group 
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Gremlin API
 echo "Creating $account"

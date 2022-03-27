@@ -16,7 +16,7 @@ backEnd='msdocs-back-end-cosmosdb'
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a virtual network with a front-end subnet
 echo "Creating $vnet"

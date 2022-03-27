@@ -20,7 +20,7 @@ bacpac="backup.bacpac"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 echo "Creating $storage..."
 az storage account create --name $storage --resource-group $resourceGroup --location "$location" --sku Standard_LRS

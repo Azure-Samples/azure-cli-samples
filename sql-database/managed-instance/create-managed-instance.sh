@@ -20,7 +20,7 @@ password="Pa$$w0rD-$randomIdentifier"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag 
+az group create --name $resourceGroup --location "$location" --tags $tag 
 
 echo "Creating $vNet with $subnet..."
 az network vnet create --name $vNet --resource-group $resourceGroup --location "$location" --address-prefixes 10.0.0.0/16

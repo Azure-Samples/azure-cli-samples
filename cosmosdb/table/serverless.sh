@@ -14,7 +14,7 @@ table="msdocs-table-cosmos-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Table API
 echo "Creating $account"

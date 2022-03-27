@@ -17,7 +17,7 @@ pythonVersion="3.9" #Allowed values: 3.7, 3.8, and 3.9
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create an Azure storage account in the resource group.
 echo "Creating $storage"

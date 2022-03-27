@@ -21,7 +21,7 @@ upgradePolicyMode="automatic"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create virtual machine from UbuntuLTS image
 echo "Create $virtualMachine from $image image"
@@ -29,7 +29,7 @@ az vm create --resource-group $resourceGroup --name $virtualMachine --image $ima
 
 # Create a resource group for images
 # echo "Creating $resourceGroup in $location..."
-# az group create --name $resourceGroup --location "$location" --tag $tag
+# az group create --name $resourceGroup --location "$location" --tags $tag
 # az group create --name myGalleryRG --location eastus
 
 # Create an image gallery

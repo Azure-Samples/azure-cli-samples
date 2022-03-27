@@ -13,7 +13,7 @@ account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos DB account with default values
 # Use appropriate values for --kind or --capabilities for other APIs

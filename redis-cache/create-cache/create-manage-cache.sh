@@ -15,7 +15,7 @@ size="C0"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Basic C0 (256 MB) Redis Cache
 echo "Creating $cache"

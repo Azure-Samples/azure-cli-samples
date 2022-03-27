@@ -18,7 +18,7 @@ zones="1"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a scale set in Availability Zone 1
 # This command also creates a 'Standard' SKU public IP address and load balancer

@@ -23,7 +23,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 # <CreateResourceGroup>
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 # </CreateResourceGroup>
 # <CreateServer>
 # Create a PostgreSQL server in the resource group

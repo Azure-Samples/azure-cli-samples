@@ -21,7 +21,7 @@ mountPath="/mounted-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create an Azure storage account in the resource group.
 echo "Creating $AZURE_STORAGE_ACCOUNT"

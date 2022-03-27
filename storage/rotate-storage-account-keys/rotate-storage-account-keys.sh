@@ -13,7 +13,7 @@ storage="msdocsstorage$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a general-purpose standard storage account
 echo "Creating $storage..."

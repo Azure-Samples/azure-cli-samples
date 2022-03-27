@@ -19,7 +19,7 @@ nsgRule="msdocs-nsg-rule-vmss"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a zone-redundant scale set across zones 1, 2, and 3
 # This command also creates a 'Standard' SKU public IP address and load balancer

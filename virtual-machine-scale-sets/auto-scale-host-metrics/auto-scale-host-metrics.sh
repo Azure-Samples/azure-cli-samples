@@ -23,7 +23,7 @@ scaleIn="1"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created

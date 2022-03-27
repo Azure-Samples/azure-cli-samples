@@ -16,7 +16,7 @@ managedApp="StorageApp"
 
 # Create a application definition resource group
 echo "Creating $appDefinitionResourceGroup in "$location"..."
-az group create --name $appDefinitionResourceGroup --location "$location" --tag $tag
+az group create --name $appDefinitionResourceGroup --location "$location" --tags $tag
 
 # Get Azure Active Directory group to manage the application
 groupid=$(az ad group show --group reader --query objectId --output tsv)
@@ -31,7 +31,7 @@ az managedapp definition create --name "$managedApp" --location "$location" --re
 
 # Create application resource group
 echo "Creating $appResourceGroup in "$location"..."
-az group create --name $appResourceGroup --location "$location" --tag $tag
+az group create --name $appResourceGroup --location "$location" --tags $tag
 
 # Get ID of managed application definition
 appid=$(az managedapp definition show --name $managedApp --resource-group $appDefinitionResourceGroup --query id --output tsv)

@@ -15,7 +15,7 @@ maxThroughput=4000 #minimum = 4000
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Table API
 echo "Creating $account"

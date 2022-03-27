@@ -24,7 +24,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Enable Same-zone HA while creating a MySQL Flexible server in the resource group
 # HA is not available for burstable tier

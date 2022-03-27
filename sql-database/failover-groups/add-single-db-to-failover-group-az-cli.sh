@@ -22,7 +22,7 @@ secondaryServer="msdocs-azuresql-secondary-server-$randomIdentifier"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 echo "Creating $server in $location..."
 az sql server create --name $server --resource-group $resourceGroup --location "$location"  --admin-user $login --admin-password $password
