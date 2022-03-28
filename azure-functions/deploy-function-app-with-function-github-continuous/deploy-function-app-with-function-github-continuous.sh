@@ -10,6 +10,7 @@ resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
 tags="deploy-function-app-with-function-github"
 skuStorage="Standard_LRS"
 storage="msdocs$randomIdentifier"
+skuStorage="Standard_LRS"
 functionApp=mygithubfunc$randomIdentifier
 functionsVersion="4"
 runtime="node"
