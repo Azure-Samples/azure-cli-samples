@@ -8,6 +8,7 @@ let "randomIdentifier=$RANDOM*$RANDOM"
 location=eastus
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
 tags="deploy-function-app-with-function-github"
+skuStorage="Standard_LRS"
 storage="msdocs$randomIdentifier"
 functionApp=mygithubfunc$randomIdentifier
 functionsVersion="4"
