@@ -8,14 +8,14 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-redis-cache-rg-$randomIdentifier"
-tags="create manage cache"
+tag="create-manage-cache"
 cache="msdocs-redis-cache-$randomIdentifier"
 sku="basic"
 size="C0"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Basic C0 (256 MB) Redis Cache
 echo "Creating $cache"

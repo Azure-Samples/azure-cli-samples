@@ -7,7 +7,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-redis-cache-rg-$randomIdentifier"
-tags="create manage premium cache cluster"
+tag="create-manage-premium-cache-cluster"
 cache="msdocs-redis-cache-$randomIdentifier"
 sku="premium"
 size="P1"
@@ -15,7 +15,7 @@ shardCount="2"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Premium P1 (6 GB) Redis Cache with clustering enabled and 2 shards (for a total of 12 GB)
 echo "Creating $cache"

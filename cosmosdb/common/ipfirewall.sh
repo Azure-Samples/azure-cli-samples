@@ -8,12 +8,12 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="ipfirewall-cosmosdb"
+tag="ipfirewall-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos DB account with default values and IP Firewall enabled
 # Use appropriate values for --kind or --capabilities for other APIs

@@ -34,7 +34,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 # <ResourceGroup>
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 # </ResourceGroup>
 # <ip>
 # Create public IP address

@@ -18,11 +18,11 @@ trafficManagerProfile="msdocs-traffic-manager-profile-$randomIdentifier"
 
 # Create a resource group in location one
 echo "Creating $resourceGroup1 in $location1..."
-az group create --name $resourceGroup1 --location "$location1" --tag $tag
+az group create --name $resourceGroup1 --location "$location1" --tags $tag
 
 # Create a resource group in location two
 echo "Creating $resourceGroup2 in $location2..."
-az group create --name $resourceGroup2 --location "$location2" --tag $tag
+az group create --name $resourceGroup2 --location "$location2" --tags $tag
 
 # Create a website deployed from GitHub in both regions (replace with your own GitHub URL).
 gitrepo="https://github.com/Azure-Samples/app-service-web-dotnet-get-started.git"

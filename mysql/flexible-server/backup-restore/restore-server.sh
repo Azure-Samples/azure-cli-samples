@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="restore-server-mysql"
+tag="restore-server-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 restoreServer="restore-server$randomIdentifier"
 login="azureuser"
@@ -23,7 +23,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a MySQL Flexible server in the resource group
 

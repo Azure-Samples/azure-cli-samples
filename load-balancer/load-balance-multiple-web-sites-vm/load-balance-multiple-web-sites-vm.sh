@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-load-balancer-rg-$randomIdentifier"
-tags="load-balance-multiple-web-sites-vm"
+tag="load-balance-multiple-web-sites-vm"
 availabilitySet="msdocs-availablity-set-lb-$randomIdentifier"
 vNet="msdocs-vnet-lb-$randomIdentifier"
 subnet="msdocs-subnet-lb-$randomIdentifier"
@@ -41,7 +41,7 @@ login="azureuser"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create an availability set for the two VMs that host both websites.
 echo "Creating $availabilitySet"
