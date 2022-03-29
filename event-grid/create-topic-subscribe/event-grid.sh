@@ -58,26 +58,6 @@ event='[ {"id": "'"$RANDOM"'", "eventType": "recordInserted", "subject": "myapp/
 curl -X POST -H "aeg-sas-key: $key" -d "$event" $url
 
 # View your web app again to see the event that you just sent
-
-# Create the Blob storage account. 
-az storage account create \
-  --name $storageName \
-  --location "$location" \
-  --resource-group $resourceGroup \
-  --sku Standard_LRS \
-  --kind BlobStorage \
-  --access-tier Hot
-
-# Get the resource ID of the Blob storage account.
-storageId=$(az storage account show --name $storageName --resource-group $resourceGroup --query id --output tsv)
-echo $storageId
-# Subscribe to the Blob storage account. 
-az eventgrid event-subscription create \
-  --source-resource-id $storageId \
-  --name demoSubToStorage \
-  --endpoint $url
-
-
 # </FullScript>
 
 # echo "Deleting all resources"
