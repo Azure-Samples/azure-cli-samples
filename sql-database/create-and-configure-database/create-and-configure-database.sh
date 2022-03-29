@@ -22,7 +22,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 # </SetParameterValues>
 # <CreateResourceGroup>
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 # </CreateResourceGroup>
 # <CreateServer>
 echo "Creating $server in $location..."

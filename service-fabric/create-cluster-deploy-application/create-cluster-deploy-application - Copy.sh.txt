@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-service-fabric-rg-$randomIdentifier"
-tags="create cluster-deploy-application"
+tag="create-cluster-deploy-application"
 cluster="msdocs-cluster-$randomIdentifier"
 password="Pa$$w0rD-$randomIdentifier"
 subject="msdocs-cluster.eastus.cloudapp.azure.com" 
@@ -22,7 +22,7 @@ appType="msdocs-application-type-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create key vault
 echo "Creating $vault"

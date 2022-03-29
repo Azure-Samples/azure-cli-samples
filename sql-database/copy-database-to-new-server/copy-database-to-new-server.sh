@@ -21,7 +21,7 @@ targetDatabase="msdocs-azuresql-targetDatabase-$randomIdentifier"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resourceGroup in location $location and $targetResourceGroup in $targetLocation..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 az group create --name $targetResourceGroup --location "$targetLocation"
 
 echo "Creating $server in $location and $targetServer in $targetLocation..."

@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tags="scale-pool"
+tag="scale-pool"
 server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
 databaseAdditional="msdocs-azuresql-additional-db-$randomIdentifier"
@@ -19,7 +19,7 @@ pool="msdocs-azuresql-pool-$randomIdentifier"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 echo "Creating $server in $location..."
 az sql server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password

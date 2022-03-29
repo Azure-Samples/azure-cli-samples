@@ -9,7 +9,7 @@ let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 failoverLocation="South Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="create-casandra-cosmosdb"
+tag="create-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 keySpace="keyspace1"
 table="table1"
@@ -17,7 +17,7 @@ maxThroughput=4000 #minimum = 4000
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Cassandra API
 echo "Creating $account"

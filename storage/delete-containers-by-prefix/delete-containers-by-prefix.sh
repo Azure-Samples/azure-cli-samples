@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
-tag="delete containers by prefix"
+tag="delete-containers-by-prefix"
 storage="msdocsstorage$randomIdentifier"
 container1="msdocs-test1-storage-container-$randomIdentifier"
 container2="msdocs-test2-storage-container-test2-$randomIdentifier"
@@ -16,7 +16,7 @@ containerProd="msdocs-prod1-storage-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create storage account
 echo "Creating $storage..."

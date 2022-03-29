@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="serverless-mongodb-cosmosdb"
+tag="serverless-mongodb-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 serverVersion="4.0" #3.2, 3.6, 4.0
 database="msdocs-db-mongo-cosmos"
@@ -16,7 +16,7 @@ collection="collection1"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for MongoDB API
 echo "Creating $account"

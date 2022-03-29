@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="eastus"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tags="create-function-app-consumption-python"
+tag="create-function-app-consumption-python"
 storage="msdocsaccount$randomIdentifier"
 functionApp="msdocs-serverless-python-function-$randomIdentifier"
 skuStorage="Standard_LRS"
@@ -17,7 +17,7 @@ pythonVersion="3.9" #Allowed values: 3.7, 3.8, and 3.9
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create an Azure storage account in the resource group.
 echo "Creating $storage"

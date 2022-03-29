@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="eastus"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tags="functions-cli-mount-files-storage-linux"
+tag="functions-cli-mount-files-storage-linux"
 export AZURE_STORAGE_ACCOUNT="msdocsstorage$randomIdentifier"
 functionApp="msdocs-serverless-function-$randomIdentifier"
 skuStorage="Standard_LRS"
@@ -21,7 +21,7 @@ mountPath="/mounted-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create an Azure storage account in the resource group.
 echo "Creating $AZURE_STORAGE_ACCOUNT"

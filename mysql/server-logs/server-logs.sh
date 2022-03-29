@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="server-logs-mysql"
+tag="server-logs-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 login="azureuser"
@@ -20,7 +20,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a MySQL server in the resource group
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.

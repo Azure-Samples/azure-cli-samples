@@ -9,14 +9,14 @@ let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 failoverLocation="South Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="create-gremlin-cosmosdb"
+tag="create-gremlin-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-gremlin-cosmos"
 graph="msdocs-graph1-gremlin-cosmos"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Gremlin API
 echo "Creating $account"

@@ -8,7 +8,7 @@ Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="service-endpoints-cosmosdb"
+tag="service-endpoints-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 vNet='msdocs-vnet-cosmosdb'
 frontEnd='msdocs-front-end-cosmosdb'
@@ -16,7 +16,7 @@ backEnd='msdocs-back-end-cosmosdb'
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a virtual network with a front-end subnet
 echo "Creating $vnet"

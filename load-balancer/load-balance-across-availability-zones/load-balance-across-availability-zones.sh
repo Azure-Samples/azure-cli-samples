@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-load-balancer-rg-$randomIdentifier"
-tags="load-balance-vms-across availability zones"
+tag="load-balance-vms-across-availability-zones"
 vNet="msdocs-vnet-lb-$randomIdentifier"
 subnet="msdocs-subnet-lb-$randomIdentifier"
 loadBalancerPublicIp="msdocs-public-ip-lb-$randomIdentifier"
@@ -30,7 +30,7 @@ login="azureuser"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a virtual network and a subnet.
 echo "Creating $vNet and $subnet"
