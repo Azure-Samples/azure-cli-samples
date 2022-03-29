@@ -9,6 +9,7 @@ location=eastus
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
 tag="deploy-function-app-with-function-github"
 storage="msdocs$randomIdentifier"
+skuStorage="Standard_LRS"
 functionApp=mygithubfunc$randomIdentifier
 functionsVersion="4"
 runtime="node"
