@@ -34,7 +34,7 @@ az eventgrid topic create \
 # Create a message endpoint
 echo "Creating $site"
 az deployment group create \
-  --resource-group gridResourceGroup \
+  --resource-group $resourceGroup \
   --template-uri "https://raw.githubusercontent.com/Azure-Samples/azure-event-grid-viewer/master/azuredeploy.json" \
   --parameters siteName=$site hostingPlanName=viewerhost
 
