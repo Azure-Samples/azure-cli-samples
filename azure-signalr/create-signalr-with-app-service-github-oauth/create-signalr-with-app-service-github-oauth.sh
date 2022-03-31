@@ -47,11 +47,11 @@ az webapp create --name $myWebAppName --resource-group $myResourceGroupName --pl
 primaryConnectionString=$(az signalr key list --name $mySignalRSvcName \
   --resource-group $myResourceGroupName --query primaryConnectionString -o tsv)
 
-#Add an app setting to the web app for the SignalR connection
+# Add an app setting to the web app for the SignalR connection
 az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
   --settings "Azure:SignalR:ConnectionString=$primaryConnectionString" 
 
-#Add app settings to use with GitHub authentication
+# Add app settings to use with GitHub authentication
 az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
   --settings "GitHubClientId=$GitHubClientId" 
 az webapp config appsettings set --name $myWebAppName --resource-group $myResourceGroupName \
