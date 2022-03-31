@@ -43,7 +43,7 @@ primaryConnectionString=$(az signalr key list --name $signalRSvc \
   --resource-group $resourceGroup --query primaryConnectionString -o tsv)
 echo $primaryConnectionString
 
-#Add an app setting to the web app for the SignalR connection
+# Add an app setting to the web app for the SignalR connection
 az webapp config appsettings set --name $webApp --resource-group $resourceGroup \
   --settings "AzureSignalRConnectionString=$primaryConnectionString" 
 # </FullScript>
