@@ -16,7 +16,7 @@ functionsVersion="4"
 pythonVersion="3.9" #Allowed values: 3.7, 3.8, and 3.9
 share="msdocs-fileshare-$randomIdentifier"
 directory="msdocs-directory-$randomIdentifier"
-shareId="msdcos-share-$randomIdentifier"
+shareId="msdocs-share-$randomIdentifier"
 mountPath="/mounted-$randomIdentifier"
 
 # Create a resource group
