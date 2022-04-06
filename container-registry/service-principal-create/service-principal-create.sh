@@ -4,7 +4,8 @@
 # Modify for your environment.
 # ACR_NAME: The name of your Azure Container Registry
 # SERVICE_PRINCIPAL_NAME: Must be unique within your AD tenant
-ACR_NAME=<container-registry-name>
+# ACR_NAME=<container-registry-name>
+ACR_NAME="msdocs-container-registry-carl"
 SERVICE_PRINCIPAL_NAME=acr-service-principal
 
 # Obtain the full registry ID for subsequent command args
