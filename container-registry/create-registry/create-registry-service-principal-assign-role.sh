@@ -21,7 +21,7 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 az acr create --resource-group $resourceGroup --name $containerRegistry --sku $registrySku
 
 # Create service principal with rights scoped to the registry
-# <service-principal-create.sh>
+# <Create>
 #!/bin/bash
 
 # This script requires Azure CLI version 2.25.0 or later. Check version with `az --version`.
@@ -49,10 +49,10 @@ USER_NAME=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query "[].app
 # applications to authenticate to the container registry.
 echo "Service principal ID: $USER_NAME"
 echo "Service principal password: $PASSWORD"
-# </service-principal-create.sh>
+# </Create>
 SERVICE_PRINCIPAL_ID=$USER_NAME
 # Use an existing service principal
-# <service-principal-assign-role.sh>
+# <Assign>
 #!/bin/bash
 
 # Modify for your environment. The ACR_NAME is the name of your Azure Container
@@ -70,7 +70,7 @@ ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --query id --output tsv)
 # acrpush:     push and pull
 # owner:       push, pull, and assign roles
 az role assignment create --assignee $SERVICE_PRINCIPAL_ID --scope $ACR_REGISTRY_ID --role acrpull
-# </service-principal-assign-role.sh>
+# </Assign>
 # </FullScript>
 
 # echo "Deleting all resources"
