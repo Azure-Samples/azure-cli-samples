@@ -1,26 +1,37 @@
 #!/bin/bash
+# Failed validation in Cloud Shell on 4/7/2022
+
+# <FullScript>
+# Create a Batch account in Batch service mode
+
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-batch-rg-$randomIdentifier"
+storageAccount="msdocsstorage$randomIdentifier"
+batchAccount="msdocsbatch$randomIdentifier"
 
 # Create a resource group.
-az group create --name myResourceGroup --location westeurope
+az group create --name $resourceGroup --location westeurope
 
 # Create a general-purpose storage account in your resource group.
 az storage account create \
-    --resource-group myResourceGroup \
-    --name mystorageaccount \
+    --resource-group $resourceGroup \
+    --name $storageAccount \
     --location westeurope \
     --sku Standard_LRS
 
 # Create a Batch account.
 az batch account create \
-    --name mybatchaccount \
-    --storage-account mystorageaccount \
-    --resource-group myResourceGroup \
+    --name $batchAccount \
+    --storage-account $storageAccount \
+    --resource-group $resourceGroup \
     --location westeurope
 
 # Authenticate against the account directly for further CLI interaction.
 az batch account login \
-    --name mybatchaccount \
-    --resource-group myResourceGroup \
+    --name $batchAccount \
+    --resource-group $resourceGroup \
     --shared-key-auth
 
 # Create a new Linux pool with a virtual machine configuration. 
@@ -28,8 +39,8 @@ az batch pool create \
     --id mypool \
     --vm-size Standard_A1 \
     --target-dedicated 2 \
-    --image canonical:ubuntuserver:16.04-LTS \
-    --node-agent-sku-id "batch.node.ubuntu 16.04"
+    --image canonical:ubuntuserver:18.04-LTS \
+    --node-agent-sku-id "batch.node.ubuntu 18.04" # what is query to get correct update to --image and --node-agent-ski-id?
 
 
 # Create a new job to encapsulate the tasks that are added.
@@ -50,11 +61,14 @@ az batch task create \
     --job-id myjob \
     --json-file tasks.json
 
+# Error
+Cannot access JSON request file: tasks.json
+
 # Update the job so that it is automatically
 # marked as completed once all the tasks are finished.
 az batch job set \
 --job-id myjob \
---on-all-tasks-complete terminateJob
+--on-all-tasks-complete terminatejob
 
 # Monitor the status of the job.
 az batch job show --job-id myjob
@@ -63,3 +77,7 @@ az batch job show --job-id myjob
 az batch task show \
     --job-id myjob \
     --task-id task1
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

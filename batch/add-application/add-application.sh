@@ -11,7 +11,6 @@ resourceGroup="msdocs-batch-rg-$randomIdentifier"
 storageAccount="msdocsstorage$randomIdentifier"
 batchAccount="msdocsbatch$randomIdentifier"
 
-# 
 # Create a resource group.
 az group create --name $resourceGroup --location westeurope
 
@@ -41,7 +40,7 @@ az batch application create \
     --name $batchAccount \
     --application-name "My Application"
 
-
+# Error message
 (InvalidUri) The requested URI does not represent any resource on the server.
 RequestId:f7c76b7e-c324-4a74-a91e-1abfd129880f
 Time:2022-04-08T17:47:44.3775560Z
@@ -75,3 +74,7 @@ az batch application set \
     --name $batchAccount \
     --application-name "My Application" \
     --default-version 1.0
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

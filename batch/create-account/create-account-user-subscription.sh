@@ -63,7 +63,7 @@ az batch account create \
     --location "$location" \
     --keyvault $keyVault 
 
-
+# error message
 (InsufficientPermissions) The Batch service does not have the required permissions to access the specified Subscription.
 RequestId:0c225edb-9138-431c-b2fd-bc8495b0a5a4
 Time:2022-04-07T16:11:55.6120867Z

@@ -1,18 +1,29 @@
 #!/bin/bash
+# Failed validation in Cloud Shell on 4/7/2022
+
+# <FullScript>
+# Create a Batch account in Batch service mode
+
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-batch-rg-$randomIdentifier"
+storageAccount="msdocsstorage$randomIdentifier"
+batchAccount="msdocsbatch$randomIdentifier"
 
 # Create a resource group.
-az group create --name myResourceGroup --location westeurope
+az group create --name $resourceGroup --location westeurope
 
 # Create a Batch account.
 az batch account create \
-    --resource-group myResourceGroup \
-    --name mybatchaccount \
+    --resource-group $resourceGroup \
+    --name $batchAccount \
     --location westeurope
 
 # Authenticate Batch account CLI session.
 az batch account login \
-    --resource-group myResourceGroup \
-    --name mybatchaccount
+    --resource-group $resourceGroup \
+    --name $batchAccount \
     --shared-key-auth
 
 # Create a new Windows cloud service platform pool with 3 Standard A1 VMs.
@@ -26,6 +37,11 @@ az batch pool create \
     --start-task-command-line "cmd /c dir /s" \
     --start-task-wait-for-success \
     --application-package-references myapp
+
+One or more of the specified application package references are invalid.
+RequestId:1d3a4bed-400e-42e9-974d-6e0fee0be1a1
+Time:2022-04-13T18:59:42.8283662Z
+myapp: The specified application package does not exist.    
 
 # Add some metadata to the pool.
 az batch pool set --pool-id mypool-windows --metadata IsWindows=true VMSize=StandardA1
@@ -43,3 +59,7 @@ az batch pool show --pool-id mypool-windows
 # Disable autoscaling when we no longer require the pool to automatically scale.
 az batch pool autoscale disable \
     --pool-id mypool-windows
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
