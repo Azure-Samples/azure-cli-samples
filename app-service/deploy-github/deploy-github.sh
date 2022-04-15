@@ -1,21 +1,40 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 4/15/2022
 
-# Replace the following URL with a public GitHub repo URL
-gitrepo=https://github.com/Azure-Samples/php-docs-hello-world
-webappname=mywebapp$RANDOM
+# <FullScript>
+# set -e # exit if error
+# Create an App Service app with deployment from GitHub
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-app-service-rg-$randomIdentifier"
+tag="deploy-github"
+gitrepo=https://github.com/Azure-Samples/php-docs-hello-world # Replace the following URL with your own public GitHub repo URL if you have one
+appServicePlan="msdocs-app-service-plan-$randomIdentifier"
+webapp="msdocs-web-app-$randomIdentifier"
 
 # Create a resource group.
-az group create --location westeurope --name myResourceGroup
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create an App Service plan in `FREE` tier.
-az appservice plan create --name $webappname --resource-group myResourceGroup --sku FREE
+echo "Creating $appServicePlan"
+az appservice plan create --name $appServicePlan --resource-group $resourceGroup --sku FREE
 
 # Create a web app.
-az webapp create --name $webappname --resource-group myResourceGroup --plan $webappname
+echo "Creating $webapp"
+az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan
 
 # Deploy code from a public GitHub repository. 
-az webapp deployment source config --name $webappname --resource-group myResourceGroup \
+az webapp deployment source config --name $webapp --resource-group $resourceGroup \
 --repo-url $gitrepo --branch master --manual-integration
 
 # Copy the result of the following command into a browser to see the web app.
-echo http://$webappname.azurewebsites.net
+echo http://$webapp.azurewebsites.net
+site="http://$webapp.azurewebsites.net"
+echo $site
+curl "$site"
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

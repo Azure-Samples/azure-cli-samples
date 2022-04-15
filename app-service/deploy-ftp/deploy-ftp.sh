@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 1/13/2022
+# Passed validation in Cloud Shell on 4/15/2022
 
 # <FullScript>
 # set -e # exit if error
@@ -17,12 +17,15 @@ webapp="msdocs-web-app-$randomIdentifier"
 curl $warurl --output index.html
 
 # Create a resource group.
-az group create --location "$location" --name $resourceGroup
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create an App Service plan in `FREE` tier.
+echo "Creating $appServicePlan"
 az appservice plan create --name $appServicePlan --resource-group $resourceGroup --sku FREE
 
 # Create a web app.
+echo "Creating $webapp"
 az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan
 
 # Get FTP publishing profile and query for publish URL and credentials
