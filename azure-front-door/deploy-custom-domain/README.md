@@ -25,7 +25,7 @@ afdverify.contoso.com   CNAME   afdverify.contoso.azurefd.net
 To deploy this sample, review and change hardcoded variables if required. Then execute:
 
 ```bash
-./deploy-custom-domain.sh
+CUSTOM_DOMAIN_NAME=www.contoso.com ./deploy-custom-domain.sh
 ```
 
 The script will:
@@ -42,21 +42,18 @@ The script will:
 
 ## Deploy custom apex domain name
 
-> ℹ As of April 2021, Front Door managed TLS certificates are not yet supported on Azure Front Door. Support is coming soon. 
-
-Until Azure Front Door adds support for managed Apex domains, you must bring your own TLS certificate for Apex domains. You must also use Azure DNS as the DNS Service for the entire domain. This script uses Azure DNS and requires manual steps for the Certificate Signing Request (CSR).
+Fully automated provisioning of Azure Front Door with apex (root) domain name (hosted by Azure DNS) and TLS cert.
 
 ### Pre-requisites
 
 1. [Host your domain in Azure DNS] and create a public zone
-1. Complete the CSR process in Azure Key Vault. See: [Add certificates in Key Vault].
 
 ### Getting started
 
 To deploy this sample, review and change hardcoded variables if required. Then execute:
 
 ```bash
-./deploy-custom-apex-domain.sh
+AZURE_DNS_ZONE_NAME=contoso.com AZURE_DNS_ZONE_RESOURCE_GROUP=contoso-rg ./deploy-custom-apex-domain.sh
 ```
 
 The script will:
@@ -71,8 +68,7 @@ The script will:
 1. Create a Front Door front-end endpoint for the custom domain
 1. Add route from custom domain frontend to SPA origin
 1. Add a routing rule to redirect HTTP -> HTTPS
-1. Enable HTTPS with a Key Vault managed TLS cert
-
+1. Enable HTTPS with Front Door managed cert
 
 ## Links and references
 

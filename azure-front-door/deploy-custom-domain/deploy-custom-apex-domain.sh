@@ -1,97 +1,113 @@
 #!/bin/bash
+
+# exit on error
 set -e
 
 # See ./README.md for notes
 # Please use latest version of AZ CLI
-# Enable HTTPS, Front Door managed cert is not possible currently 😢 So have to have to upload cert to Key Vault
 # Azure DNS public zone must already exist for domain name
-# Follow the steps in this article to give Front Door access to KV: 
-#  https://docs.microsoft.com/en-us/azure/frontdoor/front-door-custom-domain-https#option-2-use-your-own-certificate
-# Complete the CSR process in Key Vault before running this script:
-#  https://docs.microsoft.com/en-us/azure/key-vault/certificates/create-certificate-signing-request?tabs=azure-portal#add-certificates-in-key-vault-issued-by-non-partnered-cas
 
+# <FullScript>
+# Deploy a Custom Domain name and TLS certificate at the apex (root) on an Azure Front Door front-end.
 
-# Hashing Username for UID instead of using $RANDOM so that this script is idempotent
-uid=$(echo -n $USER | openssl dgst -sha256) ; uid=${uid:9:8}
+# VARIABLES
+# Change these hardcoded values if required
+
+let "randomIdentifier=$RANDOM*$RANDOM"
 location='AustraliaEast'
-loc='aue'
-rg="frontdoor-$uid-rg"
-echo $rg
-tags=('sample=deploy-custom-domain' 'repo=Azure-Samples/azure-cli-samples')
+resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
+tag='deploy-custom-domain'
 
-domainName='contoso.com'
-storage="fd$uid$loc"
+storage="msdocsafd$randomIdentifier"
 
-frontDoor="frontdoor-$uid"
-frontDoorFrontEnd='contoso'
+frontDoor="msdocs-frontdoor-$randomIdentifier"
+frontDoorFrontEnd='www-contoso'
 
 ttl=300
-kv="frontdoor-$loc-kv"
-kvSecretName='frontdoor-csr'
 
+if [ "$AZURE_DNS_ZONE_NAME" == '' ]; 
+   then 
+        echo -e "\033[33mCUSTOM_DOMAIN_NAME environment variable is not set. Front Door will be created but custom frontend will not be configured because custom domain name not provided. Try:\n\n    AZURE_DNS_ZONE_NAME=www.contoso.com AZURE_DNS_ZONE_RESOURCE_GROUP=contoso-dns-rg ./deploy-custom-apex-domain.sh\n\nSee Readme for details.\033[0m"
+   else     
+        if [ "$AZURE_DNS_ZONE_RESOURCE_GROUP" == '' ]; 
+            then 
+                # write error text
+                echo -e "\033[31mAZURE_DNS_ZONE_RESOURCE_GROUP environment variable is not set. Provide the resource group for the Azure DNS Zone. Try:\n\n    AZURE_DNS_ZONE_NAME=www.contoso.com AZURE_DNS_ZONE_RESOURCE_GROUP=contoso-dns-rg ./deploy-custom-apex-domain.sh\n\nSee Readme for details.\033[0m"
+                
+                # write stderr and exit
+                >&2 echo "AZURE_DNS_ZONE_RESOURCE_GROUP environment variable is not set."
+                exit 1
+    fi
+fi
 
-# RESOURCE GROUP
-az group create -n $rg -l $location --tags $tags
+# Resource group
+az group create -n $resourceGroup -l $location --tags $tag
 
 
 # STORAGE ACCOUNT
-az storage account create -n $storage -g $rg -l $location --sku Standard_LRS --kind StorageV2
+az storage account create -n $storage -g $resourceGroup -l $location --sku Standard_LRS --kind StorageV2
 
 # Make Storage Account a SPA
 az storage blob service-properties update --account-name $storage --static-website \
     --index-document 'index.html' --404-document 'index.html' 
 
 # Upload index.html
-az storage blob upload --account-name $storage -f ./index.html -c '$web' -n 'index.html'
+az storage blob upload --account-name $storage -f ./index.html -c '$web' -n 'index.html' --content-type 'text/html'
 
-# Get the URL to use as the Origin URL on the Front Door backend
-spaUrl=$( az storage account show -n $storage --query 'primaryEndpoints.web' -o tsv )
+# Get the URL to use as the origin URL on the Front Door backend
+spaFQUrl=$( az storage account show -n $storage --query 'primaryEndpoints.web' -o tsv )
 
-# Remove 'https://' and trailing '/' 🙄
-spaUrl=${spaUrl/https:\/\//} ; spaUrl=${spaUrl/\//}
-echo $spaUrl
+# Remove 'https://' and trailing '/'
+spaUrl=${spaFQUrl/https:\/\//} ; spaUrl=${spaUrl/\//}
 
 
 # FRONT DOOR
-frontDoorId=$( az network front-door create -n $frontDoor -g $rg --tags $tags --accepted-protocols Http Https --backend-address $spaUrl --query 'id' -o tsv )
+frontDoorId=$( az network front-door create -n $frontDoor -g $resourceGroup --tags $tag --accepted-protocols Http Https --backend-address $spaUrl --query 'id' -o tsv )
 
 
-# AZURE DNS
-# Apex hostname on contoso.com
-# Create an Alias DNS recordset
-az network dns record-set a create -n "@" -g $rg --zone-name $domainName --if-none-match --target-resource $frontDoorId --ttl $ttl
+if [ "$AZURE_DNS_ZONE_NAME" != '' ]; 
+   then 
 
-# Create the domain verify CNAME
-az network dns record-set cname set-record -g $rg --zone-name $domainName --if-none-match --record-set-name "afdverify.$domainName" --cname "afdverify.$frontDoor.azurefd.net" --ttl $ttl
+    # AZURE DNS
+    # Apex hostname on contoso.com
+    # Create an Alias DNS recordset
+    az network dns record-set a create -n "@" -g $AZURE_DNS_ZONE_RESOURCE_GROUP --zone-name $AZURE_DNS_ZONE_NAME --target-resource $frontDoorId --ttl $ttl
+
+    # Create the domain verify CNAME
+    az network dns record-set cname set-record -g $AZURE_DNS_ZONE_RESOURCE_GROUP --zone-name $AZURE_DNS_ZONE_NAME --record-set-name "afdverify" --cname "afdverify.$frontDoor.azurefd.net" --ttl $ttl
 
 
-# FRONT DOOR FRONT END
-# Create a frontend for the custom domain
-az network front-door frontend-endpoint create --front-door-name $frontDoor --host-name $domainName \
-    --name $frontDoorFrontEnd -g $rg --session-affinity-enabled 'Disabled'
+    # FRONT DOOR FRONT END
+    # Create a frontend for the custom domain
+    az network front-door frontend-endpoint create --front-door-name $frontDoor --host-name $AZURE_DNS_ZONE_NAME \
+        --name $frontDoorFrontEnd -g $resourceGroup --session-affinity-enabled 'Disabled'
 
-# Update the default routing rule to include the new frontend
-az network front-door routing-rule update --front-door-name $frontDoor -n 'DefaultRoutingRule' -g $rg \
-    --caching 'Enabled' --accepted-protocols 'HttpsOnly' \
-    --frontend-endpoints 'DefaultFrontendEndpoint' $frontDoorFrontEnd
+    # Update the default routing rule to include the new frontend
+    az network front-door routing-rule update --front-door-name $frontDoor -n 'DefaultRoutingRule' -g $resourceGroup \
+        --caching 'Enabled' --accepted-protocols 'HttpsOnly' \
+        --frontend-endpoints 'DefaultFrontendEndpoint' $frontDoorFrontEnd
 
-# Create http redirect to https routing rule
-az network front-door routing-rule create -f $frontDoor -g $rg -n 'httpRedirect' \
-    --frontend-endpoints $frontDoorFrontEnd --accepted-protocols 'Http' --route-type 'Redirect' \
-    --patterns '/*' --redirect-protocol 'HttpsOnly'
+    # Create http redirect to https routing rule
+    az network front-door routing-rule create -f $frontDoor -g $resourceGroup -n 'httpRedirect' \
+        --frontend-endpoints $frontDoorFrontEnd --accepted-protocols 'Http' --route-type 'Redirect' \
+        --patterns '/*' --redirect-protocol 'Https'
 
-# Update the default routing rule to include the new frontend
-az network front-door routing-rule update --front-door-name $frontDoor -n 'DefaultRoutingRule' -g $rg \
-    --caching 'Enabled' --frontend-endpoints 'DefaultFrontendEndpoint' $frontDoorFrontEnd
+    # Update the default routing rule to include the new frontend
+    az network front-door routing-rule update --front-door-name $frontDoor -n 'DefaultRoutingRule' -g $resourceGroup \
+        --caching 'Enabled' --frontend-endpoints 'DefaultFrontendEndpoint' $frontDoorFrontEnd
 
-# get KV id
-kvId=$( az keyvault show -n $kv -g $rg --query 'id' -o tsv )
 
-# Enable HTTPS
-az network front-door frontend-endpoint enable-https --front-door-name $frontDoor --name $frontDoorFrontEnd -g $rg \
-    --certificate-source 'AzureKeyVault' --vault-id $kvId --secret-name $kvSecretName
+    # Enable HTTPS. This command will return quickly but provisioning can take up to an hour to complete
+    az network front-door frontend-endpoint enable-https \
+        --front-door-name $frontDoor -n $frontDoorFrontEnd -g $resourceGroup
+fi
 
+# </FullScript>
 
 echo "https://$frontDoor.azurefd.net"
-echo "http://$domainName"
-echo "https://$domainName"
+echo "http://$AZURE_DNS_ZONE_NAME"
+echo "https://$AZURE_DNS_ZONE_NAME"
+echo "$spaFQUrl"
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
