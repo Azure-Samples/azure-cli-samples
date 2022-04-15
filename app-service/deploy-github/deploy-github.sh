@@ -29,11 +29,10 @@ az webapp create --name $webapp --resource-group $resourceGroup --plan $appServi
 az webapp deployment source config --name $webapp --resource-group $resourceGroup \
 --repo-url $gitrepo --branch master --manual-integration
 
-# Copy the result of the following command into a browser to see the web app.
-echo http://$webapp.azurewebsites.net
+# Use curl to see the web app.
 site="http://$webapp.azurewebsites.net"
 echo $site
-curl "$site"
+curl "$site" # Optionally, copy and paste the output of the previous command into a browser to see the web app
 # </FullScript>
 
 # echo "Deleting all resources"
