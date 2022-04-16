@@ -62,7 +62,7 @@ if [ "$CUSTOM_DOMAIN_NAME" != '' ];
 
         # Update the default routing rule to include the new frontend
         az network front-door routing-rule update --front-door-name $frontDoor -n 'DefaultRoutingRule' -g $resourceGroup \
-            --caching 'Enabled' --accepted-protocols 'HttpsOnly' \
+            --caching 'Enabled' --accepted-protocols 'Https' \
             --frontend-endpoints 'DefaultFrontendEndpoint' $frontDoorFrontEnd
 
         # Create http redirect to https routing rule

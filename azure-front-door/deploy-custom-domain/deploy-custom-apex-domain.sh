@@ -27,7 +27,7 @@ ttl=300
 
 if [ "$AZURE_DNS_ZONE_NAME" == '' ]; 
    then 
-        echo -e "\033[33mCUSTOM_DOMAIN_NAME environment variable is not set. Front Door will be created but custom frontend will not be configured because custom domain name not provided. Try:\n\n    AZURE_DNS_ZONE_NAME=www.contoso.com AZURE_DNS_ZONE_RESOURCE_GROUP=contoso-dns-rg ./deploy-custom-apex-domain.sh\n\nSee Readme for details.\033[0m"
+        echo -e "\033[33mAZURE_DNS_ZONE_NAME environment variable is not set. Front Door will be created but custom frontend will not be configured because custom domain name not provided. Try:\n\n    AZURE_DNS_ZONE_NAME=www.contoso.com AZURE_DNS_ZONE_RESOURCE_GROUP=contoso-dns-rg ./deploy-custom-apex-domain.sh\n\nSee Readme for details.\033[0m"
    else     
         if [ "$AZURE_DNS_ZONE_RESOURCE_GROUP" == '' ]; 
             then 
@@ -84,13 +84,13 @@ if [ "$AZURE_DNS_ZONE_NAME" != '' ];
 
     # Update the default routing rule to include the new frontend
     az network front-door routing-rule update --front-door-name $frontDoor -n 'DefaultRoutingRule' -g $resourceGroup \
-        --caching 'Enabled' --accepted-protocols 'HttpsOnly' \
+        --caching 'Enabled' --accepted-protocols 'Https' \
         --frontend-endpoints 'DefaultFrontendEndpoint' $frontDoorFrontEnd
 
     # Create http redirect to https routing rule
     az network front-door routing-rule create -f $frontDoor -g $resourceGroup -n 'httpRedirect' \
         --frontend-endpoints $frontDoorFrontEnd --accepted-protocols 'Http' --route-type 'Redirect' \
-        --patterns '/*' --redirect-protocol 'Https'
+        --patterns '/*' --redirect-protocol 'HttpsOnly'
 
     # Update the default routing rule to include the new frontend
     az network front-door routing-rule update --front-door-name $frontDoor -n 'DefaultRoutingRule' -g $resourceGroup \
