@@ -2,58 +2,24 @@
 
 Deploy a Custom Domain name and TLS certificate on an Azure Front Door front-end.
 
-Two scripts provided for this sample:
+Script provided for this sample:
 
 * [deploy-custom-domain.sh](deploy-custom-domain.sh)
-* [deploy-custom-apex-domain.sh](deploy-custom-apex-domain.sh)
 
 ## Deploy custom domain name
 
-Fully automated provisioning of TLS cert on subdomain. Any DNS service can be used so Azure DNS is not used in this sample. 
+Fully automated provisioning of Azure Front Door with custom domain name (hosted by Azure DNS) and TLS cert.
 
 ### Pre-requisites
 
-Two CNAME's must be created before running the script. In this example the Front Door profile name is `contoso` and the custom subdomain is `www.contoso.com`
-
-```
-www.contoso.com         CNAME   contoso.azurefd.net
-afdverify.contoso.com   CNAME   afdverify.contoso.azurefd.net
-```
+1. [Host your domain in Azure DNS] and create a public zone.
 
 ### Getting started
 
 To deploy this sample, review and change hardcoded variables if required. Then execute:
 
 ```bash
-CUSTOM_DOMAIN_NAME=www.contoso.com ./deploy-custom-domain.sh
-```
-
-The script will:
-
-1. Create a resource group
-1. Create a storage account to host a SPA
-1. Enable SPA hosting on storage account
-1. Upload a "Hello world!" `index.html` file
-1. Create a Front Door profile
-1. Create a Front Door front-end endpoint for the custom domain
-1. Add route from custom domain frontend to SPA origin
-1. Add a routing rule to redirect HTTP -> HTTPS
-1. Enable HTTPS with a Front Door managed TLS cert
-
-## Deploy custom apex domain name
-
-Fully automated provisioning of Azure Front Door with apex (root) domain name (hosted by Azure DNS) and TLS cert.
-
-### Pre-requisites
-
-1. [Host your domain in Azure DNS] and create a public zone
-
-### Getting started
-
-To deploy this sample, review and change hardcoded variables if required. Then execute:
-
-```bash
-AZURE_DNS_ZONE_NAME=contoso.com AZURE_DNS_ZONE_RESOURCE_GROUP=contoso-rg ./deploy-custom-apex-domain.sh
+AZURE_DNS_ZONE_NAME=www.contoso.com AZURE_DNS_ZONE_RESOURCE_GROUP=contoso-rg ./deploy-custom-apex-domain.sh
 ```
 
 The script will:
@@ -70,9 +36,6 @@ The script will:
 1. Add a routing rule to redirect HTTP -> HTTPS
 1. Enable HTTPS with Front Door managed cert
 
-## Links and references
-
-* [Deploying a static site using AZ CLI] - Dave Paquette
 
 <!-- link refs -->
 [Deploying a static site using AZ CLI]: https://www.davepaquette.com/archive/2020/05/10/deploying-a-static-site-to-azure-using-the-az-cli.aspx
