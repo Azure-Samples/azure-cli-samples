@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="connect-to-redis.sh"
+tag="connect-to-redis"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 
@@ -22,6 +22,7 @@ az appservice plan create --name $appServicePlan --resource-group $resourceGroup
 --location "$location"
 
 # Create a Web App
+echo "Creating $webapp"
 az webapp create --name $webapp --plan $appServicePlan --resource-group $resourceGroup 
 
 # Create a Redis Cache

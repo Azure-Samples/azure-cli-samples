@@ -1,44 +1,67 @@
 #/bin/bash
+# Passed validation in Cloud Shell on 4/18/2022
 
-# Variables
-appName="webappwithSQL$RANDOM"
-serverName="webappwithsql$RANDOM"
-location="WestUS"
-startip="0.0.0.0"
-endip="0.0.0.0"
-username="<replace-with-username>"
-sqlServerPassword="<replace-with-password>"
+# <FullScript>
+# set -e # exit if error
+# Create an App Service app and deploy files with FTP
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-app-service-rg-$randomIdentifier"
+tag="connect-to-sql"
+appServicePlan="msdocs-app-service-plan-$randomIdentifier"
+webapp="msdocs-web-app-$randomIdentifier"
+server="msdocs-azuresql-$randomIdentifier"
+database="msdocsazuresqldb$randomIdentifier"
+login="azureuser"
+password="Pa$$w0rD-$randomIdentifier"
+startIp="0.0.0.0"
+endIp="0.0.0.0"
 
-# Create a resource group 
-az group create --name myResourceGroup --location $location
+# Create a resource group.
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
-# Create an App Service plan
-az appservice plan create --name myAppServicePlan --resource-group myResourceGroup \
---location $location
+# Create an App Service Plan
+echo "Creating $appServicePlan"
+az appservice plan create --name $appServicePlan --resource-group $resourceGroup \
+--location "$location"
 
-# Create a web app
-az webapp create --name $appName --plan myAppServicePlan --resource-group myResourceGroup
+# Create a Web App
+echo "Creating $webapp"
+az webapp create --name $webapp --plan $appServicePlan --resource-group $resourceGroup 
 
 # Create a SQL Database server
-az sql server create --name $serverName --resource-group myResourceGroup \
---location $location --admin-user $username --admin-password $sqlServerPassword
+echo "Creating $server"
+az sql server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password
 
 # Configure firewall for Azure access
-az sql server firewall-rule create --server $serverName --resource-group myResourceGroup \
---name AllowYourIp --start-ip-address $startip --end-ip-address $endip
+echo "Creating firewall rule with starting ip of $startIp" and ending ip of $endIp
+az sql server firewall-rule create \
+--server $server \
+--resource-group $resourceGroup \
+--name AllowYourIp \
+--start-ip-address $startIp --end-ip-address $endIp
 
 # Create a database called 'MySampleDatabase' on server
-az sql db create --server $serverName --resource-group myResourceGroup --name MySampleDatabase \
+echo "Creating $database"
+az sql db create --server $server \
+ --resource-group $resourceGroup --name $database \
 --service-objective S0
 
 # Get connection string for the database
-connstring=$(az sql db show-connection-string --name MySampleDatabase --server $serverName \
+connstring=$(az sql db show-connection-string --name $database --server $server \
 --client ado.net --output tsv)
 
 # Add credentials to connection string
-connstring=${connstring//<username>/$username}
-connstring=${connstring//<password>/$sqlServerPassword}
+connstring=${connstring//<username>/$login}
+connstring=${connstring//<password>/$password}
 
 # Assign the connection string to an app setting in the web app
-az webapp config appsettings set --name $appName --resource-group myResourceGroup \
+az webapp config appsettings set --name $webapp \
+--resource-group $resourceGroup \
 --settings "SQLSRV_CONNSTR=$connstring" 
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
