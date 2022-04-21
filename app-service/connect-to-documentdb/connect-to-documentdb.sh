@@ -1,26 +1,39 @@
 #/bin/bash
+# Passed validation in Cloud Shell on 4/18/2022
 
-# Variables
-appName="webappwithcosmosdb$RANDOM"
-location="WestUS"
+# <FullScript>
+# set -e # exit if error
+# Create an App Service app and deploy files with FTP
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-app-service-rg-$randomIdentifier"
+tag="connect-to-documentdb.sh"
+appServicePlan="msdocs-app-service-plan-$randomIdentifier"
+webapp="msdocs-web-app-$randomIdentifier"
 
-# Create a Resource Group 
-az group create --name myResourceGroup --location $location
+# Create a resource group.
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create an App Service Plan
-az appservice plan create --name myAppServicePlan --resource-group myResourceGroup \
---location $location
+echo "Creating $appServicePlan"
+az appservice plan create --name $appServicePlan --resource-group $resourceGroup \
+--location "$location"
 
 # Create a Web App
-az webapp create --name $appName --plan myAppServicePlan --resource-group myResourceGroup 
+az webapp create --name $webapp --plan $appServicePlan --resource-group $resourceGroup 
 
 # Create a Cosmos DB with MongoDB API
-az cosmosdb create --name $appName --resource-group myResourceGroup --kind MongoDB
+az cosmosdb create --name $webapp --resource-group $resourceGroup --kind MongoDB
 
 # Get the MongoDB URL
-connectionString=$(az cosmosdb list-connection-strings --name $appName --resource-group myResourceGroup \
---query connectionStrings[0].connectionString --output tsv)
+connectionString=$(az cosmosdb keys list  --name $webapp --resource-group $resourceGroup --type connection-strings --query connectionStrings[0].connectionString --output tsv)
 
 # Assign the connection string to an App Setting in the Web App
-az webapp config appsettings set --name $appName --resource-group myResourceGroup \
---settings "MONGODB_URL=$connectionString" 
+az webapp config appsettings set --name $webapp --resource-group $resourceGroup \
+--settings "MONGODB_URL=$connectionString"
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
