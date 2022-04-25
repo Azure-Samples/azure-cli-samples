@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="scale geographic"
+tag="scale-geographic.sh"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 trafficManagerDns="msdocs-dns-$randomIdentifier"
 app1Name="msdocs-appServiceTM1-$randomIdentifier"

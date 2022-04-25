@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="backup restore"
+tag="backup-restore.sh"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 storage="webappstorage$randomIdentifier"

@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="scale manual"
+tag="scale-manual.sh"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 

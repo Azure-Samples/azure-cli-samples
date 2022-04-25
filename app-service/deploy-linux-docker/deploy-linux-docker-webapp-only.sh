@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="deploy linux docker app only"
+tag="deploy-linux-docker-app-only.sh"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 

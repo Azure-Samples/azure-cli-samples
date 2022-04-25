@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="deploy github"
+tag="deploy-github.sh"
 gitrepo=https://github.com/Azure-Samples/php-docs-hello-world # Replace the following URL with your own public GitHub repo URL if you have one
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
