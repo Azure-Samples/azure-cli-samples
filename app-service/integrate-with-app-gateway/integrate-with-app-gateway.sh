@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="integrate with app gateway"
+tag="integrate-with-app-gateway.sh"
 vNet="msdocs-app-service-vnet-$randomIdentifier"
 subnet="msdocs-app-service-subnet-$randomIdentifier"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
