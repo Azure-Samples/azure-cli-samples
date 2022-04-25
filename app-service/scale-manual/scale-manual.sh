@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="scale-manual"
+tag="scale manual"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 
@@ -18,7 +18,7 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create an App Service plan in Basic tier
 echo "Creating $appServicePlan"
-az appservice plan create --name $appServicePlan --resource-group $resourceGroup --location $location --sku B1
+az appservice plan create --name $appServicePlan --resource-group $resourceGroup --location "$location" --sku B1
 
 # Create a web app.
 echo "Creating $webapp"

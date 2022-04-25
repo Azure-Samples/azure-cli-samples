@@ -25,13 +25,13 @@ echo "Creating $webapp"
 url=$(az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan --query defaultHostName | sed -e 's/^"//' -e 's/"$//')
 
 # Enable all logging options for the Web App
-az webapp log config --name $webapp --resource-group $resourceGroup --application-logging true --detailed-error-messages true --failed-request-tracing true --web-server-logging filesystem
+az webapp log config --name $webapp --resource-group $resourceGroup --application-logging azureblobstorage --detailed-error-messages true --failed-request-tracing true --web-server-logging filesystem
 
 # Create a Web Server Log
 curl -s -L $url/404
 
 # Download the log files for review
-az webapp log download --name $webappname --resource-group $resourceGroup
+az webapp log download --name $webapp --resource-group $resourceGroup
 # </FullScript>
 
 # echo "Deleting all resources"
