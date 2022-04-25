@@ -2,8 +2,8 @@
 # Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
-# set -e # exit if error
 # Connect an App Service app to an Azure Cache for Redis
+# set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"

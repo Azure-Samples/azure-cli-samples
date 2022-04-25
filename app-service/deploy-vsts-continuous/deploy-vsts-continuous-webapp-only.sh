@@ -2,8 +2,8 @@
 # Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
-# set -e # exit if error
 # Create an App Service app with continuous deployment from an Azure DevOps repository
+# set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"

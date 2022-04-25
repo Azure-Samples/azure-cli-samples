@@ -2,8 +2,8 @@
 # Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
-# set -e # exit if error
 # Scale an App Service app worldwide with a high-availability architecture
+# set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"

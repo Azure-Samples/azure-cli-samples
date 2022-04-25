@@ -2,8 +2,8 @@
 # Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
-# set -e # exit if error
 # Create an ASP.NET Core app in a Docker container from Docker Hub
+# set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
