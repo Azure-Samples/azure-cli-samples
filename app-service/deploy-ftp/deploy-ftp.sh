@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="deploy-ftp.sh"
+tag="deploy ftp"
 warurl="https://raw.githubusercontent.com/Azure-Samples/html-docs-hello-world/master/index.html"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
