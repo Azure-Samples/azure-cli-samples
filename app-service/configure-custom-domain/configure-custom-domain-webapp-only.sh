@@ -1,14 +1,14 @@
 #/bin/bash
-# Passed validation in Cloud Shell on 4/15/2022
+# Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
-# Create an App Service app and deploy files with FTP
+# Map a custom domain to an App Service app
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="configure-custom-domain-webapp-only.sh"
+tag="configure custom domain webapp only"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 
@@ -29,6 +29,8 @@ site="http://$webapp.azurewebsites.net"
 echo $site
 curl "$site"
 # </FullScript>
+
+# See app-service/scripts/cli-configure-custom-domain.md for additional steps
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

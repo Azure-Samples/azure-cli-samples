@@ -1,9 +1,9 @@
 #/bin/bash
-# Passed validation in Cloud Shell on 4/21/2022
+# Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
-# Create an App Service app and deploy files with FTP
+# Create an ASP.NET Core app in a Docker container from Docker Hub
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
@@ -29,6 +29,8 @@ site="http://$webapp.azurewebsites.net"
 echo $site
 curl "$site"
 # </FullScript>
+
+# See app-service/scripts/cli-linux-docker-aspnetcore.md for additional steps
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

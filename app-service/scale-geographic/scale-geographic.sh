@@ -1,9 +1,9 @@
 #/bin/bash
-# Passed validation in Cloud Shell on 4/24/2022
+# Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
-# Monitor an App Service app with web server logs
+# Scale an App Service app worldwide with a high-availability architecture
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"

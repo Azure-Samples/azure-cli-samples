@@ -1,8 +1,9 @@
 #/bin/bash
+# Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
-# Create an App Service app and deploy files with FTP
+# Connect an App Service app to a storage account
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"

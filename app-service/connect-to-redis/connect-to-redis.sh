@@ -1,14 +1,14 @@
 #/bin/bash
-# Passed validation in Cloud Shell on 4/18/2022
+# Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
-# Create an App Service app and deploy files with FTP
+# Connect an App Service app to an Azure Cache for Redis
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="connect-to-redis"
+tag="connect toredis" 
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 
