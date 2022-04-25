@@ -2,8 +2,8 @@
 # Passed validation in Cloud Shell on 4/25/2022 - other than the restore step
 
 # <FullScript>
-# set -e # exit if error
 # Backup and restore a web app from a backup
+# set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
