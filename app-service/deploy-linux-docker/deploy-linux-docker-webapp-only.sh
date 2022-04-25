@@ -1,5 +1,5 @@
 #/bin/bash
-# Failed validation in Cloud Shell on 4/25/2022
+# Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
@@ -20,11 +20,9 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 echo "Creating $appServicePlan"
 az appservice plan create --name $appServicePlan --resource-group $resourceGroup --sku S1 --is-linux
 
-# Create a web app.
+# Create a web app. To see list of available runtimes, run 'az webapp list-runtimes --linux'
 echo "Creating $webapp"
-az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan
-
-# usage error: --runtime | --deployment-container-image-name | --multicontainer-config-type TYPE --multicontainer-config-file FILE
+az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan  --runtime "NODE|14-lts"
 
 # Copy the result of the following command into a browser to see the static HTML site.
 site="http://$webapp.azurewebsites.net"
