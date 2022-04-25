@@ -1,14 +1,14 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 4/18/2022
+# Passed validation in Cloud Shell on 4/25/2022 - other than the restore step
 
 # <FullScript>
 # set -e # exit if error
-# Create an App Service app and deploy files with FTP
+# Backup and restore a web app from a backup
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="backup-onetime.sh"
+tag="backup restore"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 storage="webappstorage$randomIdentifier"
@@ -71,7 +71,6 @@ az webapp config backup update --resource-group $resourceGroup --webapp-name $we
 --container-url $sasurl --frequency 2d --retain-one true --retention 10
 
 # Restore the app by overwriting it with the backup data
-# Be sure to replace <backupItemName> and <storageAccountUrl>
 
 az webapp config backup restore --resource-group $resourceGroup --webapp-name $webapp \
 --backup-name $backup --container-url $sasurl --overwrite

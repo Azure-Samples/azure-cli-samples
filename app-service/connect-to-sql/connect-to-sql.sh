@@ -1,14 +1,14 @@
 #/bin/bash
-# Passed validation in Cloud Shell on 4/18/2022
+# Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
-# Create an App Service app and deploy files with FTP
+# Connect an App Service app to SQL Database
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="connect-to-sql"
+tag="connect to sql"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 server="msdocs-azuresql-$randomIdentifier"
