@@ -1,5 +1,5 @@
 #/bin/bash
-# Passed validation in Cloud Shell on 4/25/2022
+# Failed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
 # set -e # exit if error
@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-app-service-rg-$randomIdentifier"
-tag="deploy-linux-docker-app-only.sh"
+tag="deploy linux docker app only"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 
@@ -23,6 +23,8 @@ az appservice plan create --name $appServicePlan --resource-group $resourceGroup
 # Create a web app.
 echo "Creating $webapp"
 az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan
+
+# usage error: --runtime | --deployment-container-image-name | --multicontainer-config-type TYPE --multicontainer-config-file FILE
 
 # Copy the result of the following command into a browser to see the static HTML site.
 site="http://$webapp.azurewebsites.net"
