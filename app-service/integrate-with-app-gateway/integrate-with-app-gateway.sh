@@ -14,6 +14,7 @@ subnet="msdocs-app-service-subnet-$randomIdentifier"
 appServicePlan="msdocs-app-service-plan-$randomIdentifier"
 webapp="msdocs-web-app-$randomIdentifier"
 appGateway="msdocs-app-gateway-$randomIdentifier"
+publicIpAddress="msdocs-public-ip-$randomIdentifier"
 
 # Create a resource group.
 echo "Creating $resourceGroup in "$location"..."
@@ -30,7 +31,7 @@ az network vnet create \
 
 az network public-ip create \
     --resource-group $resourceGroup --location "$location" \
-    --name myAGPublicIPAddress --dns-name $webapp --sku Standard
+    --name $publicIpAddress --dns-name $webapp --sku Standard --zone 1
 
 # Create an App Service plan in `S1` tier
 echo "Creating $appServicePlan"
@@ -55,7 +56,7 @@ az network application-gateway create \
     --frontend-port 80 \
     --http-settings-port 80 \
     --http-settings-protocol Http \
-    --public-ip-address myAGPublicIPAddress \
+    --public-ip-address $publicIpAddress \
     --servers $appFqdn
 
 az network application-gateway http-settings update \
@@ -72,7 +73,7 @@ az webapp config access-restriction add \
 # Get the App Gateway Fqdn
 az network public-ip show \
     --resource-group $resourceGroup \
-    --name myAGPublicIPAddress \
+    --name $publicIpAddress \
     --query {AppGatewayFqdn:dnsSettings.fqdn} \
     --output table
 # </FullScript>
