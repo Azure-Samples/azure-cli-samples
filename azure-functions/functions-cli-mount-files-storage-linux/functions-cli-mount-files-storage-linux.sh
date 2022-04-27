@@ -16,7 +16,7 @@ functionsVersion="4"
 pythonVersion="3.9" #Allowed values: 3.7, 3.8, and 3.9
 share="msdocs-fileshare-$randomIdentifier"
 directory="msdocs-directory-$randomIdentifier"
-shareId="msdcos-share-$randomIdentifier"
+shareId="msdocs-share-$randomIdentifier"
 mountPath="/mounted-$randomIdentifier"
 
 # Create a resource group
@@ -45,7 +45,15 @@ az storage directory create --share-name $share --name $directory
 
 # Create webapp config storage account
 echo "Creating $AZURE_STORAGE_ACCOUNT"
-az webapp config storage-account add --resource-group $resourceGroup --name $functionApp --custom-id $shareId --storage-type AzureFiles --share-name $share --account-name $AZURE_STORAGE_ACCOUNT --mount-path $mountPath --access-key $AZURE_STORAGE_KEY
+az webapp config storage-account add \
+--resource-group $resourceGroup \
+--name $functionApp \
+--custom-id $shareId \
+--storage-type AzureFiles \
+--share-name $share \
+--account-name $AZURE_STORAGE_ACCOUNT \
+--mount-path $mountPath \
+--access-key $AZURE_STORAGE_KEY
 
 # List webapp storage account
 az webapp config storage-account list --resource-group $resourceGroup --name $functionApp
