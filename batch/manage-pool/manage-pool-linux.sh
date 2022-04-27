@@ -64,6 +64,9 @@ az batch pool create \
     --image canonical:ubuntuserver:18.04-lts \
     --node-agent-sku-id "batch.node.ubuntu 18.04" # what is query to get correct update to --image and --node-agent-ski-id?
 
+# --image canonical:ubuntuserver:16.04-LTS
+# --node-agent-sku-id "batch.node.ubuntu 16.04"
+
 # Resize the pool to start some VMs.
 az batch pool resize \
     --pool-id mypool-linux \

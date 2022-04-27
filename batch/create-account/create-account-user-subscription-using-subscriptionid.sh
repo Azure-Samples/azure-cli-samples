@@ -18,9 +18,9 @@ storageAccount="msdocsstorage$randomIdentifier"
 skuStorage="Standard_LRS"
 
 # Allow Azure Batch to access the subscription (one-time operation).
-#az role assignment create \
-#    --assignee  ddbf3205-c6bd-46ae-8127-60eb93363864 \
-#    --role contributor
+az role assignment create \
+    --assignee  $subscriptionId \
+    --role contributor
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
@@ -33,12 +33,12 @@ az group create --name $resourceGroup --location "$location" --tag $tag
 # acrpush:     push and pull
 # owner:       push, pull, and assign roles
 
-az ad sp create-for-rbac --name $servicePrincipal --role contributor  --scopes /subscriptions/$subscriptionId/resourceGroups/$resourceGroup
-apId=$(az ad sp list --display-name $servicePrincipal --query "[].appId" --output tsv)
+# az ad sp create-for-rbac --name $servicePrincipal --role contributor  --scopes /subscriptions/$subscriptionId/resourceGroups/$resourceGroup
+# apId=$(az ad sp list --display-name $servicePrincipal --query "[].appId" --output tsv)
 
-az role assignment create \
-   --assignee  $apId \
-   --role contributor
+# az role assignment create \
+#    --assignee  $apId \
+#    --role contributor
 
 # Create an Azure Key Vault. A Batch account that allocates pools in the user's subscription 
 # must be configured with a Key Vault located in the same region.
@@ -55,7 +55,7 @@ az keyvault create \
 az keyvault set-policy \
     --resource-group $resourceGroup \
     --name $keyVault \
-    --spn $apId \
+    --spn $subscriptionId \
     --key-permissions all \
     --secret-permissions all
 

@@ -38,7 +38,7 @@ az batch account login \
 az batch application create \
     --resource-group $resourceGroup \
     --name $batchAccount \
-    --application-name "My Application"
+    --application-name "MyApplication" # ?? must exist?
 
 # Error message
 (InvalidUri) The requested URI does not represent any resource on the server.
@@ -63,7 +63,7 @@ Exception Details:      (UriPath) /subscriptions/c2ca0ddc-3ddc-45ce-8334-c7b28a9
 az batch application package create \
     --resource-group $resourceGroup \
     --name $batchAccount \
-    --application-name "My Application" \
+    --application-name "MyApplication" \
     --package-file my-application-exe.zip \
     --version-name 1.0
 
@@ -72,7 +72,7 @@ az batch application package create \
 az batch application set \
     --resource-group $resourceGroup \
     --name $batchAccount \
-    --application-name "My Application" \
+    --application-name "MyApplication" \
     --default-version 1.0
 # </FullScript>
 

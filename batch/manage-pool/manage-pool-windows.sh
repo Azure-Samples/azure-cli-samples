@@ -26,6 +26,18 @@ az batch account login \
     --name $batchAccount \
     --shared-key-auth
 
+
+# Try this
+
+
+# Create a new application.
+az batch application create \
+    --resource-group $resourceGroup \
+    --name $batchAccount \
+    --application-name "MyApplication" # ?? must exist?
+
+
+
 # Create a new Windows cloud service platform pool with 3 Standard A1 VMs.
 # The pool has a start task that runs a basic shell command. Typically a 
 # start task copies application files to the pool nodes.
@@ -36,12 +48,13 @@ az batch pool create \
     --vm-size small \
     --start-task-command-line "cmd /c dir /s" \
     --start-task-wait-for-success \
-    --application-package-references myapp
+    --application-package-references myapp # ?? must exist?
 
-One or more of the specified application package references are invalid.
-RequestId:1d3a4bed-400e-42e9-974d-6e0fee0be1a1
-Time:2022-04-13T18:59:42.8283662Z
-myapp: The specified application package does not exist.    
+# error
+# One or more of the specified application package references are invalid.
+# RequestId:1d3a4bed-400e-42e9-974d-6e0fee0be1a1
+# Time:2022-04-13T18:59:42.8283662Z
+# myapp: The specified application package does not exist.    
 
 # Add some metadata to the pool.
 az batch pool set --pool-id mypool-windows --metadata IsWindows=true VMSize=StandardA1
