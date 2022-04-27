@@ -1,3 +1,6 @@
+#!/bin/bash
+# Not tested as of 4/15/2022
+
 # Create a resource group.
 az group create --name myResourceGroup --location westus
 

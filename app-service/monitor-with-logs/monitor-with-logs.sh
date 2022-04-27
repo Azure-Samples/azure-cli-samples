@@ -1,23 +1,38 @@
 #/bin/bash
+# Passed validation in Cloud Shell on 4/25/2022
 
-# Variables
-appName="AppServiceMonitor$random"
-location="WestUS"
+# <FullScript>
+# Monitor an App Service app with web server logs
+# set -e # exit if error
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-app-service-rg-$randomIdentifier"
+tag="monitor-with-logs.sh"
+appServicePlan="msdocs-app-service-plan-$randomIdentifier"
+webapp="msdocs-web-app-$randomIdentifier"
 
-# Create a Resource Group
-az group create --name myResourceGroup --location $location
+# Create a resource group.
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
 # Create an App Service Plan
-az appservice plan create --name AppServiceMonitorPlan --resource-group myResourceGroup --location $location
+echo "Creating $appServicePlan"
+az appservice plan create --name $appServicePlan --resource-group $resourceGroup
 
 # Create a Web App and save the URL
-url=$(az webapp create --name $appName --plan AppServiceMonitorPlan --resource-group myResourceGroup --query defaultHostName | sed -e 's/^"//' -e 's/"$//')
+echo "Creating $webapp"
+url=$(az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan --query defaultHostName | sed -e 's/^"//' -e 's/"$//')
 
 # Enable all logging options for the Web App
-az webapp log config --name $appName --resource-group myResourceGroup --application-logging true --detailed-error-messages true --failed-request-tracing true --web-server-logging filesystem
+az webapp log config --name $webapp --resource-group $resourceGroup --application-logging azureblobstorage --detailed-error-messages true --failed-request-tracing true --web-server-logging filesystem
 
 # Create a Web Server Log
 curl -s -L $url/404
 
 # Download the log files for review
-az webapp log download --name $webappname --resource-group myResourceGroup
+az webapp log download --name $webapp --resource-group $resourceGroup
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y

@@ -1,17 +1,32 @@
 #/bin/bash
+# Passed validation in Cloud Shell on 4/25/2022
 
-# Variables
-appName="AppServiceManualScale$random"
-location="WestUS"
+# <FullScript>
+# Scale an App Service app manually
+# set -e # exit if error
+# Variable block
+let "randomIdentifier=$RANDOM*$RANDOM"
+location="East US"
+resourceGroup="msdocs-app-service-rg-$randomIdentifier"
+tag="scale-manual.sh"
+appServicePlan="msdocs-app-service-plan-$randomIdentifier"
+webapp="msdocs-web-app-$randomIdentifier"
 
-# Create a Resource Group
-az group create --name myResourceGroup --location $location
+# Create a resource group.
+echo "Creating $resourceGroup in "$location"..."
+az group create --name $resourceGroup --location "$location" --tag $tag
 
-# Create App Service Plans
-az appservice plan create --name AppServiceManualScalePlan --resource-group myResourceGroup --location $location --sku B1
+# Create an App Service plan in Basic tier
+echo "Creating $appServicePlan"
+az appservice plan create --name $appServicePlan --resource-group $resourceGroup --location "$location" --sku B1
 
-# Add a Web App
-az webapp create --name $appName --plan AppServiceManualScalePlan --resource-group myResourceGroup
+# Create a web app.
+echo "Creating $webapp"
+az webapp create --name $webapp --resource-group $resourceGroup --plan $appServicePlan
 
 # Scale Web App to 2 Workers
-az appservice plan update --number-of-workers 2 --name AppServiceManualScalePlan --resource-group myResourceGroup
+az appservice plan update --number-of-workers 2 --name $appServicePlan --resource-group $resourceGroup
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
