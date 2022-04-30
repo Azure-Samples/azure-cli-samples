@@ -35,7 +35,7 @@ ngPublicIp="$(az network public-ip show \
   --resource-group $resourceGroup \
   --query ipAddress --output tsv)"
 # </storeip>
-# <natgateway
+# <natgateway>
 az network nat gateway create \
   --resource-group $resourceGroup \
   --name myNATgateway \
