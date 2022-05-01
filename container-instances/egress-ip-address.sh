@@ -111,7 +111,7 @@ az network firewall nat-rule create \
   --translated-address $aciPrivateIp \
   --translated-port 80 \
   --priority 200
-# <natrule>
+# </natrule>
 # <outboundrule>
 az network firewall application-rule create \
   --collection-name myAppCollection \
@@ -136,7 +136,7 @@ az container create \
   --restart-policy OnFailure \
   --vnet aci-vnet \
   --subnet aci-subnet
-# <egress>
+# </egress>
 # <viewlogs>
 az container logs \
   --resource-group $resourceGroup \
