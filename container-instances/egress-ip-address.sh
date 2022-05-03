@@ -142,3 +142,7 @@ az container logs \
   --resource-group $resourceGroup \
   --name testegress
 # </viewlogs>
+# </FullScript>
+
+# echo "Deleting all resources"
+# az group delete --name $resourceGroup -y
