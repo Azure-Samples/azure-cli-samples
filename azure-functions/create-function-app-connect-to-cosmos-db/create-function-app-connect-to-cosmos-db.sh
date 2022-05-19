@@ -27,7 +27,7 @@ az storage account create --name $storage --location "$location" --resource-grou
 echo "Creating $functionApp"
 az functionapp create --name $functionApp --resource-group $resourceGroup --storage-account $storage --consumption-plan-location "$location" --functions-version $functionsVersion
 
-# Create an Azure Cosmos DB database using the same function app name.
+# Create an Azure Cosmos DB database account using the same function app name.
 echo "Creating $functionApp"
 az cosmosdb create --name $functionApp --resource-group $resourceGroup
 
