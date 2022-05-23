@@ -50,9 +50,11 @@ jobs:
               export RESOURCE_GROUP="test-deploy-rg-$randomIdentifier"
               
               echo "Running $file ..."
-              chmod +X $file
-              /bin/bash $file
+              cd $(dirname "${file}")
+              chmod +X $(basename "${file}")
+              /bin/bash $(basename "${file}")
 
+              echo "az group delete $RESOURCE_GROUP -y --no-wait"
               az group delete $RESOURCE_GROUP -y --no-wait
             fi
           done
