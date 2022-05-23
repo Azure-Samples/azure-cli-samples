@@ -24,7 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-            
+
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -35,6 +35,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           cd azure-front-door/deploy-custom-domain
-          chmod ./deploy-custom-domain.sh +X
+          chmod +X ./deploy-custom-domain.sh
           ./deploy-custom-domain.sh
-          
