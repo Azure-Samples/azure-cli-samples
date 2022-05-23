@@ -7,8 +7,12 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
+    paths:
+      - '**.sh'
   pull_request:
     branches: [ master ]
+    paths:
+      - '**.sh'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,6 +28,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - uses: azure/login@v1
         with:
@@ -34,6 +40,13 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          cd azure-front-door/deploy-custom-domain
-          chmod +X ./deploy-custom-domain.sh
-          ./deploy-custom-domain.sh
+          az config set extension.use_dynamic_install=yes_without_prompt
+
+          for file in $( git diff-tree --no-commit-id --name-only -r ${{ github.sha }} )
+          do
+            if [[ "$file" == *.sh ]]
+            then
+              chmod +X $file
+              /bin/bash $file
+            fi
+          done
