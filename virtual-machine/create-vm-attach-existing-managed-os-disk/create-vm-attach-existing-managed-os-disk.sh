@@ -1,5 +1,8 @@
+# Verified per Raman Kumar as of 2/23/2022
+
+# <FullScript>
 #Provide the subscription Id
-subscriptionId=6492b1f7-f219-446b-b509-314e17e1efb0
+subscriptionId="<subscriptionId>"
 
 #Provide the name of your resource group
 resourceGroupName=myResourceGroupName
@@ -21,6 +24,4 @@ managedDiskId=$(az disk show --name $managedDiskName --resource-group $resourceG
 
 #Create VM by attaching existing managed disks as OS
 az vm create --name $virtualMachineName --resource-group $resourceGroupName --attach-os-disk $managedDiskId --os-type $osType
-
-
-
+# </FullScript>

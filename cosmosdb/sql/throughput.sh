@@ -1,13 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Throughput operations for a SQL API database and container
 
-# Variables for SQL API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="throughput-sql-cosmosdb"
+tag="throughput-sql-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-sql-cosmos"
 container="container1"
@@ -17,7 +18,7 @@ updateThroughput=500
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for SQL API
 echo "Creating $account"
@@ -91,6 +92,7 @@ az cosmosdb sql container throughput migrate --account-name $account --resource-
 
 # Retrieve the current autoscale provisioned max container throughput
 az cosmosdb sql container throughput show --account-name $account --resource-group $resourceGroup --database-name $database --name $container --query resource.autoscaleSettings.maxThroughput -o tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

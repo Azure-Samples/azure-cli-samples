@@ -1,6 +1,8 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 # Tested after running the "create.sh" script
+
+# <FullScript>
 # Resource lock operations for a SQL database and container
 
 # Subscription owner permissions required for this script
@@ -8,7 +10,7 @@
 # Run this script after running
 # "https://docs.microsoft.com/azure/cosmos-db/scripts/cli/sql/create#sample-script"
 
-# Variables for SQL API resources
+# Variable block
 # Use values from prerequisite script or from your environment
 # resourceGroup="your resource group name"
 # account="your account name"
@@ -42,6 +44,7 @@ az lock delete --ids $lockid
 echo "Deleting $containerLock on $container"
 lockid=$(az lock show --name $containerLock     --resource-group $resourceGroup     --resource-type Microsoft.DocumentDB/containers     --resource-name $container     --parent $containerParent     --output tsv --query id)
 az lock delete --ids $lockid
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

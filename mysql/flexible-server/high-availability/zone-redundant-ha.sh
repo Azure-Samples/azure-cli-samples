@@ -1,13 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Configure Zone-redundant High Availability
+# <FullScript>
+# Configure zone-redundant high availability
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="zone-redundant-ha-mysql"
+tag="zone-redundant-ha-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="Standard_D2ds_v4"
 tier="GeneralPurpose"
@@ -25,7 +26,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Enable Zone-redundant HA while creating a MySQL Flexible server in the resource group
 # HA is not available for burstable tier
@@ -43,6 +44,7 @@ az mysql flexible-server firewall-rule create --name $server --resource-group $r
 # Disable Zone-redundant HA
 echo "Disabling zone redundant HA"
 az mysql flexible-server update --resource-group $resourceGroup --name $server --high-availability Disabled
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

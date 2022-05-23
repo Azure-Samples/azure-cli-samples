@@ -1,10 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript> 
+# Install applications into a virtual machine scale set
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
-tags="install-apps-vmss"
+tag="install-apps-vmss"
 image="UbuntuLTS"
 scaleSet="msdocs-scaleSet-$randomIdentifier"
 upgradePolicyMode="automatic"
@@ -14,7 +18,7 @@ nlbWebRule="msdocs-nlb-web-rule-vmss"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created
@@ -30,6 +34,7 @@ az network lb rule create --resource-group $resourceGroup --name $nlbWebRule --l
 
 # Output the public IP address to access the site in a web browser
 az network public-ip show --resource-group $resourceGroup --name $scaleSet"LBPublicIP" --query [ipAddress] --output tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

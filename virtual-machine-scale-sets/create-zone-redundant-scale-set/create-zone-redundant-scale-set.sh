@@ -1,10 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript>
+# Create a zone-redundant virtual machine scale set
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
-tags="create-zone-redundant-scale-set-vmss"
+tag="create-zone-redundant-scale-set-vmss"
 image="UbuntuLTS"
 scaleSet="msdocs-scaleSet-$randomIdentifier"
 upgradePolicyMode="automatic"
@@ -15,7 +19,7 @@ nsgRule="msdocs-nsg-rule-vmss"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a zone-redundant scale set across zones 1, 2, and 3
 # This command also creates a 'Standard' SKU public IP address and load balancer
@@ -32,6 +36,7 @@ az network nsg rule create --resource-group $resourceGroup --nsg-name $scaleSet"
 
 # Output the public IP address to access the site in a web browser
 az network public-ip show --resource-group $resourceGroup --name $scaleSet"LBPublicIP" --query [ipAddress] --output tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

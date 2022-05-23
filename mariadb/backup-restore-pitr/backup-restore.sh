@@ -1,10 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/11/2022
 
+# <FullScript>
+# Restore a server from backup to a new server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
-tags="backup-restore-mariadb"
+tag="backup-restore-mariadb"
 server="msdocs-mariadb-server-$randomIdentifier"
 sku="GP_Gen5_2"
 restoreServer="restore-server$randomIdentifier"
@@ -15,7 +19,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a MariaDB server in the resource group
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
@@ -36,6 +40,7 @@ echo $restorePoint
 
 echo "Restoring $restoreServer"
 az mariadb server restore --name $restoreServer --resource-group $resourceGroup --restore-point-in-time $restorePoint --source-server $server
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

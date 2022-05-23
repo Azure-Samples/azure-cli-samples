@@ -1,21 +1,22 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a Gremlin database and graph
 
-# Variables for Gremlin API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
-failoverLocation="Central US"
+failoverLocation="South Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="create-gremlin-cosmosdb"
+tag="create-gremlin-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-gremlin-cosmos"
 graph="msdocs-graph1-gremlin-cosmos"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Gremlin API
 echo "Creating $account"
@@ -44,14 +45,15 @@ printf '
             { "path":"/age", "order":"descending" }
         ]
     ]
-}' > "idxpolicy-$uniqueId.json"
+}' > "idxpolicy-$randomIdentifier.json"
 
 # Create a Gremlin graph
 echo "Creating $graph"
-az cosmosdb gremlin graph create --account-name $account --resource-group $resourceGroup --database-name $database --name $graph -p "/zipcode" --throughput 400 --idx @idxpolicy-$uniqueId.json
+az cosmosdb gremlin graph create --account-name $account --resource-group $resourceGroup --database-name $database --name $graph -p "/zipcode" --throughput 400 --idx @idxpolicy-$randomIdentifier.json
 
 # Clean up temporary index policy file
-rm -f "idxpolicy-$uniqueId.json"
+rm -f "idxpolicy-$randomIdentifier.json"
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

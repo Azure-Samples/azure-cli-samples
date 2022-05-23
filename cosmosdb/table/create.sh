@@ -1,20 +1,21 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a Table API table
 
-# Variables for Table API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
-failoverLocation="Central US"
+failoverLocation="South Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="create-table-cosmosdb"
+tag="create-table-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 table="msdocs-table-cosmos-$randomIdentifier"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Table API
 echo "Creating $account"
@@ -23,6 +24,7 @@ az cosmosdb create --name $account --resource-group $resourceGroup --capabilitie
 # Create a Table API Table
 echo "Creating $table"
 az cosmosdb table create --account-name $account --resource-group $resourceGroup --name $table --throughput 400
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

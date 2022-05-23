@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 02/03/2022
 
+# <FullScript>
+# Peer two virtual networks
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
@@ -14,7 +18,7 @@ echo "Using resource group $resourceGroup with login: $login"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create virtual network 1.
 echo "Creating $vNet1"
@@ -39,6 +43,7 @@ az network vnet peering create --name "Link"$vNet1"To"$vNet2 --resource-group $r
 # Peer VNet2 to VNet1.
 echo "Peering $vNet2 to $vNet1"
 az network vnet peering create --name "Link"$vNet2"To"$vNet1 --resource-group $resourceGroup --vnet-name $vNet2 --remote-vnet $VNet1Id --allow-vnet-access
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 02/03/2022
 
+# <FullScript>
+# Filter network traffic
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-virtual-network-rg-$randomIdentifier"
@@ -25,7 +29,7 @@ echo "Using resource group $resourceGroup with login: $login"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a virtual network and a front-end subnet.
 echo "Creating $vNet and $subnetFrontEnd"
@@ -79,6 +83,7 @@ az network nic create --resource-group $resourceGroup --vnet-name $vNet --subnet
 # Create the VM with both the FrontEnd and BackEnd NICs.
 echo "Creating $vm with both NICs"
 az vm create --resource-group $resourceGroup --name $vm --nics $nicFrontEnd $nicBackEnd --image $image --admin-username $login --generate-ssh-keys --public-ip-sku $sku
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

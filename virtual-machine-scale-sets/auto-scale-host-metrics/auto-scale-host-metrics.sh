@@ -1,10 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript>
+# Automatically scale a virtual machine scale set
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
-tags="auto-scale-host-metrics-vmss"
+tag="auto-scale-host-metrics-vmss"
 image="UbuntuLTS"
 scaleSet="msdocs-scaleSet-$randomIdentifier"
 upgradePolicyMode="automatic"
@@ -19,7 +23,7 @@ scaleIn="1"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a scale set
 # Network resources such as an Azure load balancer are automatically created
@@ -43,6 +47,7 @@ az monitor autoscale rule create --resource-group $resourceGroup --autoscale-nam
 # then drops below 30% over a 5-minute period
 echo "Creating an autoscale in rule"
 az monitor autoscale rule create --resource-group $resourceGroup --autoscale-name $autoscale --condition "Percentage CPU < 30 avg 5m" --scale in $scaleIn
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,11 +1,15 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/13/2022
 
+# <FullScript>
+# Monitor and scale a single PostgreSQL server
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
 resourceGroup="msdocs-postgresql-rg-$randomIdentifier"
-tags="scale-postgresql-server"
+tag="scale-postgresql-server"
 server="msdocs-postgresql-server-$randomIdentifier"
 sku="GP_Gen5_2"
 login="azureuser"
@@ -18,7 +22,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a PostgreSQL server in the resource group
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
@@ -45,6 +49,7 @@ az postgres server update --resource-group $resourceGroup --name $server --sku-n
 # Storage size cannot be reduced
 echo "Scaling up the storage size for $server to $storageSize"
 az postgres server update --resource-group $resourceGroup --name $server --storage-size $storageSize
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

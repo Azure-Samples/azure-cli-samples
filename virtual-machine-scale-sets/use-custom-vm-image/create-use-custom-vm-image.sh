@@ -1,11 +1,15 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/27/2022
 
+# <FullScript>
+# Create a virtual machine scale set from a custom VM image
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subcriptionId=$(az account show --query id -o tsv)
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
-tags="create-use-custom-image-vmss"
+tag="create-use-custom-image-vmss"
 image="UbuntuLTS"
 virtualMachine="msdocs-vm-$randomIdentifier"
 login="azureuser"
@@ -17,7 +21,7 @@ upgradePolicyMode="automatic"
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create virtual machine from UbuntuLTS image
 echo "Create $virtualMachine from $image image"
@@ -25,7 +29,7 @@ az vm create --resource-group $resourceGroup --name $virtualMachine --image $ima
 
 # Create a resource group for images
 # echo "Creating $resourceGroup in $location..."
-# az group create --name $resourceGroup --location "$location" --tag $tag
+# az group create --name $resourceGroup --location "$location" --tags $tag
 # az group create --name myGalleryRG --location eastus
 
 # Create an image gallery
@@ -52,6 +56,7 @@ az sig image-version create  --resource-group $resourceGroup  --gallery-name $im
 # Create a scale set from custom image
 echo "Creating $scaleSet from custom image"
 az vmss create --resource-group $resourceGroup --name $scaleSet --image "/subscriptions/$subcriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Compute/galleries/$imageGallery/images/$imageDefinition" --specialized
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

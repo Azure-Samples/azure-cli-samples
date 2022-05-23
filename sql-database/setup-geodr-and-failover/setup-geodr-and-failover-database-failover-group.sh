@@ -1,6 +1,10 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
+# <FullScript>
+# Configure a failover group for a group of databases in Azure SQL Database
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -17,7 +21,7 @@ secondaryServer="msdocs-azuresql-secondary-server-$randomIdentifier"
 echo "Using resource groups $resourceGroup and $failoverResourceGroup with login: $login, password: $password..."
 
 echo "Creating $resourceGroup in $Location and $failoverResourceGroup in $failoverLocation..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 az group create --name $failoverResourceGroup --location "$failoverLocation"
 
 echo "Creating $server in $location and $secondaryServer in $failoverLocation..."
@@ -38,6 +42,8 @@ az sql failover-group show --name $failoverGroup --resource-group $resourceGroup
 
 echo "Removing replication on $database..."
 az sql failover-group delete --name $failoverGroup --resource-group $failoverResourceGroup --server $secondaryServer
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $failoverResourceGroup -y

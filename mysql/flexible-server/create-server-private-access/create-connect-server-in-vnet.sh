@@ -1,11 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Set up variables
+# <FullScript>
+# Create an Azure Database for MySQL - Flexible Server in a VNet
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="create-connect-server-in-vnet-mysql"
+tag="create-connect-server-in-vnet-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 sku="Standard_D2ds_v4"
 tier="GeneralPurpose"
@@ -31,7 +34,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Get available service endpoints for Azure region output in JSON
 echo "List of available service endpoints for $location"
@@ -76,6 +79,7 @@ echo "Opening port 80 for web traffic"
 az vm open-port --port 80 --resource-group $resourceGroup --name $vm
 
 # Follow steps in the parent article to test connectivity to the MySQL server from the VM
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

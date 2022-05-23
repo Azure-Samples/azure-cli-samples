@@ -1,10 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 1/11/2022
 
+# <FullScript>
+# Create MariaDB server and firewall rule
+
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-mariadb-rg-$randomIdentifier"
-tags="create-mariadb-server-and-firewall-rule"
+tag="create-mariadb-server-and-firewall-rule"
 server="msdocs-mariadb-server-$randomIdentifier"
 sku="GP_Gen5_2"
 login="azureuser"
@@ -18,7 +22,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a MariaDB server in the resource group
 # Name of a server maps to DNS name and is thus required to be globally unique in Azure.
@@ -28,6 +32,7 @@ az mariadb server create --name $server --resource-group $resourceGroup --locati
 # Configure a firewall rule for the server 
 echo "Configuring a firewall rule for $server for the IP address range of $startIp to $endIp"
 az mariadb server firewall-rule create --resource-group $resourceGroup --server $server --name AllowIps --start-ip-address $startIp --end-ip-address $endIp
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

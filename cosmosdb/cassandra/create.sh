@@ -1,14 +1,15 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Create a Cassandra keyspace and table
 
-# Variables for Cassandra API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
-failoverLocation="Central US"
+failoverLocation="South Central US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="create-casandra-cosmosdb"
+tag="create-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 keySpace="keyspace1"
 table="table1"
@@ -16,7 +17,7 @@ maxThroughput=4000 #minimum = 4000
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Cassandra API
 echo "Creating $account"
@@ -40,14 +41,15 @@ printf '
     "clusterKeys": [
         { "name": "columnb", "orderBy": "asc" }
     ]
-}' > "schema-$uniqueId.json"
+}' > "schema-$randomIdentifier.json"
 
 # Create the Cassandra table
 echo "Creating $table"
-az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --max-throughput $maxThroughput --schema @schema-$uniqueId.json
+az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --max-throughput $maxThroughput --schema @schema-$randomIdentifier.json
 
 # Clean up temporary schema file
-rm -f "schema-$uniqueId.json"
+rm -f "schema-$randomIdentifier.json"
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

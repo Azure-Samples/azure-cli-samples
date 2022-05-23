@@ -1,6 +1,9 @@
 #!/bin/bash
 # Passed validation in Cloud Shell 12/01/2021
 
+# <FullScript>
+# Import a BACPAC file into a database in SQL Database
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-azuresql-rg-$randomIdentifier"
@@ -9,7 +12,6 @@ server="msdocs-azuresql-server-$randomIdentifier"
 database="msdocsazuresqldb$randomIdentifier"
 login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
-
 storage="msdocsazuresql$randomIdentifier"
 container="msdocs-azuresql-container-$randomIdentifier"
 bacpac="sample.bacpac"
@@ -17,7 +19,7 @@ bacpac="sample.bacpac"
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 echo "Creating $storage..."
 az storage account create --name $storage --resource-group $resourceGroup --location "$location" --sku Standard_LRS
@@ -42,6 +44,8 @@ az sql db create --name $database --resource-group $resourceGroup --server $serv
 
 echo "Importing sample database from $container to $database..."
 az sql db import --admin-password $password --admin-user $login --storage-key $key --storage-key-type StorageAccessKey --storage-uri https://$storage.blob.core.windows.net/$container/$bacpac --name $database --resource-group $resourceGroup --server $server
+
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

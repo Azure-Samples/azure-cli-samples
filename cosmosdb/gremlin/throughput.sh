@@ -1,13 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Throughput operations for a Gremlin API database and graph
 
-# Variables for Gremlin API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="throughput-gremlin-cosmosdb"
+tag="throughput-gremlin-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-gremlin-cosmos"
 graph="msdocs-graph1-gremlin-cosmos"
@@ -16,7 +17,7 @@ originalThroughput=400
 updateThroughput=500
 
 # Create a resource group 
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a Cosmos account for Gremlin API
 echo "Creating $account"
@@ -90,6 +91,7 @@ az cosmosdb gremlin graph throughput migrate --account-name $account --resource-
 
 # Retrieve the current autoscale provisioned max graph throughput
 az cosmosdb gremlin graph throughput show --resource-group $resourceGroup --account-name $account --database $database --name $graph --query resource.autoscaleSettings.maxThroughput -o tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

@@ -1,14 +1,15 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/9/2022
 
-# Create and manage Flexible Server Read Replicas
+# <FullScript>
+# Create and manage MySQL - Flexible Server read replicas
 
-# Set up variables
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
 resourceGroup="msdocs-mysql-rg-$randomIdentifier"
-tags="monitor-and-scale-mysql"
+tag="monitor-and-scale-mysql"
 server="msdocs-mysql-server-$randomIdentifier"
 login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
@@ -27,7 +28,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
-az group create --name $resourceGroup --location "$location" --tag $tag
+az group create --name $resourceGroup --location "$location" --tags $tag
 
 # Create a MySQL Flexible server in the resource group
 echo "Creating $server"
@@ -49,6 +50,7 @@ az mysql flexible-server replica list --source-server $server --resource-group $
 # Stop replication to a read replica and make it a read/write server.
 echo "Stop replication to $replica"
 az mysql flexible-server replica stop-replication --resource-group $resourceGroup --name $replica --yes
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

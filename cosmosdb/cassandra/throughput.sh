@@ -1,13 +1,14 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/20/2022
 
+# <FullScript>
 # Throughput operations for a Cassandra keyspace and table
 
-# Variables for Cassandra API resources
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
-tags="serverless-casandra-cosmosdb"
+tag="serverless-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 keySpace="keyspace1"
 table="table1"
@@ -34,14 +35,14 @@ printf '
         {"name": "columnB","type": "text"}
     ],
     "partitionKeys": [{"name": "columnA"}]
-}' > "schema-$uniqueId.json"
+}' > "schema-$randomIdentifier.json"
 
 # Create the Cassandra table
 echo "Creating $table with $originalThroughput"
-az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput $originalThroughput --schema @schema-$uniqueId.json
+az cosmosdb cassandra table create --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --throughput $originalThroughput --schema @schema-$randomIdentifier.json
 
 # Clean up temporary schema file
-rm -f "schema-$uniqueId.json"
+rm -f "schema-$randomIdentifier.json"
 
 # Throughput operations for Cassandra API keyspace
 #   Read the current throughput
@@ -103,6 +104,7 @@ az cosmosdb cassandra table throughput migrate --account-name $account --resourc
 
 # Retrieve the current autoscale provisioned max table throughput
 az cosmosdb cassandra table throughput show --account-name $account --resource-group $resourceGroup --keyspace-name $keySpace --name $table --query resource.autoscaleSettings.maxThroughput -o tsv
+# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
