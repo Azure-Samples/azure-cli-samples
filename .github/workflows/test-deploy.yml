@@ -54,7 +54,7 @@ jobs:
               chmod +X $(basename "${file}")
               /bin/bash $(basename "${file}")
 
-              echo "az group delete $RESOURCE_GROUP -y --no-wait"
-              az group delete $RESOURCE_GROUP -y --no-wait
+              echo "az group delete -n $RESOURCE_GROUP -y --no-wait"
+              az group delete -n $RESOURCE_GROUP -y --no-wait
             fi
           done
