@@ -13,6 +13,14 @@ set -e
 # VARIABLES
 # Change these hardcoded values if required
 
+if [[ -z "${RESOURCE_GROUP}" ]]; then
+    let "randomIdentifier=$RANDOM*$RANDOM"
+    location='AustraliaEast'
+    resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
+else
+  resourceGroup="${RESOURCE_GROUP}"
+fi
+
 let "randomIdentifier=$RANDOM*$RANDOM"
 location='AustraliaEast'
 resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"

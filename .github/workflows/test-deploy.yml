@@ -46,7 +46,13 @@ jobs:
           do
             if [[ "$file" == *.sh ]]
             then
+              let "randomIdentifier=$RANDOM*$RANDOM"
+              export RESOURCE_GROUP="test-deploy-rg-$randomIdentifier"
+              
+              echo "Running $file ..."
               chmod +X $file
               /bin/bash $file
+
+              az group delete $RESOURCE_GROUP -y --no-wait
             fi
           done
