@@ -51,7 +51,7 @@ jobs:
               echo "Running $file ..."
               cd $(dirname "${file}")
               chmod +X $(basename "${file}")
-              /bin/bash RESOURCE_GROUP="test-deploy-rg-$randomIdentifier" $(basename "${file}")
+              RESOURCE_GROUP="test-deploy-rg-$randomIdentifier" /bin/bash $(basename "${file}")
 
               if [ $(az group exists --name $RESOURCE_GROUP) = true ]; then
                 echo "az group delete -n $RESOURCE_GROUP -y --no-wait"
