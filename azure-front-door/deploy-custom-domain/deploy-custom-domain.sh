@@ -119,3 +119,4 @@ echo "$spaFQUrl"
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
+

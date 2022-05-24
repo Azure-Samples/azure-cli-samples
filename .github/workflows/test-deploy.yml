@@ -47,15 +47,16 @@ jobs:
             if [[ "$file" == *.sh ]]
             then
               let "randomIdentifier=$RANDOM*$RANDOM"
+              resourceGroup="test-deploy-rg-$randomIdentifier"
               
               echo "Running $file ..."
               cd $(dirname "${file}")
               chmod +X $(basename "${file}")
-              RESOURCE_GROUP="test-deploy-rg-$randomIdentifier" /bin/bash $(basename "${file}")
+              RESOURCE_GROUP=$resourceGroup /bin/bash $(basename "${file}")
 
-              if [ $(az group exists --name $RESOURCE_GROUP) = true ]; then
-                echo "az group delete -n $RESOURCE_GROUP -y --no-wait"
-                az group delete -n $RESOURCE_GROUP -y --no-wait
+              if [ $(az group exists --name $resourceGroup) = true ]; then
+                echo "az group delete -n $resourceGroup -y --no-wait"
+                az group delete -n $resourceGroup -y --no-wait
               fi
             fi
           done
