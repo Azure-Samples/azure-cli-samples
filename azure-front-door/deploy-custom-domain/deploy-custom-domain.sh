@@ -13,17 +13,16 @@ set -e
 # VARIABLES
 # Change these hardcoded values if required
 
-if [[ -z "${RESOURCE_GROUP}" ]]; then
-    let "randomIdentifier=$RANDOM*$RANDOM"
-    location='AustraliaEast'
-    resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
-else
-  resourceGroup="${RESOURCE_GROUP}"
+# Use environment variable if set
+if [ "$RESOURCE_GROUP" == '' ];  
+    then
+        let "randomIdentifier=$RANDOM*$RANDOM"
+        resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
+    else
+        resourceGroup="${RESOURCE_GROUP}"
 fi
 
-let "randomIdentifier=$RANDOM*$RANDOM"
 location='AustraliaEast'
-resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
 tag='deploy-custom-domain'
 
 storage="msdocsafd$randomIdentifier"
@@ -119,4 +118,3 @@ echo "$spaFQUrl"
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
-
