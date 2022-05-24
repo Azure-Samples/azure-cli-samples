@@ -13,10 +13,11 @@ set -e
 # VARIABLES
 # Change these hardcoded values if required
 
-# Use environment variable if set
+let "randomIdentifier=$RANDOM*$RANDOM"
+
+# Use resource group environment variable if set
 if [ "$RESOURCE_GROUP" == '' ];  
     then
-        let "randomIdentifier=$RANDOM*$RANDOM"
         resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
     else
         resourceGroup="${RESOURCE_GROUP}"
