@@ -55,6 +55,6 @@ jobs:
               /bin/bash $(basename "${file}")
 
               echo "az group delete -n $RESOURCE_GROUP -y --no-wait"
-              az group delete -n $RESOURCE_GROUP -y --no-wait
+              az group delete -n $RESOURCE_GROUP -y --no-wait 2>nul
             fi
           done
