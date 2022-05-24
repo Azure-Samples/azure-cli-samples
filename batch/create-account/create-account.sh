@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 4/7/2022
+# Passed validation in Cloud Shell on 5/24/2022
 
 # <FullScript>
 # Create a Batch account in Batch service mode
