@@ -32,9 +32,12 @@
   - [ ] Azure Cloud Shell
   - [ ] macOS
   - [ ] Windows Subsystem for Linux
-- [ ] Scripts do not contain passwords or other secret tokens.
+- [ ] The most recent test date and test method are recorded in the script file.
+- [ ] Scripts do not contain passwords or other secret tokens that are not randomized.
 - [ ] No deprecated commands or arguments are used. ([Release notes](https://docs.microsoft.com/cli/azure/release-notes-azure-cli))
 - [ ] All Azure resource identifiers which must be universally unique are guaranteed to be so.
+- [ ] Resource names use a random function to ensure scripts can be run multiple times in quick succession without error.
+- [ ] All scripts can be run in their entirely without user input.
 
 ### Testing information
 
