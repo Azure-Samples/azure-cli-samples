@@ -34,7 +34,8 @@ jobs:
           # For each file in this commit
           for file in $( git diff-tree --no-commit-id --name-only -r ${{ github.sha }} )
           do
-            # If a shell script
+          echo $file
+          # If a shell script
             if [[ "$file" == *.sh ]]
             then
               # Generate a resource group name so that it can be deleted when finished
