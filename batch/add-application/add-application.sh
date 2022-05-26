@@ -1,3 +1,4 @@
+# test
 #!/bin/bash
 
 # Create a resource group.
