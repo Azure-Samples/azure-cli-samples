@@ -6,7 +6,6 @@
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
-subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
 [[ "$RESOURCE_GROUP" == '' ]] && resourceGroup="msdocs-batch-rg-$randomIdentifier" || resourceGroup="${RESOURCE_GROUP}"
 tag="create-account-user-subscription"
