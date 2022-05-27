@@ -2,7 +2,7 @@
 # Passed validation in Cloud Shell on 5/24/2022
 
 # <FullScript>
-# Create a Batch account in Batch service mode
+# Create and manage a Linux pool in Azure Batch
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

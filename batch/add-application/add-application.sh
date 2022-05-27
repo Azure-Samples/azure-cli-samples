@@ -3,7 +3,7 @@
 # Passed validation in Cloud Shell on 5/24/2022
 
 # <FullScript>
-# Create a Batch account in Batch service mode
+# Add an application to an Azure Batch account
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
