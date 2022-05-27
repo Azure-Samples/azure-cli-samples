@@ -14,7 +14,7 @@ keyVault="msdocskeyvault$randomIdentifier"
 batchAccount="msdocsbatch$randomIdentifier"
 
 # Allow Azure Batch to access the subscription (one-time operation).
-az role assignment create --assignee  ddbf3205-c6bd-46ae-8127-60eb93363864 --role contributor
+az role assignment create --assignee ddbf3205-c6bd-46ae-8127-60eb93363864 --role contributor
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
