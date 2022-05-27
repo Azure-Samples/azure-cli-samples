@@ -12,8 +12,8 @@ tag="create-function-app-premium-plan"
 storage="msdocsaccount$randomIdentifier"
 premiumPlan="msdocs-premium-plan-$randomIdentifier"
 functionApp="msdocs-function-$randomIdentifier"
-skuStorage="Standard_LRS"
-skuPlan="EP1" # Allowed values: Standard_LRS, Standard_GRS, Standard_RAGRS, Standard_ZRS, Premium_LRS, Premium_ZRS, Standard_GZRS, Standard_RAGZRS
+skuStorage="Standard_LRS" # Allowed values: Standard_LRS, Standard_GRS, Standard_RAGRS, Standard_ZRS, Premium_LRS, Premium_ZRS, Standard_GZRS, Standard_RAGZRS
+skuPlan="EP1"
 functionsVersion="4"
 
 # Create a resource group
