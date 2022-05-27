@@ -28,13 +28,15 @@ jobs:
           environment: 'AzureCloud'
       
       - name: Run any shell scripts in this commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           az config set extension.use_dynamic_install=yes_without_prompt
-
-          # For each file in this commit
-          for file in $( git diff-tree --no-commit-id --name-only -r ${{ github.sha }} )
+          echo "Files in PR ${{ github.head_ref }}:"
+          gh pr view ${{ github.head_ref }} --json files -q '.files[].path'
+          # For each file in this commit          
+          for file in $( gh pr view ${{ github.head_ref }} --json files -q '.files[].path' )
           do
-            echo $file
             # If a shell script
             if [[ "$file" == *.sh ]]
             then
@@ -46,7 +48,6 @@ jobs:
               cd $(dirname "${file}")
               chmod +X $(basename "${file}")
               RESOURCE_GROUP=$resourceGroup /bin/bash $(basename "${file}")
-
               # Clean up the resource group
               if [ $(az group exists --name $resourceGroup) = true ]; then
                 echo "az group delete -n $resourceGroup -y --no-wait"
