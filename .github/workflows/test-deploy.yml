@@ -1,10 +1,6 @@
 name: Test & Deploy
 
 on:
-  push:
-    branches: [ master ]
-    paths:
-      - '**.sh'
   pull_request:
     branches: [ master ]
     paths:
