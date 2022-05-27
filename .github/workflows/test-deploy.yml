@@ -35,7 +35,7 @@ jobs:
 
           # For each file in this commit
           
-          gh pr view XXX --json files -q '.files[].path'
+          gh pr view master --json files -q '.files[].path'
 
           #git --no-pager diff --name-only FETCH_HEAD...master
           #git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
