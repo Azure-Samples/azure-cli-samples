@@ -19,8 +19,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2  # Deep fetch so that we can query the diff-tree
 
       - uses: azure/login@v1
         with:
@@ -36,7 +34,6 @@ jobs:
           echo "===================================="
           echo "Files in PR ${{ github.head_ref }}:"
           gh pr view ${{ github.head_ref }} --json files -q '.files[].path'
-          echo "===================================="
           
           # For each file in this commit          
           for file in $( gh pr view ${{ github.head_ref }} --json files -q '.files[].path' )
