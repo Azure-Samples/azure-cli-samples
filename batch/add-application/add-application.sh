@@ -33,14 +33,3 @@ az batch application create --resource-group $resourceGroup --name $batchAccount
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
-
-
-# An application can reference multiple application executable packages
-# of different versions. The executables and any dependencies need
-# to be zipped up for the package. Once uploaded, the CLI attempts
-# to activate the package so that it's ready for use.
-az batch application package create --resource-group $resourceGroup --name $batchAccount --application-name "MyApplication" --package-file my-application-exe.zip --version-name 1.0
-
-# Update the application to assign the newly added application
-# package as the default version.
-az batch application set --resource-group $resourceGroup --name $batchAccount --application-name "MyApplication" --default-version 1.0

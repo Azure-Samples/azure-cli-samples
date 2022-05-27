@@ -39,20 +39,3 @@ az batch task create --job-id myjob --task-id task1 --command-line "/bin/bash -c
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
-
-# To add many tasks at once, specify the tasks
-# in a JSON file, and pass it to the command. 
-# For format, see https://github.com/Azure/azure-docs-cli-python-samples/blob/master/batch/run-job/tasks.json.
-az batch task create --job-id myjob --json-file tasks.json
-
-# Update the job so that it is automatically
-# marked as completed once all the tasks are finished.
-az batch job set \
---job-id myjob \
---on-all-tasks-complete terminatejob
-
-# Monitor the status of the job.
-az batch job show --job-id myjob
-
-# Monitor the status of a task.
-az batch task show --job-id myjob --task-id task1
