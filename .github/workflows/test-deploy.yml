@@ -33,15 +33,10 @@ jobs:
         run: |
           az config set extension.use_dynamic_install=yes_without_prompt
 
-          # For each file in this commit
-          
+          echo "Files in PR ${{ github.head_ref }}:"
           gh pr view ${{ github.head_ref }} --json files -q '.files[].path'
 
-          #git --no-pager diff --name-only FETCH_HEAD...master
-          #git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
-          
-          #for file in $( git diff-tree --no-commit-id --name-only -r ${{ github.sha }} )
-          #for file in $( git --no-pager diff --name-only FETCH_HEAD...master )
+          # For each file in this commit          
           for file in $( gh pr view ${{ github.head_ref }} --json files -q '.files[].path' )
           do
             # If a shell script
