@@ -45,9 +45,11 @@ jobs:
               resourceGroup="test-deploy-rg-$randomIdentifier"
               
               echo "Running $file ..."
-              cd $(dirname "${file}")
+              pushd $(dirname "${file}")
               chmod +X $(basename "${file}")
               RESOURCE_GROUP=$resourceGroup /bin/bash $(basename "${file}")
+              popd
+              
               # Clean up the resource group
               if [ $(az group exists --name $resourceGroup) = true ]; then
                 echo "az group delete -n $resourceGroup -y --no-wait"
