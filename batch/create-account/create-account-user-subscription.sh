@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 subscriptionId="$(az account show --query id -o tsv)"
 location="East US"
-resourceGroup="msdocs-batch-rg-$randomIdentifier"
+[[ "$RESOURCE_GROUP" == '' ]] && resourceGroup="msdocs-batch-rg-$randomIdentifier" || resourceGroup="${RESOURCE_GROUP}"
 tag="create-account-user-subscription"
 keyVault="msdocskeyvault$randomIdentifier"
 batchAccount="msdocsbatch$randomIdentifier"

@@ -7,7 +7,7 @@
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
-resourceGroup="msdocs-batch-rg-$randomIdentifier"
+[[ "$RESOURCE_GROUP" == '' ]] && resourceGroup="msdocs-batch-rg-$randomIdentifier" || resourceGroup="${RESOURCE_GROUP}"
 tag="manage-pool-windows"
 storageAccount="msdocsstorage$randomIdentifier"
 batchAccount="msdocsbatch$randomIdentifier"
