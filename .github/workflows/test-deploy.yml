@@ -1,10 +1,6 @@
 name: Test & Deploy
 
 on:
-  push:
-    branches: [ master ]
-    paths:
-      - '**.sh'
   pull_request:
     branches: [ master ]
     paths:
@@ -19,8 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2  # Deep fetch so that we can query the diff-tree
 
       - uses: azure/login@v1
         with:
@@ -32,31 +26,36 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           az config set extension.use_dynamic_install=yes_without_prompt
-          # For each file in this commit
+        
+          echo "===================================="
+          echo "Files in PR ${{ github.head_ref }}:"
+          gh pr view ${{ github.head_ref }} --json files -q '.files[].path'
           
-          gh pr view XXX --json files -q '.files[].path'
-          #git --no-pager diff --name-only FETCH_HEAD...master
-          #git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
-          
-          #for file in $( git diff-tree --no-commit-id --name-only -r ${{ github.sha }} )
-          #for file in $( git --no-pager diff --name-only FETCH_HEAD...master )
-          for file in $( gh pr view master --json files -q '.files[].path' )
+          # For each file in this commit          
+          for file in $( gh pr view ${{ github.head_ref }} --json files -q '.files[].path' )
           do
-            # If a shell script
-            if [[ "$file" == *.sh ]]
+            # If file exists and is shell script
+            if [ -e "$file" ]
             then
-              # Generate a resource group name so that it can be deleted when finished
-              let "randomIdentifier=$RANDOM*$RANDOM"
-              resourceGroup="test-deploy-rg-$randomIdentifier"
-              
-              echo "Running $file ..."
-              cd $(dirname "${file}")
-              chmod +X $(basename "${file}")
-              RESOURCE_GROUP=$resourceGroup /bin/bash $(basename "${file}")
-              # Clean up the resource group
-              if [ $(az group exists --name $resourceGroup) = true ]; then
-                echo "az group delete -n $resourceGroup -y --no-wait"
-                az group delete -n $resourceGroup -y --no-wait
+              if [[ "$file" == *.sh ]]
+              then
+                # Generate a resource group name so that it can be deleted when finished
+                let "randomIdentifier=$RANDOM*$RANDOM"
+                resourceGroup="test-deploy-rg-$randomIdentifier"
+
+                echo "===================================="
+                echo "Running $file ..."
+                pushd $(dirname "${file}")
+                chmod +X $(basename "${file}")
+                RESOURCE_GROUP=$resourceGroup /bin/bash $(basename "${file}")
+                popd
+                echo "===================================="
+
+                # Clean up the resource group
+                if [ $(az group exists --name $resourceGroup) = true ]; then
+                  echo "Deleting resource group $resourceGroup..."
+                  az group delete -n $resourceGroup -y --no-wait
+                fi
               fi
             fi
           done
