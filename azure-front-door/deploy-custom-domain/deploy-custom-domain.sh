@@ -14,8 +14,16 @@ set -e
 # Change these hardcoded values if required
 
 let "randomIdentifier=$RANDOM*$RANDOM"
+
+# Use resource group environment variable if set
+if [ "$RESOURCE_GROUP" == '' ];  
+    then
+        resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
+    else
+        resourceGroup="${RESOURCE_GROUP}"
+fi
+
 location='AustraliaEast'
-resourceGroup="msdocs-frontdoor-rg-$randomIdentifier"
 tag='deploy-custom-domain'
 
 storage="msdocsafd$randomIdentifier"

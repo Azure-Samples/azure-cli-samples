@@ -1,0 +1,61 @@
+name: Test & Deploy
+
+on:
+  pull_request:
+    branches: [ master ]
+    paths:
+      - '**.sh'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          environment: 'AzureCloud'
+      
+      - name: Run any shell scripts in this commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+        
+          echo "===================================="
+          echo "Files in PR ${{ github.head_ref }}:"
+          gh pr view ${{ github.head_ref }} --json files -q '.files[].path'
+          
+          # For each file in this commit          
+          for file in $( gh pr view ${{ github.head_ref }} --json files -q '.files[].path' )
+          do
+            # If file exists and is shell script
+            if [ -e "$file" ]
+            then
+              if [[ "$file" == *.sh ]]
+              then
+                # Generate a resource group name so that it can be deleted when finished
+                let "randomIdentifier=$RANDOM*$RANDOM"
+                resourceGroup="test-deploy-rg-$randomIdentifier"
+
+                echo "===================================="
+                echo "Running $file ..."
+                pushd $(dirname "${file}")
+                chmod +X $(basename "${file}")
+                RESOURCE_GROUP=$resourceGroup /bin/bash $(basename "${file}")
+                popd
+                echo "===================================="
+
+                # Clean up the resource group
+                if [ $(az group exists --name $resourceGroup) = true ]; then
+                  echo "Deleting resource group $resourceGroup..."
+                  az group delete -n $resourceGroup -y --no-wait
+                fi
+              fi
+            fi
+          done
