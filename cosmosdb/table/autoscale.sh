@@ -11,7 +11,7 @@ resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
 tag="autoscale-table-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 table="msdocs-table-cosmos-$randomIdentifier"
-maxThroughput=4000 #minimum = 4000
+maxThroughput=1000 #minimum = 1000
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."

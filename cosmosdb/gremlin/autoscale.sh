@@ -13,7 +13,7 @@ account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-gremlin-cosmos"
 graph="msdocs-graph1-gremlin-cosmos"
 partitionKey="/partitionKey"
-maxThroughput=4000 #minimum = 4000
+maxThroughput=1000 #minimum = 1000
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."

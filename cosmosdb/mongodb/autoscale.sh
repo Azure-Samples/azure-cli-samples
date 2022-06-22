@@ -12,7 +12,7 @@ tag="autoscale-mongodb-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 database="msdocs-db-mongo-cosmos"
 serverVersion="4.0" #3.2, 3.6, 4.0
-maxThroughput=4000 #minimum = 4000
+maxThroughput=1000 #minimum = 1000
 collection1="collection1"
 collection2="collection2"
 

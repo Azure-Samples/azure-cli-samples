@@ -12,7 +12,7 @@ tag="autoscale-casandra-cosmosdb"
 account="msdocs-account-cosmos-$randomIdentifier" #needs to be lower case
 keySpace="keyspace1-$randomIdentifier"
 table="table1-$randomIdentifier"
-maxThroughput=4000 #minimum = 4000
+maxThroughput=1000 #minimum = 1000
 
 # Create a resource group
 echo "Creating $resourceGroup in $location..."
