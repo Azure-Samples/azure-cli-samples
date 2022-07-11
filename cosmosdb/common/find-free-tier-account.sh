@@ -36,3 +36,4 @@ done
 if [ $isFound -eq 0 ]; then
 	echo "No Free Tier accounts in subscription"
 fi
+# </FullScript>
