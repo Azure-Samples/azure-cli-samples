@@ -36,7 +36,7 @@ az webapp create --name $webapp --resource-group $resourceGroup --plan $appServi
 appFqdn=$(az webapp show --name $webapp --resource-group $resourceGroup --query defaultHostName -o tsv)
 
 # Create an Application Gateway
-az network application-gateway create --resource-group $resourceGroup --name $appGateway --location "$location" --vnet-name $vNet --subnet $subnet --min-capacity 2 --sku Standard_v2 --http-settings-cookie-based-affinity Disabled --frontend-port 80 --http-settings-port 80 --http-settings-protocol Http --public-ip-address $publicIpAddress --servers $appFqdn
+az network application-gateway create --resource-group $resourceGroup --name $appGateway --location "$location" --vnet-name $vNet --subnet $subnet --min-capacity 2 --sku Standard_v2 --http-settings-cookie-based-affinity Disabled --frontend-port 80 --http-settings-port 80 --http-settings-protocol Http --public-ip-address $publicIpAddress --servers $appFqdn --priority 1
 
 az network application-gateway http-settings update --resource-group $resourceGroup --gateway-name $appGateway --name appGatewayBackendHttpSettings --host-name-from-backend-pool
 
