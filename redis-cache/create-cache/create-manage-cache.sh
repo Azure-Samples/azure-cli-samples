@@ -41,7 +41,7 @@ echo "Secondary Key:" ${keys[1]}
 
 # Delete a redis cache
 echo "Deleting $cache"
-az redis delete --name $resourceGroup --resource-group $resourceGroup -y
+az redis delete --name $cache --resource-group $resourceGroup -y
 # </FullScript>
 
 # echo "Deleting all resources"
