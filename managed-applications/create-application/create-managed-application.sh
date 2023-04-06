@@ -19,7 +19,7 @@ echo "Creating $appDefinitionResourceGroup in "$location"..."
 az group create --name $appDefinitionResourceGroup --location "$location" --tags $tag
 
 # Get Azure Active Directory group to manage the application
-groupid=$(az ad group show --group reader --query objectId --output tsv)
+groupid=$(az ad group show --group reader --query id --output tsv)
 
 # Get role
 roleid=$(az role definition list --name Owner --query [].name --output tsv)
