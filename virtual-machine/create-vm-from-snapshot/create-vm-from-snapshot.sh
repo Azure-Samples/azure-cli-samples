@@ -2,7 +2,7 @@
 
 # <FullScript>
 #Provide the subscription Id of the subscription where you want to create Managed Disks
-subscriptionId="<subscriptionId>"c
+subscriptionId="<subscriptionId>"
 
 #Provide the name of your resource group
 resourceGroupName=myResourceGroupName
