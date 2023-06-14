@@ -4,7 +4,7 @@
 # <FullScript>
 # Service endpoint operations for an Azure Cosmos account
 
-Variable block
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 resourceGroup="msdocs-cosmosdb-rg-$randomIdentifier"
