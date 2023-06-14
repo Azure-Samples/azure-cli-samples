@@ -31,7 +31,7 @@ echo "Creating $storage"
 az storage account create --name $storage --resource-group $resourceGroup \
 --location "$location" --sku Standard_LRS
 
-# Retreive the storage account connection string 
+# Retrieve the storage account connection string 
 connstr=$(az storage account show-connection-string --name $storage --resource-group $resourceGroup \
 --query connectionString --output tsv)
 
