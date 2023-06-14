@@ -6,7 +6,7 @@
 
 # Note: Azure Comos accounts cannot include updates to regions with changes to other properties in the same operation
 
-Variable block
+# Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
 failoverLocation1="South Central US"
