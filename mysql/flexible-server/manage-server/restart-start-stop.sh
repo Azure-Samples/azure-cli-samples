@@ -24,7 +24,7 @@ echo "Using resource group $resourceGroup with login: $login, password: $passwor
 echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tags $tag
 
-# Create a MySQL Flexible server in the resource group
+# Create a MySQL Flexible Server in the resource group
 echo "Creating $server"
 az mysql flexible-server create --name $server --resource-group $resourceGroup --location "$location" --admin-user $login --admin-password $password --public-access $ipAddress
 
