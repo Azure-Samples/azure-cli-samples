@@ -1,8 +1,8 @@
-# Azure Container Registry
+# Azure App Service
 
 ## Azure CLI sample scripts
 
-The scripts in this directory demonstrate working with [Azure Container Registry][acr-home] using the [Azure CLI reference commands][azure-cli].
+The scripts in this directory demonstrate working with [Azure App Service][acr-home] using the [Azure CLI reference commands][azure-cli].
 
 | Script | Description |
 | ------ | ----------- |
