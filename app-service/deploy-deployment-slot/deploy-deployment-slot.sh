@@ -3,6 +3,11 @@
 
 # <FullScript>
 # Create an App Service app and deploy code to a staging environment
+#
+# This sample script creates an app in App Service with an additional 
+# deployment slot called "staging", and then deploys a sample app to 
+# the "staging" slot.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
