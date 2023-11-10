@@ -3,6 +3,11 @@
 
 # <FullScript>
 # Connect an App Service app to SQL Database
+#
+# This sample script creates a database in Azure SQL Database
+# and an App Service app. It then links the database to the app
+# using app settings.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
