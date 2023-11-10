@@ -3,6 +3,11 @@
 
 # <FullScript>
 # Backup and restore a web app from a backup
+#
+# This sample script creates a web app in App Service with its related resources.
+# It then creates a one-time backup for it, and also a scheduled backup for it.
+# Finally, it restores the web app from backup.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
