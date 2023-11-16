@@ -36,7 +36,7 @@ nicVm2="msdocs-nic-vm2-lb-$randomIdentifier"
 ipConfig1="msdocs-ipconfig-config1-lb-$randomIdentifier"
 ipConfig2="msdocs-ipconfig-config2-lb-$randomIdentifier"
 vm2="msdocs-vm2-lb-$randomIdentifier"
-image="UbuntuLTS"
+image="Ubuntu2204"
 login="azureuser"
 
 # Create a resource group
@@ -130,7 +130,7 @@ az network nic ip-config create --resource-group $resourceGroup --name $ipConfig
 
 # Create Vm2.
 echo "Creating $vm2"
-az vm create --resource-group $resourceGroup --name $vm2 --nics $nicVm2 --image UbuntuLTS --availability-set $availabilitySet --public-ip-sku $ipSku --admin-username $login --generate-ssh-keys
+az vm create --resource-group $resourceGroup --name $vm2 --nics $nicVm2 --image Ubuntu2204 --availability-set $availabilitySet --public-ip-sku $ipSku --admin-username $login --generate-ssh-keys
 
 # List the virtual machines
 az vm list --resource-group $resourceGroup

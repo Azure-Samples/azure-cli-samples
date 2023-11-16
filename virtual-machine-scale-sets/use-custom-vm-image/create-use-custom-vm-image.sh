@@ -10,7 +10,7 @@ subcriptionId=$(az account show --query id -o tsv)
 location="East US"
 resourceGroup="msdocs-vmss-rg-$randomIdentifier"
 tag="create-use-custom-image-vmss"
-image="UbuntuLTS"
+image="Ubuntu2204"
 virtualMachine="msdocs-vm-$randomIdentifier"
 login="azureuser"
 imageGallery="msdocsimagegalleryvmss$randomIdentifier"
@@ -23,7 +23,7 @@ upgradePolicyMode="automatic"
 echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tags $tag
 
-# Create virtual machine from UbuntuLTS image
+# Create virtual machine from Ubuntu2204 image
 echo "Create $virtualMachine from $image image"
 az vm create --resource-group $resourceGroup --name $virtualMachine --image $image --admin-username $login --generate-ssh-keys --public-ip-sku Standard
 
