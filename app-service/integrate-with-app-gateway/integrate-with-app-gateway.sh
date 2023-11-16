@@ -3,6 +3,12 @@
 
 # <FullScript>
 # Integrate App Service with Application Gateway
+#
+# This sample script creates an Azure App Service web app,
+# an Azure Virtual Network and an Application Gateway. 
+# It then restricts the traffic for the web app to only
+# originate from the Application Gateway subnet.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

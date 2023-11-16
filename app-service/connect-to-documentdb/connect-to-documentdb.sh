@@ -3,6 +3,12 @@
 
 # <FullScript>
 # Connect an App Service app to Cosmos DB
+#
+# This sample script creates an Azure Cosmos DB
+# account using Azure Cosmos DB for MongoDB and
+# an App Service app. It then links a MongoDB connection
+# string to the web app using app settings.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

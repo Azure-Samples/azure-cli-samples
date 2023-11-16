@@ -3,6 +3,12 @@
 
 # <FullScript>
 # Scale an App Service app worldwide with a high-availability architecture
+#
+# This sample script creates a resource group, two App Service plans, 
+# two apps, a traffic manager profile, and two traffic manager endpoints.
+# Once the exercise is complete, you have a high-available architecture, 
+# which provides global availability of your app based on the lowest network latency.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

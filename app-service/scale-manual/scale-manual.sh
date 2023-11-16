@@ -3,6 +3,11 @@
 
 # <FullScript>
 # Scale an App Service app manually
+#
+# This sample script creates a resource group, 
+# an App Service plan, and an app. It then scales
+# the App Service plan from a single instance to multiple instances.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

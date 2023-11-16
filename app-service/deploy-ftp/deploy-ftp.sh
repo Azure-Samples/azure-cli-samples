@@ -3,6 +3,11 @@
 
 # <FullScript>
 # Create an App Service app and deploy files with FTP
+#
+# This sample script creates an app in App Service with its related resources, 
+# and then deploys a static HTML page using FTP. For FTP upload, the script uses
+# cURL as an example. You can use whatever FTP tool to upload your files.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

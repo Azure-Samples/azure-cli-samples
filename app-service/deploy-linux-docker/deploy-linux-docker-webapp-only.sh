@@ -3,6 +3,10 @@
 
 # <FullScript>
 # Create an ASP.NET Core app in a Docker container from Docker Hub
+#
+# This sample script creates a resource group, a Linux App Service plan,
+# and an app. It then deploys an ASP.NET Core application using a Docker Container.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

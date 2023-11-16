@@ -3,6 +3,12 @@
 
 # <FullScript>
 # Monitor an App Service app with web server logs
+#
+# This sample script creates a resource group, 
+# App Service plan, and app, and configures the 
+# app to enable web server logs. It then downloads
+# the log files for review.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"

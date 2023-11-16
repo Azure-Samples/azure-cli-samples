@@ -24,7 +24,7 @@ networkSecurityGroupRuleWeb="msdocs-network-security-rule-port80-lb-$randomIdent
 nic="msdocs-nic-lb-$randomIdentifier"
 availabilitySet="msdocs-availablity-set-lb-$randomIdentifier"
 vm="msdocs-vm-lb-$randomIdentifier"
-image="UbuntuLTS"
+image="Ubuntu2204"
 ipSku="Standard"
 login="azureuser"
 
