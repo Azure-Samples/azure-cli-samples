@@ -3,6 +3,10 @@
 
 # <FullScript>
 # Connect an App Service app to a storage account
+# This sample script creates an Azure storage account
+# and an App Service app. It then links the storage account
+# to the app using app settings.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
