@@ -3,6 +3,11 @@
 
 # <FullScript>
 # Connect an App Service app to an Azure Cache for Redis
+#
+# This sample script creates an Azure Cache for Redis 
+# and an App Service app. It then links the Azure Cache
+# for Redis to the app using app settings.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
