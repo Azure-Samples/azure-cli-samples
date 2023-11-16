@@ -3,6 +3,10 @@
 
 # <FullScript>
 # Map a custom domain to an App Service app
+#
+# This sample script creates an app in App Service with its
+# related resources, and then maps www.<yourdomain> to it.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
