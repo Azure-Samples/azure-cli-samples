@@ -3,6 +3,15 @@
 
 # <FullScript>
 # Bind a custom TLS/SSL certificate to an App Service app
+#
+# This sample script creates an app in App Service with its
+# related resources, then binds the TLS/SSL certificate of
+# a custom domain name to it. For this sample, you need:
+#
+# Access to your domain registrar's DNS configuration page.
+# A valid .PFX file and its password for the TLS/SSL
+# certificate you want to upload and bind.
+#
 # set -e # exit if error
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
