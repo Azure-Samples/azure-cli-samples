@@ -25,7 +25,7 @@ networkSecurityGroupRuleSSH="msdocs-network-security-rule-port22-lb-$randomIdent
 networkSecurityGroupRuleWeb="msdocs-network-security-rule-port80-lb-$randomIdentifier"
 nic="msdocs-nic-lb-$randomIdentifier"
 vm="msdocs-vm-lb-$randomIdentifier"
-image="UbuntuLTS"
+image="Ubuntu2204"
 login="azureuser"
 
 # Create a resource group
