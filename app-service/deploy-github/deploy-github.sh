@@ -4,11 +4,16 @@
 # <FullScript>
 # Create an App Service app with deployment from GitHub
 #
-# This sample script creates an app in App Service with
-# its related resources. It then deploys your app code
-# from a public GitHub repository (without continuous deployment).
-# For GitHub deployment with continuous deployment, see 
-# Create an app with continuous deployment from GitHub.
+# This sample script creates an app in App Service with its related resources,
+# and then sets up continuous deployment from a GitHub repository. For GitHub 
+# deployment without continuous deployment, see Create an app and deploy code
+# from GitHub. 
+#
+# For this sample, you need:
+# - A GitHub repository with application code, that you have administrative 
+# permissions for. To get automatic builds, structure your repository 
+# according to the Prepare your repository table.
+# - A Personal Access Token (PAT) for your GitHub account.
 #
 # set -e # exit if error
 # Variable block
