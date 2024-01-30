@@ -10,10 +10,10 @@
 # from GitHub. 
 #
 # For this sample, you need:
-# A GitHub repository with application code, that you have administrative 
+# - A GitHub repository with application code, that you have administrative 
 # permissions for. To get automatic builds, structure your repository 
 # according to the Prepare your repository table.
-# A Personal Access Token (PAT) for your GitHub account.
+# - A Personal Access Token (PAT) for your GitHub account.
 #
 # set -e # exit if error
 # Variable block
