@@ -4,6 +4,8 @@
 # <FullScript>
 # Create an Azure SQL Managed Instance
 
+# <SetVariables>
+
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="East US"
@@ -16,11 +18,20 @@ route="msdocs-azuresql-route-$randomIdentifier"
 instance="msdocs-azuresql-instance-$randomIdentifier"
 login="azureuser"
 password="Pa$$w0rD-$randomIdentifier"
+dbname="SampleDB"
 
 echo "Using resource group $resourceGroup with login: $login, password: $password..."
 
+# </SetVariables>
+
+# <CreateResourceGroup>
+
 echo "Creating $resourceGroup in $location..."
 az group create --name $resourceGroup --location "$location" --tags $tag 
+
+# </CreateResourceGroup>
+
+# <CreateVirtualNetwork>
 
 echo "Creating $vNet with $subnet..."
 az network vnet create --name $vNet --resource-group $resourceGroup --location "$location" --address-prefixes 10.0.0.0/16
@@ -44,9 +55,20 @@ az network route-table route create --address-prefix 10.0.0.0/24 --name "ToLocal
 echo "Configuring $subnet with $nsg and $route..."
 az network vnet subnet update --name $subnet --network-security-group $nsg --route-table $route --vnet-name $vNet --resource-group $resourceGroup 
 
+# </CreateVirtualNetwork>
+
+# <CreateManagedInstance>
 # This step will take awhile to complete. You can monitor deployment progress in the activity log within the Azure portal.
 echo "Creating $instance with $vNet and $subnet..."
 az sql mi create --admin-password $password --admin-user $login --name $instance --resource-group $resourceGroup --subnet $subnet --vnet-name $vNet --location "$location"
+
+# </CreateManagedInstance>
+
+# <CreateDatabase>
+
+az sql midb create -g $resourceGroup --mi $instance -n $dbname --collation Latin1_General_100_CS_AS_SC
+
+# </CreateDatabase>
 
 # </FullScript>
 
