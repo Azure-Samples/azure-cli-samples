@@ -30,9 +30,14 @@ storageType=Premium_LRS
 #az account list-locations
 location=westus
 
+#If you're creating an OS disk, uncomment the following lines and replace the values
+#osType = 'yourOSType' #Acceptable values are either Windows or Linux
+#hyperVGeneration = 'yourHyperVGen' #Acceptable values are either v1 or v2
+
 #Set the context to the subscription Id where Managed Disk will be created
 az account set --subscription $subscriptionId
 
 #Create the Managed disk from the VHD file 
+#If you're creating an OS disk, add the following: --os-type $osType -hyper-v-generation $hyperVGeneration 
 az disk create --resource-group $resourceGroupName --name $diskName --sku $storageType --location $location --size-gb $diskSize --source $vhdUri
 # </FullScript>
