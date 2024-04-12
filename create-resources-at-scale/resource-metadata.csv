@@ -1,0 +1,3 @@
+createvm="true"; user="john-smith"; vmImage="Ubuntu2204"
+createvm="false"; user="alex-smith"; vmImage="Ubuntu2004"
+createvm="false"; user="jan-smith"; vmImage="Ubuntu2104"
