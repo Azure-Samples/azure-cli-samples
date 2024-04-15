@@ -35,20 +35,6 @@ location="westus"
 
 resourceGroup="ubuntu-vm-group22-$Identifier"
 
-tag="backup-restore.sh"
-
-appServicePlan="ubuntu-vm-serviceplan22$Identifier"
-
-webapp="ubuntu-vm-web-app22-$Identifier"
-
-storage="ubuntu-vm-storage22-$Identifier"
-
-container="ubuntu-vm-container22-$Identifier"
-
-backup="ubuntu-backup22-$Identifier"
-
-expirydate=$(date -I -d "$(date) + 1 month")
-
 # task 1 create resources
 
 for i in $(seq 0 1);
