@@ -18,7 +18,7 @@ vmImage="Ubuntu2204"
 location=""
 resourceGroup="msdocs-ubuntu-vm-group22-$Identifier"
 setupFileLocation="C:\myPath\myFileName"
-public-ip-sku=""
+publicIpSku=""
 
 # task 1 create resources
 for i in $(seq 0 1);
@@ -38,7 +38,7 @@ do
             --resource-group $resourceGroup \
             --name $vmName \
             --image $vmImage \
-            --public-ip-sku Standard \
+            --public-ip-sku $publicIpSku \
             --admin-username $user\
             --admin-password $adminPassword  
     fi
