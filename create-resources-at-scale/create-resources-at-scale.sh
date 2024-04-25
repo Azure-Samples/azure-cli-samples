@@ -31,7 +31,6 @@ do
     resourceGroup="msdocs-script-rg-$randomIdentifier"
     subnet="msdocs-vnet-$randomIdentifier"
     az group create --l $location -n $resourceGroup
-    echo test echo
     if "$createvm" =true; then 
         echo create vm
         az vm create \
