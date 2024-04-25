@@ -4,6 +4,7 @@
 
 # Variable block
 # These variables have placeholder values that are replaced with values from the csv input file.
+azSubscription="your-azure-subscription"
 lineCounter="0"
 randomIdentifier="$RANDOM*$RANDOM"
 user=""
@@ -21,6 +22,8 @@ setupFileLocation="C:\myPath\myFileName"
 publicIpSku=""
 addressPrefix="10.0.0.0/16"
 subnetPrefixes="10.0.0.0/24"
+
+# select azure subscription 
 
 # task 1 create resources
 for i in $(seq 0 1);
