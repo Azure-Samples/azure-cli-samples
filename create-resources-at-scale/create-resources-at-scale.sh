@@ -25,6 +25,8 @@ subnetPrefixes="10.0.0.0/24"
 
 # select azure subscription 
 
+az account set --subscription $azSubscription
+
 # task 1 create resources
 for i in $(seq 0 1);
 do
