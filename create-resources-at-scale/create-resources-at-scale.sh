@@ -4,7 +4,7 @@
 
 # Variable block
 # These variables have placeholder values that are replaced with values from the csv input file.
-azSubscription="your-azure-subscription"
+subscriptionId="3618afcd-ea52-4ceb-bb46-53bb962d4e0b"
 lineCounter="0"
 randomIdentifier="$RANDOM*$RANDOM"
 user=""
@@ -25,7 +25,7 @@ subnetPrefixes="10.0.0.0/24"
 
 # select azure subscription 
 
-az account set --subscription $azSubscription
+az account set --subscription "$subscriptionId"
 
 # task 1 create resources
 for i in $(seq 0 1);
