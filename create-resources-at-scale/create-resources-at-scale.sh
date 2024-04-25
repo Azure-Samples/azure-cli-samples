@@ -19,6 +19,8 @@ location=""
 resourceGroup="msdocs-ubuntu-vm-group22-$Identifier"
 setupFileLocation="C:\myPath\myFileName"
 publicIpSku=""
+addressPrefix="10.0.0.0/16"
+subnetPrefixes="10.0.0.0/24"
 
 # task 1 create resources
 for i in $(seq 0 1);
@@ -46,9 +48,9 @@ do
     az network vnet create \    
         --name $vnetname \
         --resource-group $resourceGroup \
-        --address-prefix 10.0.0.0/16 \
+        --address-prefix $addressPrefix \
         --subnet-name $subnet-$randomIdentifier \
-        --subnet-prefixes 10.0.0.0/24
+        --subnet-prefixes $subnetPrefixes
     fi    
     az group delete -n $resourceGroup -y
     echo deleted $resourceGroup
