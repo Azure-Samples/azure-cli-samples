@@ -4,8 +4,10 @@
 
 # Variable block
 # These variables have placeholder values that are replaced with values from the csv input file.
-Identifier="0"
+lineCounter="0"
+randomIdentifier="$RANDOM*$RANDOM"
 user=""
+adminPassword="msdocs-script-PS-$randomIdentifier"
 createvm="true"
 createvnet="true"
 createrg="true"
@@ -15,19 +17,20 @@ vnetname=""
 vmImage="Ubuntu2204"
 location=""
 resourceGroup="msdocs-ubuntu-vm-group22-$Identifier"
+setupFileLocation="C:\myPath\myFileName"
+public-ip-sku=""
 
 # task 1 create resources
 for i in $(seq 0 1);
 do
     # Read in commands from csv file
-    echo read in commands from csv file
-    c1= sed -n "$Identifier"p file.csv
-    Identifier=$((Identifier+1))
-    echo $Identifier. Creating resources for $user
-    resourceGroup="ubuntu-vm-group22-$Identifier"
-    subnet="msdocs-vnet-$Identifier"
+    echo Read in commands from csv file
+    c1= sed -n "$lineCounter"p $setupFileLocation
+    lineCounter=$((lineCounter+1))
+    echo $lineCounter. Creating resources for $user
+    resourceGroup="msdocs-script-rg-$randomIdentifier"
+    subnet="msdocs-vnet-$randomIdentifier"
     az group create --l $location -n $resourceGroup
-    echo $Identifier
     echo test echo
     if "$createvm" =true; then 
         echo create vm
@@ -37,7 +40,7 @@ do
             --image $vmImage \
             --public-ip-sku Standard \
             --admin-username $user\
-            --admin-password qwertY123456  
+            --admin-password $adminPassword  
     fi
     if "$createvnet" =true; then 
     echo create vnet
@@ -45,7 +48,7 @@ do
         --name $vnetname \
         --resource-group $resourceGroup \
         --address-prefix 10.0.0.0/16 \
-        --subnet-name $subnet-$Identifier \
+        --subnet-name $subnet-$randomIdentifier \
         --subnet-prefixes 10.0.0.0/24
     fi    
     az group delete -n $resourceGroup -y
