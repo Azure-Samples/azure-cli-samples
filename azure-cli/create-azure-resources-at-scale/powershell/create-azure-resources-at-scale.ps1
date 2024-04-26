@@ -36,3 +36,5 @@ publicIpSku=""
 
 # set your Azure subscription
 az account set --subscription "$subscriptionID"
+
+# </FullScript>
