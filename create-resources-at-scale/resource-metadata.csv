@@ -1,3 +1,4 @@
-createrg="true"; createvnet="true"; createvm="true"; location="southcentralus"; user="john-smith"; subnet="10.0.1.0"; vmImage="Ubuntu2204"; publicIpSku="Standard"; adminPassword="msdocs-script-PS-$randomIdentifier"
-createrg="true"; createvnet="false"; createvm="false"; location="westus2"; user="alex-smith"; subnet="10.0.2.0"; vmImage="Ubuntu2004"; publicIpSku="Standard"; adminPassword="msdocs-script-PS-$randomIdentifier"
-createrg="false"; createvnet="true"; createvm="false"; location="eastus"; user="jan-smith"; subnet="10.0.3.0"; vmImage="Ubuntu2104"; publicIpSku="Standard"; adminPassword="msdocs-script-PS-$randomIdentifier"
+1, true, true, true, southcentralus, john-smith, 10.0.1.0, Ubuntu2204, standard
+2, true, false, true , westus2, alex-smith, 10.0.2.0, Ubunto2004, standard
+3, false, true, false, eastus, jan-smith, 10.0.3.0, Ubuntu2104, standard
+0,,,,,,,,
