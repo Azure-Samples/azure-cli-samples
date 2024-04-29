@@ -1,5 +1,4 @@
-resourceNo, createRG, createVnet, createVM, location, user, subnet, vmImage, publicIpSku
-1, true, true, true, southcentralus, "john-smith", 10.0.1.0, Ubuntu2204, standard
-2, true, false, , westus2, alex-smith, 10.0.2.0, Ubunto2004, standard
-3, false, true, false, eastus, jan-smith, 10.0.3.0, Ubuntu2104, standard
-0
+resourceNo,location,createRG,exstingRgName,createVnet,vmImage,publicIpSku,Adminuser,vnetAddressPrefix,subnetAddressPrefix
+1,eastus,TRUE,,TRUE,Ubuntu2204,standard,john-smith,10.0.0.0/16,10.0.0.0/24
+2,westus,TRUE,,FALSE,Ubunto2004,standard,alex-smith,10.0.0.0/16,10.0.0.0/24
+3,southcentralus,FALSE,myResourceGroup,FALSE,Ubuntu2104,standard,jan-smith,10.0.0.0/16,10.0.0.0/24
