@@ -26,11 +26,9 @@ subnetAddressPrefix=""
 
 # set azure subscription 
 az account set --subscription $subscriptionID
-
 # </VariableBlock>
 
 # <ValidateFileValues>
-
 # check a line in the CSV for expected values
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
 do
@@ -68,7 +66,6 @@ do
     fi  
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
-
 # </ValidateFileValues>
 
 # <ValidateScriptLogic>
@@ -94,7 +91,6 @@ do
     fi
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
-
 # </ValidateScriptLogic>
 
 # <FullScript>
