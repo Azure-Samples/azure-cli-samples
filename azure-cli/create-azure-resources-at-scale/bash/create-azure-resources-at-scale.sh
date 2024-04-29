@@ -3,10 +3,10 @@
 
 # <VariableBlock>
 # Variable block
-# These variables have placeholder values that are replaced with values from the csv input file.
 subscriptionID=00000000-0000-0000-0000-00000000
 setupFileLocation="myFilePath\myFileName.csv"
 
+# These variables are placeholders whose values are replaced from the csv input file, or appended to a random ID.
 location=""
 createRG=""
 newRgName="msdocs-rg-"
