@@ -34,28 +34,38 @@ az account set --subscription $subscriptionID
 # check a line in the CSV for expected values
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
 do
-	let "randomIdentifier=$RANDOM*$RANDOM"
-    if [ "$resourceNo" = "2" ]; then
+    let "randomIdentifier=$RANDOM*$RANDOM"
+    if [ "$resourceNo" = "1" ]; then
       echo "resourceNo =" $resourceNo
-	    echo "location =" $location
-	    echo "createRG =" $createRG
-	    echo "newRGName to use when createRG is true =" $newRgName$randomIdentifier
-	    echo "exsitingRgName to use when createRG is false = "$existingRgName
-	  
-	    echo "vNet information:"
-	    echo "createVnet =" $createVnet
-	    echo "vnetName when createVnet is true =" $vnetName$randomIdentifier
-	    echo "subnetName when createVnet is true =" $subnetName$randomIdentifier
-	    echo "vnetAddressPrefix when createVnet is true =" $vnetAddressPrefix
-	    echo "subnetAddressPrefix when createVnet is true =" $subnetAddressPrefix
-	  
-	    echo "VM information:"
-	    echo "vmName =" $vmName$randomIdentifier
-	    echo "vmImage =" $vmImage
-	    echo "vmSku=" $publicIpSku
-	    echo "vmAdminUser = " $adminUser
-	    echo "vmAdminPasswrod = " $adminPassword$randomIdentifier
-	  fi
+      echo "location =" $location
+      echo ""
+
+      echo "RESOURCE GROUP INFORMATION:"
+      echo "createRG =" $createRG
+      if [ "$createRG" = "TRUE" ]; then 
+        echo "newRGName =" $newRgName$randomIdentifier
+      else
+        echo "exsitingRgName = "$existingRgName
+      fi
+      echo ""
+
+      echo "VNET INFORMATION:"
+      echo "createVnet =" $createVnet
+      if [ "$createVnet" = "TRUE" ]; then 
+        echo "vnetName =" $vnetName$randomIdentifier
+        echo "subnetName =" $subnetName$randomIdentifier
+        echo "vnetAddressPrefix =" $vnetAddressPrefix
+        echo "subnetAddressPrefix =" $subnetAddressPrefix
+      fi
+      echo ""
+
+      echo "VM INFORMATION:"
+      echo "vmName =" $vmName$randomIdentifier
+      echo "vmImage =" $vmImage
+      echo "vmSku=" $publicIpSku
+      echo "vmAdminUser = " $adminUser
+      echo "vmAdminPassword = " $adminPassword$randomIdentifier
+    fi  
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
 
@@ -65,23 +75,24 @@ done < <(tail -n +2 $setupFileLocation)
 # validate script logic
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
 do
-	echo "resourceNo =" $resourceNo
-	let "randomIdentifier=$RANDOM*$RANDOM"
-	
-	echo "create RG="$createRG
-	echo "create Vnet="$createVnet
-	
-  if [ "$createRG" == "TRUE" ]; then
-    echo "creating RG "$newRgName$randomIdentifier
-		existingRgName=$newRgName$randomIdentifier
-	fi
-	
-	if [ "$createVnet" == "TRUE" ]; then
-	  echo "creating VNet" $vnetName$randomIdentifier "in RG" $existingRgName
-		echo "creating VM" $vmName$randomIdentifier "within Vnet" $vnetName$randomIdentifier "in RG" $existingRgName
-	else
-	  echo "creating VM "$vmName$randomIdentifier "without Vnet in RG" $existingRgName
-	fi
+    echo "resourceNo =" $resourceNo
+    let "randomIdentifier=$RANDOM*$RANDOM"
+    
+    echo "create RG="$createRG
+    echo "create Vnet="$createVnet
+    
+    if [ "$createRG" == "TRUE" ]; then
+      echo "creating RG "$newRgName$randomIdentifier
+      existingRgName=$newRgName$randomIdentifier
+    fi
+    
+    if [ "$createVnet" == "TRUE" ]; then
+      echo "creating VNet" $vnetName$randomIdentifier "in RG" $existingRgName
+      echo "creating VM" $vmName$randomIdentifier "within Vnet" $vnetName$randomIdentifier "in RG" $existingRgName
+    else
+      echo "creating VM "$vmName$randomIdentifier "without Vnet in RG" $existingRgName
+    fi
+
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
 
@@ -91,45 +102,45 @@ done < <(tail -n +2 $setupFileLocation)
 # create Azure resources
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
 do
-	echo "resourceNo =" $resourceNo
-	echo "create RG="$createRG
-	echo "create Vnet="$createVnet
-	let "randomIdentifier=$RANDOM*$RANDOM"
-	
-  if [ "$createRG" == "TRUE" ]; then
-    echo "creating RG "$newRgName$randomIdentifier
-	  az group create --location $location --name $newRgName$randomIdentifier
-	  existingRgName=$newRgName$randomIdentifier
-	fi
-	
-	if [ "$createVnet" == "TRUE" ]; then
-	  echo "creating VNet" $vnetName$randomIdentifier "in RG" $existingRgName
-	  az network vnet create \    
+    echo "resourceNo =" $resourceNo
+    echo "create RG="$createRG
+    echo "create Vnet="$createVnet
+    let "randomIdentifier=$RANDOM*$RANDOM"
+
+    if [ "$createRG" == "TRUE" ]; then
+      echo "creating RG "$newRgName$randomIdentifier
+      az group create --location $location --name $newRgName$randomIdentifier
+      existingRgName=$newRgName$randomIdentifier
+    fi
+
+    if [ "$createVnet" == "TRUE" ]; then
+      echo "creating VNet" $vnetName$randomIdentifier "in RG" $existingRgName
+      az network vnet create \    
           --name $vnetName$randomIdentifier \
           --resource-group $existingRgName \
           --address-prefix $vnetAddressPrefix \
           --subnet-name $subnetName$randomIdentifier \
           --subnet-prefixes $subnetAddressPrefix
-			
-	  echo "creating VM" $vmName$randomIdentifier "within Vnet" $vnetName$randomIdentifier "in RG" $existingRgName
-	  az vm create \
+
+      echo "creating VM" $vmName$randomIdentifier "within Vnet" $vnetName$randomIdentifier "in RG" $existingRgName
+      az vm create \
           --resource-group $existingRgName \
           --name $vmName$randomIdentifier \
           --image $vmImage \
-	      --vnet-name $$vnetName$randomIdentifier
+          --vnet-name $$vnetName$randomIdentifier
           --public-ip-sku $publicIpSku \
           --admin-username $adminUser\
-          --admin-password $adminPassword$randomIdentifier	
-	else
-	  echo "creating VM "$vmName$randomIdentifier "without Vnet in RG" $existingRgName
-	  az vm create \
+          --admin-password $adminPassword$randomIdentifier
+    else
+      echo "creating VM "$vmName$randomIdentifier "without Vnet in RG" $existingRgName
+      az vm create \
           --resource-group $existingRgName \
           --name $vmName$randomIdentifier \
           --image $vmImage \
           --public-ip-sku $publicIpSku \
           --admin-username $adminUser\
           --admin-password $adminPassword$randomIdentifier
-	fi
+    fi
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
 # </FullScript>
