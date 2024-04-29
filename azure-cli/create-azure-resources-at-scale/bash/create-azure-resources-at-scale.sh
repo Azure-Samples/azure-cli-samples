@@ -98,8 +98,8 @@ done < <(tail -n +2 $setupFileLocation)
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
 do
     echo "resourceNo =" $resourceNo
-    echo "create RG="$createRG
-    echo "create Vnet="$createVnet
+    echo "create RG =" $createRG
+    echo "create Vnet =" $createVnet
     let "randomIdentifier=$RANDOM*$RANDOM"
 
     if [ "$createRG" == "TRUE" ]; then
