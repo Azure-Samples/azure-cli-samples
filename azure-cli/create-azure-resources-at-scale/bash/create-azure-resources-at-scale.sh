@@ -62,7 +62,7 @@ do
       echo "VM INFORMATION:"
       echo "vmName =" $vmName$randomIdentifier
       echo "vmImage =" $vmImage
-      echo "vmSku=" $publicIpSku
+      echo "vmSku =" $publicIpSku
       echo "vmAdminUser = " $adminUser
       echo "vmAdminPassword = " $adminPassword$randomIdentifier
     fi  
@@ -78,8 +78,8 @@ do
     echo "resourceNo =" $resourceNo
     let "randomIdentifier=$RANDOM*$RANDOM"
     
-    echo "create RG="$createRG
-    echo "create Vnet="$createVnet
+    echo "create RG =" $createRG
+    echo "create Vnet =" $createVnet
     
     if [ "$createRG" == "TRUE" ]; then
       echo "creating RG "$newRgName$randomIdentifier
@@ -92,7 +92,6 @@ do
     else
       echo "creating VM "$vmName$randomIdentifier "without Vnet in RG" $existingRgName
     fi
-
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
 
