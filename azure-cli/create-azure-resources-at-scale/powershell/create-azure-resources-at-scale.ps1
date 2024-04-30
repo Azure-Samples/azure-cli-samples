@@ -3,27 +3,27 @@
 
 # <VariableBlock>
 # Variable block
-subscriptionID=00000000-0000-0000-0000-00000000
-setupFileLocation="myFilePath\myFileName.csv"
-logFileLocation="myFilePath\myLogName.txt"
+$subscriptionID=00000000-0000-0000-0000-00000000
+$setupFileLocation="myFilePath\myFileName.csv"
+$logFileLocation="myFilePath\myLogName.txt"
 
 # These variables are placeholders whose values are replaced from the csv input file, or appended to a random ID.
-location=""
-createRG=""
-newRgName="msdocs-rg-"
-existingRgName=""
-createVnet=""
+$location=""
+$createRG=""
+$newRgName="msdocs-rg-"
+$existingRgName=""
+$createVnet=""
 
-vmName="msdocs-vm-"
-vmImage=""
-publicIpSku=""
-adminUser=""
-adminPassword="msdocs-pw-"
+$vmName="msdocs-vm-"
+$vmImage=""
+$publicIpSku=""
+$adminUser=""
+$adminPassword="msdocs-pw-"
 
-vnetName="msdocs-vnet-"
-subnetName="msdocs-subnet-"
-vnetAddressPrefix=""
-subnetAddressPrefix=""
+$vnetName="msdocs-vnet-"
+$subnetName="msdocs-subnet-"
+$vnetAddressPrefix=""
+$subnetAddressPrefix=""
 
 # set azure subscription 
 az account set --subscription $subscriptionID
