@@ -129,7 +129,7 @@ do
           --resource-group $existingRgName \
           --name $vmName$randomIdentifier \
           --image $vmImage \
-          --vnet-name $$vnetName$randomIdentifier
+          --vnet-name $vnetName$randomIdentifier \
           --public-ip-sku $publicIpSku \
           --admin-username $adminUser\
           --admin-password $adminPassword$randomIdentifier
