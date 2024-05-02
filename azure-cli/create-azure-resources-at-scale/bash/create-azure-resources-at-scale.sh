@@ -7,23 +7,23 @@ subscriptionID=00000000-0000-0000-0000-00000000
 setupFileLocation="myFilePath\myFileName.csv"
 logFileLocation="myFilePath\myLogName.txt"
 
-# These variables are placeholders whose values are replaced from the csv input file, or appended to a random ID.
+# These variables are placeholders whose values are replaced from the csv input file, or appended with a random ID.
 location=""
 createRG=""
 newRgName="msdocs-rg-"
 existingRgName=""
+
 createVnet=""
+vnetName="msdocs-vnet-"
+subnetName="msdocs-subnet-"
+vnetAddressPrefix=""
+subnetAddressPrefixes=""
 
 vmName="msdocs-vm-"
 vmImage=""
 publicIpSku=""
 adminUser=""
 adminPassword="msdocs-PW-@"
-
-vnetName="msdocs-vnet-"
-subnetName="msdocs-subnet-"
-vnetAddressPrefix=""
-subnetAddressPrefixes=""
 
 # set azure subscription 
 az account set --subscription $subscriptionID
@@ -75,9 +75,6 @@ while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetA
 do
     echo "resourceNo = $resourceNo">>$logFileLocation
     let "randomIdentifier=$RANDOM*$RANDOM"
-
-    echo "create RG flag = $createRG"
-    echo "create Vnet flag = $createVnet"
     
     if [ "$createRG" == "TRUE" ]; then
       echo "will create RG $newRgName$randomIdentifier">>$logFileLocation
