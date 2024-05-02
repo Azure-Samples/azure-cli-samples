@@ -18,19 +18,19 @@ vmName="msdocs-vm-"
 vmImage=""
 publicIpSku=""
 adminUser=""
-adminPassword="msdocs-pw-"
+adminPassword="msdocs-PW-@"
 
 vnetName="msdocs-vnet-"
 subnetName="msdocs-subnet-"
 vnetAddressPrefix=""
-subnetAddressPrefix=""
+subnetAddressPrefixes=""
 
 # set azure subscription 
 az account set --subscription $subscriptionID
 # </VariableBlock>
 
 # <ValidateFileValues>
-while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
+while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
     let "randomIdentifier=$RANDOM*$RANDOM"
     if [ "$resourceNo" = "1" ]; then
@@ -53,7 +53,7 @@ do
         echo "vnetName = $vnetName$randomIdentifier"
         echo "subnetName = $subnetName$randomIdentifier"
         echo "vnetAddressPrefix = $vnetAddressPrefix"
-        echo "subnetAddressPrefix = $subnetAddressPrefix"
+        echo "subnetAddressPrefixes = $subnetAddressPrefixes"
       fi
       echo ""
 
@@ -71,70 +71,74 @@ done < <(tail -n +2 $setupFileLocation)
 # <ValidateScriptLogic>
 # validate script logic
 echo "Validating script">$logFileLocation
-while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
+while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
     echo "resourceNo = $resourceNo">>$logFileLocation
     let "randomIdentifier=$RANDOM*$RANDOM"
 
-    echo "create RG = $createRG"
-    echo "create Vnet = $createVnet"
+    echo "create RG flag = $createRG"
+    echo "create Vnet flag = $createVnet"
     
     if [ "$createRG" == "TRUE" ]; then
-      echo "creating RG $newRgName$randomIdentifier">>$logFileLocation
+      echo "will create RG $newRgName$randomIdentifier">>$logFileLocation
       existingRgName=$newRgName$randomIdentifier
     fi
     
     if [ "$createVnet" == "TRUE" ]; then
-      echo "creating VNet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
-      echo "creating VM $vmName$randomIdentifier within Vnet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
+      echo "will create VNet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
+      echo "will create VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
     else
-      echo "creating VM $vmName$randomIdentifier without Vnet in RG $existingRgName">>$logFileLocation
+      echo "will create VM $vmName$randomIdentifier in RG $existingRgName">>$logFileLocation
     fi
-    
-    # read your log file
-    clear
-    cat $logFileLocation
 
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
+
+# read your log file
+clear
+cat $logFileLocation
 # </ValidateScriptLogic>
 
 # <FullScript>
 # create Azure resources
 echo "Creating Azure resources">$logFileLocation
-while IFS=, read -r resourceNo location createRG existingRgName createVnet vmImage publicIpSku adminUser vnetAddressPrefix subnetAddressPrefix
+while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
     echo "resourceNo = $resourceNo">>$logFileLocation
-    echo "create RG = $createRG"
-    echo "create Vnet = $createVnet"
     let "randomIdentifier=$RANDOM*$RANDOM"
 
     if [ "$createRG" == "TRUE" ]; then
       echo "creating RG $newRgName$randomIdentifier">>$logFileLocation
       az group create --location $location --name $newRgName$randomIdentifier
       existingRgName=$newRgName$randomIdentifier
+      echo "RG $newRgName$randomIdentifier creation complete">>$logFileLocation
     fi
 
     if [ "$createVnet" == "TRUE" ]; then
-      echo "creating VNet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
-      az network vnet create \    
+      echo "creating VNet $vnetName$randomIdentifier in RG $existingRgName with adrPX $vnetAddressPrefix, snName $subnetName$randomIdentifier and snPXs $subnetAddressPrefixes">>$logFileLocation
+      az network vnet create \
           --name $vnetName$randomIdentifier \
           --resource-group $existingRgName \
           --address-prefix $vnetAddressPrefix \
           --subnet-name $subnetName$randomIdentifier \
-          --subnet-prefixes $subnetAddressPrefix
-
-      echo "creating VM $vmName$randomIdentifier within Vnet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
+          --subnet-prefixes $subnetAddressPrefixes
+      echo "VNet $vnetName$randomIdentifier creation complete">>$logFileLocation
+      
+      echo "creating VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
       az vm create \
           --resource-group $existingRgName \
           --name $vmName$randomIdentifier \
           --image $vmImage \
           --vnet-name $vnetName$randomIdentifier \
+          --subnet $subnetName$randomIdentifier \
           --public-ip-sku $publicIpSku \
           --admin-username $adminUser\
           --admin-password $adminPassword$randomIdentifier
+      echo "VM $vmName$randomIdentifier creation complete">>$logFileLocation
+    
     else
-      echo "creating VM $vmName$randomIdentifier without Vnet in RG $existingRgName">>$logFileLocation
+      
+      echo "creating VM $vmName$randomIdentifier in RG $existingRgName">>$logFileLocation
       az vm create \
           --resource-group $existingRgName \
           --name $vmName$randomIdentifier \
@@ -142,7 +146,13 @@ do
           --public-ip-sku $publicIpSku \
           --admin-username $adminUser\
           --admin-password $adminPassword$randomIdentifier
+      echo "VM $vmName$randomIdentifier creation complete">>$logFileLocation
+    
     fi
 # skip the header line
 done < <(tail -n +2 $setupFileLocation)
+
+# read your log file
+# clear
+cat $logFileLocation
 # </FullScript>
