@@ -11,7 +11,7 @@ resourceGroupName=myResourceGroupName
 snapshotName=mySnapshotName
 
 #Provide Shared Access Signature (SAS) expiry duration in seconds e.g. 3600.
-#Know more about SAS here: https://docs.microsoft.com/en-us/azure/storage/storage-dotnet-shared-access-signature-part-1
+#Know more about SAS here: https://docs.microsoft.com/azure/storage/storage-dotnet-shared-access-signature-part-1
 sasExpiryDuration=3600
 
 #Provide storage account name where you want to copy the snapshot. 

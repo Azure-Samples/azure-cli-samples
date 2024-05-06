@@ -39,5 +39,5 @@ The script will:
 
 <!-- link refs -->
 [Deploying a static site using AZ CLI]: https://www.davepaquette.com/archive/2020/05/10/deploying-a-static-site-to-azure-using-the-az-cli.aspx
-[Add certificates in Key Vault]:https://docs.microsoft.com/en-us/azure/key-vault/certificates/create-certificate-signing-request?tabs=azure-portal#add-certificates-in-key-vault-issued-by-non-partnered-cas
-[Host your domain in Azure DNS]:https://docs.microsoft.com/en-us/azure/dns/dns-delegate-domain-azure-dns
+[Add certificates in Key Vault]:https://docs.microsoft.com/azure/key-vault/certificates/create-certificate-signing-request?tabs=azure-portal#add-certificates-in-key-vault-issued-by-non-partnered-cas
+[Host your domain in Azure DNS]:https://docs.microsoft.com/azure/dns/dns-delegate-domain-azure-dns

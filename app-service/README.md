@@ -63,4 +63,4 @@ The scripts in this directory demonstrate working with [Azure App Service][aas-h
 
 <!-- EXTERNAL -->
 [aas-home]: https://azure.microsoft.com/services/container-registry/
-[azure-cli]: https://learn.microsoft.com/en-us/cli/azure/reference-index
+[azure-cli]: https://learn.microsoft.com/cli/azure/reference-index
