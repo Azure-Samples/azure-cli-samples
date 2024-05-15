@@ -3,11 +3,15 @@
 
 # <VariableBlock>
 # Variable block
+
+# Replace these three variable values with actual values
 subscriptionID=00000000-0000-0000-0000-00000000
-setupFileLocation="myFilePath\myFileName.csv"
+csvFileLocation="myFilePath\myFileName.csv"
 logFileLocation="myFilePath\myLogName.txt"
 
-# These variables are placeholders whose values are replaced from the csv input file, or appended with a random ID.
+# Variable values that contain a prefix can be replaced with the prefix of your choice.
+#   These prefixes have a random ID appended to them in the script.
+# Variable values without a prefix will be overwritten by the contents of your CSV file.
 location=""
 createRG=""
 newRgName="msdocs-rg-"
@@ -25,7 +29,7 @@ publicIpSku=""
 adminUser=""
 adminPassword="msdocs-PW-@"
 
-# set azure subscription 
+# set your azure subscription 
 az account set --subscription $subscriptionID
 # </VariableBlock>
 
@@ -65,7 +69,7 @@ do
       echo "vmAdminPassword = $adminPassword$randomIdentifier"
     fi  
 # skip the header line
-done < <(tail -n +2 $setupFileLocation)
+done < <(tail -n +2 $csvFileLocation)
 # </ValidateFileValues>
 
 # <ValidateScriptLogic>
@@ -89,7 +93,7 @@ do
     fi
 
 # skip the header line
-done < <(tail -n +2 $setupFileLocation)
+done < <(tail -n +2 $csvFileLocation)
 
 # read your log file
 clear
@@ -147,7 +151,7 @@ do
     
     fi
 # skip the header line
-done < <(tail -n +2 $setupFileLocation)
+done < <(tail -n +2 $csvFileLocation)
 
 # read your log file
 # clear
