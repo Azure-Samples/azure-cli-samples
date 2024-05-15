@@ -8,11 +8,11 @@
 # Replace these three variable values with actual values
 [CmdletBinding()]
 param (
-    [string]$csvFileLocation = 'resource-metadataPS.csv'
+    [string]$csvFileLocation = 'myFileName.csv'
 )
 
 $logFileLocation = "myLogFile.txt"
-$subscriptionID = "3618afcd-ea52-4ceb-bb46-53bb962d4e0b"
+$subscriptionID = "00000000-0000-0000-0000-00000000"
 
 # Variable values that contain a prefix can be replaced with the prefix of your choice.
 #   These prefixes have a random ID appended to them in the script.
