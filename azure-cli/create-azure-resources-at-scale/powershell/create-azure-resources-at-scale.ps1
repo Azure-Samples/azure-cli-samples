@@ -1,16 +1,11 @@
-# Run this script in Azure Cloud Shell, PowerShell environment, or PowerShell 7
-# Passed validation in Azure Cloud Shell, PowerShell environment, on 4/25/2024
-
+# Run this script in Azure Cloud Shell's PowerShell environment, or PowerShell 7
+# Passed validation in PowerShell 7 on 2024-05-16
 
 # <VariableBlock>
 # Variable block
 
 # Replace these three variable values with actual values
-[CmdletBinding()]
-param (
-    [string]$csvFileLocation = 'myFileName.csv'
-)
-
+$csvFileLocation = 'myFileName.csv'
 $logFileLocation = "myLogFile.txt"
 $subscriptionID = "00000000-0000-0000-0000-00000000"
 
@@ -42,10 +37,13 @@ $data = Import-Csv $csvFileLocation -delimiter ","
 # </VariableBlock>
 
 # <ValidateFileValues>
+# Validate the CSV file format
+
 # read your imported file
+# the returned table is restricted by the width of your terminal window
 $data | Format-Table
 
-# Validate CSV data values
+# Read select rows in CSV file
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -60,17 +58,17 @@ foreach ($row in $data) {
 	
   # Generate a random ID
   $randomIdentifier = (New-Guid).ToString().Substring(0,8)
-	
+  
   if ($resourceNo -eq "1") {
     Write-Host "resourceNo = $resourceNo"
     Write-Host "location = $location"
+	Write-Host "randomIdentifier = $randomIdentifier"
     Write-Host ""
     
     Write-Host "RESOURCE GROUP INFORMATION:"
     Write-Host "createRG = $createRG"
     if ($createRG -eq "TRUE") {
-        $newRgName = "$newRgName$randomIdentifier"
-        Write-Host "newRGName = $newRgName"
+      Write-Host "newRGName = $newRgName$randomIdentifier"
     }
     else {
         Write-Host "exsitingRgName = $existingRgName"
@@ -91,15 +89,22 @@ foreach ($row in $data) {
     Write-Host "vmName = $vmName$randomIdentifier"
     Write-Host "vmImage = $vmImage"
     Write-Host "vmSku= $publicIpSku"
-    Write-Host "vmAdminUser = $adminUser"
-    Write-Host "vmAdminPassword = $adminPassword$randomIdentifier"
+    if ($adminUser -ne "") {
+	    Write-Host "vmAdminUser = $adminUser"
+      Write-Host "vmAdminPassword = $adminPassword$randomIdentifier"
+	  }
+	else {
+	  Write-Host "SSH keys will be generated."
+	  }
     }
   }
 # </ValidateFileValues>
 
-# <ValidateScriptLogic>  
+# <ValidateScriptLogic>
+# Validate script logic
+
 # Create the log file
-"Validating script" | Out-File -FilePath $logFileLocation
+"SCRIPT LOGIC VALIDATION." | Out-File -FilePath $logFileLocation
 
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
@@ -119,30 +124,32 @@ foreach ($row in $data) {
   # Log resource number
   "" | Out-File -FilePath $logFileLocation -Append
   "resourceNo = $resourceNo" | Out-File -FilePath $logFileLocation -Append
+  "randomIdentifier = $randomIdentifier" | Out-File -FilePath $logFileLocation -Append
   
   # Check if a new resource group should be created
   if ($createRG -eq "TRUE") {
-    "will create RG $newRgName$randomIdentifier" | Out-File -FilePath $logFileLocation -Append
+    "Will create RG $newRgName$randomIdentifier." | Out-File -FilePath $logFileLocation -Append
     $existingRgName = "$newRgName$randomIdentifier"
   }
   
   # Check if a new virtual network should be created
   if ($createVnet -eq "TRUE") {
-    "will create VNet $vnetName$randomIdentifier in RG $existingRgName" | Out-File -FilePath $logFileLocation -Append
-    "will create VM $vmName$randomIdentifier in VNet $vnetName$randomIdentifier in RG $existingRgName" | Out-File -FilePath $logFileLocation -Append
+    "Will create VNet $vnetName$randomIdentifier in RG $existingRgName." | Out-File -FilePath $logFileLocation -Append
+    "Will create VM $vmName$randomIdentifier in VNet $vnetName$randomIdentifier in RG $existingRgName." | Out-File -FilePath $logFileLocation -Append
   } else {
-    "will create VM $vmName$randomIdentifier in RG $existingRgName" | Out-File -FilePath $logFileLocation -Append
+    "Will create VM $vmName$randomIdentifier in RG $existingRgName." | Out-File -FilePath $logFileLocation -Append
   }
 }
 
-# Clear the console and display the log file
-Clear-Host
+# Display the log file
 Get-Content -Path $logFileLocation
 # </ValidateScriptLogic>
 
 # <FullScript>
+# Create Azure resources
+
 # Create the log file
-"Creating Azure resources" | Out-File -FilePath $logFileLocation
+"CREATE AZURE RESOURCES." | Out-File -FilePath $logFileLocation
 
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
@@ -162,27 +169,29 @@ foreach ($row in $data) {
   # Log resource number
   "" | Out-File -FilePath $logFileLocation -Append
   "resourceNo = $resourceNo" | Out-File -FilePath $logFileLocation -Append
+  "randomIdentifier = $randomIdentifier" | Out-File -FilePath $logFileLocation -Append
+  Write-Host "Starting creation of resourceNo $resourceNo at $(Get-Date -format 'u')."
   
   # Check if a new resource group should be created
   if ($createRG -eq "TRUE") {
-    Write-Host "creating RG $newRgName$randomIdentifier" | Out-File -FilePath $logFileLocation -Append
-    az group create --location $location --name $newRgName$randomIdentifier
+    "Creating RG $newRgName$randomIdentifier at $(Get-Date -format 'u')." | Out-File -FilePath $logFileLocation -Append
+    az group create --location $location --name $newRgName$randomIdentifier | Out-File -FilePath $logFileLocation -Append
     $existingRgName = "$newRgName$randomIdentifier"
-    Write-Host "RG $newRgName$randomIdentifier creation complete" | Out-File -FilePath $logFileLocation -Append
+    Write-Host "  RG $newRgName$randomIdentifier creation complete."
     }
   
   # Check if a new virtual network should be created
   if ($createVnet -eq "TRUE") {
-    Write-Host "creating VNet $vnetName$randomIdentifier in RG $existingRgName with adrPX $vnetAddressPrefix, snName $subnetName$randomIdentifier and snPXs $subnetAddressPrefixes" | Out-File -FilePath $logFileLocation -Append
+    "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(Get-Date -format 'u')." | Out-File -FilePath $logFileLocation -Append
     az network vnet create `
         --name $vnetName$randomIdentifier `
         --resource-group $existingRgName `
         --address-prefix $vnetAddressPrefix `
         --subnet-name $subnetName$randomIdentifier `
-        --subnet-prefixes $subnetAddressPrefixes
-    Write-Host "VNet $vnetName$randomIdentifier creation complete" | Out-File -FilePath $logFileLocation -Append
+        --subnet-prefixes $subnetAddressPrefixes | Out-File -FilePath $logFileLocation -Append
+    Write-Host "  VNet $vnetName$randomIdentifier creation complete."
     
-    Write-Host "creating VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName" | Out-File -FilePath $logFileLocation -Append
+    "Creating VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName at $(Get-Date -format 'u')." | Out-File -FilePath $logFileLocation -Append
     az vm create `
         --resource-group $existingRgName `
         --name $vmName$randomIdentifier `
@@ -190,23 +199,22 @@ foreach ($row in $data) {
         --vnet-name $vnetName$randomIdentifier `
         --subnet $subnetName$randomIdentifier `
         --public-ip-sku $publicIpSku `
-        --admin-username $adminUser`
-        --admin-password $adminPassword$randomIdentifier
-    Write-Host "VM $vmName$randomIdentifier creation complete" | Out-File -FilePath $logFileLocation -Append  
+        --generate-ssh-keys | Out-File -FilePath $logFileLocation -Append
+    Write-Host "  VM $vmName$randomIdentifier creation complete." 
   } else {
-    Write-Host "creating VM $vmName$randomIdentifier in RG $existingRgName" | Out-File -FilePath $logFileLocation -Append
+    "Creating VM $vmName$randomIdentifier in RG $existingRgName at $(Get-Date -format 'u')." | Out-File -FilePath $logFileLocation -Append
     az vm create `
         --resource-group $existingRgName `
         --name $vmName$randomIdentifier `
         --image $vmImage `
         --public-ip-sku $publicIpSku `
         --admin-username $adminUser `
-        --admin-password $adminPassword$randomIdentifier
-    Write-Host "VM $vmName$randomIdentifier creation complete" | Out-File -FilePath $logFileLocation -Append
+        --admin-password $adminPassword$randomIdentifier | Out-File -FilePath $logFileLocation -Append
+    Write-Host "  VM $vmName$randomIdentifier creation complete."
   }
 }
 
-# Clear the console and display the log file
+# Clear the console (optional) and display the log file
 # Clear-Host
 Get-Content -Path $logFileLocation
 # </FullScript>

@@ -1,5 +1,5 @@
 resourceNo,location,createRG,exstingRgName,createVnet,vnetAddressPrefix,subnetAddressPrefixes,vmImage,publicIpSku,Adminuser
-1,eastus,TRUE,,TRUE,10.0.0.0/16,10.0.0.0/24,Ubuntu2204,standard,john-smith
+1,eastus,TRUE,,TRUE,10.0.0.0/16,10.0.0.0/24,Ubuntu2204,standard,,
 2,eastus2,TRUE,,FALSE,,,Debian11,standard,alex-smith
 3,southcentralus,FALSE,msdocs-rg-671528884,FALSE,,,Ubuntu2204,standard,jan-smith
-[empty line]
+[empty line for Bash]
