@@ -9,7 +9,6 @@ $subscriptionID = "00000000-0000-0000-0000-00000000"
 $csvFileLocation = "myFilePath\myFileName.csv"
 $logFileLocation = "myFilePath\myLogName.txt"
 
-
 # Variable values that contain a prefix can be replaced with the prefix of your choice.
 #   These prefixes have a random ID appended to them in the script.
 # Variable values without a prefix will be overwritten by the contents of your CSV file.
@@ -40,7 +39,7 @@ $data = Import-Csv $csvFileLocation -delimiter ","
 # <ValidateFileValues>
 # Validate the CSV file format
 
-# read your imported file
+# take a look at the CSV contents
 # the returned table is restricted by the width of your terminal window
 $data | Format-Table
 
@@ -123,7 +122,7 @@ foreach ($row in $data) {
   # Generate a random ID
   $randomIdentifier = (New-Guid).ToString().Substring(0,8)
   
-  # Log resource number
+  # Log resource number and random ID
   "" | Out-File -FilePath $logFileLocation -Append
   "resourceNo = $resourceNo" | Out-File -FilePath $logFileLocation -Append
   "randomIdentifier = $randomIdentifier" | Out-File -FilePath $logFileLocation -Append
@@ -168,7 +167,7 @@ foreach ($row in $data) {
   # Generate a random ID
   $randomIdentifier = (New-Guid).ToString().Substring(0,8)
   
-  # Log resource number
+  # Log resource number, random ID and display start time
   "" | Out-File -FilePath $logFileLocation -Append
   "resourceNo = $resourceNo" | Out-File -FilePath $logFileLocation -Append
   "randomIdentifier = $randomIdentifier" | Out-File -FilePath $logFileLocation -Append
