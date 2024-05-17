@@ -34,6 +34,8 @@ az account set --subscription $subscriptionID
 # </VariableBlock>
 
 # <ValidateFileValues>
+# Validate the CSV file format
+
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
     let "randomIdentifier=$RANDOM*$RANDOM"
@@ -44,6 +46,7 @@ do
 
       echo "RESOURCE GROUP INFORMATION:"
       echo "createRG = $createRG"
+      echo "exsitingRgName = $existingRgName"
       if [ "$createRG" = "TRUE" ]; then 
         echo "newRGName = $newRgName$randomIdentifier"
       else
@@ -64,16 +67,20 @@ do
       echo "VM INFORMATION:"
       echo "vmName = $vmName$randomIdentifier"
       echo "vmImage = $vmImage"
-      echo "vmSku= $publicIpSku"
-      echo "vmAdminUser = $adminUser"
-      echo "vmAdminPassword = $adminPassword$randomIdentifier"
+      echo "vmSku = $publicIpSku"
+      if [ `expr length "$adminUser"` == "1" ]; then
+        echo "SSH keys will be generated."
+      else
+        echo "vmAdminUser = $adminUser"
+        echo "vmAdminPassword = $adminPassword$randomIdentifier"        
+      fi
     fi  
 # skip the header line
 done < <(tail -n +2 $csvFileLocation)
 # </ValidateFileValues>
 
 # <ValidateScriptLogic>
-# validate script logic
+# Validate script logic
 echo "Validating script">$logFileLocation
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
@@ -81,51 +88,56 @@ do
     let "randomIdentifier=$RANDOM*$RANDOM"
     
     if [ "$createRG" == "TRUE" ]; then
-      echo "will create RG $newRgName$randomIdentifier">>$logFileLocation
+      echo "Will create RG $newRgName$randomIdentifier.">>$logFileLocation
       existingRgName=$newRgName$randomIdentifier
     fi
     
     if [ "$createVnet" == "TRUE" ]; then
-      echo "will create VNet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
-      echo "will create VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
+      echo "Will create VNet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
+      echo "Will create VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
     else
-      echo "will create VM $vmName$randomIdentifier in RG $existingRgName">>$logFileLocation
+      echo "Will create VM $vmName$randomIdentifier in RG $existingRgName.">>$logFileLocation
     fi
 
 # skip the header line
 done < <(tail -n +2 $csvFileLocation)
 
 # read your log file
-clear
 cat $logFileLocation
 # </ValidateScriptLogic>
 
 # <FullScript>
-# create Azure resources
-echo "Creating Azure resources">$logFileLocation
+# Create Azure resources
+
+# Create the log file
+echo "CREATE AZURE RESOURCES.">$logFileLocation
+
+# Loop through the CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
-    echo "resourceNo = $resourceNo">>$logFileLocation
     let "randomIdentifier=$RANDOM*$RANDOM"
+    echo "resourceNo = $resourceNo">>$logFileLocation
+    echo "randomIdentifier = $randomIdentifier">>$logFileLocation
+    echo "Starting creation of resourceNo $resourceNo at $(date +"%Y-%m-%d %T")."
 
     if [ "$createRG" == "TRUE" ]; then
-      echo "creating RG $newRgName$randomIdentifier">>$logFileLocation
-      az group create --location $location --name $newRgName$randomIdentifier
+      echo "Creating RG $newRgName$randomIdentifier at $(date +"%Y-%m-%d %T").">>$logFileLocation
+      az group create --location $location --name $newRgName$randomIdentifier >>$logFileLocation
       existingRgName=$newRgName$randomIdentifier
-      echo "RG $newRgName$randomIdentifier creation complete">>$logFileLocation
+      echo "  RG $newRgName$randomIdentifier creation complete"
     fi
 
     if [ "$createVnet" == "TRUE" ]; then
-      echo "creating VNet $vnetName$randomIdentifier in RG $existingRgName with adrPX $vnetAddressPrefix, snName $subnetName$randomIdentifier and snPXs $subnetAddressPrefixes">>$logFileLocation
+      echo "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
       az network vnet create \
           --name $vnetName$randomIdentifier \
           --resource-group $existingRgName \
           --address-prefix $vnetAddressPrefix \
           --subnet-name $subnetName$randomIdentifier \
-          --subnet-prefixes $subnetAddressPrefixes
-      echo "VNet $vnetName$randomIdentifier creation complete">>$logFileLocation
+          --subnet-prefixes $subnetAddressPrefixes >>$logFileLocation
+      echo "  VNet $vnetName$randomIdentifier creation complete"
       
-      echo "creating VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName">>$logFileLocation
+      echo "Creating VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
       az vm create \
           --resource-group $existingRgName \
           --name $vmName$randomIdentifier \
@@ -133,27 +145,26 @@ do
           --vnet-name $vnetName$randomIdentifier \
           --subnet $subnetName$randomIdentifier \
           --public-ip-sku $publicIpSku \
-          --admin-username $adminUser\
-          --admin-password $adminPassword$randomIdentifier
-      echo "VM $vmName$randomIdentifier creation complete">>$logFileLocation
+          --generate-ssh-keys >>$logFileLocation
+      echo "  VM $vmName$randomIdentifier creation complete"
     
     else
       
-      echo "creating VM $vmName$randomIdentifier in RG $existingRgName">>$logFileLocation
+      echo "Creating VM $vmName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
       az vm create \
           --resource-group $existingRgName \
           --name $vmName$randomIdentifier \
           --image $vmImage \
           --public-ip-sku $publicIpSku \
           --admin-username $adminUser\
-          --admin-password $adminPassword$randomIdentifier
-      echo "VM $vmName$randomIdentifier creation complete">>$logFileLocation
+          --admin-password $adminPassword$randomIdentifier >>$logFileLocation
+      echo "  VM $vmName$randomIdentifier creation complete"
     
     fi
 # skip the header line
 done < <(tail -n +2 $csvFileLocation)
 
-# read your log file
+# Clear the console (optionao) and display the log file
 # clear
 cat $logFileLocation
 # </FullScript>
