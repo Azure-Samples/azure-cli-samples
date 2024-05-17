@@ -58,7 +58,9 @@ foreach ($row in $data) {
 	
   # Generate a random ID
   $randomIdentifier = (New-Guid).ToString().Substring(0,8)
-  
+
+  # Return the values for the first data row
+  # Change the resourceNo to check different scenarios in your CSV
   if ($resourceNo -eq "1") {
     Write-Host "resourceNo = $resourceNo"
     Write-Host "location = $location"
@@ -133,7 +135,7 @@ foreach ($row in $data) {
     $existingRgName = "$newRgName$randomIdentifier"
   }
   
-  # Check if a new virtual network should be created
+  # Check if a new virtual network should be created and create VM
   if ($createVnet -eq "TRUE") {
     "Will create VNet $vnetName$randomIdentifier in RG $existingRgName." | Out-File -FilePath $logFileLocation -Append
     "Will create VM $vmName$randomIdentifier in VNet $vnetName$randomIdentifier in RG $existingRgName." | Out-File -FilePath $logFileLocation -Append
@@ -152,6 +154,7 @@ Get-Content -Path $logFileLocation
 # Create the log file
 "CREATE AZURE RESOURCES." | Out-File -FilePath $logFileLocation
 
+# Loop through the CSV file
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -181,7 +184,7 @@ foreach ($row in $data) {
     Write-Host "  RG $newRgName$randomIdentifier creation complete."
     }
   
-  # Check if a new virtual network should be created
+  # Check if a new virtual network should be created and create VM
   if ($createVnet -eq "TRUE") {
     "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(Get-Date -format 'u')." | Out-File -FilePath $logFileLocation -Append
     az network vnet create `
