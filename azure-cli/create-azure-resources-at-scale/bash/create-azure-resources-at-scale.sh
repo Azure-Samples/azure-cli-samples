@@ -29,9 +29,6 @@ publicIpSku=""
 adminUser=""
 adminPassword="msdocs-PW-@"
 
-abc="abc"
-xyz="xyz"
-
 # set your azure subscription 
 az account set --subscription $subscriptionID
 # </VariableBlock>
