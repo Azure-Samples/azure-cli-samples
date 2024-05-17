@@ -36,46 +36,51 @@ az account set --subscription $subscriptionID
 # <ValidateFileValues>
 # Validate the CSV file format
 
+# take a look at the CSV contents
+cat $csvFileLocation
+
 # Read select rows in CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
-    let "randomIdentifier=$RANDOM*$RANDOM"
-    if [ "$resourceNo" = "1" ]; then
-      echo "resourceNo = $resourceNo"
-      echo "location = $location"
-      echo "randomIdentifier = $randomIdentifier"
-      echo ""
+  # Generate a random ID
+  let "randomIdentifier=$RANDOM*$RANDOM"
+  
+  if [ "$resourceNo" = "1" ]; then
+    echo "resourceNo = $resourceNo"
+    echo "location = $location"
+    echo "randomIdentifier = $randomIdentifier"
+    echo ""
+    
+    echo "RESOURCE GROUP INFORMATION:"
+    echo "createRG = $createRG"
+    if [ "$createRG" = "TRUE" ]; then 
+      echo "newRGName = $newRgName$randomIdentifier"
+    else
+      echo "exsitingRgName = $existingRgName"
+    fi
+    echo ""
 
-      echo "RESOURCE GROUP INFORMATION:"
-      echo "createRG = $createRG"
-      if [ "$createRG" = "TRUE" ]; then 
-        echo "newRGName = $newRgName$randomIdentifier"
-      else
-        echo "exsitingRgName = $existingRgName"
-      fi
-      echo ""
+    echo "VNET INFORMATION:"
+    echo "createVnet = $createVnet"
+    if [ "$createVnet" = "TRUE" ]; then 
+      echo "vnetName = $vnetName$randomIdentifier"
+      echo "subnetName = $subnetName$randomIdentifier"
+      echo "vnetAddressPrefix = $vnetAddressPrefix"
+      echo "subnetAddressPrefixes = $subnetAddressPrefixes"
+    fi
+    echo ""
 
-      echo "VNET INFORMATION:"
-      echo "createVnet = $createVnet"
-      if [ "$createVnet" = "TRUE" ]; then 
-        echo "vnetName = $vnetName$randomIdentifier"
-        echo "subnetName = $subnetName$randomIdentifier"
-        echo "vnetAddressPrefix = $vnetAddressPrefix"
-        echo "subnetAddressPrefixes = $subnetAddressPrefixes"
-      fi
-      echo ""
-
-      echo "VM INFORMATION:"
-      echo "vmName = $vmName$randomIdentifier"
-      echo "vmImage = $vmImage"
-      echo "vmSku = $publicIpSku"
-      if [ `expr length "$adminUser"` == "1" ]; then
-        echo "SSH keys will be generated."
-      else
-        echo "vmAdminUser = $adminUser"
-        echo "vmAdminPassword = $adminPassword$randomIdentifier"        
-      fi
-    fi  
+    echo "VM INFORMATION:"
+    echo "vmName = $vmName$randomIdentifier"
+    echo "vmImage = $vmImage"
+    echo "vmSku = $publicIpSku"
+    if [ `expr length "$adminUser"` == "1" ]; then
+      echo "SSH keys will be generated."
+    else
+      echo "vmAdminUser = $adminUser"
+      echo "vmAdminPassword = $adminPassword$randomIdentifier"        
+    fi
+  fi  
 # skip the header line
 done < <(tail -n +2 $csvFileLocation)
 # </ValidateFileValues>
@@ -89,25 +94,30 @@ echo "SCRIPT LOGIC VALIDATION.">$logFileLocation
 # Loop through the CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
-    echo "resourceNo = $resourceNo">>$logFileLocation
-    let "randomIdentifier=$RANDOM*$RANDOM"
+  # Generate a random ID
+  let "randomIdentifier=$RANDOM*$RANDOM"
     
-    if [ "$createRG" == "TRUE" ]; then
-      echo "Will create RG $newRgName$randomIdentifier.">>$logFileLocation
-      existingRgName=$newRgName$randomIdentifier
-    fi
-    
-    if [ "$createVnet" == "TRUE" ]; then
-      echo "Will create VNet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
-      echo "Will create VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
-    else
-      echo "Will create VM $vmName$randomIdentifier in RG $existingRgName.">>$logFileLocation
-    fi
+  # Log resource number and random ID
+  echo "resourceNo = $resourceNo">>$logFileLocation
+  echo "randomIdentifier = $randomIdentifier">>$logFileLocation
 
-# skip the header line
+  # Check if a new resource group should be created
+  if [ "$createRG" == "TRUE" ]; then
+    echo "Will create RG $newRgName$randomIdentifier.">>$logFileLocation
+    existingRgName=$newRgName$randomIdentifier
+  fi
+
+  # Check if a new virtual network should be created.
+  if [ "$createVnet" == "TRUE" ]; then
+    echo "Will create VNet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
+    echo "Will create VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
+  else
+    echo "Will create VM $vmName$randomIdentifier in RG $existingRgName.">>$logFileLocation
+  fi
+# Skip the header line.
 done < <(tail -n +2 $csvFileLocation)
 
-# read your log file
+# Display the log file.
 cat $logFileLocation
 # </ValidateScriptLogic>
 
@@ -120,11 +130,15 @@ echo "CREATE AZURE RESOURCES.">$logFileLocation
 # Loop through the CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
+  # Generate a random ID
   let "randomIdentifier=$RANDOM*$RANDOM"
+
+  # Log resource number, random ID and display start time
   echo "resourceNo = $resourceNo">>$logFileLocation
   echo "randomIdentifier = $randomIdentifier">>$logFileLocation
   echo "Starting creation of resourceNo $resourceNo at $(date +"%Y-%m-%d %T")."
 
+  # Check if a new resource group should be created
   if [ "$createRG" == "TRUE" ]; then
     echo "Creating RG $newRgName$randomIdentifier at $(date +"%Y-%m-%d %T").">>$logFileLocation
     az group create --location $location --name $newRgName$randomIdentifier >>$logFileLocation
@@ -132,6 +146,7 @@ do
     echo "  RG $newRgName$randomIdentifier creation complete"
   fi
 
+   # Check if a new virtual network should be created
   if [ "$createVnet" == "TRUE" ]; then
     echo "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
     az network vnet create \
