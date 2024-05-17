@@ -44,7 +44,9 @@ while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetA
 do
   # Generate a random ID
   let "randomIdentifier=$RANDOM*$RANDOM"
-  
+
+  # Return the values for the first data row
+  # Change the resourceNo to check different scenarios in your CSV
   if [ "$resourceNo" = "1" ]; then
     echo "resourceNo = $resourceNo"
     echo "location = $location"
@@ -107,7 +109,7 @@ do
     existingRgName=$newRgName$randomIdentifier
   fi
 
-  # Check if a new virtual network should be created.
+  # Check if a new virtual network should be created and create VM
   if [ "$createVnet" == "TRUE" ]; then
     echo "Will create VNet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
     echo "Will create VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
@@ -146,7 +148,7 @@ do
     echo "  RG $newRgName$randomIdentifier creation complete"
   fi
 
-   # Check if a new virtual network should be created
+   # Check if a new virtual network should be created and create VM
   if [ "$createVnet" == "TRUE" ]; then
     echo "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
     az network vnet create \
