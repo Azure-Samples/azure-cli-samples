@@ -36,17 +36,18 @@ az account set --subscription $subscriptionID
 # <ValidateFileValues>
 # Validate the CSV file format
 
+# Read select rows in CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
     let "randomIdentifier=$RANDOM*$RANDOM"
     if [ "$resourceNo" = "1" ]; then
       echo "resourceNo = $resourceNo"
       echo "location = $location"
+      echo "randomIdentifier = $randomIdentifier"
       echo ""
 
       echo "RESOURCE GROUP INFORMATION:"
       echo "createRG = $createRG"
-      echo "exsitingRgName = $existingRgName"
       if [ "$createRG" = "TRUE" ]; then 
         echo "newRGName = $newRgName$randomIdentifier"
       else
@@ -81,7 +82,11 @@ done < <(tail -n +2 $csvFileLocation)
 
 # <ValidateScriptLogic>
 # Validate script logic
-echo "Validating script">$logFileLocation
+
+# Create the log file
+echo "SCRIPT LOGIC VALIDATION.">$logFileLocation
+
+# Loop through the CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
     echo "resourceNo = $resourceNo">>$logFileLocation
@@ -115,52 +120,49 @@ echo "CREATE AZURE RESOURCES.">$logFileLocation
 # Loop through the CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
-    let "randomIdentifier=$RANDOM*$RANDOM"
-    echo "resourceNo = $resourceNo">>$logFileLocation
-    echo "randomIdentifier = $randomIdentifier">>$logFileLocation
-    echo "Starting creation of resourceNo $resourceNo at $(date +"%Y-%m-%d %T")."
+  let "randomIdentifier=$RANDOM*$RANDOM"
+  echo "resourceNo = $resourceNo">>$logFileLocation
+  echo "randomIdentifier = $randomIdentifier">>$logFileLocation
+  echo "Starting creation of resourceNo $resourceNo at $(date +"%Y-%m-%d %T")."
 
-    if [ "$createRG" == "TRUE" ]; then
-      echo "Creating RG $newRgName$randomIdentifier at $(date +"%Y-%m-%d %T").">>$logFileLocation
-      az group create --location $location --name $newRgName$randomIdentifier >>$logFileLocation
-      existingRgName=$newRgName$randomIdentifier
-      echo "  RG $newRgName$randomIdentifier creation complete"
-    fi
+  if [ "$createRG" == "TRUE" ]; then
+    echo "Creating RG $newRgName$randomIdentifier at $(date +"%Y-%m-%d %T").">>$logFileLocation
+    az group create --location $location --name $newRgName$randomIdentifier >>$logFileLocation
+    existingRgName=$newRgName$randomIdentifier
+    echo "  RG $newRgName$randomIdentifier creation complete"
+  fi
 
-    if [ "$createVnet" == "TRUE" ]; then
-      echo "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
-      az network vnet create \
-          --name $vnetName$randomIdentifier \
-          --resource-group $existingRgName \
-          --address-prefix $vnetAddressPrefix \
-          --subnet-name $subnetName$randomIdentifier \
-          --subnet-prefixes $subnetAddressPrefixes >>$logFileLocation
-      echo "  VNet $vnetName$randomIdentifier creation complete"
-      
-      echo "Creating VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
-      az vm create \
-          --resource-group $existingRgName \
-          --name $vmName$randomIdentifier \
-          --image $vmImage \
-          --vnet-name $vnetName$randomIdentifier \
-          --subnet $subnetName$randomIdentifier \
-          --public-ip-sku $publicIpSku \
-          --generate-ssh-keys >>$logFileLocation
-      echo "  VM $vmName$randomIdentifier creation complete"
+  if [ "$createVnet" == "TRUE" ]; then
+    echo "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
+    az network vnet create \
+        --name $vnetName$randomIdentifier \
+        --resource-group $existingRgName \
+        --address-prefix $vnetAddressPrefix \
+        --subnet-name $subnetName$randomIdentifier \
+        --subnet-prefixes $subnetAddressPrefixes >>$logFileLocation
+    echo "  VNet $vnetName$randomIdentifier creation complete"
     
-    else
-      
-      echo "Creating VM $vmName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
-      az vm create \
-          --resource-group $existingRgName \
-          --name $vmName$randomIdentifier \
-          --image $vmImage \
-          --public-ip-sku $publicIpSku \
-          --admin-username $adminUser\
-          --admin-password $adminPassword$randomIdentifier >>$logFileLocation
-      echo "  VM $vmName$randomIdentifier creation complete"
-    
-    fi
+    echo "Creating VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
+    az vm create \
+        --resource-group $existingRgName \
+        --name $vmName$randomIdentifier \
+        --image $vmImage \
+        --vnet-name $vnetName$randomIdentifier \
+        --subnet $subnetName$randomIdentifier \
+        --public-ip-sku $publicIpSku \
+        --generate-ssh-keys >>$logFileLocation
+    echo "  VM $vmName$randomIdentifier creation complete"
+  else
+    echo "Creating VM $vmName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
+    az vm create \
+        --resource-group $existingRgName \
+        --name $vmName$randomIdentifier \
+        --image $vmImage \
+        --public-ip-sku $publicIpSku \
+        --admin-username $adminUser\
+        --admin-password $adminPassword$randomIdentifier >>$logFileLocation
+    echo "  VM $vmName$randomIdentifier creation complete"    
+  fi
 # skip the header line
 done < <(tail -n +2 $csvFileLocation)
 
