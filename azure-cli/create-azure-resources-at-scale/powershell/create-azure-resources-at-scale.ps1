@@ -5,9 +5,10 @@
 # Variable block
 
 # Replace these three variable values with actual values
-$csvFileLocation = 'myFileName.csv'
-$logFileLocation = "myLogFile.txt"
 $subscriptionID = "00000000-0000-0000-0000-00000000"
+$csvFileLocation = "myFilePath\myFileName.csv"
+$logFileLocation = "myFilePath\myLogName.txt"
+
 
 # Variable values that contain a prefix can be replaced with the prefix of your choice.
 #   These prefixes have a random ID appended to them in the script.
@@ -62,7 +63,7 @@ foreach ($row in $data) {
   if ($resourceNo -eq "1") {
     Write-Host "resourceNo = $resourceNo"
     Write-Host "location = $location"
-	Write-Host "randomIdentifier = $randomIdentifier"
+    Write-Host "randomIdentifier = $randomIdentifier"
     Write-Host ""
     
     Write-Host "RESOURCE GROUP INFORMATION:"
@@ -90,12 +91,12 @@ foreach ($row in $data) {
     Write-Host "vmImage = $vmImage"
     Write-Host "vmSku= $publicIpSku"
     if ($adminUser -ne "") {
-	    Write-Host "vmAdminUser = $adminUser"
+      Write-Host "vmAdminUser = $adminUser"
       Write-Host "vmAdminPassword = $adminPassword$randomIdentifier"
-	  }
-	else {
-	  Write-Host "SSH keys will be generated."
-	  }
+      }
+    else {
+      Write-Host "SSH keys will be generated."
+      }
     }
   }
 # </ValidateFileValues>
@@ -106,6 +107,7 @@ foreach ($row in $data) {
 # Create the log file
 "SCRIPT LOGIC VALIDATION." | Out-File -FilePath $logFileLocation
 
+# Loop through the CSV file
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
