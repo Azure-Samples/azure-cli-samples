@@ -2,7 +2,7 @@
 # Passed validation in Azure Cloud Shell, PowerShell environment, on 4/25/2024
 
 
-# <VariableBlock>
+# <step1>
 # Variable block
 
 # Replace these three variable values with actual values
@@ -34,18 +34,20 @@ $publicIpSku=""
 $adminUser=""
 $adminPassword="msdocs-PW-@"
 
-# set your azure subscription 
+# Set your Azure subscription 
 az account set --subscription $subscriptionID
 
-# import your CSV data
+# Import your CSV data
 $data = Import-Csv $csvFileLocation -delimiter ","
-# </VariableBlock>
+# </step1>
 
-# <ValidateFileValues>
-# read your imported file
+# <step2>
+# Verify CSV columns are being read correctly
+
+# Take a look at the CSV contents
 $data | Format-Table
 
-# Validate CSV data values
+# Validate select CSV row values
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -95,12 +97,15 @@ foreach ($row in $data) {
     Write-Host "vmAdminPassword = $adminPassword$randomIdentifier"
     }
   }
-# </ValidateFileValues>
+# </step2>
 
-# <ValidateScriptLogic>  
+# <step3>
+# Validate script logic
+
 # Create the log file
 "Validating script" | Out-File -FilePath $logFileLocation
 
+# Loop through each row in the CSV file
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -116,9 +121,10 @@ foreach ($row in $data) {
   # Generate a random ID
   $randomIdentifier = (New-Guid).ToString().Substring(0,8)
   
-  # Log resource number
+  # Log resource number and random ID
   "" | Out-File -FilePath $logFileLocation -Append
   "resourceNo = $resourceNo" | Out-File -FilePath $logFileLocation -Append
+  "randomIdentifier = $randomIdentifier" | Out-File -FilePath $logFileLocation -Append
   
   # Check if a new resource group should be created
   if ($createRG -eq "TRUE") {
@@ -126,7 +132,7 @@ foreach ($row in $data) {
     $existingRgName = "$newRgName$randomIdentifier"
   }
   
-  # Check if a new virtual network should be created
+  # Check if a new virtual network should be created, then create a VM
   if ($createVnet -eq "TRUE") {
     "will create VNet $vnetName$randomIdentifier in RG $existingRgName" | Out-File -FilePath $logFileLocation -Append
     "will create VM $vmName$randomIdentifier in VNet $vnetName$randomIdentifier in RG $existingRgName" | Out-File -FilePath $logFileLocation -Append
@@ -135,15 +141,18 @@ foreach ($row in $data) {
   }
 }
 
-# Clear the console and display the log file
-Clear-Host
+# Clear the console (optional) and display the log file
+# Clear-Host
 Get-Content -Path $logFileLocation
-# </ValidateScriptLogic>
+# </step3>
 
-# <FullScript>
+# <step4>
+# Create Azure resources
+
 # Create the log file
 "Creating Azure resources" | Out-File -FilePath $logFileLocation
 
+# Loop through each CSV row
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -159,9 +168,11 @@ foreach ($row in $data) {
   # Generate a random ID
   $randomIdentifier = (New-Guid).ToString().Substring(0,8)
   
-  # Log resource number
+  # Log resource number, random ID and display start time
   "" | Out-File -FilePath $logFileLocation -Append
   "resourceNo = $resourceNo" | Out-File -FilePath $logFileLocation -Append
+  "randomIdentifier = $randomIdentifier" | Out-File -FilePath $logFileLocation -Append
+  Write-Host "Starting creation of resourceNo $resourceNo at $(date +"%Y-%m-%d %T")."
   
   # Check if a new resource group should be created
   if ($createRG -eq "TRUE") {
@@ -171,7 +182,7 @@ foreach ($row in $data) {
     Write-Host "RG $newRgName$randomIdentifier creation complete" | Out-File -FilePath $logFileLocation -Append
     }
   
-  # Check if a new virtual network should be created
+  # Check if a new virtual network should be created, then create the VM
   if ($createVnet -eq "TRUE") {
     Write-Host "creating VNet $vnetName$randomIdentifier in RG $existingRgName with adrPX $vnetAddressPrefix, snName $subnetName$randomIdentifier and snPXs $subnetAddressPrefixes" | Out-File -FilePath $logFileLocation -Append
     az network vnet create `
@@ -206,7 +217,7 @@ foreach ($row in $data) {
   }
 }
 
-# Clear the console and display the log file
+# Clear the console (optional) and display the log file
 # Clear-Host
 Get-Content -Path $logFileLocation
-# </FullScript>
+# </step4>
