@@ -1,7 +1,7 @@
 # Run this script in Azure Cloud Shell's PowerShell environment, or PowerShell 7
 # Passed validation in PowerShell 7 on 2024-05-16
 
-# <VariableBlock>
+# <step1>
 # Variable block
 
 # Replace these three variable values with actual values
@@ -29,21 +29,21 @@ $publicIpSku=""
 $adminUser=""
 $adminPassword="msdocs-PW-@"
 
-# set your azure subscription 
+# Set your azure subscription 
 az account set --subscription $subscriptionID
 
-# import your CSV data
+# Import your CSV data
 $data = Import-Csv $csvFileLocation -delimiter ","
-# </VariableBlock>
+# </step1>
 
-# <ValidateFileValues>
-# Validate the CSV file format
+# <step2>
+# Verify CSV columns are being read correctly
 
-# take a look at the CSV contents
-# the returned table is restricted by the width of your terminal window
+# Take a look at the CSV contents
+# The returned table is restricted by the width of your terminal window
 $data | Format-Table
 
-# Read select rows in CSV file
+# Validate select CSV row values
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -60,7 +60,7 @@ foreach ($row in $data) {
   $randomIdentifier = (New-Guid).ToString().Substring(0,8)
 
   # Return the values for the first data row
-  # Change the resourceNo to check different scenarios in your CSV
+  # Change the $resourceNo to check different scenarios in your CSV
   if ($resourceNo -eq "1") {
     Write-Host "resourceNo = $resourceNo"
     Write-Host "location = $location"
@@ -100,15 +100,15 @@ foreach ($row in $data) {
       }
     }
   }
-# </ValidateFileValues>
+# </step2>
 
-# <ValidateScriptLogic>
+# <step3>
 # Validate script logic
 
 # Create the log file
 "SCRIPT LOGIC VALIDATION." | Out-File -FilePath $logFileLocation
 
-# Loop through the CSV file
+# Loop through each row in the CSV file
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -135,7 +135,7 @@ foreach ($row in $data) {
     $existingRgName = "$newRgName$randomIdentifier"
   }
   
-  # Check if a new virtual network should be created and create VM
+  # Check if a new virtual network should be created, then create the VM
   if ($createVnet -eq "TRUE") {
     "Will create VNet $vnetName$randomIdentifier in RG $existingRgName." | Out-File -FilePath $logFileLocation -Append
     "Will create VM $vmName$randomIdentifier in VNet $vnetName$randomIdentifier in RG $existingRgName." | Out-File -FilePath $logFileLocation -Append
@@ -146,15 +146,15 @@ foreach ($row in $data) {
 
 # Display the log file
 Get-Content -Path $logFileLocation
-# </ValidateScriptLogic>
+# </step3>
 
-# <FullScript>
+# <step4>
 # Create Azure resources
 
 # Create the log file
 "CREATE AZURE RESOURCES." | Out-File -FilePath $logFileLocation
 
-# Loop through the CSV file
+# Loop through each CSV row
 foreach ($row in $data) {
   $resourceNo = $row.resourceNo
   $location = $row.location
@@ -184,7 +184,7 @@ foreach ($row in $data) {
     Write-Host "  RG $newRgName$randomIdentifier creation complete."
     }
   
-  # Check if a new virtual network should be created and create VM
+  # Check if a new virtual network should be created, then create the VM
   if ($createVnet -eq "TRUE") {
     "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(Get-Date -format 'u')." | Out-File -FilePath $logFileLocation -Append
     az network vnet create `
@@ -221,4 +221,4 @@ foreach ($row in $data) {
 # Clear the console (optional) and display the log file
 # Clear-Host
 Get-Content -Path $logFileLocation
-# </FullScript>
+# </step4>
