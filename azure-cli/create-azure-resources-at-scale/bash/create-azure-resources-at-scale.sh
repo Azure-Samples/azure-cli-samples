@@ -46,7 +46,7 @@ do
   let "randomIdentifier=$RANDOM*$RANDOM"
 
   # Return the values for the first data row
-  # Change the resourceNo to check different scenarios in your CSV
+  # Change the $resourceNo to check different scenarios in your CSV
   if [ "$resourceNo" = "1" ]; then
     echo "resourceNo = $resourceNo"
     echo "location = $location"
@@ -119,8 +119,8 @@ do
 # Skip the header line.
 done < <(tail -n +2 $csvFileLocation)
 
-# Clear the console (optional) and display the log file
-# Clear
+# Clear the console and display the log file
+Clear
 cat $logFileLocation
 # </step3>
 
