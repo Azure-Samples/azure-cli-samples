@@ -103,7 +103,7 @@ foreach ($row in $data) {
 # Validate script logic
 
 # Create the log file
-"Validating script" | Out-File -FilePath $logFileLocation
+"SCRIPT LOGIC VALIDATION." | Out-File -FilePath $logFileLocation
 
 # Loop through each row in the CSV file
 foreach ($row in $data) {
@@ -150,7 +150,7 @@ Get-Content -Path $logFileLocation
 # Create Azure resources
 
 # Create the log file
-"Creating Azure resources" | Out-File -FilePath $logFileLocation
+"CREATE AZURE RESOURCES." | Out-File -FilePath $logFileLocation
 
 # Loop through each CSV row
 foreach ($row in $data) {
@@ -172,7 +172,7 @@ foreach ($row in $data) {
   "" | Out-File -FilePath $logFileLocation -Append
   "resourceNo = $resourceNo" | Out-File -FilePath $logFileLocation -Append
   "randomIdentifier = $randomIdentifier" | Out-File -FilePath $logFileLocation -Append
-  Write-Host "Starting creation of resourceNo $resourceNo at $(date +"%Y-%m-%d %T")."
+  Write-Host "Starting creation of resourceNo $resourceNo at $(Get-Date -format 'u')."
   
   # Check if a new resource group should be created
   if ($createRG -eq "TRUE") {
