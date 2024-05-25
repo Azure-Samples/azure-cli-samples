@@ -1,7 +1,7 @@
 #!/bin/bash
 # Passed validation in Ubuntu 22.04.3 LTS on 4/29/2024
 
-# <VariableBlock>
+# <step1>
 # Variable block
 
 # Replace these three variable values with actual values
@@ -29,17 +29,17 @@ publicIpSku=""
 adminUser=""
 adminPassword="msdocs-PW-@"
 
-# set your azure subscription 
+# Set your Azure subscription 
 az account set --subscription $subscriptionID
-# </VariableBlock>
+# </step1>
 
-# <ValidateFileValues>
-# Validate the CSV file format
+# <step2>
+# Verify CSV columns are being read correctly
 
-# take a look at the CSV contents
+# Take a look at the CSV contents
 cat $csvFileLocation
 
-# Read select rows in CSV file
+# Validate select CSV row values
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
   # Generate a random ID
@@ -85,15 +85,15 @@ do
   fi  
 # skip the header line
 done < <(tail -n +2 $csvFileLocation)
-# </ValidateFileValues>
+# </step2>
 
-# <ValidateScriptLogic>
+# <step3>
 # Validate script logic
 
 # Create the log file
 echo "SCRIPT LOGIC VALIDATION.">$logFileLocation
 
-# Loop through the CSV file
+# Loop through each row in the CSV file
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
   # Generate a random ID
@@ -109,7 +109,7 @@ do
     existingRgName=$newRgName$randomIdentifier
   fi
 
-  # Check if a new virtual network should be created and create VM
+  # Check if a new virtual network should be created, then create the VM
   if [ "$createVnet" == "TRUE" ]; then
     echo "Will create VNet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
     echo "Will create VM $vmName$randomIdentifier in Vnet $vnetName$randomIdentifier in RG $existingRgName.">>$logFileLocation
@@ -119,17 +119,18 @@ do
 # Skip the header line.
 done < <(tail -n +2 $csvFileLocation)
 
-# Display the log file.
+# Clear the console (optional) and display the log file
+# Clear
 cat $logFileLocation
-# </ValidateScriptLogic>
+# </step3>
 
-# <FullScript>
+# <step4>
 # Create Azure resources
 
 # Create the log file
 echo "CREATE AZURE RESOURCES.">$logFileLocation
 
-# Loop through the CSV file
+# Loop through each CSV row
 while IFS=, read -r resourceNo location createRG existingRgName createVnet vnetAddressPrefix subnetAddressPrefixes vmImage publicIpSku adminUser
 do
   # Generate a random ID
@@ -148,7 +149,7 @@ do
     echo "  RG $newRgName$randomIdentifier creation complete"
   fi
 
-   # Check if a new virtual network should be created and create VM
+  # Check if a new virtual network should be created, then create the VM
   if [ "$createVnet" == "TRUE" ]; then
     echo "Creating VNet $vnetName$randomIdentifier in RG $existingRgName at $(date +"%Y-%m-%d %T").">>$logFileLocation
     az network vnet create \
@@ -183,7 +184,7 @@ do
 # skip the header line
 done < <(tail -n +2 $csvFileLocation)
 
-# Clear the console (optionao) and display the log file
+# Clear the console (optional) and display the log file
 # clear
 cat $logFileLocation
-# </FullScript>
+# </step4>
