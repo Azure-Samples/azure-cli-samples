@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Ubuntu 22.04.3 LTS on 4/29/2024
+# Passed validation in Azure Cloud Shell on 5/28/2024
 
 # <step1>
 # Variable block
