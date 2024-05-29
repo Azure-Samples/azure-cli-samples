@@ -1,5 +1,5 @@
 # Run this script in Azure Cloud Shell's PowerShell environment, or PowerShell 7
-# Passed validation in PowerShell 7 on 2024-05-16
+# Passed validation in Azure Cloud Shell on 5/28/2024
 
 # <step1>
 # Variable block
