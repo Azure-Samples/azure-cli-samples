@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Passed validation in Cloud Shell on 7/25/2024
+
 # <FullScript>
 # Azure Cosmos DB users can migrate from standard provisioned to autoscale
 # throughput and back again. Most users can benefit from autoscale throughput
