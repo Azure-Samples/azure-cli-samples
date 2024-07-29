@@ -193,3 +193,5 @@ for resourceGroup in $resourceGroups; do
 done
 
 echo "All Done! Enjoy your new autoscale throughput Cosmos DB accounts!"
+
+# </FullScript>
