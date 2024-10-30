@@ -1,6 +1,6 @@
 #/bin/bash
-# Passed validation in Cloud Shell on 4/30/2022
-# Code blocks for ../container-instances/container-instances-nat-gateway-custom.md
+# Passed validation in Cloud Shell on 10/29/2024
+# Code blocks for ../container-instances/container-instances-nat-gateway-custom.sh
 # <FullScript>
 # Configure a NAT gateway for static IP address for outbound traffic from a container group
 # set -e # exit if error
