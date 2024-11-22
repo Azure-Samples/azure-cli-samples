@@ -1,0 +1,183 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+          "type": "string",
+          "defaultValue": "eastus",
+          "metadata": {
+            "description": "Location for all resources."
+          }
+        },
+        "resourceGroupName": {
+          "type": "string",
+          "metadata": {
+            "description": "Name of the resource group."
+          }
+        }
+      },
+    "resources": [
+      {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2021-04-01",
+        "location": "[parameters('location')]",
+        "name": "[parameters('resourceGroupName')]",
+        "properties": {}
+      },
+      {
+        "type": "Microsoft.Network/publicIPAddresses",
+        "apiVersion": "2021-02-01",
+        "name": "myPublicIP",
+        "location": "[parameters('location')]",
+        "sku": {
+          "name": "Standard",
+          "tier": "Regional"
+        },
+        "properties": {
+          "publicIPAllocationMethod": "Static"
+        }
+      },
+      {
+        "type": "Microsoft.Network/natGateways",
+        "apiVersion": "2021-02-01",
+        "name": "myNATgateway",
+        "location": "[parameters('location')]",
+        "sku": {
+          "name": "Standard"
+        },
+        "properties": {
+          "publicIpAddresses": [
+            {
+              "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myPublicIP')]"
+            }
+          ],
+          "idleTimeoutInMinutes": 10
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/publicIPAddresses', 'myPublicIP')]"
+        ]
+      },
+      {
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2021-02-01",
+        "name": "aci-vnet",
+        "location": "[parameters('location')]",
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": ["10.0.0.0/16"]
+          },
+          "subnets": [
+            {
+              "name": "aci-subnet",
+              "properties": {
+                "addressPrefix": "10.0.0.0/24",
+                "natGateway": {
+                  "id": "[resourceId('Microsoft.Network/natGateways', 'myNATgateway')]"
+                },
+                "delegations": [
+                  {
+                    "name": "aciDelegation",
+                    "properties": {
+                      "serviceName": "Microsoft.ContainerInstance/containerGroups"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/natGateways', 'myNATgateway')]"
+        ]
+      },
+      {
+        "type": "Microsoft.Network/networkProfiles",
+        "apiVersion": "2021-02-01",
+        "name": "aci-network-profile",
+        "location": "[parameters('location')]",
+        "properties": {
+          "containerNetworkInterfaceConfigurations": [
+            {
+              "name": "aci-nic-config",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "aci-ip-config",
+                    "properties": {
+                      "subnet": {
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'aci-vnet', 'aci-subnet')]"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/virtualNetworks', 'aci-vnet')]"
+        ]
+      },
+      {
+        "type": "Microsoft.ContainerInstance/containerGroups",
+        "apiVersion": "2021-03-01",
+        "name": "appcontainer",
+        "location": "[parameters('location')]",
+        "properties": {
+          "containers": [
+            {
+              "name": "appcontainer",
+              "properties": {
+                "image": "mcr.microsoft.com/azuredocs/aci-helloworld",
+                "resources": {
+                  "requests": {
+                    "cpu": 1,
+                    "memoryInGb": 1.5
+                  }
+                }
+              }
+            }
+          ],
+          "osType": "Linux",
+          "restartPolicy": "OnFailure",
+          "networkProfile": {
+            "id": "[resourceId('Microsoft.Network/networkProfiles', 'aci-network-profile')]"
+          }
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/networkProfiles', 'aci-network-profile')]"
+        ]
+      },
+      {
+        "type": "Microsoft.ContainerInstance/containerGroups",
+        "apiVersion": "2021-03-01",
+        "name": "testegress",
+        "location": "[parameters('location')]",
+        "properties": {
+          "containers": [
+            {
+              "name": "testegress",
+              "properties": {
+                "image": "mcr.microsoft.com/azuredocs/aci-helloworld",
+                "command": ["curl", "-s", "http://checkip.dyndns.org"],
+                "resources": {
+                  "requests": {
+                    "cpu": 1,
+                    "memoryInGb": 1.5
+                  }
+                }
+              }
+            }
+          ],
+          "osType": "Linux",
+          "restartPolicy": "OnFailure",
+          "networkProfile": {
+            "id": "[resourceId('Microsoft.Network/networkProfiles', 'aci-network-profile')]"
+          }
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/networkProfiles', 'aci-network-profile')]"
+        ]
+      }
+    ]
+  }
