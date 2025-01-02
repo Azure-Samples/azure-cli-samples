@@ -33,9 +33,6 @@ az storage account create --name $storage --resource-group $resourceGroup --loca
 echo "Setting access policy on $storage..."
 az sql db audit-policy update --name $database --resource-group $resourceGroup --server $server --state Enabled --bsts Enabled --storage-account $storage
 
-echo "Setting threat detection policy on $storage..."
-az sql db threat-policy update --email-account-admins Disabled --email-addresses $notification --name $database --resource-group $resourceGroup --server $server --state Enabled --storage-account $storage
-
 # </FullScript>
 
 # echo "Deleting all resources"
