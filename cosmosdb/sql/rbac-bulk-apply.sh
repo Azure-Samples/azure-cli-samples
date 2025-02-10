@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Tested on February 7, 2025, with Azure CLI version 2.68.0
+# Tested on February 10, 2025, with Azure CLI version 2.68.0
 
 # <FullScript>
 # This sample script is designed to help users migrate from key-based to Entra Id authentication for their
@@ -14,7 +14,7 @@ subscriptionId="your-subscription-id"
 
 # Login to Azure if not already authenticated, select subscription
 # This can be commented out if running in Azure Cloud Shell
-#az login
+az login
 az account set -s $subscriptionId
 
 # Capture the current user's Id
@@ -26,7 +26,7 @@ principalId=$(az ad signed-in-user show --query id -o tsv)
 # Comment out to process all accounts in every resource group in the subscription
 #resourceGroups=('resource group 1' 'resource group 2')
 
-# Or you can process all resource groups and all acconts in the subscription
+# Or you can process all accounts in every resource group in the subscription
 if [ ${#resourceGroups[@]} -eq 0 ]; then
     resourceGroups=$(az group list --query "[].name" -o tsv)
 fi
@@ -118,4 +118,3 @@ done
 echo "All Done! Enjoy your new RBAC enabled Cosmos accounts!"
 
 #</FullScript>
-
