@@ -1,24 +1,23 @@
 #!/bin/bash
 
+# Tested on February 7, 2025, with Azure CLI version 2.68.0
+
 # <FullScript>
-# This sample applies admin level Azure and Data RBAC roles in bulk to Azure Cosmos DB accounts 
-# This script will apply this role for the current logged in user and for a
-# a specified managed identity to every Cosmos account within a resource group.
-# You can specify a single resource group with selected Cosmos DB accounts or
-# you can process all accounts in every resource group in the subscription.
+# This sample script is designed to help users migrate from key-based to Entra Id authentication for their
+# Cosmos DB accounts by assigning RBAC roles to both your Entra Id as well as a new user assigned managed identity
+# for you to apply as the "Identity" for any services within a resource group that contains a Cosmos DB account.
+
+# This script can be run as-is and it will process every Cosmos account within every resource group.
+# Or you can specify a single resource group and it will process every Cosmos account within it, or selected accounts.
 
 subscriptionId="your-subscription-id"
 
 # Login to Azure if not already authenticated, select subscription
 # This can be commented out if running in Azure Cloud Shell
-az login
+#az login
 az account set -s $subscriptionId
 
-# Get principal Id for an existing user-assigned managed identity you want to give access to
-# You can also create one here then assign it in this script. Example, (az identity create -g "myResourceGroup" -n "myManagedIdentity")
-# miPrincipalId=$(az identity show -g "myResourceGroup" -n "myManagedIdentity" --query id -o tsv)
-
-# Capture the current user's principal Id and subscription Id
+# Capture the current user's Id
 principalId=$(az ad signed-in-user show --query id -o tsv)
 
 
@@ -27,7 +26,7 @@ principalId=$(az ad signed-in-user show --query id -o tsv)
 # Comment out to process all accounts in every resource group in the subscription
 #resourceGroups=('resource group 1' 'resource group 2')
 
-# Or you can process all accounts in every resource group in the subscription
+# Or you can process all resource groups and all acconts in the subscription
 if [ ${#resourceGroups[@]} -eq 0 ]; then
     resourceGroups=$(az group list --query "[].name" -o tsv)
 fi
@@ -37,16 +36,26 @@ fi
 for resourceGroup in "${resourceGroups[@]}"; do
     echo "Processing resource group: $resourceGroup"
 
-    # Get the role definition Id for the Doc DB Account Contributor role
+    # Deployed services need their own identity to access Cosmos. 
+    # Managed identities tend to be workload specific so we will 
+    # create a new user assigned managed identity for each resource group.
+    uaManagedIdentity="$resourceGroup-mi"
+    az identity create -g $resourceGroup -n $uaManagedIdentity --output none
+    miPrincipalId=$(az identity show -g $resourceGroup -n $uaManagedIdentity --query principalId -o tsv)
+    echo "Managed Identity created: $uaManagedIdentity"
+
+
+    # Get the role definition Id for the Document DB Account Contributor role (Azure RBAC)
     roleDefinitionId=$(az role definition list --name "DocumentDB Account Contributor" --query "[0].id" -o tsv)
 
-    # Apply the Account Contributor role to the current user
-    echo "Applying DocumentDB Account Contributor Azure RBAC role to current user and managed identity"
-    az role assignment create --role $roleDefinitionId --assignee $principalId --scope /subscriptions/$subscriptionId/resourceGroups/$resourceGroup --output none
+    # Apply the Account Contributor role to you, the current user
+    echo "Applying DocumentDB Account Contributor role to current user"
+    az role assignment create --role $roleDefinitionId --assignee-object-id $principalId --assignee-principal-type "User" --scope /subscriptions/$subscriptionId/resourceGroups/$resourceGroup --output none
 
-    # Apply the Account Contributor role to the miPrincipalId if it is not null
+    # Apply the Account Contributor role to the user assigned managed identity if it is not null
     if [ ! -z "$miPrincipalId" ]; then
-        az role assignment create --role $roleDefinitionId --assignee $miPrincipalId --scope /subscriptions/$subscriptionId/resourcegroups/$resourceGroup --output none
+        echo "Applying DocumentDB Account Contributor role to the managed identity"
+        az role assignment create --role $roleDefinitionId --assignee-object-id $miPrincipalId --assignee-principal-type "ServicePrincipal" --scope /subscriptions/$subscriptionId/resourcegroups/$resourceGroup --output none
     fi
 
     # Limit to one or more Cosmos DB accounts within a specific resource group
@@ -102,9 +111,11 @@ for resourceGroup in "${resourceGroups[@]}"; do
     fi
 
     echo "Resource group: $resourceGroup complete"
+    echo "Locate this user assigned managed identity: $uaManagedIdentity, in resource group: $resourceGroup and make it the identity for any services accessing Cosmos"
 
 done
 
 echo "All Done! Enjoy your new RBAC enabled Cosmos accounts!"
 
 #</FullScript>
+
