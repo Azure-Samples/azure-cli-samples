@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 3/24/2022
+# Passed validation in Cloud Shell on 5/15/2025
 
 # <FullScript>
 # Function app, storage account, and user identity names must be unique.
