@@ -56,6 +56,7 @@ appInsights=$(az monitor app-insights component show --resource-group $resourceG
 az role assignment create --role "Monitoring Metrics Publisher" --assignee $principalId --scope $appInsights
 
 # Update app settings to use managed identities for all connections
+clientId=$(az identity show --name func-host-storage-user --resource-group $group --query 'clientId' -o tsv)
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
     --settings AzureWebJobsStorage__accountName=$storage AzureWebJobsStorage__credential=managedidentity \
     AzureWebJobsStorage__clientId=$clientId APPLICATIONINSIGHTS_AUTHENTICATION_STRING="ClientId=$clientId;Authorization=AAD"
