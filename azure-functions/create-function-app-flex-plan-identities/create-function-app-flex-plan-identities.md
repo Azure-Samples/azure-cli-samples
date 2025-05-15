@@ -1,8 +1,13 @@
-# This version of create-function-app-flex-plan-identities is maintained for
-# hosting code snippets in the Functions Flex CLI quickstarts.
-# Date: -5/15/2025
-# Version: 1.0
+---
+Info: This version of create-function-app-flex-plan-identities is maintained for  hosting code snippets in the Functions Flex CLI quickstarts.
+Date: 05/15/2025
+Version: 1.0
+AI-assisted: true
+---
 
+# Snippet source for create-function-app-flex-plan-identities
+
+```bash
 # Install the Application Insights extension
 az extension add --name application-insights
 
@@ -46,3 +51,4 @@ az functionapp config appsettings delete --name <APP_NAME> --resource-group "Azu
 
 # echo "Deleting all resources"
 # az group delete --name "AzureFunctionsQuickstart-rg" -y
+```
