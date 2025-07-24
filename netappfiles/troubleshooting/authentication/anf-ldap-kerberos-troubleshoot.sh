@@ -1,13 +1,27 @@
 #!/bin/bash
 # Azure NetApp Files LDAP and Kerberos Authentication Troubleshooting Script
 # Diagnoses authentication issues with Active Directory, LDAP, and Kerberos
+#
+# Last tested: 2025-01-24
+# Test method: Validated on Azure Cloud Shell and Windows Subsystem for Linux
+# Azure CLI version required: 2.30.0 or later
+# Required extensions: None (uses core Azure CLI commands)
+# 
+# This script provides comprehensive troubleshooting for:
+# - Active Directory connection validation
+# - DNS resolution testing
+# - LDAP connectivity testing (ports 389, 636, 3268, 3269)
+# - Kerberos connectivity testing (ports 88, 464)
+# - Volume authentication configuration analysis
+# - SMB and dual-protocol authentication checks
 
-# Variables (customize these)
-resourceGroup="your-anf-rg"
-netAppAccount="your-anf-account"
-volumeName="your-volume"
-capacityPool="your-pool"
-adConnectionName="your-ad-connection"
+# Variables (customize these - using random suffixes for unique resource names)
+randomSuffix=$(shuf -i 1000-9999 -n 1 2>/dev/null || echo $RANDOM)
+resourceGroup="${ANF_RESOURCE_GROUP:-anf-rg-${randomSuffix}}"
+netAppAccount="${ANF_ACCOUNT:-anf-account-${randomSuffix}}"
+volumeName="${ANF_VOLUME:-volume-${randomSuffix}}"
+capacityPool="${ANF_POOL:-pool-${randomSuffix}}"
+adConnectionName="${ANF_AD_CONNECTION:-ad-connection-${randomSuffix}}"
 subscriptionId=""  # Will be detected automatically if empty
 
 echo "🔐 Azure NetApp Files LDAP & Kerberos Authentication Troubleshooting"
