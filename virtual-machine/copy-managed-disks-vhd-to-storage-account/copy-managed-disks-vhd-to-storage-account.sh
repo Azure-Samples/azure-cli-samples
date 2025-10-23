@@ -1,4 +1,4 @@
-# Verified per Raman Kumar as of 2/23/2022
+# Verified by Liam Kelly as of 12/08/2025
 
 # <FullScript>
 #Provide the subscription Id where managed disk is created
@@ -28,7 +28,7 @@ destinationVHDFileName=myvhdfilename.vhd
 
 az account set --subscription $subscriptionId
 
-sas=$(az disk grant-access --resource-group $resourceGroupName --name $diskName --duration-in-seconds $sasExpiryDuration --query [accessSas] -o tsv)
+sas=$(az disk grant-access --resource-group $resourceGroupName --name $diskName --duration-in-seconds $sasExpiryDuration --query "accessSAS" -o tsv)
 
 az storage blob copy start --destination-blob $destinationVHDFileName --destination-container $storageContainerName --account-name $storageAccountName --account-key $storageAccountKey --source-uri $sas
 # </FullScript>
