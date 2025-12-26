@@ -26,6 +26,9 @@ targetSubscriptionId=6492b1f7-f219-446b-b509-314e17e1efb0
 #Name of the resource group where snapshot will be copied to
 targetResourceGroupName=mytargetResourceGroupName
 
+#Name of the location where snapshot will be copied to
+location=locationName
+
 #Set the context to the subscription Id where snapshot will be copied to
 #If snapshot is copied to the same subscription then you can skip this step
 az account set --subscription $targetSubscriptionId
@@ -33,5 +36,5 @@ az account set --subscription $targetSubscriptionId
 #Copy snapshot to different subscription using the snapshot Id
 #We recommend you to store your snapshots in Standard storage to reduce cost. Please use Standard_ZRS in regions where zone redundant storage (ZRS) is available, otherwise use Standard_LRS
 #Please check out the availability of ZRS here: https://docs.microsoft.com/azure/storage/common/storage-redundancy-zrs#support-coverage-and-regional-availability
-az snapshot create --resource-group $targetResourceGroupName --name $snapshotName --source $snapshotId --sku Standard_LRS
+az snapshot create --resource-group $targetResourceGroupName --name $snapshotName --location $location --source $snapshotId --sku Standard_LRS
 # </FullScript>
