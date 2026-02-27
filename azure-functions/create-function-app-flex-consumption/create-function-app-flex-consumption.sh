@@ -1,21 +1,21 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 5/15/2025
+# TODO: Validate in Cloud Shell before merging
 
-# <FullScript>
+# Flex Consumption is the recommended plan for most serverless workloads.
 # Function app, storage account, and user identity names must be unique.
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="northeurope"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tag="create-function-app-flex-plan-identities"
+tag="create-function-app-flex-consumption"
 storage="msdocsaccount$randomIdentifier"
 userIdentity="msdocs-managed-identity-$randomIdentifier"
 functionApp="msdocs-serverless-function-$randomIdentifier"
 skuStorage="Standard_LRS"
 functionsVersion="4"
-languageWorker="dotnet-isolated" # Supported values: dotnet-isolated, node, python, powershell, java
-languageVersion="8.0" # Supported values: 3.10, 3.11, 7.4, 8.0, 9.0, 10, 11, 17, 20, 21, 22
+languageWorker="python"
+languageVersion="3.11"
 
 # Install the Application Insights extension
 az extension add --name application-insights
@@ -60,9 +60,10 @@ clientId=$(az identity show --name $userIdentity --resource-group $resourceGroup
     --query 'clientId' -o tsv)
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
     --settings AzureWebJobsStorage__accountName=$storage AzureWebJobsStorage__credential=managedidentity \
-    AzureWebJobsStorage__clientId=$clientId APPLICATIONINSIGHTS_AUTHENTICATION_STRING="ClientId=$clientId;Authorization=AAD"
-az functionapp config appsettings delete --name $functionApp --resource-group $resourceGroup --setting-names AzureWebJobsStorage
-# </FullScript>
+    AzureWebJobsStorage__clientId=$clientId \
+    APPLICATIONINSIGHTS_AUTHENTICATION_STRING="ClientId=$clientId;Authorization=AAD"
+az functionapp config appsettings delete --name $functionApp \
+    --resource-group $resourceGroup --setting-names AzureWebJobsStorage
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

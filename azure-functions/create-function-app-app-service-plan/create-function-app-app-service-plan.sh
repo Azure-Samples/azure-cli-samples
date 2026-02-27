@@ -1,7 +1,7 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 3/24/2022
+# TODO: Validate in Cloud Shell before merging
 
-# <FullScript>
+# For the recommended serverless plan, see create-function-app-flex-consumption.
 # Function app and storage account names must be unique.
 
 # Variable block
@@ -15,6 +15,8 @@ functionApp="msdocs-serverless-function-$randomIdentifier"
 skuStorage="Standard_LRS"
 skuPlan="B1"
 functionsVersion="4"
+runtime="dotnet-isolated"
+runtimeVersion="8.0"
 
 # Create a resource group
 echo "Creating $resourceGroup in "$location"..."
@@ -26,12 +28,15 @@ az storage account create --name $storage --location "$location" --resource-grou
 
 # Create an App Service plan
 echo "Creating $appServicePlan"
-az functionapp plan create --name $appServicePlan --resource-group $resourceGroup --location "$location" --sku $skuPlan
+az functionapp plan create --name $appServicePlan --resource-group $resourceGroup \
+    --location "$location" --sku $skuPlan
 
 # Create a Function App
 echo "Creating $functionApp"
-az functionapp create --name $functionApp --storage-account $storage --plan $appServicePlan --resource-group $resourceGroup --functions-version $functionsVersion
-# </FullScript>
+az functionapp create --name $functionApp --storage-account $storage \
+    --plan $appServicePlan --resource-group $resourceGroup \
+    --runtime $runtime --runtime-version $runtimeVersion \
+    --functions-version $functionsVersion
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y

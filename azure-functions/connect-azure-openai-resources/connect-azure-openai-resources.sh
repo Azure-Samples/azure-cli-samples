@@ -1,7 +1,6 @@
 #!/bin/bash
 # TODO: Validate in Cloud Shell before merging
 
-# <FullScript>
 # Function app, storage account, and user identity names must be unique.
 
 # Variable block
@@ -16,8 +15,8 @@ openaiName="msdocs-openai-$randomIdentifier"
 modelName="gpt-4o"
 skuStorage="Standard_LRS"
 functionsVersion="4"
-languageWorker="dotnet-isolated" # Supported values: dotnet-isolated, node, python, powershell, java
-languageVersion="8.0" # Supported values: 3.10, 3.11, 7.4, 8.0, 9.0, 10, 11, 17, 20, 21, 22
+languageWorker="python"
+languageVersion="3.11"
 
 # Install the Application Insights extension
 az extension add --name application-insights
@@ -62,8 +61,10 @@ clientId=$(az identity show --name $userIdentity --resource-group $resourceGroup
     --query 'clientId' -o tsv)
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
     --settings AzureWebJobsStorage__accountName=$storage AzureWebJobsStorage__credential=managedidentity \
-    AzureWebJobsStorage__clientId=$clientId APPLICATIONINSIGHTS_AUTHENTICATION_STRING="ClientId=$clientId;Authorization=AAD"
-az functionapp config appsettings delete --name $functionApp --resource-group $resourceGroup --setting-names AzureWebJobsStorage
+    AzureWebJobsStorage__clientId=$clientId \
+    APPLICATIONINSIGHTS_AUTHENTICATION_STRING="ClientId=$clientId;Authorization=AAD"
+az functionapp config appsettings delete --name $functionApp \
+    --resource-group $resourceGroup --setting-names AzureWebJobsStorage
 
 # Create an Azure OpenAI resource
 echo "Creating Azure OpenAI resource"
@@ -99,8 +100,6 @@ az functionapp config appsettings set --name $functionApp --resource-group $reso
     AzureOpenAI__managedIdentityResourceId=$(echo $user | jq -r '.userId') \
     AzureOpenAI__clientId=$(echo $user | jq -r '.clientId') \
     CHAT_MODEL_DEPLOYMENT_NAME=$modelName
-
-# </FullScript>
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
