@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on 5/15/2025
+# Passed validation in Cloud Shell on n/y
 
 # <FullScript>
 # Function app, storage account, and user identity names must be unique.
@@ -12,6 +12,8 @@ tag="create-function-app-flex-plan-identities"
 storage="msdocsaccount$randomIdentifier"
 userIdentity="msdocs-managed-identity-$randomIdentifier"
 functionApp="msdocs-serverless-function-$randomIdentifier"
+openaiName="msdocs-openai-$randomIdentifier"
+modelName="gpt-4o"
 skuStorage="Standard_LRS"
 functionsVersion="4"
 languageWorker="dotnet-isolated" # Supported values: dotnet-isolated, node, python, powershell, java
@@ -56,12 +58,48 @@ appInsights=$(az monitor app-insights component show --resource-group $resourceG
 az role assignment create --role "Monitoring Metrics Publisher" --assignee $principalId --scope $appInsights
 
 # Update app settings to use managed identities for all connections
-clientId=$(az identity show --name $userIdentity --resource-group $resourceGroup \
+clientId=$(az identity show --name func-host-storage-user --resource-group $group \
     --query 'clientId' -o tsv)
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
     --settings AzureWebJobsStorage__accountName=$storage AzureWebJobsStorage__credential=managedidentity \
     AzureWebJobsStorage__clientId=$clientId APPLICATIONINSIGHTS_AUTHENTICATION_STRING="ClientId=$clientId;Authorization=AAD"
 az functionapp config appsettings delete --name $functionApp --resource-group $resourceGroup --setting-names AzureWebJobsStorage
+
+# Create an Azure OpenAI resource
+echo "Creating Azure OpenAI resource"
+openaiId=$(az cognitiveservices account create --name "msdocs-openai-$randomIdentifier" \
+    --resource-group $resourceGroup --kind OpenAI --sku S0 --location $location --yes \
+    --query 'id' -o tsv)
+
+# Create role assignments ("Cognitive Services OpenAI User" & "Azure AI User") for the identity
+echo "Adding UAMI to the 'Cognitive Services OpenAI User' role."
+principalId=$(az identity show --name $userIdentity --resource-group $resourceGroup \
+    --query 'principalId' -o tsv)
+az role assignment create --assignee $principalId \
+    --role "Cognitive Services OpenAI User" --scope $openaiId
+az role assignment create --assignee $principalId \
+    --role "Azure AI User" --scope $openaiId
+
+# Create the same role assignments for your Azure account so you can connect during local development.
+echo "Adding current Azure account to the 'Cognitive Services OpenAI User' role."
+accountId=$(az ad signed-in-user show --query id -o tsv)
+az role assignment create --assignee $accountId \
+    --role "Cognitive Services OpenAI User" --scope $openaiId
+az role assignment create --assignee $accountId \
+    --role "Azure AI User" --scope $openaiId
+
+# Get the user-assigned managed identity details
+user=$(az identity show --name $userIdentity --resource-group $resourceGroup \
+    --query "{userId:id, clientId: clientId}" -o json)
+
+# Add the required app settings to the function app
+az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
+    --settings AzureOpenAI__Endpoint="$openaiName.openai.azure.com/" \
+    AzureOpenAI__credential=managedidentity \
+    AzureOpenAI__managedIdentityResourceId=$(echo $user | jq -r '.userId') \
+    AzureOpenAI__clientId=$(echo $user | jq -r '.clientId') \
+    CHAT_MODEL_DEPLOYMENT_NAME=$modelName
+
 # </FullScript>
 
 # echo "Deleting all resources"
