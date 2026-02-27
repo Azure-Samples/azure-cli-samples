@@ -13,6 +13,7 @@ skuStorage="Standard_LRS"
 functionApp=mygithubfunc$randomIdentifier
 functionsVersion="4"
 runtime="node"
+runtimeVersion="20"
 # Public GitHub repository containing an Azure Functions code project.
 gitrepo=https://github.com/Azure-Samples/functions-quickstart-javascript
 ## Enable authenticated git deployment in your subscription when using a private repo. 
@@ -30,7 +31,10 @@ az storage account create --name $storage --location "$location" --resource-grou
 
 # Create a function app with source files deployed from the specified GitHub repo.
 echo "Creating $functionApp"
-az functionapp create --name $functionApp --storage-account $storage --consumption-plan-location "$location" --resource-group $resourceGroup --deployment-source-url $gitrepo --deployment-source-branch main --functions-version $functionsVersion --runtime $runtime
+az functionapp create --name $functionApp --storage-account $storage \
+    --consumption-plan-location "$location" --resource-group $resourceGroup \
+    --deployment-source-url $gitrepo --deployment-source-branch main \
+    --functions-version $functionsVersion --runtime $runtime --runtime-version $runtimeVersion
 
 # Connect to function application
 curl -s "https://${functionApp}.azurewebsites.net/api/httpexample?name=Azure"

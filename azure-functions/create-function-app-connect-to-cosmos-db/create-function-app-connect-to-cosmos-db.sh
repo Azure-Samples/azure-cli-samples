@@ -39,7 +39,7 @@ key=$(az cosmosdb keys list --name $functionApp --resource-group $resourceGroup 
 echo $key
 
 # Configure function app settings to use the Azure Cosmos DB connection string.
-az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup --setting CosmosDB_Endpoint=$endpoint CosmosDB_Key=$key
+az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup --settings CosmosDB_Endpoint=$endpoint CosmosDB_Key=$key
 # </FullScript>
 
 # echo "Deleting all resources"

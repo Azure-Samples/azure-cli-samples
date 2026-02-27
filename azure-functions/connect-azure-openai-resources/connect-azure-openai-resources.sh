@@ -1,5 +1,5 @@
 #!/bin/bash
-# Passed validation in Cloud Shell on n/y
+# TODO: Validate in Cloud Shell before merging
 
 # <FullScript>
 # Function app, storage account, and user identity names must be unique.
@@ -8,7 +8,7 @@
 let "randomIdentifier=$RANDOM*$RANDOM"
 location="northeurope"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tag="create-function-app-flex-plan-identities"
+tag="connect-azure-openai-resources"
 storage="msdocsaccount$randomIdentifier"
 userIdentity="msdocs-managed-identity-$randomIdentifier"
 functionApp="msdocs-serverless-function-$randomIdentifier"
@@ -58,7 +58,7 @@ appInsights=$(az monitor app-insights component show --resource-group $resourceG
 az role assignment create --role "Monitoring Metrics Publisher" --assignee $principalId --scope $appInsights
 
 # Update app settings to use managed identities for all connections
-clientId=$(az identity show --name func-host-storage-user --resource-group $group \
+clientId=$(az identity show --name $userIdentity --resource-group $resourceGroup \
     --query 'clientId' -o tsv)
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
     --settings AzureWebJobsStorage__accountName=$storage AzureWebJobsStorage__credential=managedidentity \
@@ -67,7 +67,7 @@ az functionapp config appsettings delete --name $functionApp --resource-group $r
 
 # Create an Azure OpenAI resource
 echo "Creating Azure OpenAI resource"
-openaiId=$(az cognitiveservices account create --name "msdocs-openai-$randomIdentifier" \
+openaiId=$(az cognitiveservices account create --name $openaiName \
     --resource-group $resourceGroup --kind OpenAI --sku S0 --location $location --yes \
     --query 'id' -o tsv)
 
@@ -94,7 +94,7 @@ user=$(az identity show --name $userIdentity --resource-group $resourceGroup \
 
 # Add the required app settings to the function app
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
-    --settings AzureOpenAI__Endpoint="$openaiName.openai.azure.com/" \
+    --settings AzureOpenAI__Endpoint="https://$openaiName.openai.azure.com/" \
     AzureOpenAI__credential=managedidentity \
     AzureOpenAI__managedIdentityResourceId=$(echo $user | jq -r '.userId') \
     AzureOpenAI__clientId=$(echo $user | jq -r '.clientId') \
