@@ -5,7 +5,7 @@
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
-location="northeurope"
+location="swedencentral"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
 tag="connect-azure-openai-resources"
 storage="msdocsaccount$randomIdentifier"
