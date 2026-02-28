@@ -68,7 +68,8 @@ az functionapp config appsettings delete --name $functionApp \
 
 # Create an Azure Cosmos DB account
 echo "Creating $cosmosDbAccount"
-az cosmosdb create --name $cosmosDbAccount --resource-group $resourceGroup --location $location
+az cosmosdb create --name $cosmosDbAccount --resource-group $resourceGroup \
+    --locations regionName=$location failoverPriority=0 isZoneRedundant=False
 
 # Assign the Cosmos DB Built-in Data Contributor role to the managed identity
 cosmosDbId=$(az cosmosdb show --name $cosmosDbAccount --resource-group $resourceGroup --query 'id' -o tsv)
