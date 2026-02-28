@@ -1,5 +1,5 @@
 #!/bin/bash
-# TODO: Validate in Cloud Shell before merging
+# Passed validation in Cloud Shell on 2/28/2026
 
 # Flex Consumption is the recommended plan for most serverless workloads.
 # Function app, storage account, and user identity names must be unique.

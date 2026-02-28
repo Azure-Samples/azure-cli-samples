@@ -1,5 +1,5 @@
 #!/bin/bash
-# TODO: Validate in Cloud Shell before merging
+# Passed validation in Cloud Shell on 2/28/2026
 
 # Function app and storage account names must be unique.
 let "randomIdentifier=$RANDOM*$RANDOM"
