@@ -13,6 +13,8 @@ storage="msdocsaccount$randomIdentifier"
 userIdentity="msdocs-managed-identity-$randomIdentifier"
 functionApp="msdocs-serverless-function-$randomIdentifier"
 cosmosDbAccount="msdocs-cosmosdb-$randomIdentifier"
+cosmosDbDatabase="documents-db"
+cosmosDbContainer="documents"
 skuStorage="Standard_LRS"
 functionsVersion="4"
 languageWorker="python"
@@ -71,6 +73,14 @@ echo "Creating $cosmosDbAccount"
 az cosmosdb create --name $cosmosDbAccount --resource-group $resourceGroup \
     --locations regionName=$location failoverPriority=0 isZoneRedundant=False
 
+# Create a database and containers for the Cosmos DB account
+az cosmosdb sql database create --account-name $cosmosDbAccount --resource-group $resourceGroup \
+    --name $cosmosDbDatabase
+az cosmosdb sql container create --account-name $cosmosDbAccount --resource-group $resourceGroup \
+    --database-name $cosmosDbDatabase --name $cosmosDbContainer --partition-key-path "/id"
+az cosmosdb sql container create --account-name $cosmosDbAccount --resource-group $resourceGroup \
+    --database-name $cosmosDbDatabase --name leases --partition-key-path "/id"
+
 # Assign the Cosmos DB Built-in Data Contributor role to the managed identity
 cosmosDbId=$(az cosmosdb show --name $cosmosDbAccount --resource-group $resourceGroup --query 'id' -o tsv)
 az cosmosdb sql role assignment create --account-name $cosmosDbAccount --resource-group $resourceGroup \
@@ -80,8 +90,9 @@ az cosmosdb sql role assignment create --account-name $cosmosDbAccount --resourc
 # Get the Cosmos DB endpoint and configure the function app to connect using managed identity
 endpoint=$(az cosmosdb show --name $cosmosDbAccount --resource-group $resourceGroup --query documentEndpoint --output tsv)
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
-    --settings CosmosDB__accountEndpoint=$endpoint CosmosDB__credential=managedidentity \
-    CosmosDB__clientId=$clientId
+    --settings COSMOS_CONNECTION__accountEndpoint=$endpoint COSMOS_CONNECTION__credential=managedidentity \
+    COSMOS_CONNECTION__clientId=$clientId \
+    COSMOS_DATABASE_NAME=$cosmosDbDatabase COSMOS_CONTAINER_NAME=$cosmosDbContainer
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
