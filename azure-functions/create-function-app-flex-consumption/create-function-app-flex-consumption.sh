@@ -1,21 +1,21 @@
 #!/bin/bash
 # Passed validation in Cloud Shell on 2/28/2026
 
+# Flex Consumption is the recommended plan for most serverless workloads.
 # Function app, storage account, and user identity names must be unique.
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
-location="eastus"
+location="northeurope"
 resourceGroup="msdocs-azure-functions-rg-$randomIdentifier"
-tag="create-function-app-connect-to-storage-account"
+tag="create-function-app-flex-consumption"
 storage="msdocsaccount$randomIdentifier"
-connStorage="msdocsconnaccount$randomIdentifier"
 userIdentity="msdocs-managed-identity-$randomIdentifier"
 functionApp="msdocs-serverless-function-$randomIdentifier"
 skuStorage="Standard_LRS"
 functionsVersion="4"
-languageWorker="dotnet-isolated"
-languageVersion="8.0"
+languageWorker="python"
+languageVersion="3.11"
 
 # Install the Application Insights extension
 az extension add --name application-insights
@@ -39,23 +39,23 @@ userId=$(echo $output | jq -r '.userId')
 principalId=$(echo $output | jq -r '.principalId')
 clientId=$(echo $output | jq -r '.clientId')
 
-# Get the storage ID and create a role assignment (Storage Blob Data Owner) for the identity
+# Get the storage ID and create a role assignment (Storage Blob Data Owner) for the user
 storageId=$(az storage account show --resource-group $resourceGroup --name $storage --query 'id' -o tsv)
 az role assignment create --assignee-object-id $principalId --assignee-principal-type ServicePrincipal \
     --role "Storage Blob Data Owner" --scope $storageId
 
-# Create the function app in a Flex Consumption plan
-echo "Creating $functionApp"
-az functionapp create --resource-group $resourceGroup --name $functionApp --flexconsumption-location $location \
+# Create the function app in a Flex Consumption plan that uses the user-assigned managed identity
+# to access the deployment share.
+az functionapp create --resource-group $resourceGroup --name $functionApp --flexconsumption-location $location  \
     --runtime $languageWorker --runtime-version $languageVersion --storage-account $storage \
-    --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value $userIdentity
+    --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value $userIdentity 
 
-# Create a role assignment (Monitoring Metrics Publisher) in Application Insights for the user identity
+# Create a role assigment (Monitoring Metrics Publisher) in Application Insights for the user identity
 appInsights=$(az monitor app-insights component show --resource-group $resourceGroup \
     --app $functionApp --query "id" --output tsv)
 az role assignment create --role "Monitoring Metrics Publisher" --assignee $principalId --scope $appInsights
 
-# Update app settings to use managed identities for host storage connections
+# Update app settings to use managed identities for all connections
 clientId=$(az identity show --name $userIdentity --resource-group $resourceGroup \
     --query 'clientId' -o tsv)
 az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
@@ -64,20 +64,6 @@ az functionapp config appsettings set --name $functionApp --resource-group $reso
     APPLICATIONINSIGHTS_AUTHENTICATION_STRING="ClientId=$clientId;Authorization=AAD"
 az functionapp config appsettings delete --name $functionApp \
     --resource-group $resourceGroup --setting-names AzureWebJobsStorage
-
-# Create a second storage account for the function app to connect to.
-echo "Creating $connStorage"
-az storage account create --name $connStorage --location "$location" --resource-group $resourceGroup --sku $skuStorage
-
-# Assign Storage Blob Data Owner on the second storage account to the managed identity
-connStorageId=$(az storage account show --resource-group $resourceGroup --name $connStorage --query 'id' -o tsv)
-az role assignment create --assignee-object-id $principalId --assignee-principal-type ServicePrincipal \
-    --role "Storage Blob Data Owner" --scope $connStorageId
-
-# Configure the function app to connect to the second storage account using managed identity
-az functionapp config appsettings set --name $functionApp --resource-group $resourceGroup \
-    --settings StorageConnection__serviceUri="https://$connStorage.blob.core.windows.net" \
-    StorageConnection__credential=managedidentity StorageConnection__clientId=$clientId
 
 # echo "Deleting all resources"
 # az group delete --name $resourceGroup -y
