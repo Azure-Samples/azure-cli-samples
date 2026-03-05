@@ -4,7 +4,7 @@ languages:
 - azurecli
 products:
 - azure
-- azure-cli
+- azure-clis
 - azure-app-service
 name: Azure App Service sample scripts
 url-fragment:
