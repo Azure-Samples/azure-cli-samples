@@ -7,7 +7,7 @@ products:
 - azure-cli
 - azure-functions
 name: Azure Functions sample scripts
-url-fragment:
+url-fragment: 
 description: These scripts demonstrate how to create and manage Azure Functions resources using the Azure CLI.
 ---
 # Azure Functions
@@ -32,6 +32,9 @@ The scripts in this directory demonstrate working with [Azure Functions][func-ho
 |[create-function-app-connect-to-cosmos-db.sh][af-6]| Creates a function app in a [Flex Consumption plan][plan-flex] and connects it to Azure Cosmos DB using managed identity and RBAC. |
 |[connect-azure-openai-resources.sh][af-7]| Creates a function app in a [Flex Consumption plan][plan-flex] and connects it to Azure OpenAI using managed identity. |
 |[functions-cli-mount-files-storage-linux.sh][af-8]| Creates a Linux function app and mounts an Azure Files share, which lets you leverage existing data or machine learning models in your functions. |
+|**Secure networking**||
+|[create-function-app-vnet-storage.sh][af-10]| Creates a function app in a [Flex Consumption plan][plan-flex] with VNet integration and restricts the storage account behind private endpoints so it's only accessible from inside the virtual network. |
+|[create-function-app-private-endpoint.sh][af-11]| Creates a function app in a [Flex Consumption plan][plan-flex] with an inbound private endpoint, restricting the function app's HTTP endpoints to only be callable from inside the virtual network. |
 |**Deploy code**||
 |[deploy-function-app-with-function-github-continuous.sh][af-9]| Creates a function app in a [Consumption plan][plan-consumption] and deploys code from a public GitHub repository. |
 
@@ -45,6 +48,8 @@ The scripts in this directory demonstrate working with [Azure Functions][func-ho
 [af-7]: ./connect-azure-openai-resources/connect-azure-openai-resources.sh
 [af-8]: ./functions-cli-mount-files-storage-linux/functions-cli-mount-files-storage-linux.sh
 [af-9]: ./deploy-function-app-with-function-github-continuous/deploy-function-app-with-function-github-continuous.sh
+[af-10]: ./create-function-app-vnet-storage/create-function-app-vnet-storage.sh
+[af-11]: ./create-function-app-private-endpoint/create-function-app-private-endpoint.sh
 
 <!-- EXTERNAL -->
 [func-home]: https://learn.microsoft.com/azure/azure-functions/
