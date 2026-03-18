@@ -2,10 +2,13 @@
 # Passed validation in Cloud Shell on 4/25/2022
 
 # <FullScript>
-# Create an ASP.NET Core app in a Docker container from Docker Hub
+# Create a Linux App Service with a built-in Node.js runtime
 #
 # This sample script creates a resource group, a Linux App Service plan,
-# and an app. It then deploys an ASP.NET Core application using a Docker Container.
+# and a web app configured to use the built-in Node.js (14 LTS) runtime.
+# It does not deploy any custom code or Docker container image; instead, it
+# provisions the infrastructure and verifies the default App Service
+# site by requesting the site URL.
 #
 # set -e # exit if error
 # Variable block

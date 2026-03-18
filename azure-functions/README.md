@@ -4,7 +4,7 @@ languages:
 - azurecli
 products:
 - azure
-- azure-cli
+- azure-clis
 - azure-functions
 name: Azure Functions sample scripts
 url-fragment: 
