@@ -1,4 +1,5 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 3/1/2026
 
 # This script creates a function app in a Flex Consumption plan with VNet integration
 # and restricts the storage account behind private endpoints so it's only accessible

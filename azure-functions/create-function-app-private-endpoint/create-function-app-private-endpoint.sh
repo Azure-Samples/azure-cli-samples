@@ -1,4 +1,5 @@
 #!/bin/bash
+# Passed validation in Cloud Shell on 3/1/2026
 
 # This script creates a function app in a Flex Consumption plan and restricts
 # inbound access using a private endpoint, so the function app's HTTP endpoints
