@@ -38,7 +38,7 @@ sleep 30m
 # restorePoint=“2021-07-09T13:10:00Z”
 restorePoint=$(date +%s)
 restorePoint=$(expr $restorePoint - 60)
-restorePoint=$(date -d @$restorePoint +"%Y-%m-%dT%T")
+restorePoint=$(date -u -d @$restorePoint +"%Y-%m-%dT%T")
 echo $restorePoint
 
 echo "Restoring to $restoreServer"
